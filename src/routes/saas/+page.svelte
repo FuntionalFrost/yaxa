@@ -12,6 +12,7 @@
 	import SubscriptionCard from '$lib/components/saas/SubscriptionCard.svelte';
 	import { useToast } from '$lib/composables/useToast';
 	import type { SubscriptionStatus } from '$lib/server/db/types';
+	import { siteConfig } from '../../site.config';
 
 	const toast = useToast();
 
@@ -240,12 +241,5 @@
 	</div>
 
 	<!-- Footer -->
-	<Footer
-		config={{
-			name: 'Yaxa Solo SaaS',
-			title: 'Yaxa',
-			description: 'The batteries-included SvelteKit SaaS stack.',
-			url: 'https://yaxa.vercel.app'
-		}}
-	/>
+	<Footer config={siteConfig} />
 </div>

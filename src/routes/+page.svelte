@@ -621,7 +621,7 @@ export const siteConfig = defineSiteConfig({
 			</Button>
 		</div>
 
-		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 			<a
 				href="/docs/intro"
 				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-primary-500 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/60"
@@ -634,10 +634,10 @@ export const siteConfig = defineSiteConfig({
 				<h3
 					class="text-sm font-bold text-neutral-900 transition-colors group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-400"
 				>
-					Introduction & Setup
+					Quickstart & Static SSG
 				</h3>
 				<p class="mt-2 text-xs leading-relaxed text-neutral-500">
-					Svelte 5 Runes Live Inspector and 4-step quickstart install guide.
+					Svelte 5 Runes inspector, install guide, and static adapter (SSG) deployment recipes.
 				</p>
 			</a>
 
@@ -656,7 +656,45 @@ export const siteConfig = defineSiteConfig({
 					Dynamic OG & Sitemaps
 				</h3>
 				<p class="mt-2 text-xs leading-relaxed text-neutral-500">
-					Interactive OG Studio, XML sitemaps with XSL dashboard, and robots.txt.
+					Interactive OG Studio, XML sitemaps with XSL dashboard, and robots.txt engine.
+				</p>
+			</a>
+
+			<a
+				href="/docs/saas-suite"
+				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-primary-500 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/60"
+			>
+				<div
+					class="mb-1 text-xs font-bold tracking-wider text-amber-600 uppercase dark:text-amber-400"
+				>
+					Solo SaaS Suite
+				</div>
+				<h3
+					class="text-sm font-bold text-neutral-900 transition-colors group-hover:text-amber-600 dark:text-white dark:group-hover:text-amber-400"
+				>
+					Full-Stack SaaS Stack
+				</h3>
+				<p class="mt-2 text-xs leading-relaxed text-neutral-500">
+					Better-Auth, Drizzle ORM (Neon & Turso), Polar.sh billing, and Resend emails.
+				</p>
+			</a>
+
+			<a
+				href="/docs/legal-suite"
+				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-primary-500 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/60"
+			>
+				<div
+					class="mb-1 text-xs font-bold tracking-wider text-rose-600 uppercase dark:text-rose-400"
+				>
+					Compliance
+				</div>
+				<h3
+					class="text-sm font-bold text-neutral-900 transition-colors group-hover:text-rose-600 dark:text-white dark:group-hover:text-rose-400"
+				>
+					Legal Suite & Impressum
+				</h3>
+				<p class="mt-2 text-xs leading-relaxed text-neutral-500">
+					Turnkey GDPR Privacy Policies, Polar MoR terms, EthicalAds disclosures, and EU Impressum.
 				</p>
 			</a>
 
@@ -673,7 +711,7 @@ export const siteConfig = defineSiteConfig({
 					Buttons & Form Inputs
 				</h3>
 				<p class="mt-2 text-xs leading-relaxed text-neutral-500">
-					Action buttons, pulsing radar chips, FormFields, and inputs.
+					Action buttons, radar status chips, FormFields, validation, and selects.
 				</p>
 			</a>
 
@@ -684,7 +722,7 @@ export const siteConfig = defineSiteConfig({
 				<div
 					class="mb-1 text-xs font-bold tracking-wider text-violet-600 uppercase dark:text-violet-400"
 				>
-					Components
+					Overlays
 				</div>
 				<h3
 					class="text-sm font-bold text-neutral-900 transition-colors group-hover:text-violet-600 dark:text-white dark:group-hover:text-violet-400"
@@ -692,7 +730,7 @@ export const siteConfig = defineSiteConfig({
 					Modals & DataTables
 				</h3>
 				<p class="mt-2 text-xs leading-relaxed text-neutral-500">
-					Dialog overlays, slideover drawers, dropdowns, and data tables.
+					Dialog overlays, slideover drawers, dropdowns, context menus, and data tables.
 				</p>
 			</a>
 		</div>
