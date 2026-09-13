@@ -29,7 +29,8 @@ DATABASE_URL="postgresql://user:password@ep-cool-db.us-east-2.aws.neon.tech/neon
 
 	const hookCodeSnippet = `// src/hooks.server.ts
 import { sequence } from '@sveltejs/kit/hooks';
-import { createYaxaHook, createYaxaAuth, createYaxaAuthHook } from 'yaxa-svelte';
+import { createYaxaHook } from 'yaxa-svelte/server';
+import { createYaxaAuth, createYaxaAuthHook } from 'yaxa-svelte/auth';
 import { siteConfig } from './site.config';
 
 const yaxaHook = createYaxaHook(siteConfig);
@@ -44,7 +45,7 @@ export const handle = sequence(yaxaHook, authHook);
 `;
 
 	const webhookCodeSnippet = `// src/routes/api/webhooks/polar/+server.ts
-import { createPolarWebhookHandler } from 'yaxa-svelte';
+import { createPolarWebhookHandler } from 'yaxa-svelte/polar';
 
 export const POST = createPolarWebhookHandler({
   onSubscriptionCreated: async (event) => {

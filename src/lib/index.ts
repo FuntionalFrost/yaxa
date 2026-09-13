@@ -146,7 +146,7 @@ export type { PageSeoConfig } from './site/seo-helpers';
 export { yaxa } from './vite/index';
 export type { YaxaPluginOptions } from './vite/index';
 
-// SaaS Suite: Components, Composables & Integrations
+// SaaS Suite: UI Components & Composables
 export { default as AuthCard } from './components/saas/AuthCard.svelte';
 export { default as UserMenu } from './components/saas/UserMenu.svelte';
 export { default as PricingCard } from './components/saas/PricingCard.svelte';
@@ -154,36 +154,6 @@ export { default as PricingTable } from './components/saas/PricingTable.svelte';
 export { default as SubscriptionCard } from './components/saas/SubscriptionCard.svelte';
 export { useAuth } from './composables/useAuth.svelte';
 export type { UseAuthOptions, SocialProvider } from './composables/useAuth.svelte';
-
-// SaaS Server & DB Modules
-export { getDb, schemaPg, schemaSqlite } from './server/db/index';
-export type {
-	DbConfig,
-	DbDriver,
-	SaasUser,
-	SaasSubscription,
-	SubscriptionStatus,
-	PricingTier,
-	PricingFeature
-} from './server/db/index';
-export { createYaxaAuth } from './server/auth/index';
-export type { YaxaAuthConfig, YaxaAuth } from './server/auth/index';
-export { createYaxaAuthHook } from './server/auth/hook';
-export type { YaxaAuthHookOptions } from './server/auth/hook';
-export {
-	getPolarClient,
-	createPolarCheckout,
-	createPolarCustomerPortalSession
-} from './server/polar/index';
-export type { PolarConfig, CreateCheckoutOptions } from './server/polar/index';
-export { createPolarWebhookHandler } from './server/polar/webhook';
-export type { PolarWebhookOptions } from './server/polar/webhook';
-export { getResendClient, sendMagicLinkEmail, sendWelcomeEmail } from './server/email/index';
-export type {
-	ResendEmailConfig,
-	SendMagicLinkOptions,
-	SendWelcomeEmailOptions
-} from './server/email/index';
 
 // Utilities
 export { cn, tv } from './utils/cn';

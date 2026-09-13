@@ -105,3 +105,5 @@ export function createYaxaAuth(config: YaxaAuthConfig = {}) {
 }
 
 export type YaxaAuth = ReturnType<typeof createYaxaAuth>;
+export { createYaxaAuthHook } from './hook';
+export type { YaxaAuthHookOptions } from './hook';

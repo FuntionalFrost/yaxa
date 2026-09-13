@@ -121,7 +121,8 @@ Handle **all 5 SEO endpoints** and **Better-Auth session parsing** in `src/hooks
 ```ts
 // src/hooks.server.ts
 import { sequence } from '@sveltejs/kit/hooks';
-import { createYaxaHook, createYaxaAuth, createYaxaAuthHook } from 'yaxa-svelte';
+import { createYaxaHook } from 'yaxa-svelte/server';
+import { createYaxaAuth, createYaxaAuthHook } from 'yaxa-svelte/auth';
 import { siteConfig } from './site.config';
 
 const yaxaHook = createYaxaHook(siteConfig);
@@ -143,7 +144,7 @@ Create a webhook endpoint in `src/routes/api/webhooks/polar/+server.ts`:
 
 ```ts
 // src/routes/api/webhooks/polar/+server.ts
-import { createPolarWebhookHandler } from 'yaxa-svelte';
+import { createPolarWebhookHandler } from 'yaxa-svelte/polar';
 
 export const POST = createPolarWebhookHandler();
 ```

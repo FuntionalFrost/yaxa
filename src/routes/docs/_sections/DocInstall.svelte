@@ -43,7 +43,7 @@ export const siteConfig = defineSiteConfig({
   {@render children()}
 </YaxaApp>`;
 
-	const hooksSnippet = `import { createYaxaHook } from 'yaxa-svelte';
+	const hooksSnippet = `import { createYaxaHook } from 'yaxa-svelte/server';
 import { siteConfig } from './site.config';
 
 // Automatically handles /robots.txt, /sitemap.xml, /site.webmanifest, and /api/og

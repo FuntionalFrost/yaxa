@@ -77,3 +77,6 @@ export async function createPolarCustomerPortalSession(
 		url: session.customerPortalUrl || ''
 	};
 }
+
+export { createPolarWebhookHandler } from './webhook';
+export type { PolarWebhookOptions } from './webhook';
