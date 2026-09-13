@@ -38,12 +38,37 @@ export function generateWebSiteSchema(config: SiteConfig) {
 }
 
 export function generateOrganizationSchema(config: SiteConfig) {
+	const privacyUrl = config.legal?.links?.privacy
+		? config.legal.links.privacy.startsWith('http')
+			? config.legal.links.privacy
+			: `${config.url}${config.legal.links.privacy}`
+		: undefined;
+
+	const termsUrl = config.legal?.links?.terms
+		? config.legal.links.terms.startsWith('http')
+			? config.legal.links.terms
+			: `${config.url}${config.legal.links.terms}`
+		: undefined;
+
 	return {
 		'@context': 'https://schema.org',
 		'@type': 'Organization',
 		name: config.name,
+		legalName: config.company?.legalName || undefined,
 		url: config.url,
 		logo: config.logo ? `${config.url}${config.logo}` : undefined,
+		email: config.company?.contactEmail || undefined,
+		address: config.company?.address
+			? {
+					'@type': 'PostalAddress',
+					streetAddress: config.company.address,
+					addressCountry: config.company.country || undefined
+				}
+			: undefined,
+		vatID: config.company?.vatNumber || undefined,
+		taxID: config.company?.registrationNumber || undefined,
+		publishingPrinciples: privacyUrl,
+		termsOfService: termsUrl,
 		sameAs: [
 			config.socials?.github,
 			config.socials?.twitter,

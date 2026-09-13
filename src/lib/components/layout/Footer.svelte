@@ -16,21 +16,37 @@
 
 	let currentConfig = $derived(config || getSiteConfig());
 	let currentYear = new Date().getFullYear();
+
+	let company = $derived(currentConfig.company);
+	let legal = $derived(currentConfig.legal);
+	let legalLinks = $derived(legal?.links);
+	let entityName = $derived(company?.legalName || currentConfig.name);
+
+	let hasLegalLinks = $derived(
+		Boolean(
+			legalLinks?.privacy || legalLinks?.terms || legalLinks?.refunds || legalLinks?.impressum
+		)
+	);
 </script>
 
 <footer
 	class="border-t border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950 {className}"
 >
 	<Container size="lg" class="py-12 md:py-16">
-		<div class="grid grid-cols-1 gap-8 md:grid-cols-4">
+		<div class="grid grid-cols-1 gap-8 md:grid-cols-4 lg:grid-cols-5">
 			<!-- Brand Info -->
-			<div class="space-y-4 md:col-span-2">
+			<div class="space-y-4 md:col-span-2 lg:col-span-2">
 				<a href="/" class="inline-flex items-center gap-2.5 font-bold tracking-tight">
 					<Logo size="sm" showText text={currentConfig.name} />
 				</a>
 				<p class="max-w-sm text-base text-neutral-600 dark:text-neutral-400">
 					{currentConfig.description}
 				</p>
+				{#if legal?.morNotice}
+					<p class="text-xs text-neutral-500 dark:text-neutral-500">
+						{legal.morNotice}
+					</p>
+				{/if}
 			</div>
 
 			<!-- Quick Links -->
@@ -49,6 +65,57 @@
 					{/each}
 				</ul>
 			</div>
+
+			<!-- Legal Links -->
+			{#if hasLegalLinks}
+				<div>
+					<h3 class="text-base font-semibold text-neutral-900 dark:text-white">
+						Legal & Compliance
+					</h3>
+					<ul class="mt-4 space-y-2.5 text-sm text-neutral-600 dark:text-neutral-400">
+						{#if legalLinks?.privacy}
+							<li>
+								<a
+									href={legalLinks.privacy}
+									class="transition-colors hover:text-primary-600 dark:hover:text-primary-400"
+								>
+									Privacy Policy
+								</a>
+							</li>
+						{/if}
+						{#if legalLinks?.terms}
+							<li>
+								<a
+									href={legalLinks.terms}
+									class="transition-colors hover:text-primary-600 dark:hover:text-primary-400"
+								>
+									Terms of Service
+								</a>
+							</li>
+						{/if}
+						{#if legalLinks?.refunds}
+							<li>
+								<a
+									href={legalLinks.refunds}
+									class="transition-colors hover:text-primary-600 dark:hover:text-primary-400"
+								>
+									Cancellation & Refunds
+								</a>
+							</li>
+						{/if}
+						{#if legalLinks?.impressum}
+							<li>
+								<a
+									href={legalLinks.impressum}
+									class="transition-colors hover:text-primary-600 dark:hover:text-primary-400"
+								>
+									Impressum
+								</a>
+							</li>
+						{/if}
+					</ul>
+				</div>
+			{/if}
 
 			<!-- Socials & Newsletter -->
 			<div>
@@ -86,11 +153,37 @@
 			</div>
 		</div>
 
+		<!-- Footer Bottom Identification Bar -->
 		<div
-			class="mt-12 flex flex-col items-center justify-between border-t border-neutral-200 pt-8 text-sm text-neutral-500 sm:flex-row dark:border-neutral-800 dark:text-neutral-400"
+			class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-neutral-200 pt-8 text-xs text-neutral-500 sm:flex-row dark:border-neutral-800 dark:text-neutral-400"
 		>
-			<p>© {currentYear} {currentConfig.name}. Built for SvelteKit 2.7 & Svelte 5.</p>
-			<p class="mt-2 sm:mt-0">Designed for solo developers · 100% DRY.</p>
+			<div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 sm:justify-start">
+				<span>© {currentYear} {entityName}.</span>
+				{#if company?.address}
+					<span>· {company.address}</span>
+				{/if}
+				{#if company?.vatNumber}
+					<span>· VAT: {company.vatNumber}</span>
+				{/if}
+				{#if company?.registrationCourt}
+					<span>· {company.registrationCourt}</span>
+				{/if}
+			</div>
+
+			<div class="flex flex-wrap items-center justify-center gap-4">
+				{#if legalLinks?.privacy}
+					<a href={legalLinks.privacy} class="hover:underline">Privacy</a>
+				{/if}
+				{#if legalLinks?.terms}
+					<a href={legalLinks.terms} class="hover:underline">Terms</a>
+				{/if}
+				{#if legalLinks?.refunds}
+					<a href={legalLinks.refunds} class="hover:underline">Refunds</a>
+				{/if}
+				{#if legalLinks?.impressum}
+					<a href={legalLinks.impressum} class="hover:underline">Impressum</a>
+				{/if}
+			</div>
 		</div>
 	</Container>
 </footer>

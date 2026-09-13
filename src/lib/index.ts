@@ -108,8 +108,21 @@ export type {
 export { default as Seo } from './components/seo/Seo.svelte';
 export { default as Favicons } from './components/seo/Favicons.svelte';
 export { default as OgImage } from './components/seo/OgImage.svelte';
-export { defineSiteConfig } from './site/config';
-export type { SiteConfig, NavItem, AuthorConfig } from './site/config';
+export { default as LegalDocument } from './components/legal/LegalDocument.svelte';
+export type {
+	LegalDocumentType,
+	LegalClause,
+	LegalDocumentProps
+} from './components/legal/LegalDocument.svelte';
+export { defineSiteConfig, DEFAULT_SITE_CONFIG } from './site/config';
+export type {
+	SiteConfig,
+	NavItem,
+	AuthorConfig,
+	CompanyConfig,
+	LegalConfig,
+	LegalLinksConfig
+} from './site/config';
 export { setSiteConfig, getSiteConfig } from './site/context';
 export { createYaxaHook } from './site/hook';
 export type { YaxaHookOptions } from './site/hook';

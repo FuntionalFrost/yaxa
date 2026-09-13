@@ -14,6 +14,36 @@ export interface NavItem {
 	badge?: string;
 }
 
+export interface CompanyConfig {
+	legalName: string;
+	address?: string;
+	country?: string;
+	contactEmail: string;
+	vatNumber?: string;
+	registrationNumber?: string;
+	registrationCourt?: string;
+	representative?: string;
+}
+
+export interface LegalLinksConfig {
+	privacy?: string;
+	terms?: string;
+	refunds?: string;
+	impressum?: string;
+}
+
+export interface LegalConfig {
+	jurisdiction?: string;
+	paymentProcessor?: 'polar' | 'stripe' | 'lemonsqueezy' | 'custom' | 'none';
+	adNetwork?: 'ethicalads' | 'custom' | 'none';
+	analytics?: 'none' | 'plausible' | 'fathom' | 'custom';
+	refundDays?: number;
+	governingLaw?: string;
+	dpoEmail?: string;
+	morNotice?: string;
+	links?: LegalLinksConfig;
+}
+
 export interface SiteConfig {
 	name: string;
 	title: string;
@@ -23,6 +53,8 @@ export interface SiteConfig {
 	defaultLocale?: string;
 	logo?: string;
 	author?: AuthorConfig;
+	company?: CompanyConfig;
+	legal?: LegalConfig;
 	theme?: {
 		primaryColor?: string;
 		neutralColor?: string;
@@ -63,11 +95,32 @@ export interface SiteConfig {
 }
 
 export function defineSiteConfig(config: SiteConfig): SiteConfig {
+	const defaultMorNotice =
+		config.legal?.paymentProcessor === 'polar'
+			? 'Payments securely processed by Polar.sh (Merchant of Record)'
+			: config.legal?.paymentProcessor === 'lemonsqueezy'
+				? 'Payments securely processed by Lemon Squeezy (Merchant of Record)'
+				: config.legal?.paymentProcessor === 'stripe'
+					? 'Payments securely processed by Stripe'
+					: undefined;
+
 	return {
 		defaultLocale: 'en',
 		theme: {
 			defaultMode: 'system',
 			...config.theme
+		},
+		legal: {
+			refundDays: 14,
+			paymentProcessor: 'polar',
+			morNotice: defaultMorNotice,
+			...config.legal,
+			links: {
+				privacy: '/privacy',
+				terms: '/terms',
+				refunds: '/refunds',
+				...config.legal?.links
+			}
 		},
 		seo: {
 			titleTemplate: '%s · ' + config.name,
@@ -95,6 +148,22 @@ export const DEFAULT_SITE_CONFIG: SiteConfig = defineSiteConfig({
 	description: 'A comprehensive Svelte 5 UI component and SEO library with Tailwind CSS v4.',
 	url: 'https://yaxa.vercel.app',
 	logo: '/favicon.svg',
+	company: {
+		legalName: 'Yaxa Open Source',
+		contactEmail: 'support@yaxa.vercel.app'
+	},
+	legal: {
+		jurisdiction: 'EU',
+		paymentProcessor: 'polar',
+		adNetwork: 'ethicalads',
+		refundDays: 14,
+		links: {
+			privacy: '/privacy',
+			terms: '/terms',
+			refunds: '/refunds',
+			impressum: '/impressum'
+		}
+	},
 	theme: {
 		primaryColor: '#ff3e00',
 		neutralColor: '#71717a',

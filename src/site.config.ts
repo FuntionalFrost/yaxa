@@ -13,6 +13,28 @@ export const siteConfig = defineSiteConfig({
 		twitter: '@yaxa_ui',
 		github: 'https://github.com/FuntionalFrost/yaxa'
 	},
+	company: {
+		legalName: 'Yaxa Open Source Project',
+		address: 'Berlin, Germany',
+		country: 'Germany',
+		contactEmail: 'contact@yaxa.vercel.app',
+		vatNumber: 'DE-394819201',
+		registrationCourt: 'Amtsgericht Charlottenburg'
+	},
+	legal: {
+		jurisdiction: 'EU',
+		paymentProcessor: 'polar',
+		adNetwork: 'ethicalads',
+		refundDays: 14,
+		governingLaw: 'European Union (Germany)',
+		dpoEmail: 'privacy@yaxa.vercel.app',
+		links: {
+			privacy: '/privacy',
+			terms: '/terms',
+			refunds: '/refunds',
+			impressum: '/impressum'
+		}
+	},
 	theme: {
 		primaryColor: '#ff3e00',
 		neutralColor: '#71717a',

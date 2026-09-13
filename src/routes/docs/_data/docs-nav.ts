@@ -49,6 +49,16 @@ export const DOC_NAV_GROUPS: DocNavGroup[] = [
 					'The 100% DRY single source of truth for your branding, metadata, color themes, navigation, social links, and Svelte 5 context.',
 				category: 'Getting Started',
 				badge: '100% DRY'
+			},
+			{
+				id: 'static-sites',
+				label: 'Static Sites (SSG)',
+				href: '/docs/static-sites',
+				title: 'Static Site Generation (SSG) & Deployments',
+				description:
+					'Deploy pure static HTML/CSS/JS websites with zero server overhead using @sveltejs/adapter-static.',
+				category: 'Getting Started',
+				badge: 'SSG'
 			}
 		]
 	},
@@ -91,6 +101,16 @@ export const DOC_NAV_GROUPS: DocNavGroup[] = [
 					'Batteries-included Auth (Better-Auth), Database ORM (Drizzle with Neon & Turso), Billing (Polar.sh), Resend email, and drop-in Svelte 5 components.',
 				category: 'Solo SaaS Suite',
 				badge: 'Full-Stack'
+			},
+			{
+				id: 'legal-suite',
+				label: 'Legal & Impressum',
+				href: '/docs/legal-suite',
+				title: 'Legal Suite & EU Impressum',
+				description:
+					'Turnkey GDPR Privacy Policies, Polar.sh Merchant of Record terms, EthicalAds zero-cookie disclosures, and EU Impressum provider identification.',
+				category: 'Solo SaaS Suite',
+				badge: 'Zero-Boilerplate'
 			}
 		]
 	},
