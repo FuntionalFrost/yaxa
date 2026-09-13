@@ -123,7 +123,13 @@ export type {
 	LegalConfig,
 	LegalLinksConfig
 } from './site/config';
-export { setSiteConfig, getSiteConfig } from './site/context';
+export {
+	setSiteConfig,
+	getSiteConfig,
+	setAuthUserContext,
+	getAuthUserContext
+} from './site/context';
+export type { AuthUserContext } from './site/context';
 export { createYaxaHook } from './site/hook';
 export type { YaxaHookOptions } from './site/hook';
 export { createRobotsHandler } from './site/robots';
@@ -147,6 +153,8 @@ export { yaxa } from './vite/index';
 export type { YaxaPluginOptions } from './vite/index';
 
 // SaaS Suite: UI Components & Composables
+export { default as Gate } from './components/saas/Gate.svelte';
+export type { GateProps } from './components/saas/Gate.svelte';
 export { default as AuthCard } from './components/saas/AuthCard.svelte';
 export { default as UserMenu } from './components/saas/UserMenu.svelte';
 export { default as PricingCard } from './components/saas/PricingCard.svelte';
@@ -154,6 +162,10 @@ export { default as PricingTable } from './components/saas/PricingTable.svelte';
 export { default as SubscriptionCard } from './components/saas/SubscriptionCard.svelte';
 export { useAuth } from './composables/useAuth.svelte';
 export type { UseAuthOptions, SocialProvider } from './composables/useAuth.svelte';
+export { useGate } from './composables/useGate.svelte';
+export type { UseGateOptions } from './composables/useGate.svelte';
+export { useUpload } from './composables/useUpload.svelte';
+export type { UseUploadOptions, UploadResult } from './composables/useUpload.svelte';
 
 // Utilities
 export { cn, tv } from './utils/cn';

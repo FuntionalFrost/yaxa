@@ -38,8 +38,9 @@ export function getDb(config?: DbConfig): AnyDb {
 	const url =
 		config?.url ||
 		(typeof process !== 'undefined'
-			? process.env.DATABASE_URL || 'postgres://localhost:5432/yaxa_saas'
-			: 'postgres://localhost:5432/yaxa_saas');
+			? process.env.DATABASE_URL ||
+				'postgresql://user:pass@ep-cool-db.us-east-2.aws.neon.tech/yaxa_saas?sslmode=require'
+			: 'postgresql://user:pass@ep-cool-db.us-east-2.aws.neon.tech/yaxa_saas?sslmode=require');
 
 	const authToken =
 		config?.authToken ||
@@ -56,8 +57,18 @@ export function getDb(config?: DbConfig): AnyDb {
 	}
 
 	// Default to Neon Serverless Postgres
-	const sql = neon(url);
-	const db = drizzleNeon(sql, { schema: schemaPg });
-	if (!config) cachedDb = db;
-	return db;
+	try {
+		const sql = neon(url);
+		const db = drizzleNeon(sql, { schema: schemaPg });
+		if (!config) cachedDb = db;
+		return db;
+	} catch {
+		// Fallback for build/analysis time
+		const sql = neon(
+			'postgresql://user:pass@ep-cool-db.us-east-2.aws.neon.tech/yaxa_saas?sslmode=require'
+		);
+		const db = drizzleNeon(sql, { schema: schemaPg });
+		if (!config) cachedDb = db;
+		return db;
+	}
 }

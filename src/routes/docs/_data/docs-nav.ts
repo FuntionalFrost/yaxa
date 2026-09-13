@@ -103,6 +103,26 @@ export const DOC_NAV_GROUPS: DocNavGroup[] = [
 				badge: 'Full-Stack'
 			},
 			{
+				id: 'gating-storage',
+				label: 'Gating & Cloud Storage',
+				href: '/docs/gating-storage',
+				title: 'Feature Gating (<Gate />) & Cloud Storage (useUpload)',
+				description:
+					'Declarative tier/role gating with Svelte 5 context fallback, useGate composable rune, and S3/R2 presigned upload workflows.',
+				category: 'Solo SaaS Suite',
+				badge: 'Runes'
+			},
+			{
+				id: 'admin-suite',
+				label: 'Admin & Introspection',
+				href: '/docs/admin-suite',
+				title: 'Drizzle Admin & Introspection Suite',
+				description:
+					'Subpath suite with 1-line route interception, schema introspection, CRUD table inspector, Dev Sandbox, and S3/R2 storage.',
+				category: 'Solo SaaS Suite',
+				badge: 'Subpath'
+			},
+			{
 				id: 'legal-suite',
 				label: 'Legal & Impressum',
 				href: '/docs/legal-suite',

@@ -138,6 +138,55 @@ export const handle = sequence(yaxaHook, authHook);
 
 ---
 
+## 🛡️ Declarative Feature Gating (`<Gate />` & `useGate()`)
+
+Declarative and programmatic subscription tier and RBAC gating with automatic Svelte 5 context fallback:
+
+```svelte
+<script lang="ts">
+	import { Gate, useGate } from 'yaxa-svelte';
+
+	const gate = useGate();
+</script>
+
+<!-- 0 props needed when wrapped in <YaxaApp user={data.user}> -->
+<Gate requiredPlan="pro" preview={true}>
+	<AdvancedAnalyticsWidget />
+</Gate>
+```
+
+---
+
+## 🗄️ Drizzle Admin & Introspection Suite (`yaxa-svelte/admin`)
+
+Dual-mode Drizzle ORM administration and introspection suite with live CRUD table editor, developer sandbox, and user impersonation:
+
+```ts
+// Approach A (Zero-File Route Interceptor in src/hooks.server.ts)
+import { sequence } from '@sveltejs/kit/hooks';
+import { createYaxaAdminHook } from 'yaxa-svelte/admin';
+import { db } from '$lib/server/db';
+import * as schema from '$lib/server/db/schema-pg';
+
+export const handle = sequence(createYaxaAdminHook({ db, schema, path: '/admin' }));
+```
+
+---
+
+## ☁️ Cloud Storage (`useUpload()` & Presigned S3/R2 Uploads)
+
+```svelte
+<!-- Client Upload with Progress Tracking -->
+<script lang="ts">
+	import { useUpload } from 'yaxa-svelte';
+	const uploader = useUpload({ endpoint: '/api/upload' });
+</script>
+
+<input type="file" onchange={(e) => uploader.upload(e.currentTarget.files[0])} />
+```
+
+---
+
 ## 💳 Polar.sh Payments & Webhook Synchronization
 
 Create a webhook endpoint in `src/routes/api/webhooks/polar/+server.ts`:
@@ -151,16 +200,34 @@ export const POST = createPolarWebhookHandler();
 
 ---
 
+## 📦 Subpath Exports Architecture
+
+| Subpath                | Description                                                                                                                               |
+| :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
+| `yaxa-svelte`          | Core UI Primitives, SEO Components, `<Gate />`, Theme System & Composables (`useGate`, `useUpload`, `useAuth`, `useClipboard`, etc.)      |
+| `yaxa-svelte/admin`    | Drizzle ORM Schema Introspection, `<AdminDashboard />`, `createYaxaAdminHook`, `createDrizzleAdmin`, `<DevSandbox />`, `<RecordDrawer />` |
+| `yaxa-svelte/server`   | Universal Server Hooks, SEO endpoints, Drizzle DB drivers, Cloud Storage handlers, and Email dispatch                                     |
+| `yaxa-svelte/auth`     | Better-Auth integration and protected route server guards (`createYaxaAuth`, `createYaxaAuthHook`)                                        |
+| `yaxa-svelte/db`       | Multi-dialect Drizzle ORM clients & schemas for Neon (PostgreSQL) and Turso (SQLite/LibSQL)                                               |
+| `yaxa-svelte/polar`    | Polar.sh billing, customer portal sessions, and webhook synchronization                                                                   |
+| `yaxa-svelte/email`    | Resend transactional email templates with automatic development console fallback                                                          |
+| `yaxa-svelte/storage`  | AWS S3 and Cloudflare R2 presigned upload URL generators                                                                                  |
+| `yaxa-svelte/vite`     | Turnkey Vite plugin (`yaxa()`)                                                                                                            |
+| `yaxa-svelte/yaxa.css` | Tailwind CSS v4 design tokens and base stylesheet                                                                                         |
+
+---
+
 ## 🧩 Component Library
 
 | Category           | Components                                                                                                                                                   |
 | :----------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **SaaS Suite**     | `AuthCard`, `UserMenu`, `PricingCard`, `PricingTable`, `SubscriptionCard`, `useAuth`                                                                         |
+| **SaaS Suite**     | `<Gate>`, `<AuthCard>`, `<UserMenu>`, `<PricingCard>`, `<PricingTable>`, `<SubscriptionCard>`, `useAuth`, `useGate`, `useUpload`                             |
+| **Admin Suite**    | `<AdminDashboard>`, `<RecordDrawer>`, `<DevSandbox>`, `<ImpersonationBanner>`, `createYaxaAdminHook`, `createDrizzleAdmin`                                   |
 | **Elements**       | `Button`, `ButtonGroup`, `Badge`, `Avatar`, `AvatarGroup`, `DataTable`, `Chip`, `Meter`, `Kbd`, `Icon`, `Spinner`, `Progress`, `Skeleton`, `Link`, `Logo`    |
 | **Forms**          | `Form`, `FormField`, `Input`, `Textarea`, `Checkbox`, `Switch`, `Select`, `RadioGroup`, `Slider`, `ColorPicker`                                              |
 | **Layout**         | `Container`, `Header`, `Footer`, `Section`, `Card`, `Divider`, `YaxaApp`                                                                                     |
 | **Overlays & Nav** | `Tabs`, `Breadcrumb`, `Pagination`, `CommandPalette` (`⌘K`), `DropdownMenu`, `ContextMenu`, `Modal`, `Slideover`, `Popover`, `Tooltip`, `Alert`, `Accordion` |
-| **Composables**    | `useAuth`, `useClipboard`, `useShortcuts`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`                                                        |
+| **Composables**    | `useAuth`, `useGate`, `useUpload`, `useClipboard`, `useShortcuts`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`                                |
 
 ---
 

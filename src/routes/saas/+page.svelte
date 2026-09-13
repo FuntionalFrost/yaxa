@@ -10,6 +10,7 @@
 	import UserMenu from '$lib/components/saas/UserMenu.svelte';
 	import PricingTable from '$lib/components/saas/PricingTable.svelte';
 	import SubscriptionCard from '$lib/components/saas/SubscriptionCard.svelte';
+	import Gate from '$lib/components/saas/Gate.svelte';
 	import { useToast } from '$lib/composables/useToast';
 	import type { SubscriptionStatus } from '$lib/server/db/types';
 	import { siteConfig } from '../../site.config';
@@ -25,7 +26,8 @@
 		{ value: 'overview', label: 'Complete SaaS Flow' },
 		{ value: 'auth', label: 'Auth & Onboarding' },
 		{ value: 'pricing', label: 'Pricing & Checkout' },
-		{ value: 'billing', label: 'Customer Billing Portal' }
+		{ value: 'billing', label: 'Customer Billing' },
+		{ value: 'gating', label: 'Feature Gating (<Gate />)' }
 	];
 </script>
 
@@ -233,6 +235,72 @@
 									toast.info('Change Plan', 'Navigating to pricing table...');
 								}}
 							/>
+						</div>
+					</div>
+				{/if}
+
+				{#if activeTab === 'overview' || activeTab === 'gating'}
+					<div class="mt-16 space-y-12 border-t border-zinc-200 pt-16 dark:border-zinc-800">
+						<div class="space-y-1 text-center">
+							<Badge color="primary" size="xs">Module 4</Badge>
+							<h2 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+								Declarative Feature Gating
+							</h2>
+							<p class="text-sm text-zinc-500 dark:text-zinc-400">
+								Lock premium components and pages with declarative tier and role gating.
+							</p>
+						</div>
+
+						<div class="mx-auto max-w-3xl space-y-6">
+							<Card
+								class="flex flex-wrap items-center justify-between gap-3 bg-zinc-100/70 p-4 text-xs dark:bg-zinc-900/50"
+							>
+								<span class="font-semibold text-zinc-700 dark:text-zinc-300">Switch User Plan:</span
+								>
+								<div class="flex items-center gap-2">
+									{#each ['Free', 'Starter', 'Pro', 'Enterprise'] as plan}
+										<Button
+											size="xs"
+											variant={mockUserTier.toLowerCase() === plan.toLowerCase()
+												? 'solid'
+												: 'outline'}
+											color={mockUserTier.toLowerCase() === plan.toLowerCase()
+												? 'primary'
+												: 'neutral'}
+											onclick={() => {
+												mockUserTier = plan;
+											}}
+										>
+											{plan}
+										</Button>
+									{/each}
+								</div>
+							</Card>
+
+							<Gate
+								requiredPlan="pro"
+								userPlan={mockUserTier.toLowerCase()}
+								preview={true}
+								upgradeTitle="Pro Tier Feature"
+								upgradeMessage="Requires an active Pro or Enterprise subscription."
+								upgradeUrl="/saas"
+							>
+								<div
+									class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+								>
+									<div class="flex items-center justify-between">
+										<div>
+											<h4 class="text-base font-bold text-zinc-900 dark:text-zinc-100">
+												Advanced Analytics & Automated Reports
+											</h4>
+											<p class="text-xs text-zinc-500">
+												Only accessible to Pro and Enterprise customers.
+											</p>
+										</div>
+										<Badge color="success" size="sm">Active (Unlocked)</Badge>
+									</div>
+								</div>
+							</Gate>
 						</div>
 					</div>
 				{/if}

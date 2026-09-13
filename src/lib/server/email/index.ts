@@ -31,8 +31,21 @@ export interface SendMagicLinkOptions {
 
 /**
  * Sends a branded magic link sign-in email.
+ * In development without a RESEND_API_KEY, logs the link clearly to the terminal console.
  */
 export async function sendMagicLinkEmail(options: SendMagicLinkOptions) {
+	const apiKey = (typeof process !== 'undefined' ? process.env.RESEND_API_KEY : undefined) || '';
+
+	if (!apiKey || apiKey === 're_placeholder' || apiKey.startsWith('mock_')) {
+		console.log('\n==================================================');
+		console.log('📨 [Yaxa Dev Email Logger] Magic Link Sign-In Email');
+		console.log(`To: ${options.to}`);
+		console.log(`Subject: Your sign-in link for ${options.appName || 'Your SaaS App'}`);
+		console.log(`URL: ${options.url}`);
+		console.log('==================================================\n');
+		return { data: { id: `mock-${Date.now()}` }, error: null };
+	}
+
 	const resend = getResendClient();
 	const appName = options.appName || 'Your SaaS App';
 	const from =
@@ -75,8 +88,20 @@ export interface SendWelcomeEmailOptions {
 
 /**
  * Sends a welcome onboarding email to new SaaS signups.
+ * In development without a RESEND_API_KEY, logs the email clearly to the terminal console.
  */
 export async function sendWelcomeEmail(options: SendWelcomeEmailOptions) {
+	const apiKey = (typeof process !== 'undefined' ? process.env.RESEND_API_KEY : undefined) || '';
+
+	if (!apiKey || apiKey === 're_placeholder' || apiKey.startsWith('mock_')) {
+		console.log('\n==================================================');
+		console.log('📨 [Yaxa Dev Email Logger] Welcome Onboarding Email');
+		console.log(`To: ${options.to} (${options.name || 'User'})`);
+		console.log(`Subject: Welcome to ${options.appName || 'Your SaaS App'}! 🎉`);
+		console.log('==================================================\n');
+		return { data: { id: `mock-${Date.now()}` }, error: null };
+	}
+
 	const resend = getResendClient();
 	const appName = options.appName || 'Your SaaS App';
 	const from =

@@ -46,3 +46,12 @@ export type {
 	SendMagicLinkOptions,
 	SendWelcomeEmailOptions
 } from './email/index';
+
+// Cloud Storage (AWS S3 & Cloudflare R2)
+export { getS3Client, createPresignedUploadUrl, createS3UploadHandler } from './storage/index';
+export type {
+	S3StorageConfig,
+	PresignedUploadOptions,
+	PresignedUploadResult,
+	S3UploadHandlerOptions
+} from './storage/index';

@@ -10,6 +10,8 @@
 	import DocForms from '../_sections/DocForms.svelte';
 	import DocOverlays from '../_sections/DocOverlays.svelte';
 	import DocSaasSuite from '../_sections/DocSaasSuite.svelte';
+	import DocGatingStorage from '../_sections/DocGatingStorage.svelte';
+	import DocAdminSuite from '../_sections/DocAdminSuite.svelte';
 	import DocLegal from '../_sections/DocLegal.svelte';
 	import Seo from '$lib/components/seo/Seo.svelte';
 
@@ -26,6 +28,8 @@
 		'comp-forms': DocForms,
 		'comp-overlays': DocOverlays,
 		'saas-suite': DocSaasSuite,
+		'gating-storage': DocGatingStorage,
+		'admin-suite': DocAdminSuite,
 		'legal-suite': DocLegal
 	};
 

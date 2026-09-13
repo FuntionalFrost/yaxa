@@ -6,21 +6,28 @@
 	import { themeInitScript } from '$lib/theme/theme.svelte';
 	import Favicons from '../seo/Favicons.svelte';
 	import Seo from '../seo/Seo.svelte';
-	import { setSiteConfig } from '$lib/site/context';
+	import { setSiteConfig, setAuthUserContext, type AuthUserContext } from '$lib/site/context';
 	import '$lib/styles/yaxa.css';
 
 	export interface YaxaAppProps {
 		config?: SiteConfig;
+		user?: AuthUserContext | null;
 		enableDefaultSeo?: boolean;
 		children?: Snippet;
 	}
 
 	export type Props = YaxaAppProps;
 
-	let { config = DEFAULT_SITE_CONFIG, enableDefaultSeo = true, children }: YaxaAppProps = $props();
+	let {
+		config = DEFAULT_SITE_CONFIG,
+		user = null,
+		enableDefaultSeo = true,
+		children
+	}: YaxaAppProps = $props();
 
-	// Provide config to all descendant components via Svelte 5 context
+	// Provide config and authenticated user to all descendant components via Svelte 5 context
 	setSiteConfig(() => config);
+	setAuthUserContext(() => user);
 
 	const scriptTag = `<script>${themeInitScript}</` + `script>`;
 </script>
