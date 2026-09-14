@@ -206,16 +206,13 @@ export type { PageSeoConfig } from './site/seo-helpers';
 export { yaxa } from './vite/index';
 export type { YaxaPluginOptions } from './vite/index';
 
-// SaaS Suite: UI Components & Composables
+// SaaS Suite: UI Components & Composables (Pure UI & Context Runes)
 export { default as Gate } from './components/saas/Gate.svelte';
 export type { GateProps } from './components/saas/Gate.svelte';
-export { default as AuthCard } from './components/saas/AuthCard.svelte';
 export { default as UserMenu } from './components/saas/UserMenu.svelte';
 export { default as PricingCard } from './components/saas/PricingCard.svelte';
 export { default as PricingTable } from './components/saas/PricingTable.svelte';
 export { default as SubscriptionCard } from './components/saas/SubscriptionCard.svelte';
-export { useAuth } from './composables/useAuth.svelte';
-export type { UseAuthOptions, SocialProvider } from './composables/useAuth.svelte';
 export { useGate } from './composables/useGate.svelte';
 export type { UseGateOptions } from './composables/useGate.svelte';
 export { useUpload } from './composables/useUpload.svelte';

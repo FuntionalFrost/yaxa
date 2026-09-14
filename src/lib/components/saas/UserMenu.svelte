@@ -3,24 +3,16 @@
 	import Badge from '../elements/Badge.svelte';
 	import Icon from '../elements/Icon.svelte';
 	import DropdownMenu, { type MenuItem } from '../navigation/DropdownMenu.svelte';
-	import { useAuth } from '../../composables/useAuth.svelte';
-
-	interface UserInfo {
-		name?: string | null;
-		email?: string | null;
-		image?: string | null;
-		role?: string | null;
-		tier?: string | null;
-	}
+	import { getAuthUserContext, type AuthUserContext } from '../../site/context';
 
 	interface Props {
-		user?: UserInfo | null;
+		user?: AuthUserContext | null;
 		tier?: string;
 		dashboardUrl?: string;
 		settingsUrl?: string;
 		billingUrl?: string;
 		class?: string;
-		onsignout?: () => void;
+		onsignout?: () => void | Promise<void>;
 	}
 
 	let {
@@ -33,16 +25,17 @@
 		onsignout
 	}: Props = $props();
 
-	const auth = useAuth();
+	const contextUser = $derived(getAuthUserContext());
 
 	const currentUser = $derived(
-		propUser ||
-			auth.user || {
-				name: 'Solo Developer',
-				email: 'dev@yaxa.dev',
-				image: null,
-				tier
-			}
+		propUser !== undefined
+			? propUser
+			: contextUser || {
+					name: 'Solo Developer',
+					email: 'dev@yaxa.dev',
+					image: null,
+					tier
+				}
 	);
 
 	const initials = $derived.by(() => {
@@ -91,9 +84,11 @@
 			icon: 'log-out',
 			destructive: true,
 			onSelect: async () => {
-				await auth.signOut();
-				if (onsignout) onsignout();
-				if (typeof window !== 'undefined') window.location.href = '/login';
+				if (onsignout) {
+					await onsignout();
+				} else if (typeof window !== 'undefined') {
+					window.location.href = '/login';
+				}
 			}
 		}
 	]);

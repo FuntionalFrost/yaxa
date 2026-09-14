@@ -13,8 +13,8 @@ export const GET = createSitemapHandler({
 	staticRoutes: [
 		{ loc: '/', priority: 1.0, changefreq: 'daily' as const },
 		{ loc: '/docs/intro', priority: 0.95, changefreq: 'weekly' as const },
-		{ loc: '/admin', priority: 0.7, changefreq: 'monthly' as const },
 		{ loc: '/saas', priority: 0.8, changefreq: 'monthly' as const },
+		{ loc: '/terms', priority: 0.5, changefreq: 'yearly' as const },
 		{ loc: '/privacy', priority: 0.5, changefreq: 'yearly' as const },
 		{ loc: '/refunds', priority: 0.5, changefreq: 'yearly' as const },
 		{ loc: '/impressum', priority: 0.5, changefreq: 'yearly' as const },

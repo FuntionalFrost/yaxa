@@ -55,8 +55,9 @@
 			"default": "./dist/server/index.js"
 		},
 		"./auth": {
-			"types": "./dist/server/auth/index.d.ts",
-			"default": "./dist/server/auth/index.js"
+			"types": "./dist/auth/index.d.ts",
+			"svelte": "./dist/auth/index.js",
+			"default": "./dist/auth/index.js"
 		},
 		"./db": {
 			"types": "./dist/server/db/index.d.ts",
@@ -127,17 +128,15 @@
 		"typescript": "^6.0.3",
 		"typescript-eslint": "^8.60.1",
 		"unplugin-icons": "^23.0.1",
-		"vite": "^8.0.16"
+		"vite": "^8.0.16",
+		"zod": "^4.5.4"
 	},
 	"dependencies": {
 		"bits-ui": "^2.19.0",
-		"formsnap": "^2.0.1",
 		"mode-watcher": "^1.1.0",
 		"runed": "^0.37.1",
 		"svelte-sonner": "^1.2.1",
-		"sveltekit-superforms": "^2.30.2",
-		"tailwind-variants": "^3.3.1",
-		"zod": "^4.5.4"
+		"tailwind-variants": "^3.3.1"
 	},
 	"peerDependencies": {
 		"@aws-sdk/client-s3": ">=3.0.0",
@@ -150,7 +149,8 @@
 		"better-auth": ">=1.7.0",
 		"drizzle-orm": ">=0.45.0",
 		"resend": ">=6.27.0",
-		"svelte": "^5.0.0"
+		"svelte": "^5.0.0",
+		"zod": ">=3.0.0 || >=4.0.0"
 	},
 	"peerDependenciesMeta": {
 		"@aws-sdk/client-s3": {
@@ -178,6 +178,9 @@
 			"optional": true
 		},
 		"resend": {
+			"optional": true
+		},
+		"zod": {
 			"optional": true
 		}
 	}

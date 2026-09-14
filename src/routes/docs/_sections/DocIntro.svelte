@@ -167,6 +167,35 @@
 						<td class="px-4 py-2.5">Tailwind CSS v4 (@tailwindcss/vite)</td>
 						<td class="px-4 py-2.5"><Badge color="primary" size="xs">Modern</Badge></td>
 					</tr>
+					<tr>
+						<td class="px-4 py-2.5 font-bold text-zinc-900 dark:text-white"
+							>Headless Actions Suite</td
+						>
+						<td class="px-4 py-2.5">VueUse (`useTextareaAutosize`, `onClickOutside`)</td>
+						<td class="px-4 py-2.5 font-mono">use:autosize, use:clickOutside, use:portal</td>
+						<td class="px-4 py-2.5"><Badge color="primary" size="xs">Headless</Badge></td>
+					</tr>
+					<tr>
+						<td class="px-4 py-2.5 font-bold text-zinc-900 dark:text-white">Subpath Architecture</td
+						>
+						<td class="px-4 py-2.5">Nuxt Layers & Modules</td>
+						<td class="px-4 py-2.5 font-mono">yaxa-svelte/auth, /server, /db, /polar</td>
+						<td class="px-4 py-2.5"><Badge color="primary" size="xs">Zero-Tax</Badge></td>
+					</tr>
+					<tr>
+						<td class="px-4 py-2.5 font-bold text-zinc-900 dark:text-white">Syntax Engine</td>
+						<td class="px-4 py-2.5">Shiki / Prism (WASM/Heavy)</td>
+						<td class="px-4 py-2.5 font-mono">&lt;CodeBlock /&gt; (Zero-WASM LaTeX/GFM/Vue/TSX)</td>
+						<td class="px-4 py-2.5"><Badge color="primary" size="xs">Pure Web</Badge></td>
+					</tr>
+					<tr>
+						<td class="px-4 py-2.5 font-bold text-zinc-900 dark:text-white"
+							>Solo SaaS & Auth Suite</td
+						>
+						<td class="px-4 py-2.5">NuxtHub / Nuxt Auth</td>
+						<td class="px-4 py-2.5 font-mono">Better-Auth, Drizzle, Polar & Resend</td>
+						<td class="px-4 py-2.5"><Badge color="primary" size="xs">Turnkey</Badge></td>
+					</tr>
 				</tbody>
 			</table>
 		</div>

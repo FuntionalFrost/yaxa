@@ -29,8 +29,7 @@ DATABASE_URL="postgresql://user:password@ep-cool-db.us-east-2.aws.neon.tech/neon
 
 	const hookCodeSnippet = `// src/hooks.server.ts
 import { sequence } from '@sveltejs/kit/hooks';
-import { createYaxaHook } from 'yaxa-svelte/server';
-import { createYaxaAuth, createYaxaAuthHook } from 'yaxa-svelte/auth';
+import { createYaxaHook, createYaxaAuth, createYaxaAuthHook } from 'yaxa-svelte/server';
 import { siteConfig } from './site.config';
 
 const yaxaHook = createYaxaHook(siteConfig);
@@ -52,6 +51,25 @@ export const POST = createPolarWebhookHandler({
     console.log('New paid subscription created!', event.data.id);
   }
 });
+`;
+
+	const subpathsSnippet = `// 1. Core UI Components & Headless Actions (Zero Backend Overhead)
+import { Button, Modal, UserMenu, useToast, useColorMode } from 'yaxa-svelte';
+
+// 2. Full-Stack Client Auth (Better-Auth Runes & Cards)
+import { useAuth, AuthCard } from 'yaxa-svelte/auth';
+
+// 3. SvelteKit Server Hooks, Auth Factory & SEO Handlers
+import { createYaxaHook, createYaxaAuth, createYaxaAuthHook } from 'yaxa-svelte/server';
+
+// 4. Drizzle ORM Database Schema & Client
+import { getDb, schemaPg, schemaSqlite } from 'yaxa-svelte/db';
+
+// 5. Polar.sh Billing & Webhooks
+import { createPolarCheckout, createPolarWebhookHandler } from 'yaxa-svelte/polar';
+
+// 6. S3 / Cloudflare R2 Presigned Uploads
+import { createPresignedUploadUrl } from 'yaxa-svelte/storage';
 `;
 </script>
 
@@ -172,6 +190,21 @@ export const POST = createPolarWebhookHandler({
 		<pre
 			class="overflow-x-auto rounded-xl border border-zinc-200 bg-zinc-900 p-4 font-mono text-xs text-zinc-100 dark:border-zinc-800"><code
 				>{webhookCodeSnippet}</code
+			></pre>
+	</div>
+
+	<!-- Subpath Module Architecture -->
+	<div class="space-y-6">
+		<h2 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+			4. Subpath Module Architecture (Zero-Bundle Tax)
+		</h2>
+		<p class="text-sm text-zinc-600 dark:text-zinc-400">
+			Yaxa isolates full-stack dependencies via dedicated subpath exports, ensuring pure client and
+			static documentation projects don't download or bundle unused backend libraries:
+		</p>
+		<pre
+			class="overflow-x-auto rounded-xl border border-zinc-200 bg-zinc-900 p-4 font-mono text-xs text-zinc-100 dark:border-zinc-800"><code
+				>{subpathsSnippet}</code
 			></pre>
 	</div>
 </div>
