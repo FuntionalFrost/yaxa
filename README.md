@@ -68,7 +68,7 @@ export default defineConfig({
 
 ### 3. Define Your Site Configuration
 
-Create `src/site.config.ts` — your single source of truth for branding, metadata, and SEO:
+Create `src/site.config.ts` — your single source of truth for branding, metadata, licensing, and SEO:
 
 ```ts
 // src/site.config.ts
@@ -79,14 +79,20 @@ export const siteConfig = defineSiteConfig({
 	title: 'My Indie SaaS — Build Fast with SvelteKit',
 	description: 'Fast, beautiful, accessible web applications.',
 	url: 'https://my-app.com',
+	// Single-email mode: Solo devs can set one email for contact, support & DPO
+	email: 'hello@my-app.com',
+	project: {
+		license: 'MIT',
+		type: 'open-source',
+		repositoryUrl: 'https://github.com/my-org/my-app'
+	},
 	theme: {
 		accent: 'svelte', // 'svelte' | 'emerald' | 'amber' | 'sky' | 'violet' | 'rose' | 'indigo'
 		neutral: 'zinc', // 'zinc' | 'slate' | 'stone' | 'neutral'
 		defaultMode: 'dark'
 	},
 	socials: {
-		github: 'https://github.com/my-org/my-app',
-		twitter: '@my_app'
+		github: 'https://github.com/my-org/my-app'
 	}
 });
 ```
@@ -219,15 +225,15 @@ export const POST = createPolarWebhookHandler();
 
 ## 🧩 Component Library
 
-| Category           | Components                                                                                                                                                   |
-| :----------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **SaaS Suite**     | `<Gate>`, `<AuthCard>`, `<UserMenu>`, `<PricingCard>`, `<PricingTable>`, `<SubscriptionCard>`, `useAuth`, `useGate`, `useUpload`                             |
-| **Admin Suite**    | `<AdminDashboard>`, `<RecordDrawer>`, `<DevSandbox>`, `<ImpersonationBanner>`, `createYaxaAdminHook`, `createDrizzleAdmin`                                   |
-| **Elements**       | `Button`, `ButtonGroup`, `Badge`, `Avatar`, `AvatarGroup`, `DataTable`, `Chip`, `Meter`, `Kbd`, `Icon`, `Spinner`, `Progress`, `Skeleton`, `Link`, `Logo`    |
-| **Forms**          | `Form`, `FormField`, `Input`, `Textarea`, `Checkbox`, `Switch`, `Select`, `RadioGroup`, `Slider`, `ColorPicker`                                              |
-| **Layout**         | `Container`, `Header`, `Footer`, `Section`, `Card`, `Divider`, `YaxaApp`                                                                                     |
-| **Overlays & Nav** | `Tabs`, `Breadcrumb`, `Pagination`, `CommandPalette` (`⌘K`), `DropdownMenu`, `ContextMenu`, `Modal`, `Slideover`, `Popover`, `Tooltip`, `Alert`, `Accordion` |
-| **Composables**    | `useAuth`, `useGate`, `useUpload`, `useClipboard`, `useShortcuts`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`                                |
+| Category            | Components                                                                                                                                                                  |
+| :------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **SaaS Suite**      | `<Gate>`, `<AuthCard>`, `<UserMenu>`, `<PricingCard>`, `<PricingTable>`, `<SubscriptionCard>`, `useAuth`, `useGate`, `useUpload`                                            |
+| **Admin Suite**     | `<AdminDashboard>`, `<RecordDrawer>`, `<DevSandbox>`, `<ImpersonationBanner>`, `createYaxaAdminHook`, `createDrizzleAdmin`                                                  |
+| **Elements**        | `Button`, `ButtonGroup`, `Badge`, `Avatar`, `AvatarGroup`, `DataTable`, `Chip`, `Meter`, `MetricCard`, `Kbd`, `Icon`, `Spinner`, `Progress`, `Skeleton`, `Link`, `Logo`     |
+| **Forms**           | `Form`, `FormField`, `Input`, `InputOTP`, `Textarea`, `Checkbox`, `Switch`, `Select`, `RadioGroup`, `Slider`, `ColorPicker`, `ToggleGroup`, `DatePicker`, `DateRangePicker` |
+| **Layout & Blocks** | `Container`, `Header`, `Footer`, `Section`, `Card`, `Divider`, `YaxaApp`, Page Blocks (Hero, SaaS Metrics, 2FA Security)                                                    |
+| **Overlays & Nav**  | `Tabs`, `Breadcrumb`, `Pagination`, `CommandPalette` (`⌘K`), `DropdownMenu`, `ContextMenu`, `Modal`, `Slideover`, `Popover`, `Tooltip`, `Alert`, `Accordion`                |
+| **Composables**     | `useAuth`, `useGate`, `useUpload`, `useClipboard`, `useShortcuts`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`                                               |
 
 ---
 

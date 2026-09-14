@@ -20,12 +20,14 @@ export { default as DataTable } from './components/elements/DataTable.svelte';
 export type { Column } from './components/elements/DataTable.svelte';
 export { default as Chip } from './components/elements/Chip.svelte';
 export { default as Meter } from './components/elements/Meter.svelte';
+export { default as MetricCard } from './components/elements/MetricCard.svelte';
 
 // Form Controls
 export { default as Form } from './components/forms/Form.svelte';
 export { default as FormField } from './components/forms/FormField.svelte';
 export { default as Input } from './components/forms/Input.svelte';
 export type { InputProps } from './components/forms/Input.svelte';
+export { default as InputOTP } from './components/forms/InputOTP.svelte';
 export { default as Textarea } from './components/forms/Textarea.svelte';
 export { default as Checkbox } from './components/forms/Checkbox.svelte';
 export { default as Switch } from './components/forms/Switch.svelte';
@@ -34,6 +36,12 @@ export type { SelectProps, SelectOption } from './components/forms/Select.svelte
 export { default as RadioGroup } from './components/forms/RadioGroup.svelte';
 export { default as Slider } from './components/forms/Slider.svelte';
 export { default as ColorPicker } from './components/forms/ColorPicker.svelte';
+export { default as ToggleGroup } from './components/forms/ToggleGroup.svelte';
+export type { ToggleItem } from './components/forms/ToggleGroup.svelte';
+export { default as DatePicker } from './components/forms/DatePicker.svelte';
+export type { DatePreset } from './components/forms/DatePicker.svelte';
+export { default as DateRangePicker } from './components/forms/DateRangePicker.svelte';
+export type { DateRange, DateRangePreset } from './components/forms/DateRangePicker.svelte';
 
 // Layout & Shell
 export { default as Container } from './components/layout/Container.svelte';
@@ -114,14 +122,18 @@ export type {
 	LegalClause,
 	LegalDocumentProps
 } from './components/legal/LegalDocument.svelte';
-export { defineSiteConfig, DEFAULT_SITE_CONFIG } from './site/config';
+export { defineSiteConfig, computeProjectBadge, DEFAULT_SITE_CONFIG } from './site/config';
 export type {
 	SiteConfig,
 	NavItem,
 	AuthorConfig,
 	CompanyConfig,
 	LegalConfig,
-	LegalLinksConfig
+	LegalLinksConfig,
+	ProjectLicense,
+	ProjectType,
+	PricingModel,
+	ProjectConfig
 } from './site/config';
 export {
 	setSiteConfig,
@@ -143,6 +155,8 @@ export { createManifestHandler } from './site/manifest';
 export {
 	generateWebSiteSchema,
 	generateOrganizationSchema,
+	generateSoftwareApplicationSchema,
+	generatePersonSchema,
 	generateArticleSchema,
 	generateBreadcrumbSchema
 } from './site/schema';

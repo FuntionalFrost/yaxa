@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import type { SiteConfig } from '$lib/site/config';
+	import { computeProjectBadge, type SiteConfig } from '$lib/site/config';
 	import { getSiteConfig } from '$lib/site/context';
 	import { generateWebSiteSchema } from '$lib/site/schema';
 
@@ -89,7 +89,11 @@
 			};
 			if (img.title) pairs.push(`title=${encodeURIComponent(img.title)}`);
 			if (img.description) pairs.push(`description=${encodeURIComponent(img.description)}`);
-			if (img.badge) pairs.push(`badge=${encodeURIComponent(img.badge)}`);
+			if (img.badge) {
+				pairs.push(`badge=${encodeURIComponent(img.badge)}`);
+			} else if (config.project) {
+				pairs.push(`badge=${encodeURIComponent(computeProjectBadge(config.project))}`);
+			}
 			if (img.theme) pairs.push(`theme=${encodeURIComponent(img.theme)}`);
 			return `${config.url}/api/og?${pairs.join('&')}`;
 		}
@@ -98,6 +102,9 @@
 				`title=${encodeURIComponent(resolvedTitle)}`,
 				`description=${encodeURIComponent(metaDescription)}`
 			];
+			if (config.project) {
+				pairs.push(`badge=${encodeURIComponent(computeProjectBadge(config.project))}`);
+			}
 			return `${config.url}/api/og?${pairs.join('&')}`;
 		}
 		return `${config.url}${config.seo?.defaultOgImage || '/api/og'}`;
@@ -141,6 +148,12 @@
 	<link rel="canonical" href={currentUrl} />
 	<meta name="robots" content={robotsContent} />
 	<meta name="theme-color" content={config.theme?.primaryColor || '#ff3e00'} />
+	{#if config.project?.license}
+		<meta name="project:license" content={config.project.license} />
+	{/if}
+	{#if config.project?.type}
+		<meta name="project:type" content={config.project.type} />
+	{/if}
 
 	<!-- Open Graph / Facebook -->
 	<meta property="og:type" content="website" />

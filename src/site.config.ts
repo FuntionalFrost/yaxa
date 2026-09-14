@@ -4,30 +4,26 @@ export const siteConfig = defineSiteConfig({
 	name: 'Yaxa',
 	title: 'Yaxa — The Intuitive Svelte UI Library',
 	description:
-		'A comprehensive Svelte 5 UI component library (SvelteKit optional) with 25+ accessible, Tailwind CSS components for building modern web applications.',
+		'A comprehensive Svelte 5 UI component library with 25+ accessible, Tailwind CSS components and automated SEO for building modern web applications.',
 	url: 'https://yaxa.vercel.app',
+	email: 'contact@yaxa.vercel.app',
 	version: 'v1',
 	logo: '/favicon.svg',
+	project: {
+		license: 'MIT',
+		type: 'open-source',
+		pricingModel: 'open-source',
+		repositoryUrl: 'https://github.com/FuntionalFrost/yaxa'
+	},
 	author: {
 		name: 'Yaxa Team',
-		twitter: '@yaxa_ui',
 		github: 'https://github.com/FuntionalFrost/yaxa'
-	},
-	company: {
-		legalName: 'Yaxa Open Source Project',
-		address: 'Berlin, Germany',
-		country: 'Germany',
-		contactEmail: 'contact@yaxa.vercel.app',
-		vatNumber: 'DE-394819201',
-		registrationCourt: 'Amtsgericht Charlottenburg'
 	},
 	legal: {
 		jurisdiction: 'EU',
 		paymentProcessor: 'polar',
 		adNetwork: 'ethicalads',
 		refundDays: 14,
-		governingLaw: 'European Union (Germany)',
-		dpoEmail: 'privacy@yaxa.vercel.app',
 		links: {
 			privacy: '/privacy',
 			terms: '/terms',
@@ -43,7 +39,6 @@ export const siteConfig = defineSiteConfig({
 	seo: {
 		titleTemplate: '%s · Yaxa',
 		defaultOgImage: '/api/og',
-		twitterCard: 'summary_large_image',
 		keywords: [
 			'Svelte',
 			'SvelteKit',
@@ -73,7 +68,6 @@ export const siteConfig = defineSiteConfig({
 		{ label: 'Releases', href: 'https://github.com/FuntionalFrost/yaxa/releases' }
 	],
 	socials: {
-		github: 'https://github.com/FuntionalFrost/yaxa',
-		twitter: 'https://twitter.com/yaxa_ui'
+		github: 'https://github.com/FuntionalFrost/yaxa'
 	}
 });

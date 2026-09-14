@@ -1,7 +1,15 @@
 import type { SiteConfig } from './config';
 
 export type SchemaType =
-	'WebSite' | 'Organization' | 'WebPage' | 'Article' | 'Product' | 'BreadcrumbList' | 'FAQPage';
+	| 'WebSite'
+	| 'Organization'
+	| 'Person'
+	| 'SoftwareApplication'
+	| 'WebPage'
+	| 'Article'
+	| 'Product'
+	| 'BreadcrumbList'
+	| 'FAQPage';
 
 export interface BreadcrumbItem {
 	name: string;
@@ -25,15 +33,71 @@ export function generateWebSiteSchema(config: SiteConfig) {
 		name: config.name,
 		url: config.url,
 		description: config.description,
+		license: config.project?.licenseUrl || config.project?.license || undefined,
+		isAccessibleForFree: config.project?.isAccessibleForFree,
 		...(config.author
 			? {
 					author: {
 						'@type': 'Person',
 						name: config.author.name,
-						url: config.author.url
+						url: config.author.url,
+						email: config.author.email || config.email
 					}
 				}
 			: {})
+	};
+}
+
+export function generatePersonSchema(config: SiteConfig) {
+	return {
+		'@context': 'https://schema.org',
+		'@type': 'Person',
+		name: config.author?.name || config.company?.legalName || config.name,
+		url: config.author?.url || config.url,
+		email: config.email || config.author?.email,
+		sameAs: [
+			config.author?.twitter ? `https://twitter.com/${config.author.twitter}` : undefined,
+			config.author?.github ? `https://github.com/${config.author.github}` : undefined,
+			config.socials?.github,
+			config.socials?.twitter,
+			config.socials?.bluesky
+		].filter(Boolean)
+	};
+}
+
+export function generateSoftwareApplicationSchema(config: SiteConfig) {
+	const offers =
+		config.project?.pricingModel === 'paid' || config.project?.pricingModel === 'freemium'
+			? {
+					'@type': 'Offer',
+					price: config.project?.pricingModel === 'freemium' ? '0' : undefined,
+					priceCurrency: 'USD'
+				}
+			: {
+					'@type': 'Offer',
+					price: '0',
+					priceCurrency: 'USD'
+				};
+
+	return {
+		'@context': 'https://schema.org',
+		'@type': 'SoftwareApplication',
+		name: config.name,
+		headline: config.title,
+		description: config.description,
+		url: config.url,
+		applicationCategory: 'DeveloperApplication',
+		operatingSystem: 'Any',
+		license: config.project?.licenseUrl || config.project?.license,
+		isAccessibleForFree: config.project?.isAccessibleForFree ?? true,
+		offers,
+		author: config.author
+			? {
+					'@type': 'Person',
+					name: config.author.name,
+					url: config.author.url
+				}
+			: undefined
 	};
 }
 
@@ -57,7 +121,7 @@ export function generateOrganizationSchema(config: SiteConfig) {
 		legalName: config.company?.legalName || undefined,
 		url: config.url,
 		logo: config.logo ? `${config.url}${config.logo}` : undefined,
-		email: config.company?.contactEmail || undefined,
+		email: config.email || config.company?.contactEmail || undefined,
 		address: config.company?.address
 			? {
 					'@type': 'PostalAddress',

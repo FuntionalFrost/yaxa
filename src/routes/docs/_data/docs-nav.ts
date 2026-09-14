@@ -59,6 +59,16 @@ export const DOC_NAV_GROUPS: DocNavGroup[] = [
 					'Deploy pure static HTML/CSS/JS websites with zero server overhead using @sveltejs/adapter-static.',
 				category: 'Getting Started',
 				badge: 'SSG'
+			},
+			{
+				id: 'blocks',
+				label: 'Page Blocks',
+				href: '/docs/blocks',
+				title: 'Pre-Built Page Blocks for Solo Devs',
+				description:
+					'Copy-paste responsive hero sections, SaaS metrics dashboard cards, 2FA security cards, and pricing grids.',
+				category: 'Getting Started',
+				badge: 'New'
 			}
 		]
 	},

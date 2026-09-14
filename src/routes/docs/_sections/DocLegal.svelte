@@ -12,15 +12,15 @@ import { defineSiteConfig } from 'yaxa-svelte';
 export const siteConfig = defineSiteConfig({
   name: 'CodeSnap',
   url: 'https://codesnap.dev',
+  
+  // ✉️ Solo Dev Single-Email (No company registration needed!)
+  email: 'support@codesnap.dev',
 
-  // 🏢 Company Identification / EU Impressum
-  company: {
-    legalName: 'CodeSnap Labs GmbH',
-    address: 'Musterstraße 12, 10115 Berlin, Germany',
-    country: 'Germany',
-    contactEmail: 'support@codesnap.dev',
-    vatNumber: 'DE-394819201',
-    registrationCourt: 'Amtsgericht Charlottenburg (HRB 123456)'
+  // 📦 Software Nature & Licensing
+  project: {
+    license: 'MIT',
+    type: 'open-source',
+    repositoryUrl: 'https://github.com/codesnap/codesnap'
   },
 
   // ⚖️ Legal & Integrations
@@ -29,8 +29,6 @@ export const siteConfig = defineSiteConfig({
     paymentProcessor: 'polar',       // Injects Polar Merchant of Record & EU VAT handling
     adNetwork: 'ethicalads',         // Injects zero-cookie / zero-tracking disclosure
     refundDays: 14,                  // 14-day money-back guarantee
-    governingLaw: 'Germany',
-    dpoEmail: 'privacy@codesnap.dev',
     links: {
       privacy: '/privacy',
       terms: '/terms',

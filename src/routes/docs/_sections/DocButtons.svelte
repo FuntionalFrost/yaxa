@@ -8,6 +8,7 @@
 	import Chip from '$lib/components/elements/Chip.svelte';
 	import Spinner from '$lib/components/elements/Spinner.svelte';
 	import Skeleton from '$lib/components/elements/Skeleton.svelte';
+	import MetricCard from '$lib/components/elements/MetricCard.svelte';
 	import Icon from '$lib/components/elements/Icon.svelte';
 	import { ArrowRight, ChevronLeft, ChevronRight, Sparkles, Send } from '@lucide/svelte';
 
@@ -125,6 +126,30 @@
 				<Skeleton class="h-4 w-full" />
 				<Skeleton class="h-4 w-1/2" />
 			</div>
+		</div>
+	</DocSandbox>
+
+	<!-- MetricCard Stats & Zero-Dep Sparklines -->
+	<DocSandbox title="MetricCard (Zero-Dep SVG Sparkline Trend Card)">
+		<div class="grid w-full max-w-lg grid-cols-1 gap-4 sm:grid-cols-2">
+			<MetricCard
+				title="Total Users"
+				value="8,924"
+				change={12.5}
+				changePeriod="vs last month"
+				sparkline={[4200, 5100, 6400, 7200, 8100, 8924]}
+				sparklineColor="success"
+				icon="users"
+			/>
+			<MetricCard
+				title="Conversion"
+				value="3.42%"
+				change={-0.8}
+				changePeriod="vs last week"
+				sparkline={[4.2, 4.0, 3.8, 3.9, 3.6, 3.42]}
+				sparklineColor="error"
+				icon="sparkles"
+			/>
 		</div>
 	</DocSandbox>
 

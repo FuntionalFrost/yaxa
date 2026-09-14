@@ -1,5 +1,5 @@
 import type { RequestHandler } from '@sveltejs/kit';
-import type { SiteConfig } from './config';
+import { computeProjectBadge, type SiteConfig } from './config';
 
 export interface OgImageOptions {
 	config?: SiteConfig;
@@ -38,6 +38,8 @@ export function generateOgSvg(params: {
 	const safeSiteName = escapeXml(params.siteName || 'Yaxa');
 	const safeBadge = params.badge ? escapeXml(params.badge) : null;
 	const safeUrl = escapeXml(params.url ? params.url.replace(/^https?:\/\//, '') : 'yaxa.dev');
+	const badgeWidth = safeBadge ? Math.max(90, safeBadge.length * 8.5 + 24) : 0;
+	const badgeX = 840 - badgeWidth;
 
 	return `<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -87,8 +89,8 @@ export function generateOgSvg(params: {
     ${
 			safeBadge
 				? `
-    <rect x="760" y="2" width="${safeBadge.length * 10 + 36}" height="32" rx="16" fill="rgba(255, 62, 0, 0.15)" stroke="rgba(255, 62, 0, 0.4)" stroke-width="1"/>
-    <text x="${760 + (safeBadge.length * 10 + 36) / 2}" y="23" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" fill="#ff6a00" text-anchor="middle">${safeBadge}</text>
+    <rect x="${badgeX}" y="2" width="${badgeWidth}" height="32" rx="16" fill="rgba(255, 62, 0, 0.15)" stroke="rgba(255, 62, 0, 0.4)" stroke-width="1"/>
+    <text x="${badgeX + badgeWidth / 2}" y="23" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="600" fill="#ff6a00" text-anchor="middle">${safeBadge}</text>
     `
 				: ''
 		}
@@ -116,7 +118,9 @@ export function createOgImageHandler(options?: OgImageOptions): RequestHandler {
 			url.searchParams.get('description') ||
 			options?.config?.description ||
 			'Fast, beautiful, accessible UI components and SEO tools for SvelteKit.';
-		const badge = url.searchParams.get('badge') || undefined;
+		const badge =
+			url.searchParams.get('badge') ||
+			(options?.config?.project ? computeProjectBadge(options.config.project) : undefined);
 		const theme = (url.searchParams.get('theme') as 'dark' | 'light') || 'dark';
 		const siteName = url.searchParams.get('site') || options?.config?.name || 'Yaxa';
 		const siteUrl = options?.config?.url || url.origin;

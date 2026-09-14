@@ -13,6 +13,7 @@
 	import DocGatingStorage from '../_sections/DocGatingStorage.svelte';
 	import DocAdminSuite from '../_sections/DocAdminSuite.svelte';
 	import DocLegal from '../_sections/DocLegal.svelte';
+	import DocBlocks from '../_sections/DocBlocks.svelte';
 	import Seo from '$lib/components/seo/Seo.svelte';
 
 	let { data }: PageProps = $props();
@@ -22,6 +23,7 @@
 		install: DocInstall,
 		config: DocConfig,
 		'static-sites': DocStaticSites,
+		blocks: DocBlocks,
 		'seo-og': DocSeoOg,
 		'seo-robots': DocSeoRobots,
 		'comp-buttons': DocButtons,

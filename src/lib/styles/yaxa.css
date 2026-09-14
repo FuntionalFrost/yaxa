@@ -82,3 +82,73 @@ body {
 ::-webkit-scrollbar-thumb:hover {
 	background: var(--yaxa-muted);
 }
+
+/* Micro-interactions & Animation Utilities */
+.yaxa-press {
+	transition:
+		transform 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+		box-shadow 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+	will-change: transform;
+}
+.yaxa-press:active {
+	transform: scale(0.97);
+}
+
+.yaxa-glass {
+	background-color: rgba(255, 255, 255, 0.8);
+	backdrop-filter: blur(12px);
+	-webkit-backdrop-filter: blur(12px);
+}
+.dark .yaxa-glass {
+	background-color: rgba(18, 18, 18, 0.8);
+}
+
+@keyframes yaxa-shimmer {
+	0% {
+		background-position: -200% 0;
+	}
+	100% {
+		background-position: 200% 0;
+	}
+}
+
+.animate-yaxa-shimmer {
+	background: linear-gradient(
+		90deg,
+		rgba(255, 255, 255, 0) 0%,
+		rgba(255, 255, 255, 0.15) 50%,
+		rgba(255, 255, 255, 0) 100%
+	);
+	background-size: 200% 100%;
+	animation: yaxa-shimmer 2.5s infinite linear;
+}
+
+@keyframes yaxa-float {
+	0%,
+	100% {
+		transform: translateY(0px);
+	}
+	50% {
+		transform: translateY(-6px);
+	}
+}
+
+.animate-yaxa-float {
+	animation: yaxa-float 4s ease-in-out infinite;
+}
+
+@keyframes yaxa-pulse-glow {
+	0%,
+	100% {
+		opacity: 0.6;
+		transform: scale(1);
+	}
+	50% {
+		opacity: 1;
+		transform: scale(1.05);
+	}
+}
+
+.animate-yaxa-pulse-glow {
+	animation: yaxa-pulse-glow 3s ease-in-out infinite;
+}
