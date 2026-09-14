@@ -5,6 +5,8 @@
 	import Chip from '$lib/components/elements/Chip.svelte';
 	import Icon from '$lib/components/elements/Icon.svelte';
 	import MetricCard from '$lib/components/elements/MetricCard.svelte';
+	import CodeBlock from '$lib/components/elements/CodeBlock.svelte';
+	import SortableList from '$lib/components/elements/SortableList.svelte';
 	import Input from '$lib/components/forms/Input.svelte';
 	import Switch from '$lib/components/forms/Switch.svelte';
 	import Tabs from '$lib/components/navigation/Tabs.svelte';
@@ -97,8 +99,17 @@ export const siteConfig = defineSiteConfig({
 		}
 	}
 
+	let sampleTasks = $state([
+		'⚡ Svelte 5 Runes Reactivity',
+		'🎨 Tailwind CSS v4 Theme Studio',
+		'🪄 Headless Actions Suite',
+		'✨ Zero-WASM Syntax Highlighter'
+	]);
+
 	const demoTabs = [
 		{ value: 'buttons', label: 'Actions' },
+		{ value: 'code', label: 'Code Block' },
+		{ value: 'sortable', label: 'Drag & Drop' },
 		{ value: 'forms', label: 'Inputs' },
 		{ value: 'badges', label: 'Status' },
 		{ value: 'metrics', label: 'SaaS Stat' }
@@ -143,8 +154,8 @@ export const siteConfig = defineSiteConfig({
 		<p
 			class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed font-normal text-neutral-600 sm:text-xl dark:text-neutral-400"
 		>
-			25+ accessible components, automated runtime OpenGraph card generation, robots.txt, XML
-			sitemaps, and real-time Tailwind theme customization from a single source of truth.
+			35+ accessible components, headless Svelte 5 actions, zero-WASM syntax highlighter, automated
+			runtime OpenGraph cards, XML sitemaps, and real-time Tailwind theme customization.
 		</p>
 
 		<!-- Action CTA Buttons -->
@@ -427,6 +438,22 @@ export const siteConfig = defineSiteConfig({
 								<Chip color="success" pulse>Connected</Chip>
 								<Chip color="warning">Pending</Chip>
 							</div>
+						</div>
+					{:else if activeDemoTab === 'code'}
+						<div class="space-y-2">
+							<CodeBlock
+								code={'<' +
+									'script lang="ts">\n  import { useLocale } from "yaxa-svelte";\n  const { formatCurrency } = useLocale();\n<' +
+									'/script>\n\n<p>Price: {formatCurrency(29.99, "EUR")}</p>'}
+								language="svelte"
+								filename="Pricing.svelte"
+								showLineNumbers={true}
+							/>
+						</div>
+					{:else if activeDemoTab === 'sortable'}
+						<div class="space-y-2">
+							<p class="text-xs text-neutral-500">Drag cards by handle to reorder:</p>
+							<SortableList bind:items={sampleTasks} />
 						</div>
 					{:else if activeDemoTab === 'forms'}
 						<div class="space-y-4">
