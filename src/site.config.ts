@@ -6,7 +6,7 @@ export const siteConfig = defineSiteConfig({
 	description:
 		'A comprehensive Svelte 5 UI component library with 25+ accessible, Tailwind CSS components and automated SEO for building modern web applications.',
 	url: 'https://yaxa.vercel.app',
-	email: 'contact@yaxa.vercel.app',
+	email: 'devfrost@protonmail.com',
 	version: 'v1',
 	logo: '/favicon.svg',
 	project: {
