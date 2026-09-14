@@ -150,33 +150,33 @@ export const DOC_NAV_GROUPS: DocNavGroup[] = [
 		items: [
 			{
 				id: 'comp-buttons',
-				label: 'Buttons & Badges',
+				label: 'Buttons & Elements',
 				href: '/docs/comp-buttons',
-				title: 'Buttons, ButtonGroups & Badges',
+				title: 'Buttons, Badges & Visual Elements',
 				description:
-					'Accessible action triggers, button groups, status chips, pulsing radar chips, spinners, and skeletons with 6 visual variants.',
+					'Accessible action triggers, button groups, avatars, presence indicators, keyboard shortcuts, status chips, spinners, progress meters, and skeletons.',
 				category: 'Components',
 				source: 'src/lib/components/elements/Button.svelte',
 				badge: 'Elements'
 			},
 			{
 				id: 'comp-forms',
-				label: 'Forms & Inputs',
+				label: 'Forms & Pickers',
 				href: '/docs/comp-forms',
-				title: 'Forms, Inputs & FormFields',
+				title: 'Forms, Inputs & Pickers',
 				description:
-					'Typed FormFields with validation states, character counters, switches, checkboxes, sliders, radio cards, and color pickers.',
+					'Typed FormFields with validation states, character counters, OTP/2FA code inputs, ToggleGroups, DatePickers, switches, checkboxes, and sliders.',
 				category: 'Components',
 				source: 'src/lib/components/forms/FormField.svelte',
 				badge: 'Forms'
 			},
 			{
 				id: 'comp-overlays',
-				label: 'Modals, Overlays & Tables',
+				label: 'Overlays & Navigation',
 				href: '/docs/comp-overlays',
-				title: 'Modals, Slideover Drawers, Toasts & DataTables',
+				title: 'Modals, Overlays, Navigation & DataTables',
 				description:
-					'Accessible dialog overlays, slideover sheets, popovers, dropdown menus, context menus, alert banners, and reactive data tables.',
+					'Accessible dialog overlays, slideover sheets, popovers, context menus, accordion FAQ panels, breadcrumbs, pagination, alert banners, and reactive data tables.',
 				category: 'Components',
 				source: 'src/lib/components/overlays/Modal.svelte',
 				badge: 'Overlays'

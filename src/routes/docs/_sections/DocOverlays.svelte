@@ -13,8 +13,16 @@
 	import Input from '$lib/components/forms/Input.svelte';
 	import { useToast } from '$lib/composables/useToast';
 
+	import Popover from '$lib/components/overlays/Popover.svelte';
+	import Accordion, { type AccordionItem } from '$lib/components/overlays/Accordion.svelte';
+	import ContextMenu, { type ContextMenuItem } from '$lib/components/overlays/ContextMenu.svelte';
+	import Breadcrumb, { type BreadcrumbItem as NavBreadcrumbItem } from '$lib/components/navigation/Breadcrumb.svelte';
+	import Pagination from '$lib/components/navigation/Pagination.svelte';
+
 	let modalOpen = $state(false);
 	let slideoverOpen = $state(false);
+	let popoverOpen = $state(false);
+	let currentPage = $state(2);
 	let tableSearch = $state('');
 	const toast = useToast();
 
@@ -38,6 +46,42 @@
 		{ id: '2', label: 'Documentation', icon: 'book-open' },
 		{ id: '3', label: '', separator: true },
 		{ id: '4', label: 'Log Out', icon: 'arrow-right-on-rectangle', destructive: true }
+	];
+
+	const contextMenuItems: ContextMenuItem[] = [
+		{ id: '1', label: 'Copy Link', icon: 'clipboard', shortcut: '⌘C', onSelect: () => toast.success('Link copied') },
+		{ id: '2', label: 'Inspect Component', icon: 'bolt', shortcut: '⌥I' },
+		{ id: '3', label: 'Duplicate', icon: 'plus' },
+		{ id: '4', label: '', separator: true },
+		{ id: '5', label: 'Delete Row', icon: 'trash', destructive: true, onSelect: () => toast.error('Row deleted') }
+	];
+
+	const accordionItems: AccordionItem[] = [
+		{
+			value: 'q1',
+			title: 'How does Yaxa differ from shadcn-svelte?',
+			content: 'Yaxa is a zero-boilerplate single-package library (like Nuxt UI) rather than a code-copy CLI. Everything updates cleanly via npm/pnpm with full type safety.',
+			icon: 'bolt'
+		},
+		{
+			value: 'q2',
+			title: 'Does it support SvelteKit 2.7+ and Svelte 5 Runes?',
+			content: 'Yes! 100% of Yaxa primitives are written natively with Svelte 5 runes ($state, $derived, $effect, and snippet slots) and Tailwind CSS v4.',
+			icon: 'sparkles'
+		},
+		{
+			value: 'q3',
+			title: 'Are SEO tags and Open Graph images automated?',
+			content: 'Yes. Yaxa includes dynamic SVG OG image generation, automated sitemaps with XSL styling, robots.txt handlers, and Schema.org JSON-LD generation.',
+			icon: 'document'
+		}
+	];
+
+	const breadcrumbItems: NavBreadcrumbItem[] = [
+		{ label: 'Home', href: '/', icon: 'home' },
+		{ label: 'Docs', href: '/docs' },
+		{ label: 'Components', href: '/docs/comp-overlays' },
+		{ label: 'Overlays & Navigation' }
 	];
 </script>
 
@@ -111,7 +155,7 @@
 	</Slideover>
 
 	<!-- Popovers, Tooltips & Dropdowns Sandbox -->
-	<DocSandbox title="Popovers, Tooltips, Dropdowns & Toasts">
+	<DocSandbox title="Popovers, Tooltips, Dropdowns & Context Menus">
 		<div class="flex flex-wrap items-center justify-center gap-4">
 			<Tooltip text="Svelte 5 Runes Native">
 				<Button variant="outline">Hover for Tooltip</Button>
@@ -125,6 +169,29 @@
 				{/snippet}
 			</DropdownMenu>
 
+			<Popover bind:open={popoverOpen}>
+				{#snippet trigger()}
+					<Button variant="outline">
+						<Icon name="adjustments-horizontal" class="mr-1.5 h-4 w-4" />
+						Filters Popover
+					</Button>
+				{/snippet}
+				<div class="w-64 space-y-3">
+					<h4 class="font-bold text-xs text-neutral-900 dark:text-white uppercase tracking-wider">Display Settings</h4>
+					<div class="space-y-2 text-xs">
+						<label class="flex items-center justify-between text-neutral-600 dark:text-neutral-400">
+							<span>Compact view</span>
+							<input type="checkbox" class="rounded accent-primary-600" />
+						</label>
+						<label class="flex items-center justify-between text-neutral-600 dark:text-neutral-400">
+							<span>Show sparklines</span>
+							<input type="checkbox" checked class="rounded accent-primary-600" />
+						</label>
+					</div>
+					<Button size="xs" color="primary" class="w-full" onclick={() => (popoverOpen = false)}>Apply</Button>
+				</div>
+			</Popover>
+
 			<Button
 				variant="solid"
 				color="success"
@@ -132,6 +199,39 @@
 			>
 				Trigger Toast
 			</Button>
+		</div>
+
+		<!-- Context Menu Target Area -->
+		<div class="mt-6 w-full max-w-md mx-auto">
+			<ContextMenu items={contextMenuItems}>
+				<div class="rounded-xl border border-dashed border-neutral-300 bg-neutral-50/50 p-6 text-center transition-all hover:bg-neutral-100/50 dark:border-neutral-700 dark:bg-neutral-900/30 dark:hover:bg-neutral-900/60 cursor-context-menu">
+					<Icon name="cursor-arrow-rays" class="mx-auto mb-2 h-6 w-6 text-neutral-400" />
+					<p class="text-xs font-semibold text-neutral-700 dark:text-neutral-300">Right-Click Area for Context Menu</p>
+					<p class="text-[11px] text-neutral-500">Includes keyboard shortcuts, item separators & actions</p>
+				</div>
+			</ContextMenu>
+		</div>
+	</DocSandbox>
+
+	<!-- Accordion Collapsible Panels Sandbox -->
+	<DocSandbox title="Accordion (Collapsible FAQ & Panels)">
+		<div class="w-full max-w-xl mx-auto rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900/40">
+			<Accordion items={accordionItems} type="single" />
+		</div>
+	</DocSandbox>
+
+	<!-- Navigation: Breadcrumbs & Pagination Sandbox -->
+	<DocSandbox title="Breadcrumb Navigation & Pagination Controls">
+		<div class="w-full space-y-6">
+			<div class="flex flex-col gap-2 rounded-lg bg-neutral-50 p-3 dark:bg-neutral-800/40">
+				<span class="text-[11px] font-bold uppercase tracking-wider text-neutral-500">Breadcrumb Trail</span>
+				<Breadcrumb items={breadcrumbItems} separator="chevron-right" />
+			</div>
+
+			<div class="flex flex-col items-center justify-between gap-4 sm:flex-row">
+				<span class="text-xs text-neutral-500">Showing page <strong class="text-neutral-900 dark:text-white">{currentPage}</strong> of 10</span>
+				<Pagination total={100} pageSize={10} bind:page={currentPage} />
+			</div>
 		</div>
 	</DocSandbox>
 

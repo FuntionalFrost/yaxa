@@ -4,6 +4,7 @@
 	import Badge from '$lib/components/elements/Badge.svelte';
 	import Chip from '$lib/components/elements/Chip.svelte';
 	import Icon from '$lib/components/elements/Icon.svelte';
+	import MetricCard from '$lib/components/elements/MetricCard.svelte';
 	import Input from '$lib/components/forms/Input.svelte';
 	import Switch from '$lib/components/forms/Switch.svelte';
 	import Tabs from '$lib/components/navigation/Tabs.svelte';
@@ -99,7 +100,8 @@ export const siteConfig = defineSiteConfig({
 	const demoTabs = [
 		{ value: 'buttons', label: 'Actions' },
 		{ value: 'forms', label: 'Inputs' },
-		{ value: 'badges', label: 'Status' }
+		{ value: 'badges', label: 'Status' },
+		{ value: 'metrics', label: 'SaaS Stat' }
 	];
 </script>
 
@@ -457,6 +459,18 @@ export const siteConfig = defineSiteConfig({
 							<Badge color="warning" variant="subtle">Maintenance</Badge>
 							<Badge color="info" variant="subtle">Beta 2.0</Badge>
 						</div>
+					{:else if activeDemoTab === 'metrics'}
+						<div class="space-y-3">
+							<MetricCard
+								title="Monthly Recurring Revenue"
+								value="$14,250"
+								change={18.4}
+								changePeriod="vs last month"
+								sparkline={[8200, 9400, 11200, 10800, 12600, 13500, 14250]}
+								sparklineColor="primary"
+								icon="lightning"
+							/>
+						</div>
 					{/if}
 
 					<div
@@ -505,7 +519,7 @@ export const siteConfig = defineSiteConfig({
 				</h3>
 				<p class="text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">
 					Zero legacy Svelte 4 store baggage. Pure Svelte 5 runes (`$state`, `$derived`, `$props`,
-					and `&#123;#snippet&#125;`) for lightning-fast reactivity and ultra-clean code.
+					and snippets) for lightning-fast reactivity and ultra-clean code.
 				</p>
 			</div>
 
@@ -573,11 +587,10 @@ export const siteConfig = defineSiteConfig({
 					<Icon name="squares-plus" class="h-5 w-5" />
 				</div>
 				<h3 class="mb-2 text-base font-bold text-neutral-900 dark:text-white">
-					25+ Accessible Primitives
+					35+ Accessible Primitives
 				</h3>
 				<p class="text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">
-					Buttons, Modals, Slideovers, Popovers, Tooltips, DataTables, FormFields, Selects, Sliders,
-					and Toasts ready for immediate production deployment.
+					MetricCards, InputOTP, ToggleGroups, DatePickers, Modals, Slideovers, Popovers, Tooltips, DataTables, FormFields, and Toasts ready for deployment.
 				</p>
 			</div>
 
@@ -591,11 +604,10 @@ export const siteConfig = defineSiteConfig({
 					<Icon name="sparkles" class="h-5 w-5" />
 				</div>
 				<h3 class="mb-2 text-base font-bold text-neutral-900 dark:text-white">
-					100% DRY Architecture
+					Solo Dev DX & 100% DRY
 				</h3>
 				<p class="text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">
-					Never repeat metadata or styling across files. Configure `src/site.config.ts` once and let
-					Yaxa derive your header, footer, SEO tags, and endpoints automatically.
+					Single-email mode, automated project licensing badges, and turnkey Polar.sh billing. Never repeat metadata or boilerplate across files.
 				</p>
 			</div>
 		</div>
@@ -616,12 +628,17 @@ export const siteConfig = defineSiteConfig({
 					Explore Yaxa by Category
 				</h2>
 			</div>
-			<Button href="/docs/intro" color="primary" variant="outline" size="sm">
-				View All Documentation ↗
-			</Button>
+			<div class="flex items-center gap-3">
+				<Button href="/saas" color="neutral" variant="outline" size="sm">
+					SaaS Demo ↗
+				</Button>
+				<Button href="/docs/intro" color="primary" variant="solid" size="sm">
+					View Documentation ↗
+				</Button>
+			</div>
 		</div>
 
-		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
 			<a
 				href="/docs/intro"
 				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-primary-500 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/60"
@@ -634,10 +651,29 @@ export const siteConfig = defineSiteConfig({
 				<h3
 					class="text-sm font-bold text-neutral-900 transition-colors group-hover:text-primary-600 dark:text-white dark:group-hover:text-primary-400"
 				>
-					Quickstart & Static SSG
+					Quickstart & SSG
 				</h3>
 				<p class="mt-2 text-xs leading-relaxed text-neutral-500">
-					Svelte 5 Runes inspector, install guide, and static adapter (SSG) deployment recipes.
+					Svelte 5 Runes, install guide, and static adapter recipes.
+				</p>
+			</a>
+
+			<a
+				href="/docs/blocks"
+				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-primary-500 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/60"
+			>
+				<div
+					class="mb-1 text-xs font-bold tracking-wider text-indigo-600 uppercase dark:text-indigo-400"
+				>
+					Page Blocks
+				</div>
+				<h3
+					class="text-sm font-bold text-neutral-900 transition-colors group-hover:text-indigo-600 dark:text-white dark:group-hover:text-indigo-400"
+				>
+					Pre-Built Templates
+				</h3>
+				<p class="mt-2 text-xs leading-relaxed text-neutral-500">
+					Copy-paste SaaS metrics, hero sections, and 2FA cards.
 				</p>
 			</a>
 
@@ -656,7 +692,7 @@ export const siteConfig = defineSiteConfig({
 					Dynamic OG & Sitemaps
 				</h3>
 				<p class="mt-2 text-xs leading-relaxed text-neutral-500">
-					Interactive OG Studio, XML sitemaps with XSL dashboard, and robots.txt engine.
+					Interactive OG Studio, XML sitemaps, and robots.txt.
 				</p>
 			</a>
 
@@ -675,7 +711,26 @@ export const siteConfig = defineSiteConfig({
 					Full-Stack SaaS Stack
 				</h3>
 				<p class="mt-2 text-xs leading-relaxed text-neutral-500">
-					Better-Auth, Drizzle ORM (Neon & Turso), Polar.sh billing, and Resend emails.
+					Better-Auth, Drizzle ORM, Polar.sh billing, and Resend.
+				</p>
+			</a>
+
+			<a
+				href="/docs/admin-suite"
+				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-primary-500 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/60"
+			>
+				<div
+					class="mb-1 text-xs font-bold tracking-wider text-purple-600 uppercase dark:text-purple-400"
+				>
+					Admin Suite
+				</div>
+				<h3
+					class="text-sm font-bold text-neutral-900 transition-colors group-hover:text-purple-600 dark:text-white dark:group-hover:text-purple-400"
+				>
+					Drizzle DB Inspector
+				</h3>
+				<p class="mt-2 text-xs leading-relaxed text-neutral-500">
+					Schema introspection, table CRUD, and impersonation.
 				</p>
 			</a>
 
@@ -694,7 +749,7 @@ export const siteConfig = defineSiteConfig({
 					Legal Suite & Impressum
 				</h3>
 				<p class="mt-2 text-xs leading-relaxed text-neutral-500">
-					Turnkey GDPR Privacy Policies, Polar MoR terms, EthicalAds disclosures, and EU Impressum.
+					GDPR Privacy Policies, Polar MoR terms, and EU Impressum.
 				</p>
 			</a>
 
@@ -711,7 +766,7 @@ export const siteConfig = defineSiteConfig({
 					Buttons & Form Inputs
 				</h3>
 				<p class="mt-2 text-xs leading-relaxed text-neutral-500">
-					Action buttons, radar status chips, FormFields, validation, and selects.
+					Buttons, OTP input, DatePickers, ToggleGroups, and selects.
 				</p>
 			</a>
 
@@ -720,17 +775,17 @@ export const siteConfig = defineSiteConfig({
 				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-primary-500 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/60"
 			>
 				<div
-					class="mb-1 text-xs font-bold tracking-wider text-violet-600 uppercase dark:text-violet-400"
+					class="mb-1 text-xs font-bold tracking-wider text-teal-600 uppercase dark:text-teal-400"
 				>
 					Overlays
 				</div>
 				<h3
-					class="text-sm font-bold text-neutral-900 transition-colors group-hover:text-violet-600 dark:text-white dark:group-hover:text-violet-400"
+					class="text-sm font-bold text-neutral-900 transition-colors group-hover:text-teal-600 dark:text-white dark:group-hover:text-teal-400"
 				>
 					Modals & DataTables
 				</h3>
 				<p class="mt-2 text-xs leading-relaxed text-neutral-500">
-					Dialog overlays, slideover drawers, dropdowns, context menus, and data tables.
+					Dialog overlays, sheets, dropdowns, and data tables.
 				</p>
 			</a>
 		</div>

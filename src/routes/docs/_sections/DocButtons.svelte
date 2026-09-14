@@ -8,11 +8,17 @@
 	import Chip from '$lib/components/elements/Chip.svelte';
 	import Spinner from '$lib/components/elements/Spinner.svelte';
 	import Skeleton from '$lib/components/elements/Skeleton.svelte';
+	import Avatar from '$lib/components/elements/Avatar.svelte';
+	import AvatarGroup from '$lib/components/elements/AvatarGroup.svelte';
+	import Kbd from '$lib/components/elements/Kbd.svelte';
+	import Progress from '$lib/components/elements/Progress.svelte';
+	import Meter from '$lib/components/elements/Meter.svelte';
 	import MetricCard from '$lib/components/elements/MetricCard.svelte';
 	import Icon from '$lib/components/elements/Icon.svelte';
 	import { ArrowRight, ChevronLeft, ChevronRight, Sparkles, Send } from '@lucide/svelte';
 
 	let loading = $state(false);
+	let progressVal = $state(68);
 
 	function triggerLoading() {
 		loading = true;
@@ -31,11 +37,27 @@
 	const chipSnippet = `<Chip color="primary" pulse>Live Updates</Chip>
 <Chip color="success" pulse>Systems Operational</Chip>
 <Chip color="warning">Maintenance</Chip>`;
+
+	const avatarSnippet = `<!-- Avatars with Presence & Fallbacks -->
+<Avatar alt="Sarah Connor" presence="online" size="md" />
+<Avatar text="Alex Doe" presence="busy" size="md" />
+
+<!-- Avatar Group Stack -->
+<AvatarGroup>
+  <Avatar alt="Elena Rostova" size="sm" />
+  <Avatar alt="Marcus Vance" size="sm" />
+  <Avatar alt="Chen Wei" size="sm" />
+</AvatarGroup>`;
+
+	const kbdSnippet = `<div class="flex items-center gap-1.5">
+  <Kbd value="⌘" />
+  <Kbd value="K" />
+</div>`;
 </script>
 
 <DocHeader
-	title="Buttons, ButtonGroups & Badges"
-	description="Accessible action triggers, button groups, status chips, pulsing radar chips, spinners, and skeletons with 6 visual variants."
+	title="Buttons, Badges & Visual Elements"
+	description="Accessible action triggers, button groups, avatars, presence indicators, keyboard shortcuts, status chips, spinners, progress meters, and skeletons."
 	badge="Elements"
 	source="src/lib/components/elements/Button.svelte"
 	category="Components"
@@ -108,6 +130,89 @@
 				<Chip color="success" pulse>Connected</Chip>
 				<Chip color="warning" pulse>High Load</Chip>
 				<Chip color="error">Offline</Chip>
+			</div>
+		</div>
+	</DocSandbox>
+
+	<!-- Avatars & Avatar Groups Sandbox -->
+	<DocSandbox title="Avatars, Presence & AvatarGroup Stacks" code={avatarSnippet}>
+		<div class="flex flex-col items-center gap-6">
+			<!-- Individual Avatars with Presence -->
+			<div class="flex flex-wrap items-center justify-center gap-4">
+				<Avatar text="Sarah Connor" presence="online" size="md" />
+				<Avatar text="Alex Doe" presence="busy" size="md" />
+				<Avatar text="Marcus Vance" presence="away" size="md" />
+				<Avatar text="Offline User" presence="offline" size="md" />
+			</div>
+
+			<!-- Avatar Sizes & Group Stacking -->
+			<div class="flex flex-wrap items-center justify-center gap-6">
+				<AvatarGroup>
+					<Avatar text="Elena Rostova" size="sm" />
+					<Avatar text="David Kim" size="sm" />
+					<Avatar text="Sophie Martin" size="sm" />
+					<Avatar text="+3" size="sm" fallback="+3" class="bg-primary-100 text-primary-700 font-bold dark:bg-primary-950 dark:text-primary-300" />
+				</AvatarGroup>
+
+				<div class="flex items-center gap-2">
+					<Avatar text="XS" size="xs" />
+					<Avatar text="SM" size="sm" />
+					<Avatar text="MD" size="md" />
+					<Avatar text="LG" size="lg" />
+				</div>
+			</div>
+		</div>
+	</DocSandbox>
+
+	<!-- Keyboard Key Badges (Kbd) -->
+	<DocSandbox title="Keyboard Key Badges (Kbd)" code={kbdSnippet}>
+		<div class="flex flex-wrap items-center justify-center gap-6">
+			<div class="flex items-center gap-2 text-xs text-neutral-600 dark:text-neutral-400">
+				<span>Command Palette:</span>
+				<div class="flex items-center gap-1">
+					<Kbd value="⌘" />
+					<Kbd value="K" />
+				</div>
+			</div>
+
+			<div class="flex items-center gap-2 text-xs text-neutral-600 dark:text-neutral-400">
+				<span>Save Changes:</span>
+				<div class="flex items-center gap-1">
+					<Kbd value="Ctrl" />
+					<Kbd value="S" />
+				</div>
+			</div>
+
+			<div class="flex items-center gap-2 text-xs text-neutral-600 dark:text-neutral-400">
+				<span>Multi-size:</span>
+				<Kbd value="XS" size="xs" />
+				<Kbd value="SM" size="sm" />
+				<Kbd value="MD" size="md" />
+				<Kbd value="LG" size="lg" />
+			</div>
+		</div>
+	</DocSandbox>
+
+	<!-- Progress Bars & Meters -->
+	<DocSandbox title="Progress Bars & Status Meters">
+		<div class="w-full max-w-md space-y-6">
+			<!-- Determinate and Animated Progress -->
+			<div class="space-y-3">
+				<div class="flex justify-between text-xs text-neutral-600 dark:text-neutral-400">
+					<span>Storage Quota</span>
+					<span class="font-mono font-bold text-neutral-900 dark:text-white">{progressVal}%</span>
+				</div>
+				<Progress value={progressVal} color="primary" size="md" />
+				<div class="flex gap-2">
+					<Button size="xs" variant="outline" onclick={() => (progressVal = Math.max(0, progressVal - 15))}>-15%</Button>
+					<Button size="xs" variant="outline" onclick={() => (progressVal = Math.min(100, progressVal + 15))}>+15%</Button>
+				</div>
+			</div>
+
+			<!-- Semantic Status Meter -->
+			<div class="space-y-3">
+				<Meter label="API Rate Limit (Requests / min)" value={84} max={100} color="warning" size="md" />
+				<Meter label="System Health" value={99} max={100} color="success" size="sm" />
 			</div>
 		</div>
 	</DocSandbox>
