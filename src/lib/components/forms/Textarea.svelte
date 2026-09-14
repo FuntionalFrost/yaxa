@@ -36,17 +36,23 @@
 			value?: string;
 			rows?: number;
 			maxlength?: number;
+			maxHeight?: number;
 			showCount?: boolean;
+			autosize?: boolean;
 			class?: string;
 		};
 </script>
 
 <script lang="ts">
+	import { autosize as autosizeAction } from '$lib/actions/autosize';
+
 	let {
 		value = $bindable(''),
 		rows = 4,
 		maxlength,
+		maxHeight,
 		showCount = false,
+		autosize = false,
 		size = 'md',
 		status = 'default',
 		resize = 'vertical',
@@ -58,12 +64,32 @@
 </script>
 
 <div class="relative w-full">
-	<textarea
-		bind:value
-		{rows}
-		{maxlength}
-		class={textareaVariants({ size, status, resize, class: className })}
-		{...restProps}></textarea>
+	{#if autosize}
+		<textarea
+			bind:value
+			rows={1}
+			{maxlength}
+			use:autosizeAction={{ maxHeight }}
+			class={textareaVariants({
+				size,
+				status,
+				resize: 'none',
+				class: className
+			})}
+			{...restProps}></textarea>
+	{:else}
+		<textarea
+			bind:value
+			{rows}
+			{maxlength}
+			class={textareaVariants({
+				size,
+				status,
+				resize,
+				class: className
+			})}
+			{...restProps}></textarea>
+	{/if}
 
 	{#if showCount && maxlength}
 		<div class="mt-1 flex justify-end text-sm text-neutral-500 dark:text-neutral-400">

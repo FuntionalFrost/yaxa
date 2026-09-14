@@ -2,7 +2,11 @@
 	import { page } from '$app/state';
 	import { computeProjectBadge, type SiteConfig } from '$lib/site/config';
 	import { getSiteConfig } from '$lib/site/context';
-	import { generateWebSiteSchema } from '$lib/site/schema';
+	import {
+		generateWebSiteSchema,
+		generateSoftwareApplicationSchema,
+		generateSoftwareSourceCodeSchema
+	} from '$lib/site/schema';
 
 	interface Props {
 		title?: string;
@@ -126,7 +130,11 @@
 	);
 
 	let jsonLdSchemas = $derived.by(() => {
-		const schemas: Record<string, unknown>[] = [generateWebSiteSchema(config)];
+		const schemas: Record<string, unknown>[] = [
+			generateWebSiteSchema(config),
+			generateSoftwareApplicationSchema(config),
+			generateSoftwareSourceCodeSchema(config)
+		];
 		if (schema) {
 			if (Array.isArray(schema)) {
 				schemas.push(...schema);
@@ -146,6 +154,7 @@
 		<meta name="keywords" content={keywords.join(', ')} />
 	{/if}
 	<link rel="canonical" href={currentUrl} />
+	<link rel="sitemap" type="application/xml" href="{config.url}/sitemap.xml" />
 	<meta name="robots" content={robotsContent} />
 	<meta name="theme-color" content={config.theme?.primaryColor || '#ff3e00'} />
 	{#if config.project?.license}
@@ -161,6 +170,7 @@
 	<meta property="og:title" content={fullTitle} />
 	<meta property="og:description" content={metaDescription} />
 	<meta property="og:image" content={resolvedOgImageUrl} />
+	<meta property="og:image:alt" content="{fullTitle} preview card" />
 	<meta property="og:image:width" content="1200" />
 	<meta property="og:image:height" content="630" />
 	<meta property="og:site_name" content={config.name} />
@@ -172,6 +182,7 @@
 	<meta name="twitter:title" content={fullTitle} />
 	<meta name="twitter:description" content={metaDescription} />
 	<meta name="twitter:image" content={resolvedOgImageUrl} />
+	<meta name="twitter:image:alt" content="{fullTitle} preview card" />
 	{#if config.author?.twitter}
 		<meta name="twitter:creator" content={config.author.twitter} />
 	{/if}

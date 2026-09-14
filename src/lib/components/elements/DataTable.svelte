@@ -3,6 +3,11 @@
 		key: keyof T | string;
 		label: string;
 		sortable?: boolean;
+		pinned?: 'left' | 'right';
+		resizable?: boolean;
+		width?: number;
+		minWidth?: number;
+		maxWidth?: number;
 		class?: string;
 	}
 </script>
@@ -43,14 +48,53 @@
 
 	let sortKey = $state<string | null>(null);
 	let sortOrder = $state<'asc' | 'desc'>('asc');
+	let columnWidths = $state<Record<string, number>>({});
+
+	// Initialize defined column widths
+	$effect(() => {
+		const initial: Record<string, number> = {};
+		columns.forEach((c) => {
+			if (c.width) initial[String(c.key)] = c.width;
+		});
+		columnWidths = { ...initial, ...columnWidths };
+	});
 
 	function handleSort(key: string) {
 		if (sortKey === key) {
 			sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
 		} else {
 			sortKey = key;
-			sortOrder = 'asc';
 		}
+	}
+
+	function startColumnResize(columnKey: string, e: MouseEvent | TouchEvent) {
+		e.preventDefault();
+		e.stopPropagation();
+
+		const startX = 'touches' in e ? e.touches[0].clientX : e.clientX;
+		const currentCol = columns.find((c) => String(c.key) === columnKey);
+		const currentWidth = columnWidths[columnKey] || 150;
+		const minWidth = currentCol?.minWidth || 60;
+		const maxWidth = currentCol?.maxWidth || 600;
+
+		function onMove(moveEvent: MouseEvent | TouchEvent) {
+			const clientX = 'touches' in moveEvent ? moveEvent.touches[0].clientX : moveEvent.clientX;
+			const delta = clientX - startX;
+			const newWidth = Math.max(minWidth, Math.min(maxWidth, currentWidth + delta));
+			columnWidths[columnKey] = newWidth;
+		}
+
+		function onEnd() {
+			window.removeEventListener('mousemove', onMove);
+			window.removeEventListener('mouseup', onEnd);
+			window.removeEventListener('touchmove', onMove);
+			window.removeEventListener('touchend', onEnd);
+		}
+
+		window.addEventListener('mousemove', onMove);
+		window.addEventListener('mouseup', onEnd);
+		window.addEventListener('touchmove', onMove);
+		window.addEventListener('touchend', onEnd);
 	}
 
 	let filteredData = $derived.by(() => {
@@ -103,6 +147,16 @@
 			selected = selected.filter((i) => i !== item);
 		}
 	}
+
+	function getPinClass(pinned?: 'left' | 'right') {
+		if (pinned === 'left') {
+			return 'sticky left-0 z-20 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-xs border-r border-neutral-200 dark:border-neutral-800 shadow-xs';
+		}
+		if (pinned === 'right') {
+			return 'sticky right-0 z-20 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-xs border-l border-neutral-200 dark:border-neutral-800 shadow-xs';
+		}
+		return '';
+	}
 </script>
 
 <div
@@ -116,7 +170,7 @@
 			>
 				<tr>
 					{#if selectable}
-						<th class="w-10 px-4 py-3">
+						<th class="w-10 px-4 py-3 {getPinClass('left')}">
 							<Checkbox
 								checked={allSelected}
 								onchange={toggleSelectAll}
@@ -125,29 +179,60 @@
 						</th>
 					{/if}
 					{#each columns as column}
-						<th class="px-4 py-3 {column.class || ''}">
-							{#if column.sortable}
+						{@const colKey = String(column.key)}
+						{@const widthStyle = columnWidths[colKey]
+							? `width: ${columnWidths[colKey]}px; min-width: ${columnWidths[colKey]}px;`
+							: ''}
+						<th
+							class="relative px-4 py-3 {getPinClass(column.pinned)} {column.class || ''}"
+							style={widthStyle}
+						>
+							<div class="flex items-center justify-between gap-2">
+								{#if column.sortable}
+									<button
+										type="button"
+										onclick={() => handleSort(colKey)}
+										class="group inline-flex items-center gap-1 font-semibold tracking-wider uppercase transition hover:text-neutral-900 dark:hover:text-white"
+									>
+										<span>{column.label}</span>
+										<span
+											class="text-neutral-400 transition-colors group-hover:text-primary-500 {sortKey ===
+											colKey
+												? 'text-primary-500'
+												: ''}"
+										>
+											{#if sortKey === colKey}
+												<Icon
+													name={sortOrder === 'asc' ? 'chevron-up' : 'chevron-down'}
+													size="xs"
+												/>
+											{:else}
+												<Icon name="chevron-down" size="xs" class="opacity-40" />
+											{/if}
+										</span>
+									</button>
+								{:else}
+									<span>{column.label}</span>
+								{/if}
+
+								{#if column.pinned}
+									<span
+										class="rounded bg-primary-100 px-1 text-[9px] font-bold text-primary-700 dark:bg-primary-950 dark:text-primary-300"
+									>
+										Pinned
+									</span>
+								{/if}
+							</div>
+
+							<!-- Column Resizing Handle -->
+							{#if column.resizable !== false}
 								<button
 									type="button"
-									onclick={() => handleSort(String(column.key))}
-									class="group inline-flex items-center gap-1 font-semibold tracking-wider uppercase transition hover:text-neutral-900 dark:hover:text-white"
-								>
-									<span>{column.label}</span>
-									<span
-										class="text-neutral-400 transition-colors group-hover:text-primary-500 {sortKey ===
-										String(column.key)
-											? 'text-primary-500'
-											: ''}"
-									>
-										{#if sortKey === String(column.key)}
-											<Icon name={sortOrder === 'asc' ? 'chevron-up' : 'chevron-down'} size="xs" />
-										{:else}
-											<Icon name="chevron-down" size="xs" class="opacity-40" />
-										{/if}
-									</span>
-								</button>
-							{:else}
-								<span>{column.label}</span>
+									onmousedown={(e) => startColumnResize(colKey, e)}
+									ontouchstart={(e) => startColumnResize(colKey, e)}
+									class="absolute top-0 right-0 bottom-0 w-1.5 cursor-col-resize transition-colors hover:bg-primary-500 active:bg-primary-600"
+									aria-label="Resize column {column.label}"
+								></button>
 							{/if}
 						</th>
 					{/each}
@@ -196,7 +281,7 @@
 								: ''}"
 						>
 							{#if selectable}
-								<td class="w-10 px-4 py-3.5">
+								<td class="w-10 px-4 py-3.5 {getPinClass('left')}">
 									<Checkbox
 										checked={isSelected}
 										onchange={(checked) => toggleSelectRow(item, checked)}
@@ -205,7 +290,14 @@
 								</td>
 							{/if}
 							{#each columns as column}
-								<td class="px-4 py-3.5 {column.class || ''}">
+								{@const colKey = String(column.key)}
+								{@const widthStyle = columnWidths[colKey]
+									? `width: ${columnWidths[colKey]}px; min-width: ${columnWidths[colKey]}px;`
+									: ''}
+								<td
+									class="px-4 py-3.5 {getPinClass(column.pinned)} {column.class || ''}"
+									style={widthStyle}
+								>
 									{#if cell}
 										{@render cell(item, column)}
 									{:else}

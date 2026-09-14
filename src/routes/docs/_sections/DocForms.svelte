@@ -15,11 +15,15 @@
 	import ToggleGroup from '$lib/components/forms/ToggleGroup.svelte';
 	import DatePicker from '$lib/components/forms/DatePicker.svelte';
 	import DateRangePicker from '$lib/components/forms/DateRangePicker.svelte';
+	import Dropzone from '$lib/components/forms/Dropzone.svelte';
 	import Badge from '$lib/components/elements/Badge.svelte';
 
 	let sampleEmail = $state('user@yaxa.dev');
-	let sampleBio = $state('Building high-converting web apps with SvelteKit.');
 	let sampleRole = $state('developer');
+	let autoGrowBio = $state(
+		'This textarea auto-sizes dynamically as you type more lines without scrollbars.'
+	);
+	let dropzoneFiles = $state<File[]>([]);
 	let enableTelemetry = $state(true);
 	let acceptTerms = $state(true);
 	let selectedTier = $state('pro');
@@ -99,9 +103,35 @@
 				<Select options={roleOptions} bind:value={sampleRole} />
 			</FormField>
 
-			<FormField label="Developer Bio" hint="Describe your tech stack">
-				<Textarea bind:value={sampleBio} rows={3} />
+			<FormField
+				label="Developer Bio (Auto-Sizing Height)"
+				hint="Expands automatically without scrollbars as you type"
+			>
+				<Textarea bind:value={autoGrowBio} autosize />
 			</FormField>
+		</div>
+	</DocSandbox>
+
+	<!-- File Upload Dropzone -->
+	<DocSandbox title="File Drag & Drop (<Dropzone />)">
+		<div class="w-full max-w-lg space-y-4">
+			<div class="space-y-1">
+				<div class="text-sm font-semibold text-neutral-900 dark:text-white">
+					Cloud File Upload Target
+				</div>
+				<p class="text-xs text-neutral-500">
+					Direct drag-and-drop target with file previews, size limits, and S3 / Cloudflare R2
+					presigned uploads.
+				</p>
+			</div>
+
+			<Dropzone
+				accept="image/*,application/pdf"
+				multiple={true}
+				bind:files={dropzoneFiles}
+				label="Drop assets here or click to browse"
+				description="PNG, JPG, SVG, or PDF up to 10MB"
+			/>
 		</div>
 	</DocSandbox>
 

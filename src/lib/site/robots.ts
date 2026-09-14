@@ -7,7 +7,24 @@ export interface RobotsOptions {
 	 * Override environment detection. If true, allows indexing. If false, disallows indexing.
 	 */
 	isProduction?: boolean;
+	/**
+	 * Policy for AI scrapers and web crawlers (default: 'allow')
+	 */
+	aiCrawlers?: 'allow' | 'disallow';
 }
+
+const AI_USER_AGENTS = [
+	'GPTBot',
+	'ChatGPT-User',
+	'ClaudeBot',
+	'Anthropic-ai',
+	'PerplexityBot',
+	'CCBot',
+	'Bytespider',
+	'cohere-ai',
+	'Diffbot',
+	'FacebookBot'
+];
 
 export function createRobotsHandler(optionsOrConfig: SiteConfig | RobotsOptions): RequestHandler {
 	const options: RobotsOptions =
@@ -21,11 +38,10 @@ export function createRobotsHandler(optionsOrConfig: SiteConfig | RobotsOptions)
 				options.isProduction ??
 				(isProdEnv &&
 					!url.hostname.includes('localhost') &&
-					!url.hostname.includes('vercel.app') &&
 					!url.hostname.includes('preview') &&
 					!url.hostname.includes('staging'));
 
-			const baseUrl = config?.url || url?.origin || 'https://yaxa.vercel.app';
+			const baseUrl = (config?.url || url?.origin || 'https://yaxa.vercel.app').replace(/\/$/, '');
 
 			let body: string;
 
@@ -47,12 +63,20 @@ export function createRobotsHandler(optionsOrConfig: SiteConfig | RobotsOptions)
 					})
 					.join('\n');
 			} else {
-				// Default production allow
-				body = `User-agent: *\nAllow: /\n`;
+				// Standard production setup
+				body = `User-agent: *\nAllow: /\nDisallow: /admin/\nDisallow: /admin\nDisallow: /api/\n`;
+
+				// AI Crawlers configuration
+				if (options.aiCrawlers === 'disallow') {
+					body += `\n# AI Training & Scraper Policies\n`;
+					for (const bot of AI_USER_AGENTS) {
+						body += `User-agent: ${bot}\nDisallow: /\n`;
+					}
+				}
 			}
 
-			// Always append sitemap reference
-			body += `\nSitemap: ${baseUrl}/sitemap.xml\n`;
+			// Append host & sitemap reference
+			body += `\nHost: ${baseUrl}\nSitemap: ${baseUrl}/sitemap.xml\n`;
 
 			return new Response(body, {
 				headers: {

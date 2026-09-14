@@ -6,7 +6,6 @@
 	import ButtonGroup from '$lib/components/elements/ButtonGroup.svelte';
 	import Badge from '$lib/components/elements/Badge.svelte';
 	import Chip from '$lib/components/elements/Chip.svelte';
-	import Spinner from '$lib/components/elements/Spinner.svelte';
 	import Skeleton from '$lib/components/elements/Skeleton.svelte';
 	import Avatar from '$lib/components/elements/Avatar.svelte';
 	import AvatarGroup from '$lib/components/elements/AvatarGroup.svelte';
@@ -14,11 +13,20 @@
 	import Progress from '$lib/components/elements/Progress.svelte';
 	import Meter from '$lib/components/elements/Meter.svelte';
 	import MetricCard from '$lib/components/elements/MetricCard.svelte';
+	import CodeBlock from '$lib/components/elements/CodeBlock.svelte';
+	import SortableList from '$lib/components/elements/SortableList.svelte';
 	import Icon from '$lib/components/elements/Icon.svelte';
 	import { ArrowRight, ChevronLeft, ChevronRight, Sparkles, Send } from '@lucide/svelte';
 
 	let loading = $state(false);
 	let progressVal = $state(68);
+
+	let tasks = $state([
+		{ id: '1', title: 'Design user onboarding flow', priority: 'High', tag: 'UI' },
+		{ id: '2', title: 'Set up Polar.sh subscription webhook', priority: 'Urgent', tag: 'Billing' },
+		{ id: '3', title: 'Configure Drizzle ORM migrations', priority: 'Normal', tag: 'Database' },
+		{ id: '4', title: 'Deploy static site to Cloudflare Pages', priority: 'Normal', tag: 'DevOps' }
+	]);
 
 	function triggerLoading() {
 		loading = true;
@@ -26,6 +34,65 @@
 			loading = false;
 		}, 2000);
 	}
+
+	const sampleSvelteSnippet =
+		`<` +
+		`script lang="ts">
+  import { Button, CodeBlock, useLocale } from 'yaxa-svelte';
+  const { formatCurrency } = useLocale();
+  let count = $state(0);
+</` +
+		`script>
+
+<div class="space-y-4">
+  <p>Price: {formatCurrency(49.99, 'USD')}</p>
+  <Button color="primary" onclick={() => count++}>
+    Clicks: {count}
+  </Button>
+</div>`;
+
+	const sampleLatexSnippet = `% Euler's Identity & Gaussian Integral
+\\[ e^{i\\pi} + 1 = 0 \\]
+\\int_{-\\infty}^{\\infty} e^{-x^2} \\, dx = \\sqrt{\\pi}
+
+% Quadratic Formula
+x = \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a}`;
+
+	const sampleVueSnippet =
+		'<' +
+		'template>\n' +
+		'  <div class="counter-card">\n' +
+		'    <h2>{{ title }}</h2>\n' +
+		'    <button @click="increment" :disabled="isLoading">\n' +
+		'      Count: {{ count }}\n' +
+		'    </button>\n' +
+		'  </div>\n' +
+		'<' +
+		'/template>\n\n' +
+		'<' +
+		'script setup lang="ts">\n' +
+		"import { ref } from 'vue';\n" +
+		'const count = ref(0);\n' +
+		'const increment = () => count.value++;\n' +
+		'<' +
+		'/script>';
+
+	const sampleTsxSnippet = `import React, { useState, useEffect } from 'react';
+
+interface MetricProps {
+  label: string;
+  initialValue?: number;
+}
+
+export const Metric: React.FC<MetricProps> = ({ label, initialValue = 0 }) => {
+  const [val, setVal] = useState(initialValue);
+  return (
+    <div className="metric-pill" onClick={() => setVal(v => v + 1)}>
+      <span>{label}</span>
+      <strong>{val}</strong>
+    </div>
+  );
+};`;
 
 	const buttonSnippet = `<Button variant="solid" color="primary">Solid</Button>
 <Button variant="outline">Outline</Button>
@@ -151,7 +218,12 @@
 					<Avatar text="Elena Rostova" size="sm" />
 					<Avatar text="David Kim" size="sm" />
 					<Avatar text="Sophie Martin" size="sm" />
-					<Avatar text="+3" size="sm" fallback="+3" class="bg-primary-100 text-primary-700 font-bold dark:bg-primary-950 dark:text-primary-300" />
+					<Avatar
+						text="+3"
+						size="sm"
+						fallback="+3"
+						class="bg-primary-100 font-bold text-primary-700 dark:bg-primary-950 dark:text-primary-300"
+					/>
 				</AvatarGroup>
 
 				<div class="flex items-center gap-2">
@@ -204,33 +276,122 @@
 				</div>
 				<Progress value={progressVal} color="primary" size="md" />
 				<div class="flex gap-2">
-					<Button size="xs" variant="outline" onclick={() => (progressVal = Math.max(0, progressVal - 15))}>-15%</Button>
-					<Button size="xs" variant="outline" onclick={() => (progressVal = Math.min(100, progressVal + 15))}>+15%</Button>
+					<Button
+						size="xs"
+						variant="outline"
+						onclick={() => (progressVal = Math.max(0, progressVal - 15))}>-15%</Button
+					>
+					<Button
+						size="xs"
+						variant="outline"
+						onclick={() => (progressVal = Math.min(100, progressVal + 15))}>+15%</Button
+					>
 				</div>
 			</div>
 
 			<!-- Semantic Status Meter -->
 			<div class="space-y-3">
-				<Meter label="API Rate Limit (Requests / min)" value={84} max={100} color="warning" size="md" />
+				<Meter
+					label="API Rate Limit (Requests / min)"
+					value={84}
+					max={100}
+					color="warning"
+					size="md"
+				/>
 				<Meter label="System Health" value={99} max={100} color="success" size="sm" />
 			</div>
 		</div>
 	</DocSandbox>
 
-	<!-- Spinners & Skeletons -->
-	<DocSandbox title="Spinners & Skeletons">
-		<div class="flex w-full max-w-md flex-col items-center justify-center gap-8 md:flex-row">
-			<div class="flex items-center gap-3">
-				<Spinner size="sm" class="text-primary-500" />
-				<Spinner size="md" class="text-primary-500" />
-				<Spinner size="lg" class="text-primary-500" />
+	<!-- Enhanced Skeletons & Shimmer Animation -->
+	<DocSandbox title="Enhanced Skeleton Loaders (Shimmer, Multi-Line & Shapes)">
+		<div class="w-full max-w-lg space-y-6">
+			<!-- Profile Card Skeleton with Shimmer -->
+			<div
+				class="flex items-center gap-4 rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900/40"
+			>
+				<Skeleton shape="circle" width="48px" height="48px" variant="shimmer" />
+				<div class="flex-1 space-y-2">
+					<Skeleton width="60%" height="16px" variant="shimmer" />
+					<Skeleton width="40%" height="12px" variant="shimmer" />
+				</div>
+				<Skeleton shape="pill" width="64px" height="24px" variant="shimmer" />
 			</div>
 
-			<div class="w-full flex-1 space-y-2">
-				<Skeleton class="h-4 w-3/4" />
-				<Skeleton class="h-4 w-full" />
-				<Skeleton class="h-4 w-1/2" />
+			<!-- Multi-line Staggered Paragraph Skeleton -->
+			<div class="space-y-2">
+				<span class="text-xs font-semibold tracking-wider text-neutral-500 uppercase"
+					>Multi-Line Paragraph Stagger</span
+				>
+				<Skeleton lines={3} variant="shimmer" />
 			</div>
+		</div>
+	</DocSandbox>
+
+	<!-- Drag & Drop Sortable List -->
+	<DocSandbox title="UI Drag & Drop Reordering (<SortableList />)">
+		<div class="w-full max-w-lg">
+			<p class="mb-3 text-xs text-neutral-500 dark:text-neutral-400">
+				Drag items by handle to reorder, or use keyboard arrow buttons:
+			</p>
+			<SortableList bind:items={tasks}>
+				{#snippet children(task)}
+					<div class="flex items-center justify-between">
+						<span class="text-xs font-medium text-neutral-800 dark:text-neutral-200"
+							>{task.title}</span
+						>
+						<Badge
+							size="xs"
+							color={task.priority === 'Urgent'
+								? 'error'
+								: task.priority === 'High'
+									? 'warning'
+									: 'neutral'}
+							variant="subtle"
+						>
+							{task.tag}
+						</Badge>
+					</div>
+				{/snippet}
+			</SortableList>
+		</div>
+	</DocSandbox>
+
+	<!-- Zero-WASM CodeBlock Component (Multi-Language) -->
+	<DocSandbox title="Zero-WASM Syntax-Highlighted <CodeBlock /> (Multi-Language)">
+		<div class="w-full max-w-xl space-y-4">
+			<!-- Svelte 5 Snippet -->
+			<CodeBlock
+				code={sampleSvelteSnippet}
+				language="svelte"
+				filename="src/routes/demo/+page.svelte"
+				showLineNumbers={true}
+				highlightLines={[2, 3]}
+			/>
+
+			<!-- LaTeX / Math Snippet -->
+			<CodeBlock
+				code={sampleLatexSnippet}
+				language="latex"
+				filename="equations.tex"
+				showLineNumbers={true}
+			/>
+
+			<!-- Vue SFC Snippet -->
+			<CodeBlock
+				code={sampleVueSnippet}
+				language="vue"
+				filename="Counter.vue"
+				showLineNumbers={true}
+			/>
+
+			<!-- React TSX Snippet -->
+			<CodeBlock
+				code={sampleTsxSnippet}
+				language="tsx"
+				filename="Metric.tsx"
+				showLineNumbers={true}
+			/>
 		</div>
 	</DocSandbox>
 

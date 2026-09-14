@@ -5,6 +5,7 @@ export type SchemaType =
 	| 'Organization'
 	| 'Person'
 	| 'SoftwareApplication'
+	| 'SoftwareSourceCode'
 	| 'WebPage'
 	| 'Article'
 	| 'Product'
@@ -91,6 +92,26 @@ export function generateSoftwareApplicationSchema(config: SiteConfig) {
 		license: config.project?.licenseUrl || config.project?.license,
 		isAccessibleForFree: config.project?.isAccessibleForFree ?? true,
 		offers,
+		author: config.author
+			? {
+					'@type': 'Person',
+					name: config.author.name,
+					url: config.author.url
+				}
+			: undefined
+	};
+}
+
+export function generateSoftwareSourceCodeSchema(config: SiteConfig) {
+	return {
+		'@context': 'https://schema.org',
+		'@type': 'SoftwareSourceCode',
+		name: config.name,
+		description: config.description,
+		programmingLanguage: 'Svelte',
+		runtimePlatform: 'SvelteKit 2',
+		codeRepository: config.project?.repositoryUrl || config.socials?.github || undefined,
+		license: config.project?.licenseUrl || config.project?.license || 'MIT',
 		author: config.author
 			? {
 					'@type': 'Person',

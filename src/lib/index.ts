@@ -13,7 +13,8 @@ export { default as Icon } from './components/elements/Icon.svelte';
 export type { IconProps, IconSource } from './components/elements/Icon.svelte';
 export { default as Spinner } from './components/elements/Spinner.svelte';
 export { default as Progress } from './components/elements/Progress.svelte';
-export { default as Skeleton } from './components/elements/Skeleton.svelte';
+export { default as Skeleton, skeletonVariants } from './components/elements/Skeleton.svelte';
+export type { SkeletonProps } from './components/elements/Skeleton.svelte';
 export { default as Link } from './components/elements/Link.svelte';
 export { default as Logo } from './components/elements/Logo.svelte';
 export { default as DataTable } from './components/elements/DataTable.svelte';
@@ -21,6 +22,10 @@ export type { Column } from './components/elements/DataTable.svelte';
 export { default as Chip } from './components/elements/Chip.svelte';
 export { default as Meter } from './components/elements/Meter.svelte';
 export { default as MetricCard } from './components/elements/MetricCard.svelte';
+export { default as CodeBlock, tokenizeCode } from './components/elements/CodeBlock.svelte';
+export type { CodeBlockProps } from './components/elements/CodeBlock.svelte';
+export { default as SortableList } from './components/elements/SortableList.svelte';
+export type { SortableListProps } from './components/elements/SortableList.svelte';
 
 // Form Controls
 export { default as Form } from './components/forms/Form.svelte';
@@ -29,6 +34,7 @@ export { default as Input } from './components/forms/Input.svelte';
 export type { InputProps } from './components/forms/Input.svelte';
 export { default as InputOTP } from './components/forms/InputOTP.svelte';
 export { default as Textarea } from './components/forms/Textarea.svelte';
+export type { TextareaProps } from './components/forms/Textarea.svelte';
 export { default as Checkbox } from './components/forms/Checkbox.svelte';
 export { default as Switch } from './components/forms/Switch.svelte';
 export { default as Select } from './components/forms/Select.svelte';
@@ -42,6 +48,8 @@ export { default as DatePicker } from './components/forms/DatePicker.svelte';
 export type { DatePreset } from './components/forms/DatePicker.svelte';
 export { default as DateRangePicker } from './components/forms/DateRangePicker.svelte';
 export type { DateRange, DateRangePreset } from './components/forms/DateRangePicker.svelte';
+export { default as Dropzone } from './components/forms/Dropzone.svelte';
+export type { DropzoneProps } from './components/forms/Dropzone.svelte';
 
 // Layout & Shell
 export { default as Container } from './components/layout/Container.svelte';
@@ -78,6 +86,22 @@ export type { AccordionProps, AccordionItem } from './components/overlays/Accord
 export { default as ContextMenu } from './components/overlays/ContextMenu.svelte';
 export type { ContextMenuItem } from './components/overlays/ContextMenu.svelte';
 
+// Headless Actions Suite
+export {
+	autosize,
+	clickOutside,
+	portal,
+	infiniteScroll as infiniteScrollAction,
+	sortableItem
+} from './actions';
+export type {
+	AutosizeOptions,
+	ClickOutsideOptions,
+	PortalOptions,
+	InfiniteScrollActionOptions,
+	SortableItemOptions
+} from './actions';
+
 // Composables & Runes (Nuxt UI v4 Composables Parity)
 export { useClipboard } from './composables/useClipboard.svelte';
 export type { UseClipboardOptions } from './composables/useClipboard.svelte';
@@ -88,6 +112,21 @@ export { useToast } from './composables/useToast';
 export type { ToastOptions, ToastAction } from './composables/useToast';
 export { useMediaQuery } from './composables/useMediaQuery.svelte';
 export { useDebounce } from './composables/useDebounce.svelte';
+export { InfiniteScroll, useInfiniteScroll } from './composables/useInfiniteScroll.svelte';
+export type { UseInfiniteScrollOptions } from './composables/useInfiniteScroll.svelte';
+export {
+	LocaleStore,
+	setLocaleContext,
+	getLocaleContext,
+	useLocale,
+	useRtl,
+	localeStore
+} from './composables/useLocale.svelte';
+export type { UseLocaleOptions, TextDirection } from './composables/useLocale.svelte';
+export { Sortable, useSortable } from './composables/useSortable.svelte';
+export type { UseSortableOptions } from './composables/useSortable.svelte';
+export { useFormAction } from './composables/useFormAction.svelte';
+export type { UseFormActionOptions } from './composables/useFormAction.svelte';
 
 // Feedback & Toast notification helper
 export { toast } from 'svelte-sonner';
@@ -147,7 +186,7 @@ export type { YaxaHookOptions } from './site/hook';
 export { createRobotsHandler } from './site/robots';
 export type { RobotsOptions } from './site/robots';
 export { createSitemapHandler } from './site/sitemap';
-export type { SitemapRoute, SitemapOptions } from './site/sitemap';
+export type { SitemapRoute, SitemapImage, SitemapOptions } from './site/sitemap';
 export { createSitemapXslHandler, generateSitemapXsl } from './site/sitemap-xsl';
 export { createOgImageHandler, generateOgSvg } from './site/og';
 export type { OgImageOptions } from './site/og';
@@ -156,6 +195,7 @@ export {
 	generateWebSiteSchema,
 	generateOrganizationSchema,
 	generateSoftwareApplicationSchema,
+	generateSoftwareSourceCodeSchema,
 	generatePersonSchema,
 	generateArticleSchema,
 	generateBreadcrumbSchema

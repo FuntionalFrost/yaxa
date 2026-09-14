@@ -590,7 +590,8 @@ export const siteConfig = defineSiteConfig({
 					35+ Accessible Primitives
 				</h3>
 				<p class="text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">
-					MetricCards, InputOTP, ToggleGroups, DatePickers, Modals, Slideovers, Popovers, Tooltips, DataTables, FormFields, and Toasts ready for deployment.
+					MetricCards, InputOTP, ToggleGroups, DatePickers, Modals, Slideovers, Popovers, Tooltips,
+					DataTables, FormFields, and Toasts ready for deployment.
 				</p>
 			</div>
 
@@ -607,7 +608,8 @@ export const siteConfig = defineSiteConfig({
 					Solo Dev DX & 100% DRY
 				</h3>
 				<p class="text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">
-					Single-email mode, automated project licensing badges, and turnkey Polar.sh billing. Never repeat metadata or boilerplate across files.
+					Single-email mode, automated project licensing badges, and turnkey Polar.sh billing. Never
+					repeat metadata or boilerplate across files.
 				</p>
 			</div>
 		</div>
@@ -629,9 +631,7 @@ export const siteConfig = defineSiteConfig({
 				</h2>
 			</div>
 			<div class="flex items-center gap-3">
-				<Button href="/saas" color="neutral" variant="outline" size="sm">
-					SaaS Demo ↗
-				</Button>
+				<Button href="/saas" color="neutral" variant="outline" size="sm">SaaS Demo ↗</Button>
 				<Button href="/docs/intro" color="primary" variant="solid" size="sm">
 					View Documentation ↗
 				</Button>
