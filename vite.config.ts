@@ -14,9 +14,7 @@ export default defineConfig({
 				runes: ({ filename }) =>
 					filename.split(/[/\\]/).includes('node_modules') ? undefined : true
 			},
-			adapter: adapter({
-				runtime: 'nodejs22.x'
-			})
+			adapter: adapter()
 		})
 	]
 });
