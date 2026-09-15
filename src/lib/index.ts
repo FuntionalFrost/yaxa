@@ -29,6 +29,7 @@ export type { SortableListProps } from './components/elements/SortableList.svelt
 
 // Form Controls
 export { default as Form } from './components/forms/Form.svelte';
+export type { FormSchema } from './components/forms/Form.svelte';
 export { default as FormField } from './components/forms/FormField.svelte';
 export { default as Input } from './components/forms/Input.svelte';
 export type { InputProps } from './components/forms/Input.svelte';

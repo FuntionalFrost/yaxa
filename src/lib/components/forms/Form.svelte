@@ -3,8 +3,15 @@
 	import type { ZodSchema } from 'zod';
 	import Alert from '../overlays/Alert.svelte';
 
+	export interface FormSchema<T = any> {
+		parse?: (data: unknown) => T;
+		safeParse?: (data: unknown) => { success: boolean; data?: T; error?: any };
+		validate?: (data: unknown) => T;
+		[key: string]: any;
+	}
+
 	interface Props {
-		schema?: ZodSchema;
+		schema?: FormSchema | ZodSchema | any;
 		values?: Record<string, any>;
 		loading?: boolean;
 		errorSummary?: boolean;
@@ -30,8 +37,27 @@
 	function validate() {
 		if (!schema) return true;
 		try {
-			schema.parse(values);
-			errors = {};
+			if (typeof schema.safeParse === 'function') {
+				const res = schema.safeParse(values);
+				if (!res.success) {
+					const fieldErrors: Record<string, string> = {};
+					const issues = res.error?.issues || res.error?.errors || [];
+					for (const e of issues) {
+						const field = Array.isArray(e.path) ? e.path.join('.') : String(e.path || 'form');
+						if (!fieldErrors[field]) {
+							fieldErrors[field] = e.message;
+						}
+					}
+					errors = fieldErrors;
+					return false;
+				}
+				errors = {};
+				return true;
+			} else if (typeof schema.parse === 'function') {
+				schema.parse(values);
+				errors = {};
+				return true;
+			}
 			return true;
 		} catch (err: any) {
 			const fieldErrors: Record<string, string> = {};
