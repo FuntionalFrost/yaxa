@@ -48,6 +48,13 @@ import { siteConfig } from './site.config';
 
 // Automatically handles /robots.txt, /sitemap.xml, /site.webmanifest, and /api/og
 export const handle = createYaxaHook(siteConfig);`;
+
+	const agentCurlSnippet = `# Download Yaxa UI Guide for Google Antigravity / Gemini CLI:
+mkdir -p .gemini/skills/yaxa-ui-guide
+curl -fsSL https://yaxa.vercel.app/skills.md -o .gemini/skills/yaxa-ui-guide/SKILL.md
+
+# Or save as AGENTS.md for Cursor, Windsurf, or Claude Code:
+curl -fsSL https://yaxa.vercel.app/skills.md -o AGENTS.md`;
 </script>
 
 <DocHeader
@@ -181,5 +188,26 @@ pnpm add -D tailwindcss @tailwindcss/vite @tailwindcss/typography"
 			>, and <code class="font-mono text-xs text-primary-600 dark:text-primary-400">/api/og</code>:
 		</p>
 		<DocCodeBlock code={hooksSnippet} filename="src/hooks.server.ts" language="typescript" />
+	</div>
+
+	<!-- Optional Step 7: AI Coding Agents & Skills -->
+	<div class="space-y-3 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+		<div class="flex items-center gap-2.5">
+			<Badge color="primary" variant="subtle" size="sm">AI Ready</Badge>
+			<h3 class="text-base font-bold text-zinc-900 dark:text-white">
+				Equip AI Coding Agents with the Yaxa Guide
+			</h3>
+		</div>
+		<p class="text-xs text-zinc-600 dark:text-zinc-400">
+			Give AI assistants (Google Antigravity, Gemini CLI, Cursor, Windsurf, Claude Code) complete
+			architectural context on Yaxa's 35+ components, Svelte 5 runes patterns, and subpaths. You can
+			download the guide directly via terminal or view the raw file at <a
+				href="/skills.md"
+				target="_blank"
+				class="text-primary-600 underline hover:text-primary-500 dark:text-primary-400"
+				>/skills.md</a
+			>:
+		</p>
+		<DocCodeBlock code={agentCurlSnippet} filename="Terminal" language="bash" />
 	</div>
 </div>
