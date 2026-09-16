@@ -155,6 +155,17 @@
 							<Icon name="github" size="sm" />
 						</a>
 					{/if}
+					{#if currentConfig.socials?.npm}
+						<a
+							href={currentConfig.socials.npm}
+							target="_blank"
+							rel="noopener noreferrer"
+							class="text-neutral-500 hover:text-red-500 dark:hover:text-red-400"
+							aria-label="npm"
+						>
+							<Icon name="npm" size="sm" />
+						</a>
+					{/if}
 					{#if currentConfig.socials?.twitter}
 						<a
 							href={currentConfig.socials.twitter}

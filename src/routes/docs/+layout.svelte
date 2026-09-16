@@ -25,16 +25,28 @@
 				<span class="font-semibold text-zinc-900 dark:text-white">{currentItem.label}</span>
 			</div>
 
-			<!-- Quick Jump Link to Github -->
-			<a
-				href="https://github.com/FuntionalFrost/yaxa"
-				target="_blank"
-				rel="noopener noreferrer"
-				class="hidden items-center gap-1.5 font-mono text-zinc-500 hover:text-zinc-900 sm:inline-flex dark:hover:text-white"
-			>
-				<Icon name="github" class="h-3.5 w-3.5" />
-				<span>GitHub</span>
-			</a>
+			<!-- Quick Jump Links to npm & GitHub -->
+			<div class="hidden items-center gap-3 font-mono text-zinc-500 sm:inline-flex">
+				<a
+					href="https://www.npmjs.com/package/yaxa-svelte"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="flex items-center gap-1.5 hover:text-red-500 dark:hover:text-red-400"
+				>
+					<Icon name="npm" class="h-3.5 w-3.5" />
+					<span>npm</span>
+				</a>
+				<span class="text-zinc-300 dark:text-zinc-700">·</span>
+				<a
+					href="https://github.com/FuntionalFrost/yaxa"
+					target="_blank"
+					rel="noopener noreferrer"
+					class="flex items-center gap-1.5 hover:text-zinc-900 dark:hover:text-white"
+				>
+					<Icon name="github" class="h-3.5 w-3.5" />
+					<span>GitHub</span>
+				</a>
+			</div>
 		</div>
 
 		<!-- Mobile Horizontal Section Scrollbar -->

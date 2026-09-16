@@ -123,6 +123,20 @@
 					</Button>
 				{/if}
 
+				<!-- npm Link -->
+				{#if currentConfig.socials?.npm}
+					<Button
+						href={currentConfig.socials.npm}
+						variant="ghost"
+						color="neutral"
+						square
+						size="sm"
+						aria-label="npm Package"
+					>
+						<Icon name="npm" size="sm" />
+					</Button>
+				{/if}
+
 				{#if actions}
 					{@render actions()}
 				{/if}

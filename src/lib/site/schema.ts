@@ -60,6 +60,7 @@ export function generatePersonSchema(config: SiteConfig) {
 			config.author?.twitter ? `https://twitter.com/${config.author.twitter}` : undefined,
 			config.author?.github ? `https://github.com/${config.author.github}` : undefined,
 			config.socials?.github,
+			config.socials?.npm,
 			config.socials?.twitter,
 			config.socials?.bluesky
 		].filter(Boolean)
@@ -156,6 +157,7 @@ export function generateOrganizationSchema(config: SiteConfig) {
 		termsOfService: termsUrl,
 		sameAs: [
 			config.socials?.github,
+			config.socials?.npm,
 			config.socials?.twitter,
 			config.socials?.discord,
 			config.socials?.bluesky,

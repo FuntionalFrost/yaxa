@@ -127,6 +127,7 @@ export interface SiteConfig {
 	nav?: NavItem[];
 	socials?: {
 		github?: string;
+		npm?: string;
 		twitter?: string;
 		discord?: string;
 		bluesky?: string;

@@ -68,6 +68,7 @@ export const siteConfig = defineSiteConfig({
 		{ label: 'Releases', href: 'https://github.com/FuntionalFrost/yaxa/releases' }
 	],
 	socials: {
-		github: 'https://github.com/FuntionalFrost/yaxa'
+		github: 'https://github.com/FuntionalFrost/yaxa',
+		npm: 'https://www.npmjs.com/package/yaxa-svelte'
 	}
 });
