@@ -1,5 +1,6 @@
 import { betterAuth, type BetterAuthOptions } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
+import { organization } from 'better-auth/plugins';
 import { schemaPg, schemaSqlite, getDb, type AnyDb } from '../db';
 
 export interface YaxaAuthConfig {
@@ -7,6 +8,12 @@ export interface YaxaAuthConfig {
 	driver?: 'neon' | 'turso' | 'sqlite';
 	secret?: string;
 	baseURL?: string;
+	organization?: {
+		enabled?: boolean;
+		allowUserToCreateOrganization?: boolean;
+		creatorRole?: 'owner' | 'admin';
+		membershipLimit?: number;
+	};
 	socialProviders?: {
 		github?: {
 			clientId: string;
@@ -32,7 +39,7 @@ export interface YaxaAuthConfig {
 }
 
 /**
- * Creates and initializes a Better-Auth instance pre-configured for Yaxa and Drizzle.
+ * Creates and initializes a Better-Auth instance pre-configured for Yaxa, Drizzle, and Multi-Tenant Organizations.
  */
 export function createYaxaAuth(config: YaxaAuthConfig = {}) {
 	const driver =
@@ -43,6 +50,17 @@ export function createYaxaAuth(config: YaxaAuthConfig = {}) {
 		'neon';
 
 	const database = config.db || getDb({ driver });
+
+	const plugins = [];
+	if (config.organization?.enabled ?? true) {
+		plugins.push(
+			organization({
+				allowUserToCreateOrganization: config.organization?.allowUserToCreateOrganization ?? true,
+				creatorRole: config.organization?.creatorRole ?? 'owner',
+				membershipLimit: config.organization?.membershipLimit
+			})
+		);
+	}
 
 	const authOptions: BetterAuthOptions = {
 		secret:
@@ -59,6 +77,7 @@ export function createYaxaAuth(config: YaxaAuthConfig = {}) {
 			provider: driver === 'neon' ? 'pg' : 'sqlite',
 			schema: driver === 'neon' ? schemaPg : schemaSqlite
 		}),
+		plugins,
 		emailAndPassword: {
 			enabled: config.emailAndPassword?.enabled ?? true,
 			requireEmailVerification: config.emailAndPassword?.requireEmailVerification ?? false

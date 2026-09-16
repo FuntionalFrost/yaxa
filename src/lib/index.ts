@@ -34,6 +34,13 @@ export { default as Tree, treeVariants } from './components/elements/Tree.svelte
 export type { TreeProps, TreeNode } from './components/elements/Tree.svelte';
 export { default as Terminal, terminalVariants } from './components/elements/Terminal.svelte';
 export type { TerminalProps, TerminalLine } from './components/elements/Terminal.svelte';
+export {
+	default as VirtualList,
+	virtualListVariants
+} from './components/elements/VirtualList.svelte';
+export type { VirtualListProps } from './components/elements/VirtualList.svelte';
+export { default as Carousel, carouselVariants } from './components/elements/Carousel.svelte';
+export type { CarouselProps } from './components/elements/Carousel.svelte';
 
 // Form Controls
 export { default as Form } from './components/forms/Form.svelte';
@@ -75,6 +82,16 @@ export { default as Card } from './components/layout/Card.svelte';
 export { default as Divider } from './components/layout/Divider.svelte';
 export type { DividerProps } from './components/layout/Divider.svelte';
 export { default as YaxaApp } from './components/layout/YaxaApp.svelte';
+export {
+	default as DashboardShell,
+	dashboardShellVariants
+} from './components/layout/DashboardShell.svelte';
+export type { DashboardShellProps } from './components/layout/DashboardShell.svelte';
+export {
+	default as ResizablePanels,
+	resizablePanelsVariants
+} from './components/layout/ResizablePanels.svelte';
+export type { ResizablePanelsProps } from './components/layout/ResizablePanels.svelte';
 
 // Navigation & Command
 export { default as Tabs } from './components/navigation/Tabs.svelte';

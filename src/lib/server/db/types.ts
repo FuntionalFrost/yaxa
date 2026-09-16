@@ -11,6 +11,38 @@ export interface SaasUser {
 	updatedAt: Date;
 }
 
+export type OrgRole = 'owner' | 'admin' | 'member';
+
+export interface SaasOrganization {
+	id: string;
+	name: string;
+	slug: string;
+	logo?: string | null;
+	metadata?: string | null;
+	createdAt: Date;
+	updatedAt: Date;
+}
+
+export interface SaasMember {
+	id: string;
+	organizationId: string;
+	userId: string;
+	role: OrgRole | string;
+	createdAt: Date;
+	updatedAt: Date;
+}
+
+export interface SaasInvitation {
+	id: string;
+	organizationId: string;
+	email: string;
+	role?: OrgRole | string | null;
+	status: 'pending' | 'accepted' | 'rejected' | 'canceled';
+	expiresAt: Date;
+	inviterId: string;
+	createdAt: Date;
+}
+
 export type SubscriptionStatus =
 	'active' | 'canceled' | 'past_due' | 'trialing' | 'incomplete' | 'unpaid';
 

@@ -1,7 +1,7 @@
 import { pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core';
 
 // ---------------------------------------------------------------------------
-// Better-Auth Tables (PostgreSQL)
+// Better-Auth Core Tables (PostgreSQL)
 // ---------------------------------------------------------------------------
 
 export const user = pgTable('user', {
@@ -28,7 +28,8 @@ export const session = pgTable('session', {
 	userAgent: text('user_agent'),
 	userId: text('user_id')
 		.notNull()
-		.references(() => user.id, { onDelete: 'cascade' })
+		.references(() => user.id, { onDelete: 'cascade' }),
+	activeOrganizationId: text('active_organization_id')
 });
 
 export const account = pgTable('account', {
@@ -56,6 +57,48 @@ export const verification = pgTable('verification', {
 	expiresAt: timestamp('expires_at', { mode: 'date' }).notNull(),
 	createdAt: timestamp('created_at', { mode: 'date' }),
 	updatedAt: timestamp('updated_at', { mode: 'date' })
+});
+
+// ---------------------------------------------------------------------------
+// Better-Auth Multi-Tenant Organization Tables (PostgreSQL)
+// ---------------------------------------------------------------------------
+
+export const organization = pgTable('organization', {
+	id: text('id').primaryKey(),
+	name: text('name').notNull(),
+	slug: text('slug').notNull().unique(),
+	logo: text('logo'),
+	metadata: text('metadata'),
+	createdAt: timestamp('created_at', { mode: 'date' }).notNull(),
+	updatedAt: timestamp('updated_at', { mode: 'date' }).notNull()
+});
+
+export const member = pgTable('member', {
+	id: text('id').primaryKey(),
+	organizationId: text('organization_id')
+		.notNull()
+		.references(() => organization.id, { onDelete: 'cascade' }),
+	userId: text('user_id')
+		.notNull()
+		.references(() => user.id, { onDelete: 'cascade' }),
+	role: text('role').notNull().default('member'), // 'owner' | 'admin' | 'member'
+	createdAt: timestamp('created_at', { mode: 'date' }).notNull(),
+	updatedAt: timestamp('updated_at', { mode: 'date' }).notNull()
+});
+
+export const invitation = pgTable('invitation', {
+	id: text('id').primaryKey(),
+	organizationId: text('organization_id')
+		.notNull()
+		.references(() => organization.id, { onDelete: 'cascade' }),
+	email: text('email').notNull(),
+	role: text('role').default('member'),
+	status: text('status').notNull().default('pending'), // 'pending' | 'accepted' | 'rejected' | 'canceled'
+	expiresAt: timestamp('expires_at', { mode: 'date' }).notNull(),
+	inviterId: text('inviter_id')
+		.notNull()
+		.references(() => user.id, { onDelete: 'cascade' }),
+	createdAt: timestamp('created_at', { mode: 'date' }).notNull()
 });
 
 // ---------------------------------------------------------------------------

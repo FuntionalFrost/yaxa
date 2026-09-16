@@ -1,7 +1,7 @@
 import { sqliteTable, text, integer } from 'drizzle-orm/sqlite-core';
 
 // ---------------------------------------------------------------------------
-// Better-Auth Tables (SQLite / Turso)
+// Better-Auth Core Tables (SQLite / Turso)
 // ---------------------------------------------------------------------------
 
 export const user = sqliteTable('user', {
@@ -28,7 +28,8 @@ export const session = sqliteTable('session', {
 	userAgent: text('user_agent'),
 	userId: text('user_id')
 		.notNull()
-		.references(() => user.id, { onDelete: 'cascade' })
+		.references(() => user.id, { onDelete: 'cascade' }),
+	activeOrganizationId: text('active_organization_id')
 });
 
 export const account = sqliteTable('account', {
@@ -56,6 +57,48 @@ export const verification = sqliteTable('verification', {
 	expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
 	createdAt: integer('created_at', { mode: 'timestamp' }),
 	updatedAt: integer('updated_at', { mode: 'timestamp' })
+});
+
+// ---------------------------------------------------------------------------
+// Better-Auth Multi-Tenant Organization Tables (SQLite / Turso)
+// ---------------------------------------------------------------------------
+
+export const organization = sqliteTable('organization', {
+	id: text('id').primaryKey(),
+	name: text('name').notNull(),
+	slug: text('slug').notNull().unique(),
+	logo: text('logo'),
+	metadata: text('metadata'),
+	createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+	updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
+});
+
+export const member = sqliteTable('member', {
+	id: text('id').primaryKey(),
+	organizationId: text('organization_id')
+		.notNull()
+		.references(() => organization.id, { onDelete: 'cascade' }),
+	userId: text('user_id')
+		.notNull()
+		.references(() => user.id, { onDelete: 'cascade' }),
+	role: text('role').notNull().default('member'), // 'owner' | 'admin' | 'member'
+	createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+	updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
+});
+
+export const invitation = sqliteTable('invitation', {
+	id: text('id').primaryKey(),
+	organizationId: text('organization_id')
+		.notNull()
+		.references(() => organization.id, { onDelete: 'cascade' }),
+	email: text('email').notNull(),
+	role: text('role').default('member'),
+	status: text('status').notNull().default('pending'), // 'pending' | 'accepted' | 'rejected' | 'canceled'
+	expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
+	inviterId: text('inviter_id')
+		.notNull()
+		.references(() => user.id, { onDelete: 'cascade' }),
+	createdAt: integer('created_at', { mode: 'timestamp' }).notNull()
 });
 
 // ---------------------------------------------------------------------------

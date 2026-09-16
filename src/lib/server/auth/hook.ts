@@ -9,9 +9,9 @@ export interface YaxaAuthHookOptions {
 }
 
 /**
- * Creates an all-in-one SvelteKit Server Hook for Better-Auth.
+ * Creates an all-in-one SvelteKit Server Hook for Better-Auth with Multi-Tenant Org resolution.
  * - Automatically routes /api/auth/* to Better-Auth
- * - Parses and caches session on event.locals
+ * - Parses and caches session, user, and active organization on event.locals
  * - Enforces path protection for dashboard/app routes
  */
 export function createYaxaAuthHook(options: YaxaAuthHookOptions): Handle {
@@ -33,12 +33,18 @@ export function createYaxaAuthHook(options: YaxaAuthHookOptions): Handle {
 				headers: event.request.headers
 			});
 
-			// Attach to locals
+			// Attach user & session to locals
 			(event.locals as any).session = session?.session || null;
 			(event.locals as any).user = session?.user || null;
+			(event.locals as any).orgId =
+				(session?.session as any)?.activeOrganizationId ||
+				event.request.headers?.get?.('x-organization-id') ||
+				(event.cookies?.get ? event.cookies.get('yaxa_active_org') : null) ||
+				null;
 		} catch {
 			(event.locals as any).session = null;
 			(event.locals as any).user = null;
+			(event.locals as any).orgId = null;
 		}
 
 		// 3. Check protected routes

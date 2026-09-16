@@ -154,7 +154,7 @@ export const siteConfig = defineSiteConfig({
 		<p
 			class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed font-normal text-neutral-600 sm:text-xl dark:text-neutral-400"
 		>
-			35+ accessible components, headless Svelte 5 actions, zero-WASM syntax highlighter, automated
+			45+ accessible components, layouts, SaaS page blocks, DOM virtualization, zero-WASM syntax highlighter, automated
 			runtime OpenGraph cards, XML sitemaps, and real-time Tailwind theme customization.
 		</p>
 
@@ -614,11 +614,10 @@ export const siteConfig = defineSiteConfig({
 					<Icon name="squares-plus" class="h-5 w-5" />
 				</div>
 				<h3 class="mb-2 text-base font-bold text-neutral-900 dark:text-white">
-					35+ Accessible Primitives
+					45+ Accessible Primitives
 				</h3>
 				<p class="text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">
-					MetricCards, InputOTP, ToggleGroups, DatePickers, Modals, Slideovers, Popovers, Tooltips,
-					DataTables, FormFields, and Toasts ready for deployment.
+					DashboardShell, Carousel, VirtualList, ResizablePanels, Terminal, Timeline, Tree, MultiSelect, Combobox, Stepper, Modals, Slideovers, and DataTables ready for deployment.
 				</p>
 			</div>
 
@@ -700,7 +699,7 @@ export const siteConfig = defineSiteConfig({
 					Pre-Built Templates
 				</h3>
 				<p class="mt-2 text-xs leading-relaxed text-neutral-500">
-					Copy-paste SaaS metrics, hero sections, and 2FA cards.
+					DashboardShell, Carousel, VirtualList, and ResizablePanels.
 				</p>
 			</a>
 
@@ -738,7 +737,7 @@ export const siteConfig = defineSiteConfig({
 					Full-Stack SaaS Stack
 				</h3>
 				<p class="mt-2 text-xs leading-relaxed text-neutral-500">
-					Better-Auth, Drizzle ORM, Polar.sh billing, and Resend.
+					Better-Auth Multi-Tenancy, Drizzle ORM, and Polar.sh.
 				</p>
 			</a>
 
