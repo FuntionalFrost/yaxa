@@ -79,6 +79,10 @@
 			"types": "./dist/vite/index.d.ts",
 			"default": "./dist/vite/index.js"
 		},
+		"./testing": {
+			"types": "./dist/testing/index.d.ts",
+			"default": "./dist/testing/index.js"
+		},
 		"./yaxa.css": "./dist/styles/yaxa.css"
 	},
 	"scripts": {

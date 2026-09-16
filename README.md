@@ -53,16 +53,17 @@ _(Optional full-stack SaaS features: `pnpm add better-auth drizzle-orm @polar-sh
 
 ### 2. Configure `vite.config.ts`
 
-Add Tailwind CSS to your Vite plugins:
+Add Tailwind CSS and the `yaxa()` plugin to your Vite plugins:
 
 ```ts
 // vite.config.ts
 import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
+import { yaxa } from 'yaxa-svelte/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-	plugins: [tailwindcss(), sveltekit()]
+	plugins: [tailwindcss(), sveltekit(), yaxa()]
 });
 ```
 

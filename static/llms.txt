@@ -1,0 +1,65 @@
+# Yaxa
+
+> The Intuitive Svelte UI Library — Nuxt UI v4 equivalent for SvelteKit 2.7+ & Svelte 5 with automated SEO, dynamic OpenGraph cards, sitemaps, robots.txt, and Tailwind CSS v4.
+
+## Quick Links
+
+- [Documentation](https://yaxa.vercel.app/docs/intro): Full guides and API references.
+- [AI Coding Agent Skill](https://yaxa.vercel.app/skills.md): Full markdown instructions and rules for AI coding assistants.
+- [GitHub Repository](https://github.com/FuntionalFrost/yaxa): Open-source source code and issues.
+- [npm Package](https://www.npmjs.com/package/yaxa-svelte): Official npm package registry.
+
+## Core Concepts & Architecture
+
+- **Svelte 5 Runes**: Built exclusively with `$state`, `$derived`, `$props`, and `$bindable` — zero Virtual DOM overhead.
+- **Tailwind CSS v4 Native Tokens**: Configured with `@theme` variables; fully customizable without legacy PostCSS.
+- **Single Source of Truth (`src/site.config.ts`)**: Automated Schema.org JSON-LD, `/api/og` dynamic SVG OpenGraph images, environment-aware `robots.txt`, XML sitemaps with human-readable `sitemap.xsl` stylesheets, and PWA manifests.
+- **Full-Stack SaaS Integrations**: Pre-integrated with Better-Auth, Drizzle ORM (Neon PostgreSQL & Turso LibSQL/SQLite), Polar.sh Merchant-of-Record payments, and Resend transactional emails.
+
+## Documentation Sections
+
+- [Getting Started - Introduction](https://yaxa.vercel.app/docs/intro): Core value proposition and architecture.
+- [Getting Started - Installation](https://yaxa.vercel.app/docs/install): 4-step quickstart with pnpm, Tailwind CSS v4, and Vite plugin.
+- [Getting Started - Site Configuration](https://yaxa.vercel.app/docs/config): Using `defineSiteConfig` for DRY SEO and site metadata.
+- [Getting Started - Static Sites (SSG)](https://yaxa.vercel.app/docs/static-sites): Deploying static websites with `@sveltejs/adapter-static`.
+- [Getting Started - Page Blocks](https://yaxa.vercel.app/docs/blocks): Hero, metrics dashboard, security cards, and pricing tables.
+- [SEO Suite - Dynamic OpenGraph](https://yaxa.vercel.app/docs/seo-og): `/api/og` server route and `createOgImageHandler`.
+- [SEO Suite - Robots & Sitemaps](https://yaxa.vercel.app/docs/seo-robots): Automated `robots.txt` and XML sitemaps with human-readable XSL.
+- [Components - Buttons & Elements](https://yaxa.vercel.app/docs/comp-buttons): Button, ButtonGroup, Badge, Avatar, AvatarGroup, Chip, Kbd, Progress, Meter, Skeleton, Spinner, CodeBlock, SortableList, DataTable.
+- [Components - Forms & Inputs](https://yaxa.vercel.app/docs/comp-forms): FormField, Input, Textarea, Select, Checkbox, RadioGroup, Switch, Slider, ColorPicker, ToggleGroup, DatePicker, DateRangePicker, InputOTP, Dropzone.
+- [Components - Overlays & Navigation](https://yaxa.vercel.app/docs/comp-overlays): Modal, Slideover, Popover, Tooltip, Alert, Accordion, ContextMenu, Breadcrumb, Pagination, Tabs, CommandPalette, DropdownMenu.
+- [SaaS Suite - Full-Stack Auth & Billing](https://yaxa.vercel.app/docs/saas-suite): Better-Auth client/server hooks, Drizzle ORM schemas, Polar checkout & webhooks, Resend emails, and S3 file uploads.
+
+## Installation & Quickstart
+
+```bash
+pnpm add yaxa-svelte @lucide/svelte
+pnpm add -D tailwindcss @tailwindcss/vite @tailwindcss/typography
+```
+
+```ts
+// vite.config.ts
+import { sveltekit } from '@sveltejs/kit/vite';
+import tailwindcss from '@tailwindcss/vite';
+import { yaxa } from 'yaxa-svelte/vite';
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  plugins: [tailwindcss(), sveltekit(), yaxa()]
+});
+```
+
+```svelte
+<!-- src/routes/+layout.svelte -->
+<script lang="ts">
+  import 'yaxa-svelte/yaxa.css';
+  import { YaxaApp } from 'yaxa-svelte';
+  import { siteConfig } from '../site.config';
+
+  let { children } = $props();
+</script>
+
+<YaxaApp config={siteConfig}>
+  {@render children()}
+</YaxaApp>
+```

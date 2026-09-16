@@ -54,6 +54,7 @@ export const siteConfig = defineSiteConfig({
 	description="Turnkey GDPR Privacy Policies, Polar.sh Merchant of Record terms, EthicalAds zero-cookie disclosures, and EU Impressum provider identification."
 	badge="Zero-Boilerplate"
 	category="Solo SaaS Suite"
+	importStatement={"import { LegalDocument, Footer } from 'yaxa-svelte';"}
 />
 
 <div class="space-y-10">

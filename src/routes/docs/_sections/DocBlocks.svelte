@@ -2,6 +2,8 @@
 	import DocHeader from '../_components/DocHeader.svelte';
 	import DocSandbox from '../_components/DocSandbox.svelte';
 	import MetricCard from '$lib/components/elements/MetricCard.svelte';
+	import EmptyState from '$lib/components/elements/EmptyState.svelte';
+	import Stepper, { type StepItem } from '$lib/components/navigation/Stepper.svelte';
 	import Button from '$lib/components/elements/Button.svelte';
 	import Icon from '$lib/components/elements/Icon.svelte';
 	import ToggleGroup from '$lib/components/forms/ToggleGroup.svelte';
@@ -10,6 +12,35 @@
 
 	let dashboardInterval = $state('30d');
 	let otpValue = $state('739201');
+	let currentStep = $state(1);
+
+	const onboardingSteps: StepItem[] = [
+		{ id: 'details', title: 'Project Details', description: 'Name and repository setup' },
+		{ id: 'auth', title: 'Database & Auth', description: 'Neon PostgreSQL & Better-Auth' },
+		{ id: 'billing', title: 'Billing & Polar', description: 'Connect subscription tiers' },
+		{ id: 'deploy', title: 'Edge Deployment', description: 'Vercel / Cloudflare edge rollout' }
+	];
+
+	const stepperSnippet = `<Stepper
+  steps={[
+    { id: 'details', title: 'Project Details', description: 'Name and repository setup' },
+    { id: 'auth', title: 'Database & Auth', description: 'Neon PostgreSQL & Better-Auth' },
+    { id: 'billing', title: 'Billing & Polar', description: 'Connect subscription tiers' },
+    { id: 'deploy', title: 'Edge Deployment', description: 'Vercel / Cloudflare rollout' }
+  ]}
+  bind:currentStep={currentStep}
+/>`;
+
+	const emptyStateSnippet = `<EmptyState
+  icon="database"
+  title="No database migrations found"
+  description="Run drizzle-kit generate or sv-utils db:push to synchronize your Neon PostgreSQL schema."
+>
+  {#snippet actions()}
+    <Button size="sm" icon="lightning">Run First Migration</Button>
+    <Button size="sm" variant="outline">Read Documentation</Button>
+  {/snippet}
+</EmptyState>`;
 
 	const metricSnippet = `<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
   <MetricCard
@@ -64,14 +95,67 @@
 </script>
 
 <DocHeader
-	title="Pre-Built Page Blocks"
-	description="Ready-to-copy responsive page block templates built specifically for solo developers launching modern SaaS applications."
+	title="Pre-Built Page Blocks & Wizards"
+	description="Ready-to-copy responsive page block templates, multi-step wizards, and empty state placeholders built specifically for solo developers launching modern SaaS applications."
 	badge="Page Blocks"
 	source="src/lib/components/elements/MetricCard.svelte"
 	category="Getting Started"
+	importStatement={"import { Card, MetricCard, Stepper, EmptyState, Button, Badge } from 'yaxa-svelte';"}
 />
 
 <div class="space-y-10">
+	<!-- Multi-Step Stepper Wizard Block -->
+	<DocSandbox title="Interactive Step Wizard (<Stepper />)" code={stepperSnippet}>
+		<div class="w-full space-y-6">
+			<Stepper steps={onboardingSteps} bind:currentStep />
+
+			<div
+				class="flex items-center justify-between rounded-xl border border-neutral-200 bg-neutral-50/60 p-4 dark:border-neutral-800 dark:bg-neutral-900/40"
+			>
+				<div class="text-xs text-neutral-500">
+					Current step: <span class="font-bold text-neutral-900 dark:text-white"
+						>{onboardingSteps[currentStep].title}</span
+					>
+					({currentStep + 1} of {onboardingSteps.length})
+				</div>
+				<div class="flex items-center gap-2">
+					<Button
+						variant="outline"
+						size="sm"
+						disabled={currentStep === 0}
+						onclick={() => (currentStep = Math.max(0, currentStep - 1))}
+					>
+						Previous Step
+					</Button>
+					<Button
+						variant="solid"
+						size="sm"
+						disabled={currentStep === onboardingSteps.length - 1}
+						onclick={() => (currentStep = Math.min(onboardingSteps.length - 1, currentStep + 1))}
+					>
+						Next Step
+					</Button>
+				</div>
+			</div>
+		</div>
+	</DocSandbox>
+
+	<!-- EmptyState Placeholder Sandbox -->
+	<DocSandbox title="Zero-State Placeholder (<EmptyState />)" code={emptyStateSnippet}>
+		<div class="w-full">
+			<EmptyState
+				icon="database"
+				title="No database migrations found"
+				description="Run drizzle-kit generate or sv-utils db:push to synchronize your Neon PostgreSQL schema."
+			>
+				{#snippet actions()}
+					<Button size="sm" icon="lightning" class="yaxa-press">Run First Migration</Button>
+					<Button size="sm" variant="outline" class="yaxa-press">Read Documentation</Button>
+				{/snippet}
+			</EmptyState>
+		</div>
+	</DocSandbox>
+
 	<!-- SaaS Metrics Dashboard Block -->
 	<DocSandbox title="SaaS Metrics Dashboard Block" code={metricSnippet}>
 		<div class="w-full space-y-4">

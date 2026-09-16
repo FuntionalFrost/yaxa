@@ -3,6 +3,7 @@ import adapter from '@sveltejs/adapter-vercel';
 import { sveltekit } from '@sveltejs/kit/vite';
 import Icons from 'unplugin-icons/vite';
 import { defineConfig } from 'vitest/config';
+import { yaxa } from './src/lib/vite/index.ts';
 
 export default defineConfig({
 	plugins: [
@@ -17,7 +18,8 @@ export default defineConfig({
 			adapter: adapter({
 				runtime: 'nodejs22.x'
 			})
-		})
+		}),
+		yaxa()
 	],
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']

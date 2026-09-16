@@ -81,6 +81,7 @@ export const siteConfig = defineSiteConfig({
 	description="Define your branding, single-email routing, project licensing, color themes, navigation, and SEO rules in one single source of truth."
 	badge="100% DRY"
 	category="Getting Started"
+	importStatement={"import { defineSiteConfig } from 'yaxa-svelte';"}
 />
 
 <div class="space-y-8">

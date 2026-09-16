@@ -16,6 +16,9 @@
 	import DatePicker from '$lib/components/forms/DatePicker.svelte';
 	import DateRangePicker from '$lib/components/forms/DateRangePicker.svelte';
 	import Dropzone from '$lib/components/forms/Dropzone.svelte';
+	import Combobox, { type ComboboxOption } from '$lib/components/forms/Combobox.svelte';
+	import MultiSelect, { type MultiSelectOption } from '$lib/components/forms/MultiSelect.svelte';
+	import NumberInput from '$lib/components/forms/NumberInput.svelte';
 	import Badge from '$lib/components/elements/Badge.svelte';
 
 	let sampleEmail = $state('user@yaxa.dev');
@@ -29,6 +32,27 @@
 	let selectedTier = $state('pro');
 	let volume = $state(75);
 	let chosenHex = $state('#ff3e00');
+
+	let selectedFramework = $state('svelte');
+	let selectedSkills = $state<string[]>(['svelte', 'tailwind']);
+	let itemQuantity = $state(3);
+
+	const frameworkOptions: ComboboxOption[] = [
+		{ label: 'Svelte 5', value: 'svelte', description: 'Runes-driven high performance UI' },
+		{ label: 'SvelteKit 2', value: 'sveltekit', description: 'Full-stack meta-framework' },
+		{ label: 'Tailwind CSS v4', value: 'tailwind', description: 'Utility-first modern CSS engine' },
+		{ label: 'TypeScript', value: 'typescript', description: 'Typed JavaScript' },
+		{ label: 'Vite', value: 'vite', description: 'Next-gen frontend tooling' }
+	];
+
+	const skillOptions: MultiSelectOption[] = [
+		{ label: 'Svelte 5', value: 'svelte' },
+		{ label: 'Tailwind CSS', value: 'tailwind' },
+		{ label: 'TypeScript', value: 'ts' },
+		{ label: 'PostgreSQL', value: 'postgres' },
+		{ label: 'Drizzle ORM', value: 'drizzle' },
+		{ label: 'Docker', value: 'docker' }
+	];
 
 	let otpValue = $state('482910');
 	let otpResult = $state('');
@@ -65,6 +89,26 @@
   <Textarea bind:value={bio} maxCount={200} showCount />
 </FormField>`;
 
+	const comboboxSnippet = `<Combobox
+  options={frameworkOptions}
+  bind:value={selectedFramework}
+  placeholder="Search framework..."
+  searchPlaceholder="Filter options..."
+/>
+
+<MultiSelect
+  options={skillOptions}
+  bind:value={selectedSkills}
+  placeholder="Select team skills..."
+/>
+
+<NumberInput
+  bind:value={itemQuantity}
+  min={1}
+  max={100}
+  step={1}
+/>`;
+
 	const otpSnippet = `<InputOTP
   length={6}
   bind:value={otpCode}
@@ -80,10 +124,11 @@
 
 <DocHeader
 	title="Forms, Inputs & Pickers"
-	description="Typed FormFields with validation states, character counters, OTP/2FA code inputs, ToggleGroups, DatePickers, switches, checkboxes, and sliders."
+	description="Typed FormFields with validation states, character counters, OTP/2FA code inputs, Comboboxes, MultiSelect chips, NumberInputs, ToggleGroups, DatePickers, switches, checkboxes, and sliders."
 	badge="Forms"
 	source="src/lib/components/forms/FormField.svelte"
 	category="Components"
+	importStatement={"import { FormField, Input, Select, Combobox, MultiSelect, NumberInput, Checkbox, Switch, DatePicker } from 'yaxa-svelte';"}
 />
 
 <div class="space-y-8">
@@ -108,6 +153,38 @@
 				hint="Expands automatically without scrollbars as you type"
 			>
 				<Textarea bind:value={autoGrowBio} autosize />
+			</FormField>
+		</div>
+	</DocSandbox>
+
+	<!-- Searchable Combobox & MultiSelect Sandboxes -->
+	<DocSandbox title="Combobox, MultiSelect & NumberInput" code={comboboxSnippet}>
+		<div class="w-full max-w-lg space-y-6">
+			<FormField
+				label="Searchable Framework (Combobox)"
+				hint="Filterable options with keyboard navigation and clear button"
+			>
+				<Combobox
+					options={frameworkOptions}
+					bind:value={selectedFramework}
+					placeholder="Select target framework..."
+					searchPlaceholder="Filter framework list..."
+				/>
+			</FormField>
+
+			<FormField
+				label="Team Tech Stack (MultiSelect)"
+				hint="Chip-based multi-selection with backspace removal"
+			>
+				<MultiSelect
+					options={skillOptions}
+					bind:values={selectedSkills}
+					placeholder="Add technologies..."
+				/>
+			</FormField>
+
+			<FormField label="Team Seats (NumberInput)" hint="Numeric stepper with min=1, max=50, step=1">
+				<NumberInput bind:value={itemQuantity} min={1} max={50} step={1} />
 			</FormField>
 		</div>
 	</DocSandbox>

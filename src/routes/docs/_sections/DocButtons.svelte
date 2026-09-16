@@ -128,6 +128,7 @@ export const Metric: React.FC<MetricProps> = ({ label, initialValue = 0 }) => {
 	badge="Elements"
 	source="src/lib/components/elements/Button.svelte"
 	category="Components"
+	importStatement={"import { Button, Badge, Avatar, Kbd, Progress } from 'yaxa-svelte';"}
 />
 
 <div class="space-y-8">

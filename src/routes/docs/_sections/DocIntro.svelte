@@ -27,6 +27,7 @@
 	description="The intuitive, production-grade UI component and automated SEO library for SvelteKit 2.7+ and Svelte 5 Runes. Bringing full Nuxt UI v4 & Nuxt SEO DX to the Svelte ecosystem."
 	badge="Svelte 5 Runes"
 	category="Getting Started"
+	importStatement={"import { YaxaApp, Button, defineSiteConfig } from 'yaxa-svelte';"}
 />
 
 <div class="space-y-8">

@@ -40,6 +40,7 @@ export const siteConfig = defineSiteConfig({
 	description="Automated environment-gated robots.txt, dynamic XML sitemaps with human-readable XSL stylesheets, and PWA site.webmanifest generation."
 	badge="SEO Suite"
 	category="Site & SEO Kit"
+	importStatement={"import { createRobotsHandler, createSitemapHandler, createManifestHandler } from 'yaxa-svelte';"}
 />
 
 <div class="space-y-8">

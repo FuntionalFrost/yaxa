@@ -26,6 +26,8 @@ export { default as CodeBlock, tokenizeCode } from './components/elements/CodeBl
 export type { CodeBlockProps } from './components/elements/CodeBlock.svelte';
 export { default as SortableList } from './components/elements/SortableList.svelte';
 export type { SortableListProps } from './components/elements/SortableList.svelte';
+export { default as EmptyState, emptyStateVariants } from './components/elements/EmptyState.svelte';
+export type { EmptyStateProps } from './components/elements/EmptyState.svelte';
 
 // Form Controls
 export { default as Form } from './components/forms/Form.svelte';
@@ -51,6 +53,12 @@ export { default as DateRangePicker } from './components/forms/DateRangePicker.s
 export type { DateRange, DateRangePreset } from './components/forms/DateRangePicker.svelte';
 export { default as Dropzone } from './components/forms/Dropzone.svelte';
 export type { DropzoneProps } from './components/forms/Dropzone.svelte';
+export { default as Combobox, comboboxVariants } from './components/forms/Combobox.svelte';
+export type { ComboboxProps, ComboboxOption } from './components/forms/Combobox.svelte';
+export { default as MultiSelect, multiSelectVariants } from './components/forms/MultiSelect.svelte';
+export type { MultiSelectProps, MultiSelectOption } from './components/forms/MultiSelect.svelte';
+export { default as NumberInput, numberInputVariants } from './components/forms/NumberInput.svelte';
+export type { NumberInputProps } from './components/forms/NumberInput.svelte';
 
 // Layout & Shell
 export { default as Container } from './components/layout/Container.svelte';
@@ -73,10 +81,14 @@ export { default as CommandPalette } from './components/navigation/CommandPalett
 export type { CommandItem } from './components/navigation/CommandPalette.svelte';
 export { default as DropdownMenu } from './components/navigation/DropdownMenu.svelte';
 export type { MenuItem } from './components/navigation/DropdownMenu.svelte';
+export { default as Stepper, stepperVariants } from './components/navigation/Stepper.svelte';
+export type { StepperProps, StepItem, StepStatus } from './components/navigation/Stepper.svelte';
 
 // Overlays & Feedback
 export { default as Modal } from './components/overlays/Modal.svelte';
 export type { ModalProps } from './components/overlays/Modal.svelte';
+export { default as Drawer, drawerVariants } from './components/overlays/Drawer.svelte';
+export type { DrawerProps } from './components/overlays/Drawer.svelte';
 export { default as Slideover } from './components/overlays/Slideover.svelte';
 export { default as Popover } from './components/overlays/Popover.svelte';
 export { default as Tooltip } from './components/overlays/Tooltip.svelte';
@@ -218,6 +230,10 @@ export { useGate } from './composables/useGate.svelte';
 export type { UseGateOptions } from './composables/useGate.svelte';
 export { useUpload } from './composables/useUpload.svelte';
 export type { UseUploadOptions, UploadResult } from './composables/useUpload.svelte';
+
+// Testing Utilities
+export { createMockSiteConfig, createMockUser, createTestWrapperProps } from './testing';
+export type { YaxaTestOptions } from './testing';
 
 // Utilities
 export { cn, tv } from './utils/cn';

@@ -2,6 +2,7 @@
 	import DocHeader from '../_components/DocHeader.svelte';
 	import DocSandbox from '../_components/DocSandbox.svelte';
 	import Modal from '$lib/components/overlays/Modal.svelte';
+	import Drawer from '$lib/components/overlays/Drawer.svelte';
 	import Slideover from '$lib/components/overlays/Slideover.svelte';
 	import Tooltip from '$lib/components/overlays/Tooltip.svelte';
 	import DropdownMenu, { type MenuItem } from '$lib/components/navigation/DropdownMenu.svelte';
@@ -25,6 +26,7 @@
 
 	let modalOpen = $state(false);
 	let slideoverOpen = $state(false);
+	let drawerOpen = $state(false);
 	let popoverOpen = $state(false);
 	let currentPage = $state(2);
 	let tableSearch = $state('');
@@ -177,20 +179,26 @@
 </script>
 
 <DocHeader
-	title="Modals, Slideover Drawers, Toasts & DataTables"
-	description="Accessible dialog overlays, slideover sheets, popovers, dropdown menus, context menus, alert banners, and reactive data tables."
+	title="Modals, Drawers, Slideovers & DataTables"
+	description="Accessible dialog overlays, mobile-first bottom drawers, slideover sheets, popovers, dropdown menus, context menus, alert banners, and reactive data tables."
 	badge="Overlays"
 	source="src/lib/components/overlays/Modal.svelte"
 	category="Components"
+	importStatement={"import { Modal, Drawer, Slideover, Popover, Tooltip, Alert, Accordion } from 'yaxa-svelte';"}
 />
 
 <div class="space-y-8">
-	<!-- Modal & Slideover Sandbox -->
-	<DocSandbox title="Modal Dialogs & Slideover Sheets">
+	<!-- Modal, Slideover & Drawer Sandbox -->
+	<DocSandbox title="Modals, Slideovers & Mobile-First Drawers">
 		<div class="flex flex-wrap items-center justify-center gap-4">
 			<Button variant="solid" color="primary" onclick={() => (modalOpen = true)}>
 				<Icon name="window" class="mr-1.5 h-4 w-4" />
 				Open Modal Dialog
+			</Button>
+
+			<Button variant="outline" color="neutral" onclick={() => (drawerOpen = true)}>
+				<Icon name="chevron-down" class="mr-1.5 h-4 w-4" />
+				Open Bottom Drawer
 			</Button>
 
 			<Button variant="outline" color="neutral" onclick={() => (slideoverOpen = true)}>
@@ -225,6 +233,44 @@
 			</div>
 		{/snippet}
 	</Modal>
+
+	<!-- Drawer Component (Mobile-First Bottom Sheet) -->
+	<Drawer
+		bind:open={drawerOpen}
+		title="Quick Actions & Shortcuts"
+		description="Touch-friendly bottom drawer with drag handle"
+	>
+		<div class="space-y-3 text-xs text-zinc-600 dark:text-zinc-400">
+			<p>Quickly configure notifications, toggle dark mode, or export project metrics.</p>
+			<div class="grid grid-cols-2 gap-2">
+				<Button
+					variant="outline"
+					size="sm"
+					class="w-full"
+					onclick={() => {
+						drawerOpen = false;
+						toast.info('Exported JSON');
+					}}
+				>
+					Export Data
+				</Button>
+				<Button
+					variant="outline"
+					size="sm"
+					class="w-full"
+					onclick={() => {
+						drawerOpen = false;
+						toast.success('Cache Purged');
+					}}
+				>
+					Purge Edge Cache
+				</Button>
+			</div>
+		</div>
+		{#snippet footer()}
+			<Button color="primary" class="w-full" onclick={() => (drawerOpen = false)}>Done</Button>
+		{/snippet}
+	</Drawer>
 
 	<!-- Slideover Component -->
 	<Slideover

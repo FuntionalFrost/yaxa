@@ -37,6 +37,7 @@
 	description="Zero-dependency runtime SVG Open Graph image generator. Automatically creates branded 1200x630 social share cards without headless Chrome or heavy canvas dependencies."
 	badge="Automated SEO"
 	category="Site & SEO Kit"
+	importStatement={"import { createOgImageHandler, generateOgSvg } from 'yaxa-svelte';"}
 />
 
 <div class="space-y-8">
