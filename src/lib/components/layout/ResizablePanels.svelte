@@ -90,37 +90,50 @@
 		}
 	}
 
+	let rafId: number | null = null;
+
 	function startDrag(e: MouseEvent | TouchEvent) {
 		e.preventDefault();
 		isDragging = true;
 
 		function onMove(moveEvent: MouseEvent | TouchEvent) {
 			if (!containerRef) return;
-			const rect = containerRef.getBoundingClientRect();
-			let newPercent: number;
+			const isTouch = 'touches' in moveEvent;
+			const clientX = isTouch && moveEvent.touches.length > 0 ? moveEvent.touches[0].clientX : (moveEvent as MouseEvent).clientX;
+			const clientY = isTouch && moveEvent.touches.length > 0 ? moveEvent.touches[0].clientY : (moveEvent as MouseEvent).clientY;
 
-			if (direction === 'horizontal') {
-				const clientX = 'touches' in moveEvent ? moveEvent.touches[0].clientX : moveEvent.clientX;
-				newPercent = ((clientX - rect.left) / rect.width) * 100;
-			} else {
-				const clientY = 'touches' in moveEvent ? moveEvent.touches[0].clientY : moveEvent.clientY;
-				newPercent = ((clientY - rect.top) / rect.height) * 100;
-			}
+			if (rafId !== null) return;
+			rafId = requestAnimationFrame(() => {
+				rafId = null;
+				if (!containerRef) return;
+				const rect = containerRef.getBoundingClientRect();
+				let newPercent: number;
 
-			saveSize(newPercent);
+				if (direction === 'horizontal') {
+					newPercent = ((clientX - rect.left) / rect.width) * 100;
+				} else {
+					newPercent = ((clientY - rect.top) / rect.height) * 100;
+				}
+
+				saveSize(newPercent);
+			});
 		}
 
 		function onEnd() {
 			isDragging = false;
+			if (rafId !== null) {
+				cancelAnimationFrame(rafId);
+				rafId = null;
+			}
 			window.removeEventListener('mousemove', onMove);
 			window.removeEventListener('mouseup', onEnd);
 			window.removeEventListener('touchmove', onMove);
 			window.removeEventListener('touchend', onEnd);
 		}
 
-		window.addEventListener('mousemove', onMove);
+		window.addEventListener('mousemove', onMove, { passive: true });
 		window.addEventListener('mouseup', onEnd);
-		window.addEventListener('touchmove', onMove);
+		window.addEventListener('touchmove', onMove, { passive: true });
 		window.addEventListener('touchend', onEnd);
 	}
 

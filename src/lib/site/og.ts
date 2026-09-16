@@ -153,7 +153,7 @@ export function createOgImageHandler(options?: OgImageOptions): RequestHandler {
 		return new Response(svg, {
 			headers: {
 				'Content-Type': 'image/svg+xml; charset=utf-8',
-				'Cache-Control': 'public, max-age=86400, s-maxage=86400'
+				'Cache-Control': 'public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400'
 			}
 		});
 	};

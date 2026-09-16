@@ -1,41 +1,10 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
-	import DocIntro from '../_sections/DocIntro.svelte';
-	import DocInstall from '../_sections/DocInstall.svelte';
-	import DocConfig from '../_sections/DocConfig.svelte';
-	import DocStaticSites from '../_sections/DocStaticSites.svelte';
-	import DocSeoOg from '../_sections/DocSeoOg.svelte';
-	import DocSeoRobots from '../_sections/DocSeoRobots.svelte';
-	import DocButtons from '../_sections/DocButtons.svelte';
-	import DocForms from '../_sections/DocForms.svelte';
-	import DocOverlays from '../_sections/DocOverlays.svelte';
-	import DocSaasSuite from '../_sections/DocSaasSuite.svelte';
-	import DocGatingStorage from '../_sections/DocGatingStorage.svelte';
-	import DocAdminSuite from '../_sections/DocAdminSuite.svelte';
-	import DocLegal from '../_sections/DocLegal.svelte';
-	import DocBlocks from '../_sections/DocBlocks.svelte';
 	import Seo from '$lib/components/seo/Seo.svelte';
 
 	let { data }: PageProps = $props();
 
-	const SECTION_MAP: Record<string, any> = {
-		intro: DocIntro,
-		install: DocInstall,
-		config: DocConfig,
-		'static-sites': DocStaticSites,
-		blocks: DocBlocks,
-		'seo-og': DocSeoOg,
-		'seo-robots': DocSeoRobots,
-		'comp-buttons': DocButtons,
-		'comp-forms': DocForms,
-		'comp-overlays': DocOverlays,
-		'saas-suite': DocSaasSuite,
-		'gating-storage': DocGatingStorage,
-		'admin-suite': DocAdminSuite,
-		'legal-suite': DocLegal
-	};
-
-	let ActiveSectionComponent = $derived(SECTION_MAP[data.slug] ?? DocIntro);
+	let ActiveSectionComponent = $derived(data.component);
 </script>
 
 <Seo
@@ -49,3 +18,4 @@
 />
 
 <ActiveSectionComponent />
+
