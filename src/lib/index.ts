@@ -28,6 +28,12 @@ export { default as SortableList } from './components/elements/SortableList.svel
 export type { SortableListProps } from './components/elements/SortableList.svelte';
 export { default as EmptyState, emptyStateVariants } from './components/elements/EmptyState.svelte';
 export type { EmptyStateProps } from './components/elements/EmptyState.svelte';
+export { default as Timeline, timelineVariants } from './components/elements/Timeline.svelte';
+export type { TimelineProps, TimelineItem } from './components/elements/Timeline.svelte';
+export { default as Tree, treeVariants } from './components/elements/Tree.svelte';
+export type { TreeProps, TreeNode } from './components/elements/Tree.svelte';
+export { default as Terminal, terminalVariants } from './components/elements/Terminal.svelte';
+export type { TerminalProps, TerminalLine } from './components/elements/Terminal.svelte';
 
 // Form Controls
 export { default as Form } from './components/forms/Form.svelte';
@@ -98,6 +104,14 @@ export { default as Accordion } from './components/overlays/Accordion.svelte';
 export type { AccordionProps, AccordionItem } from './components/overlays/Accordion.svelte';
 export { default as ContextMenu } from './components/overlays/ContextMenu.svelte';
 export type { ContextMenuItem } from './components/overlays/ContextMenu.svelte';
+export {
+	default as NotificationCenter,
+	notificationCenterVariants
+} from './components/overlays/NotificationCenter.svelte';
+export type {
+	NotificationCenterProps,
+	NotificationItem
+} from './components/overlays/NotificationCenter.svelte';
 
 // Headless Actions Suite
 export {
@@ -140,6 +154,8 @@ export { Sortable, useSortable } from './composables/useSortable.svelte';
 export type { UseSortableOptions } from './composables/useSortable.svelte';
 export { useFormAction } from './composables/useFormAction.svelte';
 export type { UseFormActionOptions } from './composables/useFormAction.svelte';
+export { useIdle } from './composables/useIdle.svelte';
+export type { UseIdleOptions } from './composables/useIdle.svelte';
 
 // Feedback & Toast notification helper
 export { toast } from 'svelte-sonner';
@@ -223,6 +239,8 @@ export type { YaxaPluginOptions } from './vite/index';
 export { default as Gate } from './components/saas/Gate.svelte';
 export type { GateProps } from './components/saas/Gate.svelte';
 export { default as UserMenu } from './components/saas/UserMenu.svelte';
+export { default as OrgSwitcher, orgSwitcherVariants } from './components/saas/OrgSwitcher.svelte';
+export type { OrgSwitcherProps, OrgItem } from './components/saas/OrgSwitcher.svelte';
 export { default as PricingCard } from './components/saas/PricingCard.svelte';
 export { default as PricingTable } from './components/saas/PricingTable.svelte';
 export { default as SubscriptionCard } from './components/saas/SubscriptionCard.svelte';
@@ -230,6 +248,20 @@ export { useGate } from './composables/useGate.svelte';
 export type { UseGateOptions } from './composables/useGate.svelte';
 export { useUpload } from './composables/useUpload.svelte';
 export type { UseUploadOptions, UploadResult } from './composables/useUpload.svelte';
+
+// Pre-Built SaaS Blocks
+export {
+	default as Testimonials,
+	testimonialsVariants
+} from './components/blocks/Testimonials.svelte';
+export type { TestimonialsProps, TestimonialItem } from './components/blocks/Testimonials.svelte';
+export { default as FAQ, faqVariants } from './components/blocks/FAQ.svelte';
+export type { FAQProps, FAQItem } from './components/blocks/FAQ.svelte';
+export {
+	default as FeatureGrid,
+	featureGridVariants
+} from './components/blocks/FeatureGrid.svelte';
+export type { FeatureGridProps, FeatureItem } from './components/blocks/FeatureGrid.svelte';
 
 // Testing Utilities
 export { createMockSiteConfig, createMockUser, createTestWrapperProps } from './testing';

@@ -6,11 +6,48 @@
 	import UserMenu from '$lib/components/saas/UserMenu.svelte';
 	import PricingTable from '$lib/components/saas/PricingTable.svelte';
 	import SubscriptionCard from '$lib/components/saas/SubscriptionCard.svelte';
+	import OrgSwitcher, { type OrgItem } from '$lib/components/saas/OrgSwitcher.svelte';
+	import NotificationCenter, {
+		type NotificationItem
+	} from '$lib/components/overlays/NotificationCenter.svelte';
 
 	let activeDemo = $state('auth');
 
+	let demoOrgId = $state('org-1');
+	const demoOrgs: OrgItem[] = [
+		{ id: 'org-1', name: 'Acme SaaS Corp', role: 'Owner', plan: 'Enterprise' },
+		{ id: 'org-2', name: 'Starlight Labs', role: 'Admin', plan: 'Pro' },
+		{ id: 'org-3', name: 'Personal Workspace', role: 'Member', plan: 'Free' }
+	];
+
+	let demoNotifs = $state<NotificationItem[]>([
+		{
+			id: '1',
+			title: 'Payment received ($29.00)',
+			description: 'Invoice #INV-4982 settled via Polar.',
+			timestamp: '5m ago',
+			read: false
+		},
+		{
+			id: '2',
+			title: 'Database schema migration',
+			description: 'Schema successfully synced with Neon Postgres.',
+			timestamp: '1h ago',
+			read: false
+		},
+		{
+			id: '3',
+			title: 'SSL Certificate Auto-Renewed',
+			description: 'Wildcard TLS certificate issued for api.yaxa.dev.',
+			timestamp: '1d ago',
+			read: true
+		}
+	]);
+
 	const demoTabs = [
 		{ value: 'auth', label: 'Auth Card' },
+		{ value: 'org-switcher', label: 'Org Switcher' },
+		{ value: 'notifications', label: 'Notifications' },
 		{ value: 'pricing', label: 'Pricing Table' },
 		{ value: 'subscription', label: 'Subscription Widget' },
 		{ value: 'user-menu', label: 'User Menu' }
@@ -116,6 +153,28 @@ import { createPresignedUploadUrl } from 'yaxa-svelte/storage';
 			{#if activeDemo === 'auth'}
 				<div class="w-full max-w-md">
 					<AuthCard showSocial={true} showMagicLinkToggle={true} />
+				</div>
+			{:else if activeDemo === 'org-switcher'}
+				<div class="flex flex-col items-center justify-center gap-4 p-8 text-center">
+					<div class="text-xs text-neutral-500 dark:text-neutral-400">
+						Switch between personal and multi-tenant workspaces
+					</div>
+					<OrgSwitcher
+						organizations={demoOrgs}
+						bind:currentOrgId={demoOrgId}
+						oncreate={() => alert('Create organization modal trigger')}
+					/>
+				</div>
+			{:else if activeDemo === 'notifications'}
+				<div class="flex flex-col items-center justify-center gap-4 p-8 text-center">
+					<div class="text-xs text-neutral-500 dark:text-neutral-400">
+						Real-time notification drawer with unread counter chip
+					</div>
+					<NotificationCenter
+						notifications={demoNotifs}
+						onmarkallread={() => (demoNotifs = demoNotifs.map((n) => ({ ...n, read: true })))}
+						onselect={(n) => alert('Selected notification: ' + n.title)}
+					/>
 				</div>
 			{:else if activeDemo === 'pricing'}
 				<div class="w-full">

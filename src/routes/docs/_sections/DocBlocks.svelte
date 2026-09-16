@@ -4,6 +4,11 @@
 	import MetricCard from '$lib/components/elements/MetricCard.svelte';
 	import EmptyState from '$lib/components/elements/EmptyState.svelte';
 	import Stepper, { type StepItem } from '$lib/components/navigation/Stepper.svelte';
+	import Terminal from '$lib/components/elements/Terminal.svelte';
+	import Timeline, { type TimelineItem } from '$lib/components/elements/Timeline.svelte';
+	import Testimonials, { type TestimonialItem } from '$lib/components/blocks/Testimonials.svelte';
+	import FAQ, { type FAQItem } from '$lib/components/blocks/FAQ.svelte';
+	import FeatureGrid, { type FeatureItem } from '$lib/components/blocks/FeatureGrid.svelte';
 	import Button from '$lib/components/elements/Button.svelte';
 	import Icon from '$lib/components/elements/Icon.svelte';
 	import ToggleGroup from '$lib/components/forms/ToggleGroup.svelte';
@@ -19,6 +24,120 @@
 		{ id: 'auth', title: 'Database & Auth', description: 'Neon PostgreSQL & Better-Auth' },
 		{ id: 'billing', title: 'Billing & Polar', description: 'Connect subscription tiers' },
 		{ id: 'deploy', title: 'Edge Deployment', description: 'Vercel / Cloudflare edge rollout' }
+	];
+
+	const terminalLines = [
+		{ comment: 'Create modern full-stack SvelteKit 2 + Svelte 5 app' },
+		{ command: 'pnpm create yaxa-app my-saas' },
+		{
+			output:
+				'✔ Template scaffolding complete\n✔ Tailwind CSS v4 configured\n✔ Drizzle ORM + Better-Auth wired'
+		},
+		{ comment: 'Start lightning-fast dev server' },
+		{ command: 'cd my-saas && pnpm dev' }
+	];
+
+	const changelogTimeline: TimelineItem[] = [
+		{
+			id: '1',
+			title: 'v1.6 Release: Tier 2 SaaS Blocks & Composables',
+			description:
+				'Added Terminal, Timeline, Tree, OrgSwitcher, Testimonials, FAQ, and FeatureGrid.',
+			timestamp: 'Just now',
+			color: 'success',
+			tag: 'Latest'
+		},
+		{
+			id: '2',
+			title: 'v1.5 Security Patch & Public Agent Endpoint',
+			description: 'Hardened Polar HMAC validation and deployed public /skills.md.',
+			timestamp: '1 hour ago',
+			color: 'primary',
+			tag: 'Patch'
+		},
+		{
+			id: '3',
+			title: 'v1.4 Core Components Expansion',
+			description: 'Introduced Combobox, MultiSelect, NumberInput, Drawer, and EmptyState.',
+			timestamp: 'Yesterday',
+			color: 'info'
+		}
+	];
+
+	const demoTestimonials: TestimonialItem[] = [
+		{
+			id: '1',
+			quote: 'Yaxa allowed us to ship our SaaS product in 4 days instead of 2 months.',
+			author: 'Sarah Chen',
+			role: 'Founder & CTO',
+			company: 'CloudFlow',
+			rating: 5
+		},
+		{
+			id: '2',
+			quote: 'The Svelte 5 runes architecture is exceptionally clean and blazing fast.',
+			author: 'Marcus Vance',
+			role: 'Lead Architect',
+			company: 'NovaStack',
+			rating: 5
+		},
+		{
+			id: '3',
+			quote: 'Automated SEO & dynamic OG images out-of-the-box saved us weeks of boilerplate.',
+			author: 'Elena Rostova',
+			role: 'Head of Growth',
+			company: 'ScaleDev',
+			rating: 5
+		}
+	];
+
+	const demoFAQ: FAQItem[] = [
+		{
+			id: '1',
+			question: 'Is Yaxa compatible with Svelte 5 and SvelteKit 2.7+?',
+			answer:
+				'Yes, 100%. Yaxa is built from the ground up using native Svelte 5 Runes ($state, $derived, $props, $bindable, snippets).',
+			category: 'General'
+		},
+		{
+			id: '2',
+			question: 'How do I handle subscriptions and payments?',
+			answer:
+				'Yaxa includes turnkey Polar.sh Merchant of Record integration with cryptographic webhook validation.',
+			category: 'Billing'
+		},
+		{
+			id: '3',
+			question: 'Can I deploy to Cloudflare Pages or Vercel Edge?',
+			answer:
+				'Absolutely. Yaxa supports zero-dependency server adapters including @sveltejs/adapter-vercel, adapter-cloudflare, and adapter-static.',
+			category: 'Deployment'
+		}
+	];
+
+	const demoFeatures: FeatureItem[] = [
+		{
+			id: '1',
+			title: 'Svelte 5 Runes Native',
+			description: 'Reactive state management with zero overhead and atomic signals.',
+			icon: 'lightning',
+			tag: 'Fast'
+		},
+		{
+			id: '2',
+			title: 'Automated SEO & Social OG',
+			description: 'Zero-dependency runtime SVG Open Graph image generation and XML sitemaps.',
+			icon: 'globe',
+			tag: 'Built-in'
+		},
+		{
+			id: '3',
+			title: 'Turnkey Auth & Billing',
+			description:
+				'Batteries-included Better-Auth, Drizzle ORM, and Polar.sh checkout integration.',
+			icon: 'shield',
+			tag: 'Secure'
+		}
 	];
 
 	const stepperSnippet = `<Stepper
@@ -41,6 +160,15 @@
     <Button size="sm" variant="outline">Read Documentation</Button>
   {/snippet}
 </EmptyState>`;
+
+	const terminalSnippet = `<Terminal
+  title="bash / zsh"
+  lines={[
+    { comment: 'Create modern full-stack SvelteKit 2 + Svelte 5 app' },
+    { command: 'pnpm create yaxa-app my-saas' },
+    { output: '✔ Template scaffolding complete' }
+  ]}
+/>`;
 
 	const metricSnippet = `<div class="grid grid-cols-1 md:grid-cols-3 gap-4">
   <MetricCard
@@ -95,12 +223,12 @@
 </script>
 
 <DocHeader
-	title="Pre-Built Page Blocks & Wizards"
-	description="Ready-to-copy responsive page block templates, multi-step wizards, and empty state placeholders built specifically for solo developers launching modern SaaS applications."
+	title="Pre-Built Page Blocks & Developer Primitives"
+	description="Ready-to-copy responsive page block templates, terminal emulators, activity timelines, bento feature grids, testimonials, FAQ accordions, and onboarding wizards."
 	badge="Page Blocks"
-	source="src/lib/components/elements/MetricCard.svelte"
+	source="src/lib/components/blocks/FeatureGrid.svelte"
 	category="Getting Started"
-	importStatement={"import { Card, MetricCard, Stepper, EmptyState, Button, Badge } from 'yaxa-svelte';"}
+	importStatement={"import { FeatureGrid, Testimonials, FAQ, Terminal, Timeline, Stepper, EmptyState, MetricCard } from 'yaxa-svelte';"}
 />
 
 <div class="space-y-10">
@@ -260,6 +388,58 @@
 				</div>
 				<Button block class="yaxa-press">Confirm Code</Button>
 			</Card>
+		</div>
+	</DocSandbox>
+
+	<!-- CLI Terminal Emulator Sandbox -->
+	<DocSandbox title="CLI Terminal Emulator (<Terminal />)" code={terminalSnippet}>
+		<div class="mx-auto w-full max-w-xl">
+			<Terminal title="zsh / yaxa-scaffold" lines={terminalLines} copyable={true} />
+		</div>
+	</DocSandbox>
+
+	<!-- Activity & Changelog Timeline Sandbox -->
+	<DocSandbox title="Activity & Changelog Feed (<Timeline />)">
+		<div class="mx-auto w-full max-w-lg">
+			<Timeline items={changelogTimeline} size="md" />
+		</div>
+	</DocSandbox>
+
+	<!-- Bento Feature Showcase Grid -->
+	<DocSandbox title="Bento Feature Showcase (<FeatureGrid />)">
+		<div class="w-full">
+			<FeatureGrid
+				badge="Architecture"
+				title="Engineered for Peak Velocity"
+				description="Eliminate boilerplate with pre-wired authentication, database introspection, and automated SEO."
+				features={demoFeatures}
+				columns={3}
+			/>
+		</div>
+	</DocSandbox>
+
+	<!-- Social Proof Testimonials Grid -->
+	<DocSandbox title="Social Proof & Quotes (<Testimonials />)">
+		<div class="w-full">
+			<Testimonials
+				badge="Testimonials"
+				title="Built for Fast-Moving Solo Founders"
+				description="Discover why makers choose Yaxa to launch high-converting full-stack SaaS apps."
+				items={demoTestimonials}
+				columns={3}
+			/>
+		</div>
+	</DocSandbox>
+
+	<!-- FAQ Accordion Block -->
+	<DocSandbox title="Expandable FAQ Accordion (<FAQ />)">
+		<div class="w-full">
+			<FAQ
+				badge="Support"
+				title="Frequently Asked Questions"
+				description="Instant answers to questions about architecture, licensing, and edge deployments."
+				items={demoFAQ}
+			/>
 		</div>
 	</DocSandbox>
 </div>

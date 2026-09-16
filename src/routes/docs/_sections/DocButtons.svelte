@@ -15,11 +15,44 @@
 	import MetricCard from '$lib/components/elements/MetricCard.svelte';
 	import CodeBlock from '$lib/components/elements/CodeBlock.svelte';
 	import SortableList from '$lib/components/elements/SortableList.svelte';
+	import Tree, { type TreeNode } from '$lib/components/elements/Tree.svelte';
 	import Icon from '$lib/components/elements/Icon.svelte';
 	import { ArrowRight, ChevronLeft, ChevronRight, Sparkles, Send } from '@lucide/svelte';
 
 	let loading = $state(false);
 	let progressVal = $state(68);
+	let selectedTreeId = $state('page-svelte');
+	let expandedTreeIds = $state<string[]>(['src', 'routes', 'components']);
+
+	const demoTreeData: TreeNode[] = [
+		{
+			id: 'src',
+			label: 'src',
+			children: [
+				{
+					id: 'routes',
+					label: 'routes',
+					children: [
+						{ id: 'layout', label: '+layout.svelte' },
+						{ id: 'page-svelte', label: '+page.svelte' },
+						{ id: 'page-server', label: '+page.server.ts' }
+					]
+				},
+				{
+					id: 'components',
+					label: 'lib/components',
+					children: [
+						{ id: 'button', label: 'Button.svelte' },
+						{ id: 'tree', label: 'Tree.svelte' },
+						{ id: 'terminal', label: 'Terminal.svelte' }
+					]
+				},
+				{ id: 'config', label: 'site.config.ts' }
+			]
+		},
+		{ id: 'pkg', label: 'package.json' },
+		{ id: 'tsconfig', label: 'tsconfig.json' }
+	];
 
 	let tasks = $state([
 		{ id: '1', title: 'Design user onboarding flow', priority: 'High', tag: 'UI' },
@@ -123,12 +156,12 @@ export const Metric: React.FC<MetricProps> = ({ label, initialValue = 0 }) => {
 </script>
 
 <DocHeader
-	title="Buttons, Badges & Visual Elements"
-	description="Accessible action triggers, button groups, avatars, presence indicators, keyboard shortcuts, status chips, spinners, progress meters, and skeletons."
+	title="Buttons, Badges, Trees & Visual Elements"
+	description="Accessible action triggers, button groups, avatars, presence indicators, keyboard shortcuts, status chips, hierarchical trees, progress meters, and skeletons."
 	badge="Elements"
 	source="src/lib/components/elements/Button.svelte"
 	category="Components"
-	importStatement={"import { Button, Badge, Avatar, Kbd, Progress } from 'yaxa-svelte';"}
+	importStatement={"import { Button, ButtonGroup, Badge, Tree, Chip, Skeleton, Avatar, Kbd } from 'yaxa-svelte';"}
 />
 
 <div class="space-y-8">
@@ -416,6 +449,27 @@ export const Metric: React.FC<MetricProps> = ({ label, initialValue = 0 }) => {
 				sparkline={[4.2, 4.0, 3.8, 3.9, 3.6, 3.42]}
 				sparklineColor="error"
 				icon="sparkles"
+			/>
+		</div>
+	</DocSandbox>
+
+	<!-- Hierarchical Tree Explorer Sandbox -->
+	<DocSandbox title="Hierarchical Tree Explorer (<Tree />)">
+		<div
+			class="w-full max-w-sm rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900/60"
+		>
+			<div
+				class="mb-3 flex items-center justify-between border-b border-neutral-100 pb-2 text-xs font-semibold text-neutral-600 dark:border-neutral-800 dark:text-neutral-400"
+			>
+				<span>File Tree</span>
+				<span class="font-mono text-[11px] text-primary-600 dark:text-primary-400"
+					>{selectedTreeId}</span
+				>
+			</div>
+			<Tree
+				items={demoTreeData}
+				bind:selectedId={selectedTreeId}
+				bind:expandedIds={expandedTreeIds}
 			/>
 		</div>
 	</DocSandbox>
