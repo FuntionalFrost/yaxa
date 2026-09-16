@@ -11,7 +11,7 @@
 	"bugs": {
 		"url": "https://github.com/FuntionalFrost/yaxa/issues"
 	},
-	"packageManager": "pnpm@11.24.0",
+	"packageManager": "pnpm@12.4.2",
 	"engines": {
 		"node": ">=24"
 	},
