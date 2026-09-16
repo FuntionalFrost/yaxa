@@ -1,5 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
+import { validateEvent } from '@polar-sh/sdk/webhooks';
 import { eq } from 'drizzle-orm';
 import { getDb, schemaPg, schemaSqlite, type AnyDb } from '../db';
 
@@ -37,22 +38,34 @@ export function createPolarWebhookHandler(options: PolarWebhookOptions = {}) {
 		}
 
 		let rawBody: string;
-		let payload: any;
 		try {
 			rawBody = await event.request.text();
-			payload = JSON.parse(rawBody);
 		} catch {
-			return new Response('Invalid JSON payload', { status: 400 });
+			return new Response('Failed to read request body', { status: 400 });
 		}
 
-		// Verify signature if secret provided
+		let payload: any;
+		// Cryptographically verify signature if secret provided
 		if (secret) {
-			const signature =
-				event.request.headers.get('webhook-signature') ||
-				event.request.headers.get('polar-signature');
+			try {
+				const headersObj: Record<string, string> = {};
+				event.request.headers.forEach((val, key) => {
+					headersObj[key.toLowerCase()] = val;
+				});
 
-			if (!signature) {
-				return new Response('Missing webhook signature', { status: 401 });
+				if (headersObj['polar-signature'] && !headersObj['webhook-signature']) {
+					headersObj['webhook-signature'] = headersObj['polar-signature'];
+				}
+
+				payload = validateEvent(rawBody, headersObj, secret);
+			} catch {
+				return new Response('Invalid or missing webhook signature', { status: 401 });
+			}
+		} else {
+			try {
+				payload = JSON.parse(rawBody);
+			} catch {
+				return new Response('Invalid JSON payload', { status: 400 });
 			}
 		}
 
@@ -134,7 +147,7 @@ export function createPolarWebhookHandler(options: PolarWebhookOptions = {}) {
 			return json({ received: true });
 		} catch (err: any) {
 			console.error('[Polar Webhook Error]', err);
-			return new Response(`Webhook handling error: ${err.message}`, { status: 500 });
+			return new Response('Internal Server Error', { status: 500 });
 		}
 	};
 }

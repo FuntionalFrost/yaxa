@@ -201,7 +201,8 @@ export function defineSiteConfig(config: SiteConfig): SiteConfig {
 	};
 
 	return {
-		defaultLocale: 'en',
+		...config,
+		defaultLocale: config.defaultLocale || 'en',
 		email: primaryEmail,
 		theme: {
 			defaultMode: 'system',
@@ -238,8 +239,7 @@ export function defineSiteConfig(config: SiteConfig): SiteConfig {
 			priority: 0.8,
 			exclude: ['/api/*'],
 			...config.sitemap
-		},
-		...config
+		}
 	};
 }
 

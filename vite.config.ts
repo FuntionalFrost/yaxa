@@ -2,7 +2,7 @@ import tailwindcss from '@tailwindcss/vite';
 import adapter from '@sveltejs/adapter-vercel';
 import { sveltekit } from '@sveltejs/kit/vite';
 import Icons from 'unplugin-icons/vite';
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	plugins: [
@@ -18,5 +18,8 @@ export default defineConfig({
 				runtime: 'nodejs22.x'
 			})
 		})
-	]
+	],
+	test: {
+		include: ['src/**/*.{test,spec}.{js,ts}']
+	}
 });
