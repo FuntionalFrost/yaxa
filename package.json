@@ -1,6 +1,6 @@
 {
 	"name": "yaxa-svelte",
-	"version": "1.7.0",
+	"version": "1.8.0",
 	"description": "The Intuitive Svelte UI Library — Nuxt UI v4 equivalent for SvelteKit 2.7+ & Svelte 5 with automated SEO, dynamic OpenGraph cards, sitemaps, robots.txt, and Tailwind CSS v4.",
 	"license": "MIT",
 	"homepage": "https://yaxa.vercel.app",
