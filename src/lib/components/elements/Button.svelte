@@ -193,48 +193,48 @@
 	});
 
 	export type ButtonProps = VariantProps<typeof buttonVariants> & {
+		type?: 'button' | 'submit' | 'reset';
 		href?: string;
-		loading?: boolean;
+		as?: 'button' | 'a' | 'span' | 'div';
 		disabled?: boolean;
+		loading?: boolean;
 		icon?: IconSource;
 		trailingIcon?: IconSource;
-		type?: 'button' | 'submit' | 'reset';
-		class?: string;
 		leading?: Snippet;
 		trailing?: Snippet;
 		children?: Snippet;
-		onclick?: (e: MouseEvent) => void;
-		'aria-label'?: string;
-		'aria-current'?: 'page' | 'step' | 'location' | 'date' | 'time' | 'true' | 'false' | boolean;
+		onclick?: (event: MouseEvent) => void;
+		class?: string;
 		[key: string]: unknown;
 	};
 </script>
 
 <script lang="ts">
-	import Icon from './Icon.svelte';
 	import Spinner from './Spinner.svelte';
+	import Icon from './Icon.svelte';
 
 	let {
+		type = 'button',
 		href,
+		as = 'button',
 		variant = 'solid',
 		color = 'primary',
 		size = 'md',
 		block = false,
 		square = false,
-		loading = false,
 		disabled = false,
+		loading = false,
 		icon,
 		trailingIcon,
-		type = 'button',
-		class: className = '',
 		leading,
 		trailing,
 		children,
 		onclick,
+		class: className = '',
 		...restProps
 	}: ButtonProps = $props();
 
-	let classes = $derived(
+	const classes = $derived(
 		buttonVariants({
 			variant,
 			color,
@@ -246,7 +246,47 @@
 	);
 </script>
 
-{#if href}
+{#if as === 'span'}
+	<span class={classes} aria-disabled={disabled || loading} {onclick} {...restProps}>
+		{#if loading}
+			<Spinner size={size === 'xs' || size === 'sm' ? 'sm' : 'md'} />
+		{:else if leading}
+			{@render leading()}
+		{:else if icon}
+			<Icon name={icon} size={size === 'xs' ? 'xs' : size === 'sm' ? 'sm' : 'md'} />
+		{/if}
+
+		{#if children}
+			{@render children()}
+		{/if}
+
+		{#if trailing}
+			{@render trailing()}
+		{:else if trailingIcon}
+			<Icon name={trailingIcon} size={size === 'xs' ? 'xs' : size === 'sm' ? 'sm' : 'md'} />
+		{/if}
+	</span>
+{:else if as === 'div'}
+	<div class={classes} aria-disabled={disabled || loading} {onclick} {...restProps}>
+		{#if loading}
+			<Spinner size={size === 'xs' || size === 'sm' ? 'sm' : 'md'} />
+		{:else if leading}
+			{@render leading()}
+		{:else if icon}
+			<Icon name={icon} size={size === 'xs' ? 'xs' : size === 'sm' ? 'sm' : 'md'} />
+		{/if}
+
+		{#if children}
+			{@render children()}
+		{/if}
+
+		{#if trailing}
+			{@render trailing()}
+		{:else if trailingIcon}
+			<Icon name={trailingIcon} size={size === 'xs' ? 'xs' : size === 'sm' ? 'sm' : 'md'} />
+		{/if}
+	</div>
+{:else if href || as === 'a'}
 	<a
 		{href}
 		class={classes}

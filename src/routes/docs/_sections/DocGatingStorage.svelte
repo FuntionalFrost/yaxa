@@ -3,6 +3,7 @@
 	import Card from '$lib/components/layout/Card.svelte';
 	import Icon from '$lib/components/elements/Icon.svelte';
 	import Gate from '$lib/components/saas/Gate.svelte';
+	import CodeBlock from '$lib/components/elements/CodeBlock.svelte';
 	import { useGate } from '$lib/composables/useGate.svelte';
 
 	// Simulated user state for interactive live playground
@@ -219,20 +220,24 @@ export const POST = createS3UploadHandler({
 			<h3 class="text-base font-bold text-neutral-900 dark:text-neutral-100">
 				1. Declarative &lt;Gate /&gt; Usage
 			</h3>
-			<pre
-				class="text-2xs overflow-x-auto rounded-lg bg-neutral-900 p-3.5 font-mono text-neutral-100 dark:bg-neutral-950"><code
-					>{gateSnippet}</code
-				></pre>
+			<CodeBlock
+				code={gateSnippet}
+				language="svelte"
+				filename="GateExample.svelte"
+				showLineNumbers={true}
+			/>
 		</div>
 
 		<div class="space-y-3">
 			<h3 class="text-base font-bold text-neutral-900 dark:text-neutral-100">
 				2. Programmatic useGate() Composable
 			</h3>
-			<pre
-				class="text-2xs overflow-x-auto rounded-lg bg-neutral-900 p-3.5 font-mono text-neutral-100 dark:bg-neutral-950"><code
-					>{useGateSnippet}</code
-				></pre>
+			<CodeBlock
+				code={useGateSnippet}
+				language="svelte"
+				filename="useGateDemo.svelte"
+				showLineNumbers={true}
+			/>
 		</div>
 	</div>
 
@@ -245,9 +250,11 @@ export const POST = createS3UploadHandler({
 			Seamless direct-to-bucket presigned uploads with reactive progress tracking and turnkey
 			RequestHandler endpoints:
 		</p>
-		<pre
-			class="overflow-x-auto rounded-lg bg-neutral-900 p-4 font-mono text-xs text-neutral-100 dark:bg-neutral-950"><code
-				>{uploadSnippet}</code
-			></pre>
+		<CodeBlock
+			code={uploadSnippet}
+			language="typescript"
+			filename="src/routes/api/upload/+server.ts"
+			showLineNumbers={true}
+		/>
 	</div>
 </div>

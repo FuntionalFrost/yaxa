@@ -7,7 +7,7 @@
 			variant: {
 				pulse: 'animate-pulse',
 				shimmer:
-					'before:absolute before:inset-0 before:-translate-x-full before:animate-[yaxa-shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent dark:before:via-white/10',
+					'before:absolute before:inset-0 before:-translate-x-full before:animate-[yaxa-shimmer-slide_1.5s_infinite] before:bg-gradient-to-r before:from-transparent before:via-white/60 before:to-transparent dark:before:via-white/20',
 				none: ''
 			},
 			shape: {

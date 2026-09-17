@@ -295,12 +295,12 @@
 	<DocSandbox title="Popovers, Tooltips, Dropdowns & Context Menus">
 		<div class="flex flex-wrap items-center justify-center gap-4">
 			<Tooltip text="Svelte 5 Runes Native">
-				<Button variant="outline">Hover for Tooltip</Button>
+				<Button as="span" variant="outline">Hover for Tooltip</Button>
 			</Tooltip>
 
 			<DropdownMenu items={dropdownItems}>
 				{#snippet trigger()}
-					<Button variant="outline">
+					<Button as="span" variant="outline">
 						User Menu <Icon name="chevron-down" class="ml-1.5 h-4 w-4" />
 					</Button>
 				{/snippet}
@@ -308,7 +308,7 @@
 
 			<Popover bind:open={popoverOpen}>
 				{#snippet trigger()}
-					<Button variant="outline">
+					<Button as="span" variant="outline">
 						<Icon name="adjustments-horizontal" class="mr-1.5 h-4 w-4" />
 						Filters Popover
 					</Button>

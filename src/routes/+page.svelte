@@ -128,7 +128,7 @@ export const siteConfig = defineSiteConfig({
 <section class="relative overflow-hidden pt-12 pb-20 md:pt-20 md:pb-28">
 	<!-- Subtle ambient glow matching dynamic primary color -->
 	<div
-		class="pointer-events-none absolute -top-40 left-1/2 -z-10 h-[500px] w-[800px] -translate-x-1/2 rounded-full opacity-20 blur-3xl transition-all duration-700 dark:opacity-30"
+		class="pointer-events-none absolute -top-40 left-1/2 -z-10 h-125 w-200 -translate-x-1/2 rounded-full opacity-20 blur-3xl transition-all duration-700 dark:opacity-30"
 		style="background: radial-gradient(circle, var(--yaxa-primary-500, #ff3e00) 0%, transparent 70%);"
 	></div>
 
@@ -146,7 +146,7 @@ export const siteConfig = defineSiteConfig({
 			class="mx-auto max-w-4xl text-4xl leading-[1.1] font-extrabold tracking-tight text-neutral-900 sm:text-6xl md:text-7xl dark:text-white"
 		>
 			The Intuitive Svelte UI Library for <span
-				class="bg-gradient-to-r from-primary-600 via-primary-500 to-amber-500 bg-clip-text text-transparent dark:from-primary-400 dark:via-primary-300 dark:to-amber-300"
+				class="bg-linear-to-r from-primary-600 via-primary-500 to-amber-500 bg-clip-text text-transparent dark:from-primary-400 dark:via-primary-300 dark:to-amber-300"
 				>Fast Teams</span
 			>
 		</h1>
@@ -154,8 +154,9 @@ export const siteConfig = defineSiteConfig({
 		<p
 			class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed font-normal text-neutral-600 sm:text-xl dark:text-neutral-400"
 		>
-			45+ accessible components, layouts, SaaS page blocks, DOM virtualization, zero-WASM syntax highlighter, automated
-			runtime OpenGraph cards, XML sitemaps, and real-time Tailwind theme customization.
+			45+ accessible components, layouts, SaaS page blocks, DOM virtualization, zero-WASM syntax
+			highlighter, automated runtime OpenGraph cards, XML sitemaps, and real-time Tailwind theme
+			customization.
 		</p>
 
 		<!-- Action CTA Buttons -->
@@ -617,7 +618,8 @@ export const siteConfig = defineSiteConfig({
 					45+ Accessible Primitives
 				</h3>
 				<p class="text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">
-					DashboardShell, Carousel, VirtualList, ResizablePanels, Terminal, Timeline, Tree, MultiSelect, Combobox, Stepper, Modals, Slideovers, and DataTables ready for deployment.
+					DashboardShell, Carousel, VirtualList, ResizablePanels, Terminal, Timeline, Tree,
+					MultiSelect, Combobox, Stepper, Modals, Slideovers, and DataTables ready for deployment.
 				</p>
 			</div>
 
@@ -822,7 +824,7 @@ export const siteConfig = defineSiteConfig({
 <section class="py-20">
 	<Container size="lg">
 		<div
-			class="relative overflow-hidden rounded-3xl border border-primary-500/30 bg-gradient-to-br from-primary-900/40 via-neutral-900/90 to-neutral-950 p-8 text-center shadow-2xl backdrop-blur-md sm:p-12"
+			class="relative overflow-hidden rounded-3xl border border-primary-500/30 bg-linear-to-br from-primary-900/40 via-neutral-900/90 to-neutral-950 p-8 text-center shadow-2xl backdrop-blur-md sm:p-12"
 		>
 			<div
 				class="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-primary-500/20 blur-3xl"

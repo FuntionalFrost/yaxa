@@ -3,6 +3,7 @@
 	import Card from '$lib/components/layout/Card.svelte';
 	import DevSandbox from '$lib/admin/components/DevSandbox.svelte';
 	import ImpersonationBanner from '$lib/admin/components/ImpersonationBanner.svelte';
+	import CodeBlock from '$lib/components/elements/CodeBlock.svelte';
 
 	let isImpersonatingDemo = $state(true);
 
@@ -99,10 +100,12 @@ export const { load, actions } = createDrizzleAdmin({
 					>src/hooks.server.ts</code
 				>. No route files required.
 			</p>
-			<pre
-				class="text-2xs overflow-x-auto rounded-lg bg-neutral-900 p-3.5 font-mono text-neutral-100 dark:bg-neutral-950"><code
-					>{approachACode}</code
-				></pre>
+			<CodeBlock
+				code={approachACode}
+				language="typescript"
+				filename="src/hooks.server.ts"
+				showLineNumbers={true}
+			/>
 		</Card>
 
 		<!-- Approach B Card -->
@@ -127,14 +130,18 @@ export const { load, actions } = createDrizzleAdmin({
 					>&lt;AdminDashboard /&gt;</code
 				> component.
 			</p>
-			<pre
-				class="text-2xs overflow-x-auto rounded-lg bg-neutral-900 p-3.5 font-mono text-neutral-100 dark:bg-neutral-950"><code
-					>{approachBServerCode}</code
-				></pre>
-			<pre
-				class="text-2xs overflow-x-auto rounded-lg bg-neutral-900 p-3.5 font-mono text-neutral-100 dark:bg-neutral-950"><code
-					>{approachBPageCode}</code
-				></pre>
+			<CodeBlock
+				code={approachBServerCode}
+				language="typescript"
+				filename="src/routes/admin/+page.server.ts"
+				showLineNumbers={true}
+			/>
+			<CodeBlock
+				code={approachBPageCode}
+				language="svelte"
+				filename="src/routes/admin/+page.svelte"
+				showLineNumbers={true}
+			/>
 		</Card>
 	</div>
 

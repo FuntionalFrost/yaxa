@@ -392,7 +392,10 @@ class ThemeStore {
 
 		let isDark: boolean;
 		if (this.mode === 'system') {
-			isDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+			isDark =
+				typeof window.matchMedia === 'function'
+					? window.matchMedia('(prefers-color-scheme: dark)').matches
+					: false;
 		} else {
 			isDark = this.mode === 'dark';
 		}

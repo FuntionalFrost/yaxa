@@ -10,3 +10,4 @@ bun.lockb
 dist/
 .svelte-kit/
 build/
+coverage/

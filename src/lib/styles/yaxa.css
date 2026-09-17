@@ -112,6 +112,15 @@ body {
 	}
 }
 
+@keyframes yaxa-shimmer-slide {
+	0% {
+		transform: translateX(-100%);
+	}
+	100% {
+		transform: translateX(100%);
+	}
+}
+
 .animate-yaxa-shimmer {
 	background: linear-gradient(
 		90deg,

@@ -10,6 +10,7 @@
 	import NotificationCenter, {
 		type NotificationItem
 	} from '$lib/components/overlays/NotificationCenter.svelte';
+	import CodeBlock from '$lib/components/elements/CodeBlock.svelte';
 
 	let activeDemo = $state('auth');
 
@@ -148,7 +149,7 @@ import { createPresignedUploadUrl } from 'yaxa-svelte/storage';
 		</div>
 
 		<div
-			class="flex min-h-[420px] items-center justify-center rounded-xl border border-dashed border-zinc-200 bg-zinc-50/50 p-6 dark:border-zinc-800 dark:bg-zinc-950/40"
+			class="flex min-h-105 items-center justify-center rounded-xl border border-dashed border-zinc-200 bg-zinc-50/50 p-6 dark:border-zinc-800 dark:bg-zinc-950/40"
 		>
 			{#if activeDemo === 'auth'}
 				<div class="w-full max-w-md">
@@ -214,10 +215,7 @@ import { createPresignedUploadUrl } from 'yaxa-svelte/storage';
 			<code class="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-xs dark:bg-zinc-800">.env</code
 			>:
 		</p>
-		<pre
-			class="overflow-x-auto rounded-xl border border-zinc-200 bg-zinc-900 p-4 font-mono text-xs text-zinc-100 dark:border-zinc-800"><code
-				>{envCodeSnippet}</code
-			></pre>
+		<CodeBlock code={envCodeSnippet} language="bash" filename=".env" showLineNumbers={true} />
 	</div>
 
 	<!-- Better-Auth Setup -->
@@ -231,10 +229,13 @@ import { createPresignedUploadUrl } from 'yaxa-svelte/storage';
 				>createYaxaAuthHook</code
 			>:
 		</p>
-		<pre
-			class="overflow-x-auto rounded-xl border border-zinc-200 bg-zinc-900 p-4 font-mono text-xs text-zinc-100 dark:border-zinc-800"><code
-				>{hookCodeSnippet}</code
-			></pre>
+		<CodeBlock
+			code={hookCodeSnippet}
+			language="typescript"
+			filename="src/hooks.server.ts"
+			showLineNumbers={true}
+			highlightLines={[8, 9, 10]}
+		/>
 	</div>
 
 	<!-- Polar.sh Payments -->
@@ -246,10 +247,12 @@ import { createPresignedUploadUrl } from 'yaxa-svelte/storage';
 			Create instant checkout endpoints and handle webhooks with automatic Drizzle database
 			synchronization:
 		</p>
-		<pre
-			class="overflow-x-auto rounded-xl border border-zinc-200 bg-zinc-900 p-4 font-mono text-xs text-zinc-100 dark:border-zinc-800"><code
-				>{webhookCodeSnippet}</code
-			></pre>
+		<CodeBlock
+			code={webhookCodeSnippet}
+			language="typescript"
+			filename="src/routes/api/webhooks/polar/+server.ts"
+			showLineNumbers={true}
+		/>
 	</div>
 
 	<!-- Subpath Module Architecture -->
@@ -261,9 +264,11 @@ import { createPresignedUploadUrl } from 'yaxa-svelte/storage';
 			Yaxa isolates full-stack dependencies via dedicated subpath exports, ensuring pure client and
 			static documentation projects don't download or bundle unused backend libraries:
 		</p>
-		<pre
-			class="overflow-x-auto rounded-xl border border-zinc-200 bg-zinc-900 p-4 font-mono text-xs text-zinc-100 dark:border-zinc-800"><code
-				>{subpathsSnippet}</code
-			></pre>
+		<CodeBlock
+			code={subpathsSnippet}
+			language="typescript"
+			filename="subpath-imports.ts"
+			showLineNumbers={true}
+		/>
 	</div>
 </div>

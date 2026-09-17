@@ -99,8 +99,14 @@
 		function onMove(moveEvent: MouseEvent | TouchEvent) {
 			if (!containerRef) return;
 			const isTouch = 'touches' in moveEvent;
-			const clientX = isTouch && moveEvent.touches.length > 0 ? moveEvent.touches[0].clientX : (moveEvent as MouseEvent).clientX;
-			const clientY = isTouch && moveEvent.touches.length > 0 ? moveEvent.touches[0].clientY : (moveEvent as MouseEvent).clientY;
+			const clientX =
+				isTouch && moveEvent.touches.length > 0
+					? moveEvent.touches[0].clientX
+					: (moveEvent as MouseEvent).clientX;
+			const clientY =
+				isTouch && moveEvent.touches.length > 0
+					? moveEvent.touches[0].clientY
+					: (moveEvent as MouseEvent).clientY;
 
 			if (rafId !== null) return;
 			rafId = requestAnimationFrame(() => {

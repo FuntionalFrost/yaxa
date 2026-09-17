@@ -48,15 +48,14 @@
 
 	let sortKey = $state<string | null>(null);
 	let sortOrder = $state<'asc' | 'desc'>('asc');
-	let columnWidths = $state<Record<string, number>>({});
+	let customWidths = $state<Record<string, number>>({});
 
-	// Initialize defined column widths
-	$effect(() => {
-		const initial: Record<string, number> = {};
+	let effectiveWidths = $derived.by(() => {
+		const widths: Record<string, number> = {};
 		columns.forEach((c) => {
-			if (c.width) initial[String(c.key)] = c.width;
+			if (c.width) widths[String(c.key)] = c.width;
 		});
-		columnWidths = { ...initial, ...columnWidths };
+		return { ...widths, ...customWidths };
 	});
 
 	function handleSort(key: string) {
@@ -73,7 +72,7 @@
 
 		const startX = 'touches' in e ? e.touches[0].clientX : e.clientX;
 		const currentCol = columns.find((c) => String(c.key) === columnKey);
-		const currentWidth = columnWidths[columnKey] || 150;
+		const currentWidth = effectiveWidths[columnKey] || 150;
 		const minWidth = currentCol?.minWidth || 60;
 		const maxWidth = currentCol?.maxWidth || 600;
 
@@ -81,7 +80,7 @@
 			const clientX = 'touches' in moveEvent ? moveEvent.touches[0].clientX : moveEvent.clientX;
 			const delta = clientX - startX;
 			const newWidth = Math.max(minWidth, Math.min(maxWidth, currentWidth + delta));
-			columnWidths[columnKey] = newWidth;
+			customWidths[columnKey] = newWidth;
 		}
 
 		function onEnd() {
@@ -180,8 +179,8 @@
 					{/if}
 					{#each columns as column}
 						{@const colKey = String(column.key)}
-						{@const widthStyle = columnWidths[colKey]
-							? `width: ${columnWidths[colKey]}px; min-width: ${columnWidths[colKey]}px;`
+						{@const widthStyle = effectiveWidths[colKey]
+							? `width: ${effectiveWidths[colKey]}px; min-width: ${effectiveWidths[colKey]}px;`
 							: ''}
 						<th
 							class="relative px-4 py-3 {getPinClass(column.pinned)} {column.class || ''}"
@@ -291,8 +290,8 @@
 							{/if}
 							{#each columns as column}
 								{@const colKey = String(column.key)}
-								{@const widthStyle = columnWidths[colKey]
-									? `width: ${columnWidths[colKey]}px; min-width: ${columnWidths[colKey]}px;`
+								{@const widthStyle = effectiveWidths[colKey]
+									? `width: ${effectiveWidths[colKey]}px; min-width: ${effectiveWidths[colKey]}px;`
 									: ''}
 								<td
 									class="px-4 py-3.5 {getPinClass(column.pinned)} {column.class || ''}"
