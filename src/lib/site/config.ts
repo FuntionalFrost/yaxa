@@ -103,6 +103,8 @@ export interface SiteConfig {
 	seo?: {
 		titleTemplate?: string;
 		defaultOgImage?: string;
+		appleTouchIcon?: string;
+		favicon?: string;
 		twitterCard?: 'summary' | 'summary_large_image' | 'app' | 'player';
 		keywords?: string[];
 		robots?: {

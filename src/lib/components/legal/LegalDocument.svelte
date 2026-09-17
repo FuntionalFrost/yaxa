@@ -23,7 +23,7 @@
 </script>
 
 <script lang="ts">
-	import { getSiteConfig } from '$lib/site/context';
+	import { getSiteConfigGetter } from '$lib/site/context';
 	import Container from '../layout/Container.svelte';
 	import Badge from '../elements/Badge.svelte';
 	import Icon from '../elements/Icon.svelte';
@@ -39,7 +39,8 @@
 		children
 	}: LegalDocumentProps = $props();
 
-	let currentConfig = $derived(config || getSiteConfig());
+	const getContextConfig = getSiteConfigGetter();
+	let currentConfig = $derived(config || getContextConfig());
 	let company = $derived(currentConfig.company);
 	let legal = $derived(currentConfig.legal);
 

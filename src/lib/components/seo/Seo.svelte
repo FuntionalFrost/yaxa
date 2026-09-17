@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { computeProjectBadge, type SiteConfig } from '$lib/site/config';
-	import { getSiteConfig } from '$lib/site/context';
+	import { getSiteConfigGetter } from '$lib/site/context';
 	import {
 		generateWebSiteSchema,
 		generateSoftwareApplicationSchema,
@@ -35,8 +35,10 @@
 		config: propConfig
 	}: Props = $props();
 
+	const getContextConfig = getSiteConfigGetter();
+
 	// Read config from prop or Svelte 5 context
-	let config = $derived(propConfig || getSiteConfig());
+	let config = $derived(propConfig || getContextConfig());
 
 	// Dynamic resolution from props OR SvelteKit page.data (e.g. +page.server.ts load data)
 	let pageData = $derived(page.data || {});
@@ -188,7 +190,7 @@
 	{/if}
 
 	<!-- Schema.org JSON-LD -->
-	{#each jsonLdSchemas as schemaItem}
+	{#each jsonLdSchemas as schemaItem, i (i)}
 		{@html `<script type="application/ld+json">${JSON.stringify(schemaItem)}</` + `script>`}
 	{/each}
 </svelte:head>

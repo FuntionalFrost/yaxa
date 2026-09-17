@@ -223,8 +223,10 @@ export type {
 export {
 	setSiteConfig,
 	getSiteConfig,
+	getSiteConfigGetter,
 	setAuthUserContext,
-	getAuthUserContext
+	getAuthUserContext,
+	getAuthUserContextGetter
 } from './site/context';
 export type { AuthUserContext } from './site/context';
 export { createYaxaHook } from './site/hook';

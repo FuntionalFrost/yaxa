@@ -12,16 +12,25 @@ export function setSiteConfig(config: () => SiteConfig): void {
 }
 
 /**
+ * Retrieves the site configuration getter function from Svelte 5 context.
+ * Must be called during component initialization (top-level <script>).
+ */
+export function getSiteConfigGetter(): () => SiteConfig {
+	try {
+		const getter = getContext<() => SiteConfig>(YAXA_CONFIG_KEY);
+		return getter || (() => DEFAULT_SITE_CONFIG);
+	} catch {
+		return () => DEFAULT_SITE_CONFIG;
+	}
+}
+
+/**
  * Retrieves the site configuration from Svelte 5 context.
+ * Must be called during component initialization (top-level <script>).
  * Falls back to DEFAULT_SITE_CONFIG if called outside <YaxaApp>.
  */
 export function getSiteConfig(): SiteConfig {
-	try {
-		const getter = getContext<() => SiteConfig>(YAXA_CONFIG_KEY);
-		return getter ? getter() : DEFAULT_SITE_CONFIG;
-	} catch {
-		return DEFAULT_SITE_CONFIG;
-	}
+	return getSiteConfigGetter()();
 }
 
 export interface AuthUserContext {
@@ -46,13 +55,22 @@ export function setAuthUserContext(userGetter: () => AuthUserContext | null | un
 }
 
 /**
- * Retrieves the authenticated user from Svelte 5 context.
+ * Retrieves the authenticated user getter function from Svelte 5 context.
+ * Must be called during component initialization (top-level <script>).
  */
-export function getAuthUserContext(): AuthUserContext | null {
+export function getAuthUserContextGetter(): () => AuthUserContext | null {
 	try {
 		const getter = getContext<() => AuthUserContext | null | undefined>(YAXA_USER_KEY);
-		return getter ? (getter() ?? null) : null;
+		return () => (getter ? (getter() ?? null) : null);
 	} catch {
-		return null;
+		return () => null;
 	}
+}
+
+/**
+ * Retrieves the authenticated user from Svelte 5 context.
+ * Must be called during component initialization (top-level <script>).
+ */
+export function getAuthUserContext(): AuthUserContext | null {
+	return getAuthUserContextGetter()();
 }

@@ -4,7 +4,7 @@
 	import Container from './Container.svelte';
 	import Icon from '../elements/Icon.svelte';
 	import Logo from '../elements/Logo.svelte';
-	import { getSiteConfig } from '$lib/site/context';
+	import { getSiteConfigGetter } from '$lib/site/context';
 
 	interface Props {
 		config?: SiteConfig;
@@ -14,7 +14,8 @@
 
 	let { config, newsletter, class: className = '' }: Props = $props();
 
-	let currentConfig = $derived(config || getSiteConfig());
+	const getContextConfig = getSiteConfigGetter();
+	let currentConfig = $derived(config || getContextConfig());
 	let currentYear = new Date().getFullYear();
 
 	let company = $derived(currentConfig.company);

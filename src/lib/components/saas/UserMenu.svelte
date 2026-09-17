@@ -3,7 +3,7 @@
 	import Badge from '../elements/Badge.svelte';
 	import Icon from '../elements/Icon.svelte';
 	import DropdownMenu, { type MenuItem } from '../navigation/DropdownMenu.svelte';
-	import { getAuthUserContext, type AuthUserContext } from '../../site/context';
+	import { getAuthUserContextGetter, type AuthUserContext } from '../../site/context';
 
 	interface Props {
 		user?: AuthUserContext | null;
@@ -25,7 +25,8 @@
 		onsignout
 	}: Props = $props();
 
-	const contextUser = $derived(getAuthUserContext());
+	const getContextUser = getAuthUserContextGetter();
+	const contextUser = $derived(getContextUser());
 
 	const currentUser = $derived(
 		propUser !== undefined

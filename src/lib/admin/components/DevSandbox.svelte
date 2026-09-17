@@ -5,7 +5,7 @@
 	import Icon from '../../components/elements/Icon.svelte';
 	import Progress from '../../components/elements/Progress.svelte';
 	import { useUpload } from '../../composables/useUpload.svelte';
-	import { getAuthUserContext } from '../../site/context';
+	import { getAuthUserContextGetter } from '../../site/context';
 
 	interface Props {
 		apiPrefix?: string;
@@ -15,7 +15,8 @@
 	let { apiPrefix = '/admin/api', class: className = '' }: Props = $props();
 
 	// Auth & Context info
-	const user = $derived(getAuthUserContext());
+	const getContextUser = getAuthUserContextGetter();
+	const user = $derived(getContextUser());
 
 	// Email Sandbox State
 	let emailTo = $state('developer@example.com');

@@ -182,8 +182,12 @@ export function setLocaleContext(
  * Retrieves the SSR-safe LocaleStore from context if available, falling back to the singleton.
  */
 export function getLocaleContext(): LocaleStore {
-	if (hasContext(LOCALE_CONTEXT_KEY)) {
-		return getContext<LocaleStore>(LOCALE_CONTEXT_KEY);
+	try {
+		if (hasContext(LOCALE_CONTEXT_KEY)) {
+			return getContext<LocaleStore>(LOCALE_CONTEXT_KEY);
+		}
+	} catch {
+		// Fallback when called outside component lifecycle
 	}
 	return localeStore;
 }

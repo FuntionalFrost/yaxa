@@ -37,7 +37,7 @@
 </script>
 
 <script lang="ts">
-	import { getAuthUserContext } from '$lib/site/context';
+	import { getAuthUserContextGetter } from '$lib/site/context';
 	import Icon from '../elements/Icon.svelte';
 	import Button from '../elements/Button.svelte';
 
@@ -61,7 +61,8 @@
 		fallback
 	}: GateProps = $props();
 
-	const effectiveUser = $derived(user ?? getAuthUserContext());
+	const getContextUser = getAuthUserContextGetter();
+	const effectiveUser = $derived(user ?? getContextUser());
 	const effectiveRole = $derived(userRole !== undefined ? userRole : (effectiveUser?.role ?? null));
 	const effectivePlan = $derived(
 		userPlan !== undefined

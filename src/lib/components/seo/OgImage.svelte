@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { SiteConfig } from '$lib/site/config';
-	import { getSiteConfig } from '$lib/site/context';
+	import { getSiteConfigGetter } from '$lib/site/context';
 
 	interface Props {
 		title?: string;
@@ -20,7 +20,8 @@
 		class: className = ''
 	}: Props = $props();
 
-	let currentConfig = $derived(config || getSiteConfig());
+	const getContextConfig = getSiteConfigGetter();
+	let currentConfig = $derived(config || getContextConfig());
 
 	let ogUrl = $derived.by(() => {
 		const pairs: string[] = [];

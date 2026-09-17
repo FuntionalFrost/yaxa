@@ -8,7 +8,7 @@
 	import Kbd from '../elements/Kbd.svelte';
 	import Link from '../elements/Link.svelte';
 	import Logo from '../elements/Logo.svelte';
-	import { getSiteConfig } from '$lib/site/context';
+	import { getSiteConfigGetter } from '$lib/site/context';
 
 	interface Props {
 		config?: SiteConfig;
@@ -20,7 +20,8 @@
 
 	let { config, links, onOpenCommand, actions, class: className = '' }: Props = $props();
 
-	let currentConfig = $derived(config || getSiteConfig());
+	const getContextConfig = getSiteConfigGetter();
+	let currentConfig = $derived(config || getContextConfig());
 	let resolvedLinks = $derived(links || currentConfig.nav || []);
 
 	let mobileMenuOpen = $state(false);
@@ -56,7 +57,7 @@
 
 				<!-- Desktop Navigation Links -->
 				<nav class="hidden items-center gap-1 md:flex">
-					{#each resolvedLinks as item}
+					{#each resolvedLinks as item (item.href)}
 						<Link
 							href={item.href}
 							class="rounded-md px-3 py-1.5 text-sm font-medium text-neutral-600 transition-colors hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white"
@@ -173,7 +174,7 @@
 		{#if mobileMenuOpen}
 			<div class="border-t border-neutral-200 py-4 md:hidden dark:border-neutral-800">
 				<div class="flex flex-col space-y-2">
-					{#each resolvedLinks as item}
+					{#each resolvedLinks as item (item.href)}
 						<a
 							href={item.href}
 							onclick={() => (mobileMenuOpen = false)}
