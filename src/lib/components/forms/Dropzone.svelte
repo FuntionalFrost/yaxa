@@ -1,5 +1,9 @@
 <script module lang="ts">
 	export interface DropzoneProps {
+		id?: string;
+		name?: string;
+		'aria-label'?: string;
+		ariaLabel?: string;
 		accept?: string;
 		multiple?: boolean;
 		maxSize?: number; // in bytes
@@ -23,6 +27,10 @@
 	import { useUpload } from '$lib/composables/useUpload.svelte';
 
 	let {
+		id,
+		name = 'dropzoneFiles',
+		'aria-label': ariaLabelAttr,
+		ariaLabel,
 		accept = '*/*',
 		multiple = false,
 		maxSize = 10 * 1024 * 1024, // 10MB default
@@ -166,11 +174,14 @@
 		aria-disabled={disabled}
 	>
 		<input
+			id={id || name || 'dropzone-file-input'}
+			name={name || 'dropzoneFiles'}
 			bind:this={fileInputEl}
 			type="file"
 			{accept}
 			{multiple}
 			{disabled}
+			aria-label={ariaLabelAttr || ariaLabel || label || 'Upload files'}
 			class="hidden"
 			onchange={handleInputChange}
 		/>

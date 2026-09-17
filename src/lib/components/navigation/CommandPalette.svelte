@@ -125,9 +125,12 @@
 			<div class="flex items-center border-b border-neutral-200 px-4 dark:border-neutral-800">
 				<Icon name="search" size="sm" class="mr-3 text-neutral-400" />
 				<input
+					id="command-palette-input"
+					name="commandQuery"
 					type="text"
 					bind:value={query}
 					{placeholder}
+					aria-label={placeholder || 'Search commands and pages'}
 					class="h-12 w-full bg-transparent text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none dark:text-white"
 					use:focusOnMount
 				/>

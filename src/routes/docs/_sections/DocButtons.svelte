@@ -17,7 +17,6 @@
 	import SortableList from '$lib/components/elements/SortableList.svelte';
 	import Tree, { type TreeNode } from '$lib/components/elements/Tree.svelte';
 	import Icon from '$lib/components/elements/Icon.svelte';
-	import { ArrowRight, ChevronLeft, ChevronRight, Sparkles, Send } from '@lucide/svelte';
 
 	let loading = $state(false);
 	let progressVal = $state(68);
@@ -199,18 +198,18 @@ export const Metric: React.FC<MetricProps> = ({ label, initialValue = 0 }) => {
 	</DocSandbox>
 
 	<!-- ButtonGroup & Icons Sandbox -->
-	<DocSandbox title="ButtonGroup & @lucide/svelte Icons">
+	<DocSandbox title="ButtonGroup & Native Icons">
 		<div class="flex flex-col items-center gap-4">
 			<div class="flex flex-wrap items-center justify-center gap-3">
-				<Button color="primary" icon={Sparkles}>Generate</Button>
-				<Button variant="outline" trailingIcon={ArrowRight}>Get Started</Button>
-				<Button variant="soft" color="success" icon={Send}>Send Message</Button>
+				<Button color="primary" icon="sparkles">Generate</Button>
+				<Button variant="outline" trailingIcon="arrow-right">Get Started</Button>
+				<Button variant="soft" color="success" icon="check">Send Message</Button>
 			</div>
 
 			<ButtonGroup>
-				<Button variant="outline" icon={ChevronLeft}>Prev</Button>
+				<Button variant="outline" icon="chevron-left">Prev</Button>
 				<Button variant="outline">Today</Button>
-				<Button variant="outline" trailingIcon={ChevronRight}>Next</Button>
+				<Button variant="outline" trailingIcon="chevron-right">Next</Button>
 			</ButtonGroup>
 		</div>
 	</DocSandbox>
@@ -476,36 +475,93 @@ export const Metric: React.FC<MetricProps> = ({ label, initialValue = 0 }) => {
 
 	<!-- Props Table -->
 	<DocPropsTable
+		title="Button Props & API Reference"
+		description="Props, variants, semantic colors, and snippet slots supported by the <Button /> primitive."
 		items={[
 			{
 				name: 'variant',
 				type: "'solid' | 'outline' | 'soft' | 'subtle' | 'ghost' | 'link'",
 				default: "'solid'",
-				description: 'Visual style variant of the button.'
-			},
-			{
-				name: 'size',
-				type: "'xs' | 'sm' | 'md' | 'lg' | 'xl'",
-				default: "'md'",
-				description: 'Button size and padding preset.'
+				description: 'Visual styling preset determining background, border, and elevation.'
 			},
 			{
 				name: 'color',
 				type: "'primary' | 'neutral' | 'success' | 'warning' | 'error' | 'info'",
 				default: "'primary'",
-				description: 'Semantic theme color applied.'
+				description: 'Semantic theme palette applied to background, text, and focus ring.'
+			},
+			{
+				name: 'size',
+				type: "'xs' | 'sm' | 'md' | 'lg' | 'xl'",
+				default: "'md'",
+				description: 'Button size, typography scale, padding, and icon gap.'
+			},
+			{
+				name: 'icon',
+				type: 'IconSource',
+				default: 'undefined',
+				description: 'Leading icon name (e.g. "bolt", "plus") or custom Svelte component.'
+			},
+			{
+				name: 'trailingIcon',
+				type: 'IconSource',
+				default: 'undefined',
+				description: 'Trailing icon name (e.g. "arrow-right", "chevron-down") or custom component.'
 			},
 			{
 				name: 'loading',
 				type: 'boolean',
 				default: 'false',
-				description: 'Replaces lead icon with animated SVG spinner and disables click.'
+				description: 'Replaces lead icon with an animated SVG spinner and disables interaction.'
 			},
 			{
 				name: 'disabled',
 				type: 'boolean',
 				default: 'false',
-				description: 'Disables user interactions and applies opacity reduction.'
+				description: 'Disables user click events, keyboard focus, and applies opacity reduction.'
+			},
+			{
+				name: 'href',
+				type: 'string',
+				default: 'undefined',
+				description: 'When provided, automatically renders an accessible HTML <a> anchor tag.'
+			},
+			{
+				name: 'as',
+				type: "'button' | 'a' | 'span' | 'div'",
+				default: "'button'",
+				description: 'Custom underlying HTML tag to prevent invalid nested button markup.'
+			},
+			{
+				name: 'block',
+				type: 'boolean',
+				default: 'false',
+				description: 'If true, stretches button width to 100% of parent container.'
+			},
+			{
+				name: 'square',
+				type: 'boolean',
+				default: 'false',
+				description:
+					'Applies 1:1 aspect-ratio and removes horizontal padding for icon-only buttons.'
+			},
+			{
+				name: 'leading',
+				type: 'Snippet',
+				default: 'undefined',
+				description: 'Custom Svelte 5 snippet slot rendered before button text content.'
+			},
+			{
+				name: 'trailing',
+				type: 'Snippet',
+				default: 'undefined',
+				description: 'Custom Svelte 5 snippet slot rendered after button text content.'
+			},
+			{
+				name: 'children',
+				type: 'Snippet',
+				default: 'undefined',
+				description: 'Main default snippet slot for button label and nested elements.'
 			}
 		]}
 	/>

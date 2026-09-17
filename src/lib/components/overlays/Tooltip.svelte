@@ -16,11 +16,15 @@
 <Tooltip.Provider>
 	<Tooltip.Root>
 		<Tooltip.Trigger class="inline-flex">
-			{#if trigger}
-				{@render trigger()}
-			{:else if children}
-				{@render children()}
-			{/if}
+			{#snippet child({ props })}
+				<span {...props} class="inline-flex">
+					{#if trigger}
+						{@render trigger()}
+					{:else if children}
+						{@render children()}
+					{/if}
+				</span>
+			{/snippet}
 		</Tooltip.Trigger>
 
 		<Tooltip.Portal>

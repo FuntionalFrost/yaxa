@@ -8,7 +8,7 @@
 	import Kbd from '../elements/Kbd.svelte';
 	import Link from '../elements/Link.svelte';
 	import Logo from '../elements/Logo.svelte';
-	import { getSiteConfigGetter } from '$lib/site/context';
+	import { useYaxa } from '$lib/site/context';
 
 	interface Props {
 		config?: SiteConfig;
@@ -20,8 +20,8 @@
 
 	let { config, links, onOpenCommand, actions, class: className = '' }: Props = $props();
 
-	const getContextConfig = getSiteConfigGetter();
-	let currentConfig = $derived(config || getContextConfig());
+	const yaxa = useYaxa();
+	let currentConfig = $derived(config || yaxa.config);
 	let resolvedLinks = $derived(links || currentConfig.nav || []);
 
 	let mobileMenuOpen = $state(false);

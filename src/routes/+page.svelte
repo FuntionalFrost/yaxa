@@ -533,9 +533,9 @@ export const siteConfig = defineSiteConfig({
 		</div>
 
 		<div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-			<!-- Card 1 -->
+			<!-- Card 1 (Primary / Bolt) -->
 			<div
-				class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs transition-all hover:border-primary-500/40 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/40"
+				class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs transition-all hover:border-primary-500/50 hover:shadow-md hover:shadow-primary-500/10 dark:border-neutral-800 dark:bg-neutral-900/40 dark:hover:border-primary-400/50"
 			>
 				<div
 					class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-primary-100 text-primary-600 dark:bg-primary-950/60 dark:text-primary-400"
@@ -543,17 +543,17 @@ export const siteConfig = defineSiteConfig({
 					<Icon name="bolt" class="h-5 w-5" />
 				</div>
 				<h3 class="mb-2 text-base font-bold text-neutral-900 dark:text-white">
-					Svelte 5 Runes Native
+					Pure Svelte 5 Runes & createContext
 				</h3>
 				<p class="text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">
-					Zero legacy Svelte 4 store baggage. Pure Svelte 5 runes (`$state`, `$derived`, `$props`,
-					and snippets) for lightning-fast reactivity and ultra-clean code.
+					Zero legacy store baggage. Svelte 5.40+ `createContext` with SSR leak-proof reactive class
+					containers and direct composables (`useYaxa()`, `useSiteConfig()`).
 				</p>
 			</div>
 
-			<!-- Card 2 -->
+			<!-- Card 2 (Emerald / Photo) -->
 			<div
-				class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs transition-all hover:border-primary-500/40 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/40"
+				class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs transition-all hover:border-emerald-500/50 hover:shadow-md hover:shadow-emerald-500/10 dark:border-neutral-800 dark:bg-neutral-900/40 dark:hover:border-emerald-400/50"
 			>
 				<div
 					class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400"
@@ -569,9 +569,9 @@ export const siteConfig = defineSiteConfig({
 				</p>
 			</div>
 
-			<!-- Card 3 -->
+			<!-- Card 3 (Sky / Document) -->
 			<div
-				class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs transition-all hover:border-primary-500/40 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/40"
+				class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs transition-all hover:border-sky-500/50 hover:shadow-md hover:shadow-sky-500/10 dark:border-neutral-800 dark:bg-neutral-900/40 dark:hover:border-sky-400/50"
 			>
 				<div
 					class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-sky-100 text-sky-600 dark:bg-sky-950/60 dark:text-sky-400"
@@ -587,9 +587,9 @@ export const siteConfig = defineSiteConfig({
 				</p>
 			</div>
 
-			<!-- Card 4 -->
+			<!-- Card 4 (Violet / Swatch) -->
 			<div
-				class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs transition-all hover:border-primary-500/40 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/40"
+				class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs transition-all hover:border-violet-500/50 hover:shadow-md hover:shadow-violet-500/10 dark:border-neutral-800 dark:bg-neutral-900/40 dark:hover:border-violet-400/50"
 			>
 				<div
 					class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100 text-violet-600 dark:bg-violet-950/60 dark:text-violet-400"
@@ -605,9 +605,9 @@ export const siteConfig = defineSiteConfig({
 				</p>
 			</div>
 
-			<!-- Card 5 -->
+			<!-- Card 5 (Amber / Squares) -->
 			<div
-				class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs transition-all hover:border-primary-500/40 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/40"
+				class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs transition-all hover:border-amber-500/50 hover:shadow-md hover:shadow-amber-500/10 dark:border-neutral-800 dark:bg-neutral-900/40 dark:hover:border-amber-400/50"
 			>
 				<div
 					class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-amber-100 text-amber-600 dark:bg-amber-950/60 dark:text-amber-400"
@@ -623,9 +623,9 @@ export const siteConfig = defineSiteConfig({
 				</p>
 			</div>
 
-			<!-- Card 6 -->
+			<!-- Card 6 (Rose / Sparkles) -->
 			<div
-				class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs transition-all hover:border-primary-500/40 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/40"
+				class="rounded-2xl border border-neutral-200/80 bg-white p-6 shadow-xs transition-all hover:border-rose-500/50 hover:shadow-md hover:shadow-rose-500/10 dark:border-neutral-800 dark:bg-neutral-900/40 dark:hover:border-rose-400/50"
 			>
 				<div
 					class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-rose-100 text-rose-600 dark:bg-rose-950/60 dark:text-rose-400"
@@ -669,7 +669,7 @@ export const siteConfig = defineSiteConfig({
 		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
 			<a
 				href="/docs/intro"
-				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-primary-500 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/60"
+				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-primary-500 hover:shadow-md hover:shadow-primary-500/10 dark:border-neutral-800 dark:bg-neutral-900/60 dark:hover:border-primary-400"
 			>
 				<div
 					class="mb-1 text-xs font-bold tracking-wider text-primary-600 uppercase dark:text-primary-400"
@@ -688,7 +688,7 @@ export const siteConfig = defineSiteConfig({
 
 			<a
 				href="/docs/blocks"
-				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-primary-500 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/60"
+				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-indigo-500 hover:shadow-md hover:shadow-indigo-500/10 dark:border-neutral-800 dark:bg-neutral-900/60 dark:hover:border-indigo-400"
 			>
 				<div
 					class="mb-1 text-xs font-bold tracking-wider text-indigo-600 uppercase dark:text-indigo-400"
@@ -707,7 +707,7 @@ export const siteConfig = defineSiteConfig({
 
 			<a
 				href="/docs/seo-og"
-				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-primary-500 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/60"
+				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-emerald-500 hover:shadow-md hover:shadow-emerald-500/10 dark:border-neutral-800 dark:bg-neutral-900/60 dark:hover:border-emerald-400"
 			>
 				<div
 					class="mb-1 text-xs font-bold tracking-wider text-emerald-600 uppercase dark:text-emerald-400"
@@ -726,7 +726,7 @@ export const siteConfig = defineSiteConfig({
 
 			<a
 				href="/docs/saas-suite"
-				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-primary-500 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/60"
+				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-amber-500 hover:shadow-md hover:shadow-amber-500/10 dark:border-neutral-800 dark:bg-neutral-900/60 dark:hover:border-amber-400"
 			>
 				<div
 					class="mb-1 text-xs font-bold tracking-wider text-amber-600 uppercase dark:text-amber-400"
@@ -745,7 +745,7 @@ export const siteConfig = defineSiteConfig({
 
 			<a
 				href="/docs/admin-suite"
-				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-primary-500 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/60"
+				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-purple-500 hover:shadow-md hover:shadow-purple-500/10 dark:border-neutral-800 dark:bg-neutral-900/60 dark:hover:border-purple-400"
 			>
 				<div
 					class="mb-1 text-xs font-bold tracking-wider text-purple-600 uppercase dark:text-purple-400"
@@ -764,7 +764,7 @@ export const siteConfig = defineSiteConfig({
 
 			<a
 				href="/docs/legal-suite"
-				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-primary-500 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/60"
+				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-rose-500 hover:shadow-md hover:shadow-rose-500/10 dark:border-neutral-800 dark:bg-neutral-900/60 dark:hover:border-rose-400"
 			>
 				<div
 					class="mb-1 text-xs font-bold tracking-wider text-rose-600 uppercase dark:text-rose-400"
@@ -783,7 +783,7 @@ export const siteConfig = defineSiteConfig({
 
 			<a
 				href="/docs/comp-buttons"
-				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-primary-500 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/60"
+				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-sky-500 hover:shadow-md hover:shadow-sky-500/10 dark:border-neutral-800 dark:bg-neutral-900/60 dark:hover:border-sky-400"
 			>
 				<div class="mb-1 text-xs font-bold tracking-wider text-sky-600 uppercase dark:text-sky-400">
 					Components
@@ -800,7 +800,7 @@ export const siteConfig = defineSiteConfig({
 
 			<a
 				href="/docs/comp-overlays"
-				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-primary-500 hover:shadow-md dark:border-neutral-800 dark:bg-neutral-900/60"
+				class="group rounded-xl border border-neutral-200 bg-white p-5 transition-all hover:border-teal-500 hover:shadow-md hover:shadow-teal-500/10 dark:border-neutral-800 dark:bg-neutral-900/60 dark:hover:border-teal-400"
 			>
 				<div
 					class="mb-1 text-xs font-bold tracking-wider text-teal-600 uppercase dark:text-teal-400"

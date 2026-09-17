@@ -192,11 +192,14 @@
 			<div class="flex items-center border-b border-neutral-200 px-4 py-3 dark:border-neutral-800">
 				<Icon name="search" class="mr-3 h-5 w-5 text-neutral-400" />
 				<input
+					id="doc-search-modal-input"
+					name="docSearch"
 					bind:this={inputElement}
 					bind:value={query}
 					onkeydown={handleModalKeydown}
 					type="text"
 					placeholder="Search documentation, components, props..."
+					aria-label="Search documentation, components, props"
 					class="w-full bg-transparent text-sm text-neutral-900 placeholder-neutral-400 outline-none dark:text-neutral-100"
 				/>
 				<button

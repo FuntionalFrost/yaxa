@@ -64,10 +64,10 @@ export const siteConfig = defineSiteConfig({
 	const contextSnippet =
 		`<` +
 		`script lang="ts">
-  import { getSiteConfig } from 'yaxa-svelte';
+  import { useSiteConfig } from 'yaxa-svelte';
 
   // Reactively retrieve the current site configuration from context
-  const site = getSiteConfig();
+  const site = useSiteConfig();
 <` +
 		`/script>
 
@@ -98,6 +98,7 @@ export const siteConfig = defineSiteConfig({
 					</label>
 					<input
 						id="cfg-site-name"
+						name="siteName"
 						type="text"
 						bind:value={sampleName}
 						class="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-900 focus:border-primary-500 focus:outline-hidden dark:border-neutral-800 dark:bg-neutral-950 dark:text-white"
@@ -112,6 +113,7 @@ export const siteConfig = defineSiteConfig({
 					</label>
 					<input
 						id="cfg-site-url"
+						name="siteUrl"
 						type="text"
 						bind:value={sampleUrl}
 						class="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-900 focus:border-primary-500 focus:outline-hidden dark:border-neutral-800 dark:bg-neutral-950 dark:text-white"
@@ -126,6 +128,7 @@ export const siteConfig = defineSiteConfig({
 					</label>
 					<input
 						id="cfg-site-email"
+						name="siteEmail"
 						type="email"
 						bind:value={sampleEmail}
 						class="w-full rounded-lg border border-neutral-200 bg-white px-3 py-2 text-sm text-neutral-900 focus:border-primary-500 focus:outline-hidden dark:border-neutral-800 dark:bg-neutral-950 dark:text-white"

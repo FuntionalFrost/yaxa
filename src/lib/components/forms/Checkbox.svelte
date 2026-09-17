@@ -3,6 +3,7 @@
 	import Icon from '../elements/Icon.svelte';
 
 	interface Props {
+		id?: string;
 		checked?: boolean;
 		label?: string;
 		description?: string;
@@ -17,6 +18,7 @@
 	}
 
 	let {
+		id,
 		checked = $bindable(false),
 		label,
 		description,
@@ -38,6 +40,7 @@
 >
 	<div class="flex h-5 items-center">
 		<input
+			id={id || name}
 			type="checkbox"
 			bind:checked
 			aria-label={ariaLabelAttr || ariaLabel || label}

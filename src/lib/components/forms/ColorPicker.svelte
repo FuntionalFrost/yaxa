@@ -3,6 +3,11 @@
 	import Icon from '../elements/Icon.svelte';
 
 	interface Props {
+		id?: string;
+		name?: string;
+		label?: string;
+		'aria-label'?: string;
+		ariaLabel?: string;
 		value?: string;
 		presets?: string[];
 		disabled?: boolean;
@@ -23,6 +28,11 @@
 	];
 
 	let {
+		id,
+		name,
+		label,
+		'aria-label': ariaLabelAttr,
+		ariaLabel,
 		value = $bindable('#ff3e00'),
 		presets = defaultPresets,
 		disabled = false,
@@ -62,18 +72,23 @@
 				style="background-color: {value};"
 			>
 				<input
+					id={id ? `${id}-color` : name ? `${name}-color` : undefined}
+					name={name ? `${name}-color` : 'colorPickerValue'}
 					type="color"
 					bind:value
 					{disabled}
 					class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-					aria-label="Pick color"
+					aria-label={ariaLabelAttr || ariaLabel || label || 'Pick color'}
 				/>
 			</label>
 			<input
+				id={id ? `${id}-hex` : name ? `${name}-hex` : undefined}
+				name={name || 'colorHex'}
 				type="text"
 				bind:value
 				{disabled}
 				placeholder="#ff3e00"
+				aria-label="Hex color code"
 				class="h-8 w-full rounded-md border border-neutral-200 bg-neutral-50 px-2.5 font-mono text-sm text-neutral-800 focus:border-primary-500 focus:outline-none dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200"
 			/>
 		</div>
@@ -124,16 +139,21 @@
 					style="background-color: {value};"
 				>
 					<input
+						id={id ? `${id}-popover-color` : name ? `${name}-popover-color` : undefined}
+						name={name ? `${name}-popover-color` : 'colorPickerValue'}
 						type="color"
 						bind:value
 						class="absolute inset-0 h-full w-full cursor-pointer opacity-0"
-						aria-label="Pick color"
+						aria-label={ariaLabelAttr || ariaLabel || label || 'Pick color'}
 					/>
 				</label>
 				<input
+					id={id ? `${id}-popover-hex` : name ? `${name}-popover-hex` : undefined}
+					name={name || 'colorHex'}
 					type="text"
 					bind:value
 					placeholder="#ff3e00"
+					aria-label="Hex color code"
 					class="h-8 w-full rounded-md border border-neutral-200 bg-neutral-50 px-2.5 font-mono text-sm text-neutral-800 focus:border-primary-500 focus:outline-none dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200"
 				/>
 			</div>

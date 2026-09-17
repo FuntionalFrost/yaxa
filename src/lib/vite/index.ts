@@ -42,17 +42,25 @@ export function yaxa(options: YaxaPluginOptions = {}): Plugin[] {
 			name: 'vite-plugin-yaxa',
 			config() {
 				return {
+					resolve: {
+						dedupe: [
+							'svelte',
+							'svelte/internal',
+							'svelte/internal/client',
+							'svelte/internal/server'
+						]
+					},
 					...(optimizeDeps
 						? {
 								optimizeDeps: {
-									include: [
-										'tailwind-variants',
+									include: ['tailwind-variants'],
+									exclude: [
+										'svelte',
 										'bits-ui',
 										'svelte-sonner',
 										'runed',
 										'mode-watcher',
-										'clsx',
-										'tailwind-merge'
+										'yaxa-svelte'
 									]
 								}
 							}

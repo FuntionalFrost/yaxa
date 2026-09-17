@@ -2,6 +2,7 @@
 	import type { Snippet } from 'svelte';
 
 	interface Props {
+		id?: string;
 		label?: string;
 		description?: string;
 		error?: string;
@@ -13,6 +14,7 @@
 	}
 
 	let {
+		id,
 		label,
 		description,
 		error,
@@ -28,7 +30,10 @@
 	{#if label || hint}
 		<div class="flex items-center justify-between">
 			{#if label}
-				<label for={name} class="block text-sm font-medium text-neutral-700 dark:text-neutral-300">
+				<label
+					for={id || name}
+					class="block text-sm font-medium text-neutral-700 dark:text-neutral-300"
+				>
 					{label}
 					{#if required}
 						<span class="ml-0.5 text-rose-500">*</span>

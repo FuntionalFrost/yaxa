@@ -318,13 +318,30 @@
 						Display Settings
 					</h4>
 					<div class="space-y-2 text-xs">
-						<label class="flex items-center justify-between text-neutral-600 dark:text-neutral-400">
+						<label
+							for="popover-compact-view"
+							class="flex items-center justify-between text-neutral-600 dark:text-neutral-400"
+						>
 							<span>Compact view</span>
-							<input type="checkbox" class="rounded accent-primary-600" />
+							<input
+								id="popover-compact-view"
+								name="compactView"
+								type="checkbox"
+								class="rounded accent-primary-600"
+							/>
 						</label>
-						<label class="flex items-center justify-between text-neutral-600 dark:text-neutral-400">
+						<label
+							for="popover-show-sparklines"
+							class="flex items-center justify-between text-neutral-600 dark:text-neutral-400"
+						>
 							<span>Show sparklines</span>
-							<input type="checkbox" checked class="rounded accent-primary-600" />
+							<input
+								id="popover-show-sparklines"
+								name="showSparklines"
+								type="checkbox"
+								checked
+								class="rounded accent-primary-600"
+							/>
 						</label>
 					</div>
 					<Button size="xs" color="primary" class="w-full" onclick={() => (popoverOpen = false)}

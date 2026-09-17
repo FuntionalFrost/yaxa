@@ -138,6 +138,7 @@
 								<div class="flex items-center gap-2 pt-1">
 									<input
 										id={`field-${col.name}`}
+										name={col.name}
 										type="checkbox"
 										class="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500 dark:border-neutral-700 dark:bg-neutral-800"
 										checked={Boolean(formData[col.name])}
@@ -150,6 +151,7 @@
 							{:else if col.dataType === 'number' || col.dataType === 'integer'}
 								<input
 									id={`field-${col.name}`}
+									name={col.name}
 									type="number"
 									class="w-full rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm text-neutral-900 placeholder-neutral-400 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:outline-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100"
 									disabled={col.primaryKey}
@@ -162,6 +164,7 @@
 							{:else if String(formData[col.name] ?? '').length > 60 || col.name.includes('description') || col.name.includes('body')}
 								<textarea
 									id={`field-${col.name}`}
+									name={col.name}
 									rows={3}
 									class="w-full rounded-md border border-neutral-300 bg-white px-3 py-1.5 font-mono text-sm text-xs text-neutral-900 placeholder-neutral-400 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:outline-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100"
 									disabled={col.primaryKey}
@@ -172,6 +175,7 @@
 							{:else}
 								<input
 									id={`field-${col.name}`}
+									name={col.name}
 									type="text"
 									class="w-full rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-sm text-neutral-900 placeholder-neutral-400 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:outline-none disabled:opacity-50 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100"
 									disabled={col.primaryKey}

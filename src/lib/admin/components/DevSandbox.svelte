@@ -5,7 +5,7 @@
 	import Icon from '../../components/elements/Icon.svelte';
 	import Progress from '../../components/elements/Progress.svelte';
 	import { useUpload } from '../../composables/useUpload.svelte';
-	import { getAuthUserContextGetter } from '../../site/context';
+	import { useYaxa } from '../../site/context';
 
 	interface Props {
 		apiPrefix?: string;
@@ -15,8 +15,8 @@
 	let { apiPrefix = '/admin/api', class: className = '' }: Props = $props();
 
 	// Auth & Context info
-	const getContextUser = getAuthUserContextGetter();
-	const user = $derived(getContextUser());
+	const yaxa = useYaxa();
+	const user = $derived(yaxa.user);
 
 	// Email Sandbox State
 	let emailTo = $state('developer@example.com');
@@ -97,6 +97,7 @@
 				>
 				<input
 					id="email-to"
+					name="emailTo"
 					type="email"
 					bind:value={emailTo}
 					placeholder="you@example.com"
@@ -110,6 +111,7 @@
 				>
 				<select
 					id="email-template"
+					name="emailTemplate"
 					bind:value={emailTemplate}
 					class="w-full rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs text-neutral-900 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:outline-none dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100"
 				>
@@ -173,6 +175,7 @@
 				>
 				<input
 					id="storage-file"
+					name="storageFile"
 					type="file"
 					onchange={(e) => {
 						const files = e.currentTarget.files;

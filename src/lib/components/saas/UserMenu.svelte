@@ -3,7 +3,7 @@
 	import Badge from '../elements/Badge.svelte';
 	import Icon from '../elements/Icon.svelte';
 	import DropdownMenu, { type MenuItem } from '../navigation/DropdownMenu.svelte';
-	import { getAuthUserContextGetter, type AuthUserContext } from '../../site/context';
+	import { useYaxa, type AuthUserContext } from '../../site/context';
 
 	interface Props {
 		user?: AuthUserContext | null;
@@ -25,13 +25,12 @@
 		onsignout
 	}: Props = $props();
 
-	const getContextUser = getAuthUserContextGetter();
-	const contextUser = $derived(getContextUser());
+	const yaxa = useYaxa();
 
 	const currentUser = $derived(
 		propUser !== undefined
 			? propUser
-			: contextUser || {
+			: yaxa.user || {
 					name: 'Solo Developer',
 					email: 'dev@yaxa.dev',
 					image: null,

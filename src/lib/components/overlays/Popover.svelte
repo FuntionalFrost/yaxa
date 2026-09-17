@@ -15,7 +15,11 @@
 <Popover.Root bind:open>
 	{#if trigger}
 		<Popover.Trigger class="inline-flex">
-			{@render trigger()}
+			{#snippet child({ props })}
+				<span {...props} class="inline-flex">
+					{@render trigger()}
+				</span>
+			{/snippet}
 		</Popover.Trigger>
 	{/if}
 

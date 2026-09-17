@@ -55,6 +55,7 @@
 					</label>
 					<input
 						id="og-card-title"
+						name="ogTitle"
 						type="text"
 						bind:value={ogTitle}
 						class="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-primary-500 focus:outline-hidden dark:border-zinc-800 dark:bg-zinc-950 dark:text-white"
@@ -69,6 +70,7 @@
 					</label>
 					<input
 						id="og-badge-tag"
+						name="ogBadge"
 						type="text"
 						bind:value={ogBadge}
 						class="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-primary-500 focus:outline-hidden dark:border-zinc-800 dark:bg-zinc-950 dark:text-white"
@@ -83,6 +85,7 @@
 					</label>
 					<input
 						id="og-description-text"
+						name="ogDescription"
 						type="text"
 						bind:value={ogDescription}
 						class="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-primary-500 focus:outline-hidden dark:border-zinc-800 dark:bg-zinc-950 dark:text-white"

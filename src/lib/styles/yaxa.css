@@ -161,3 +161,24 @@ body {
 .animate-yaxa-pulse-glow {
 	animation: yaxa-pulse-glow 3s ease-in-out infinite;
 }
+
+/* Sonner Toast Design System Integration */
+[data-sonner-toaster] {
+	font-family: var(--font-sans) !important;
+}
+
+[data-sonner-toast] {
+	border-radius: var(--yaxa-radius, 0.75rem) !important;
+	font-family: var(--font-sans) !important;
+	box-shadow:
+		0 10px 25px -5px rgba(0, 0, 0, 0.1),
+		0 8px 10px -6px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-sonner-toast] [data-button] {
+	border-radius: calc(var(--yaxa-radius, 0.75rem) * 0.75) !important;
+}
+
+[data-sonner-toast][data-type='info'] [data-icon] {
+	color: var(--yaxa-primary-500, #ff3e00) !important;
+}

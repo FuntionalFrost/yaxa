@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { computeProjectBadge, type SiteConfig } from '$lib/site/config';
-	import { getSiteConfigGetter } from '$lib/site/context';
+	import { useYaxa } from '$lib/site/context';
 	import {
 		generateWebSiteSchema,
 		generateSoftwareApplicationSchema,
@@ -35,10 +35,10 @@
 		config: propConfig
 	}: Props = $props();
 
-	const getContextConfig = getSiteConfigGetter();
+	const yaxa = useYaxa();
 
-	// Read config from prop or Svelte 5 context
-	let config = $derived(propConfig || getContextConfig());
+	// Read config from prop or reactive Yaxa context
+	let config = $derived(propConfig || yaxa.config);
 
 	// Dynamic resolution from props OR SvelteKit page.data (e.g. +page.server.ts load data)
 	let pageData = $derived(page.data || {});

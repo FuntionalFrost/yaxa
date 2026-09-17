@@ -220,14 +220,7 @@ export type {
 	PricingModel,
 	ProjectConfig
 } from './site/config';
-export {
-	setSiteConfig,
-	getSiteConfig,
-	getSiteConfigGetter,
-	setAuthUserContext,
-	getAuthUserContext,
-	getAuthUserContextGetter
-} from './site/context';
+export { YaxaState, initYaxaState, useYaxa, useSiteConfig, useAuthUser } from './site/context';
 export type { AuthUserContext } from './site/context';
 export { createYaxaHook } from './site/hook';
 export type { YaxaHookOptions } from './site/hook';

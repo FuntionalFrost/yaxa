@@ -4,7 +4,7 @@
 	import Container from './Container.svelte';
 	import Icon from '../elements/Icon.svelte';
 	import Logo from '../elements/Logo.svelte';
-	import { getSiteConfigGetter } from '$lib/site/context';
+	import { useYaxa } from '$lib/site/context';
 
 	interface Props {
 		config?: SiteConfig;
@@ -14,8 +14,8 @@
 
 	let { config, newsletter, class: className = '' }: Props = $props();
 
-	const getContextConfig = getSiteConfigGetter();
-	let currentConfig = $derived(config || getContextConfig());
+	const yaxa = useYaxa();
+	let currentConfig = $derived(config || yaxa.config);
 	let currentYear = new Date().getFullYear();
 
 	let company = $derived(currentConfig.company);
@@ -208,19 +208,13 @@
 				{/if}
 			</div>
 
-			<div class="flex flex-wrap items-center justify-center gap-4">
-				{#if legalLinks?.privacy}
-					<a href={legalLinks.privacy} class="hover:underline">Privacy</a>
-				{/if}
-				{#if legalLinks?.terms}
-					<a href={legalLinks.terms} class="hover:underline">Terms</a>
-				{/if}
-				{#if legalLinks?.refunds}
-					<a href={legalLinks.refunds} class="hover:underline">Refunds</a>
-				{/if}
-				{#if legalLinks?.impressum}
-					<a href={legalLinks.impressum} class="hover:underline">Impressum</a>
-				{/if}
+			<div class="flex items-center gap-2">
+				<span
+					class="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-medium text-emerald-600 dark:text-emerald-400"
+				>
+					<span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"></span>
+					All Systems Operational
+				</span>
 			</div>
 		</div>
 	</Container>

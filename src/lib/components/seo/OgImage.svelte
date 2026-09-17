@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { SiteConfig } from '$lib/site/config';
-	import { getSiteConfigGetter } from '$lib/site/context';
+	import { useYaxa } from '$lib/site/context';
 
 	interface Props {
 		title?: string;
@@ -20,8 +20,8 @@
 		class: className = ''
 	}: Props = $props();
 
-	const getContextConfig = getSiteConfigGetter();
-	let currentConfig = $derived(config || getContextConfig());
+	const yaxa = useYaxa();
+	let currentConfig = $derived(config || yaxa.config);
 
 	let ogUrl = $derived.by(() => {
 		const pairs: string[] = [];

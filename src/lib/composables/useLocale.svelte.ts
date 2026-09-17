@@ -1,5 +1,5 @@
 import { browser } from '$app/environment';
-import { getContext, hasContext, setContext } from 'svelte';
+import { createContext } from 'svelte';
 
 export type TextDirection = 'ltr' | 'rtl';
 
@@ -28,7 +28,7 @@ const RTL_LOCALES = new Set([
 	'yi'
 ]);
 
-const LOCALE_CONTEXT_KEY = Symbol('yaxa-locale-context');
+const [getLocaleContextInternal, setLocaleContextInternal] = createContext<LocaleStore>();
 
 export class LocaleStore {
 	locale = $state<string>('en');
@@ -174,7 +174,7 @@ export function setLocaleContext(
 	initialDir: TextDirection = 'ltr'
 ): LocaleStore {
 	const store = new LocaleStore(initialLocale, initialDir);
-	setContext(LOCALE_CONTEXT_KEY, store);
+	setLocaleContextInternal(store);
 	return store;
 }
 
@@ -183,13 +183,10 @@ export function setLocaleContext(
  */
 export function getLocaleContext(): LocaleStore {
 	try {
-		if (hasContext(LOCALE_CONTEXT_KEY)) {
-			return getContext<LocaleStore>(LOCALE_CONTEXT_KEY);
-		}
+		return getLocaleContextInternal() ?? localeStore;
 	} catch {
-		// Fallback when called outside component lifecycle
+		return localeStore;
 	}
-	return localeStore;
 }
 
 /**

@@ -32,7 +32,7 @@
 
 <div class="space-y-8">
 	<!-- Architecture Features Grid -->
-	<div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+	<div class="grid grid-cols-1 gap-4 md:grid-cols-4">
 		<div
 			class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900/40"
 		>
@@ -43,8 +43,25 @@
 			</div>
 			<h3 class="mb-1 text-sm font-bold text-zinc-900 dark:text-white">Svelte 5 Runes Native</h3>
 			<p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
-				Built from the ground up using `$state()`, `$derived()`, and `&#123;#snippet&#125;` without
-				legacy Svelte 4 store wrappers.
+				Pure runes reactivity (`$state`, `$derived`, `&#123;#snippet&#125;`) with zero Svelte 4
+				store overhead.
+			</p>
+		</div>
+
+		<div
+			class="rounded-xl border border-zinc-200 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-900/40"
+		>
+			<div
+				class="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-100 text-indigo-600 dark:bg-indigo-950/60 dark:text-indigo-400"
+			>
+				<Icon name="cube" class="h-5 w-5" />
+			</div>
+			<h3 class="mb-1 text-sm font-bold text-zinc-900 dark:text-white">
+				createContext & Class State
+			</h3>
+			<p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
+				SSR-safe `createContext` state containers. Direct property access via `useYaxa()` with zero
+				prop drilling or leaks.
 			</p>
 		</div>
 
@@ -71,7 +88,9 @@
 			>
 				<Icon name="globe" class="h-5 w-5" />
 			</div>
-			<h3 class="mb-1 text-sm font-bold text-zinc-900 dark:text-white">100% DRY Nuxt SEO Parity</h3>
+			<h3 class="mb-1 text-sm font-bold text-zinc-900 dark:text-white">
+				100% DRY SEO & Edge Parity
+			</h3>
 			<p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
 				Single-file `site.config.ts` powers runtime SVG OpenGraph cards, XML sitemaps, robots.txt,
 				and Schema.org.
@@ -188,6 +207,24 @@
 						<td class="px-4 py-2.5">Shiki / Prism (WASM/Heavy)</td>
 						<td class="px-4 py-2.5 font-mono">&lt;CodeBlock /&gt; (Zero-WASM LaTeX/GFM/Vue/TSX)</td>
 						<td class="px-4 py-2.5"><Badge color="primary" size="xs">Pure Web</Badge></td>
+					</tr>
+					<tr>
+						<td class="px-4 py-2.5 font-bold text-zinc-900 dark:text-white"
+							>Context & State Isolation</td
+						>
+						<td class="px-4 py-2.5">Vue `provide` / `inject` & Pinia</td>
+						<td class="px-4 py-2.5 font-mono text-primary-600 dark:text-primary-400"
+							>Svelte 5.40+ createContext & YaxaState</td
+						>
+						<td class="px-4 py-2.5"><Badge color="primary" size="xs">SSR Leak-Proof</Badge></td>
+					</tr>
+					<tr>
+						<td class="px-4 py-2.5 font-bold text-zinc-900 dark:text-white"
+							>Unified Config & Edge Deploy</td
+						>
+						<td class="px-4 py-2.5">Nitro / `nuxt.config.ts`</td>
+						<td class="px-4 py-2.5 font-mono">vite.config.ts + adapter-vercel</td>
+						<td class="px-4 py-2.5"><Badge color="primary" size="xs">Zero-Config</Badge></td>
 					</tr>
 					<tr>
 						<td class="px-4 py-2.5 font-bold text-zinc-900 dark:text-white"

@@ -30,17 +30,20 @@
 
 <DropdownMenu.Root>
 	<DropdownMenu.Trigger class="inline-flex">
-		{#if trigger}
-			{@render trigger()}
-		{:else}
-			<button
-				type="button"
-				class="inline-flex items-center gap-1 rounded-lg border border-neutral-200 bg-white px-3 py-1.5 text-sm font-medium text-neutral-800 shadow-xs hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800"
-			>
-				Options
-				<Icon name="chevron-down" size="xs" />
-			</button>
-		{/if}
+		{#snippet child({ props })}
+			<span {...props} class="inline-flex">
+				{#if trigger}
+					{@render trigger()}
+				{:else}
+					<span
+						class="inline-flex items-center gap-1 rounded-lg border border-neutral-200 bg-white px-3 py-1.5 text-sm font-medium text-neutral-800 shadow-xs hover:bg-neutral-50 dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-200 dark:hover:bg-neutral-800"
+					>
+						Options
+						<Icon name="chevron-down" size="xs" />
+					</span>
+				{/if}
+			</span>
+		{/snippet}
 	</DropdownMenu.Trigger>
 
 	<DropdownMenu.Portal>

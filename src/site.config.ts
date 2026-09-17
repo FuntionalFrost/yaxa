@@ -4,10 +4,9 @@ export const siteConfig = defineSiteConfig({
 	name: 'Yaxa',
 	title: 'Yaxa — The Intuitive Svelte UI Library',
 	description:
-		'A comprehensive Svelte 5 UI component library with 25+ accessible, Tailwind CSS components and automated SEO for building modern web applications.',
+		'A comprehensive Svelte 5 UI component library with 45+ accessible, Tailwind CSS components and automated SEO for building modern web applications.',
 	url: 'https://yaxa.vercel.app',
 	email: 'devfrost@protonmail.com',
-	version: 'v1',
 	logo: '/favicon.svg',
 	project: {
 		license: 'MIT',
@@ -65,7 +64,7 @@ export const siteConfig = defineSiteConfig({
 		{ label: 'Docs', href: '/docs/intro' },
 		{ label: 'Components', href: '/docs/comp-buttons' },
 		{ label: 'SEO Suite', href: '/docs/seo-og' },
-		{ label: 'Releases', href: 'https://github.com/FuntionalFrost/yaxa/releases' }
+		{ label: 'SaaS Suite', href: '/saas' }
 	],
 	socials: {
 		github: 'https://github.com/FuntionalFrost/yaxa',

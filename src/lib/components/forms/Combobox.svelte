@@ -180,9 +180,12 @@
 			>
 				<Icon name="search" size="xs" class="mr-2 shrink-0 text-neutral-400" />
 				<input
+					id={name ? `${name}-search` : undefined}
+					name={name ? `${name}-search` : 'comboboxSearch'}
 					type="text"
 					bind:value={query}
 					placeholder={searchPlaceholder}
+					aria-label={searchPlaceholder || 'Search options'}
 					onkeydown={handleKeydown}
 					class="h-8 w-full bg-transparent text-xs text-neutral-900 placeholder:text-neutral-400 focus:outline-none dark:text-white"
 				/>

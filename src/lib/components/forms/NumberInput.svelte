@@ -23,6 +23,7 @@
 	});
 
 	export type NumberInputProps = VariantProps<typeof numberInputVariants> & {
+		id?: string;
 		value?: number;
 		min?: number;
 		max?: number;
@@ -32,6 +33,9 @@
 		placeholder?: string;
 		disabled?: boolean;
 		name?: string;
+		label?: string;
+		'aria-label'?: string;
+		ariaLabel?: string;
 		class?: string;
 	};
 </script>
@@ -40,6 +44,7 @@
 	import Icon from '../elements/Icon.svelte';
 
 	let {
+		id,
 		value = $bindable(0),
 		min,
 		max,
@@ -49,6 +54,9 @@
 		placeholder,
 		disabled = false,
 		name,
+		label,
+		'aria-label': ariaLabelAttr,
+		ariaLabel,
 		size = 'md',
 		status = 'default',
 		class: className = ''
@@ -110,14 +118,16 @@
 		{/if}
 
 		<input
+			id={id || name}
 			type="number"
-			{name}
+			name={name || id || 'number-input'}
 			{min}
 			{max}
 			{step}
 			{disabled}
 			{placeholder}
 			{value}
+			aria-label={ariaLabelAttr || ariaLabel || label || placeholder || name || 'Number input'}
 			oninput={handleInput}
 			onkeydown={handleKeydown}
 			class="w-full [appearance:textfield] bg-transparent text-center font-mono focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"

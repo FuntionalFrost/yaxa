@@ -31,13 +31,18 @@
 	});
 
 	export type SelectProps = VariantProps<typeof selectVariants> & {
+		id?: string;
 		value?: string;
 		options?: SelectOption[];
 		placeholder?: string;
 		icon?: IconSource;
 		disabled?: boolean;
 		name?: string;
+		label?: string;
+		'aria-label'?: string;
+		ariaLabel?: string;
 		class?: string;
+		[key: string]: any;
 	};
 </script>
 
@@ -45,15 +50,20 @@
 	import Icon from '../elements/Icon.svelte';
 
 	let {
+		id,
 		value = $bindable(''),
 		options = [],
 		placeholder = 'Select an option...',
 		icon,
 		disabled = false,
 		name,
+		label,
+		'aria-label': ariaLabelAttr,
+		ariaLabel,
 		size = 'md',
 		status = 'default',
-		class: className = ''
+		class: className = '',
+		...restProps
 	}: SelectProps = $props();
 </script>
 
@@ -65,14 +75,17 @@
 	{/if}
 
 	<select
+		id={id || name}
 		bind:value
 		{disabled}
 		{name}
+		aria-label={ariaLabelAttr || ariaLabel || label || placeholder || name || 'Select option'}
 		class="{selectVariants({ size, status, class: className })} {icon
 			? size === 'sm'
 				? 'pl-8'
 				: 'pl-10'
 			: ''}"
+		{...restProps}
 	>
 		{#if placeholder}
 			<option value="" disabled selected={!value}>

@@ -23,7 +23,7 @@
 </script>
 
 <script lang="ts">
-	import { getSiteConfigGetter } from '$lib/site/context';
+	import { useYaxa } from '$lib/site/context';
 	import Container from '../layout/Container.svelte';
 	import Badge from '../elements/Badge.svelte';
 	import Icon from '../elements/Icon.svelte';
@@ -39,8 +39,8 @@
 		children
 	}: LegalDocumentProps = $props();
 
-	const getContextConfig = getSiteConfigGetter();
-	let currentConfig = $derived(config || getContextConfig());
+	const yaxa = useYaxa();
+	let currentConfig = $derived(config || yaxa.config);
 	let company = $derived(currentConfig.company);
 	let legal = $derived(currentConfig.legal);
 

@@ -2,6 +2,8 @@
 	import { cn } from '$lib/utils/cn';
 
 	interface Props {
+		id?: string;
+		name?: string;
 		length?: number;
 		value?: string;
 		type?: 'number' | 'text' | 'password';
@@ -17,6 +19,8 @@
 	}
 
 	let {
+		id,
+		name = 'otp',
 		length = 6,
 		value = $bindable(''),
 		type = 'number',
@@ -139,6 +143,8 @@
 		{/if}
 
 		<input
+			id={`${id || name}-${index + 1}`}
+			name={`${name}-${index + 1}`}
 			bind:this={inputRefs[index]}
 			type={type === 'password' ? 'password' : 'text'}
 			inputmode={type === 'number' ? 'numeric' : 'text'}

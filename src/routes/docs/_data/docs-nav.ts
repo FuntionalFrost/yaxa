@@ -28,7 +28,7 @@ export const DOC_NAV_GROUPS: DocNavGroup[] = [
 				description:
 					'The intuitive, production-grade UI component and automated SEO library for SvelteKit 2.7+ and Svelte 5 Runes. Full Nuxt UI & Nuxt SEO parity.',
 				category: 'Getting Started',
-				badge: 'v1.0'
+				badge: 'Runes'
 			},
 			{
 				id: 'install',

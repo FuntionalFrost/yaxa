@@ -31,11 +31,14 @@
 	});
 
 	export type SwitchProps = VariantProps<typeof switchVariants> & {
+		id?: string;
 		checked?: boolean;
 		label?: string;
 		description?: string;
 		disabled?: boolean;
 		name?: string;
+		'aria-label'?: string;
+		ariaLabel?: string;
 		class?: string;
 		children?: Snippet;
 	};
@@ -45,12 +48,15 @@
 	import { Switch } from 'bits-ui';
 
 	let {
+		id,
 		checked = $bindable(false),
 		size = 'md',
 		label,
 		description,
 		disabled = false,
 		name,
+		'aria-label': ariaLabelAttr,
+		ariaLabel,
 		class: className = '',
 		children
 	}: SwitchProps = $props();
@@ -61,7 +67,14 @@
 		? 'cursor-not-allowed opacity-60'
 		: 'cursor-pointer'} {className}"
 >
-	<Switch.Root bind:checked {disabled} {name} class={switchVariants({ size })}>
+	<Switch.Root
+		id={id || name}
+		bind:checked
+		{disabled}
+		{name}
+		aria-label={ariaLabelAttr || ariaLabel || label}
+		class={switchVariants({ size })}
+	>
 		<Switch.Thumb class={thumbVariants({ size })} />
 	</Switch.Root>
 

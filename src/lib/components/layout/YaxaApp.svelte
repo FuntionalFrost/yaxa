@@ -3,10 +3,10 @@
 	import { Toaster } from 'svelte-sonner';
 	import { Tooltip } from 'bits-ui';
 	import { type SiteConfig, DEFAULT_SITE_CONFIG } from '$lib/site/config';
-	import { themeInitScript } from '$lib/theme/theme.svelte';
+	import { theme, themeInitScript } from '$lib/theme/theme.svelte';
 	import Favicons from '../seo/Favicons.svelte';
 	import Seo from '../seo/Seo.svelte';
-	import { setSiteConfig, setAuthUserContext, type AuthUserContext } from '$lib/site/context';
+	import { initYaxaState, type AuthUserContext } from '$lib/site/context';
 	import '$lib/styles/yaxa.css';
 
 	export interface YaxaAppProps {
@@ -25,9 +25,11 @@
 		children
 	}: YaxaAppProps = $props();
 
-	// Provide config and authenticated user to all descendant components via Svelte 5 context
-	setSiteConfig(() => config);
-	setAuthUserContext(() => user);
+	// Initialize SSR-safe reactive state container for descendant components
+	initYaxaState(
+		() => config,
+		() => user
+	);
 
 	const scriptTag = `<script>${themeInitScript}</` + `script>`;
 </script>
@@ -51,5 +53,5 @@
 	</div>
 </Tooltip.Provider>
 
-<!-- Global Toast Container -->
-<Toaster richColors position="top-right" closeButton />
+<!-- Global Toast Container with dynamic theme synchronization -->
+<Toaster richColors theme={theme.resolvedTheme} position="top-right" closeButton />

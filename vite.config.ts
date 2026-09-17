@@ -5,20 +5,26 @@ import Icons from 'unplugin-icons/vite';
 import { defineConfig } from 'vitest/config';
 import { yaxa } from './src/lib/vite/index.ts';
 
-export default defineConfig(({ mode }) => ({
+export default defineConfig({
 	plugins: [
 		tailwindcss(),
 		Icons({ compiler: 'svelte', autoInstall: false }),
 		sveltekit({
-			adapter: adapter(),
-			compilerOptions: {
-				runes: true
-			}
+			adapter: adapter({
+				runtime: 'nodejs22.x'
+			})
 		}),
 		yaxa()
 	],
 	resolve: {
-		conditions: mode === 'test' ? ['browser'] : []
+		dedupe: ['svelte', 'svelte/internal', 'svelte/internal/client', 'svelte/internal/server'],
+		conditions: ['browser', 'svelte']
+	},
+	optimizeDeps: {
+		exclude: ['bits-ui', 'svelte-sonner', 'runed', 'mode-watcher', 'svelte']
+	},
+	ssr: {
+		noExternal: ['bits-ui', 'svelte-sonner', 'runed', 'mode-watcher', 'yaxa-svelte']
 	},
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}'],
@@ -31,4 +37,4 @@ export default defineConfig(({ mode }) => ({
 			exclude: ['src/lib/**/*.test.{js,ts}', 'src/lib/**/*.spec.{js,ts}', 'src/lib/**/types.ts']
 		}
 	}
-}));
+});

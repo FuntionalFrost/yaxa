@@ -45,11 +45,13 @@
 				: ''}"
 		>
 			<input
+				id={`${name}-${opt.value}`}
 				type="radio"
 				{name}
 				value={opt.value}
 				disabled={opt.disabled}
 				checked={isSelected}
+				aria-label={opt.label}
 				onchange={() => (value = opt.value)}
 				class="sr-only"
 			/>

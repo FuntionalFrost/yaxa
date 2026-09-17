@@ -284,8 +284,11 @@
 						<div class="flex items-center gap-2">
 							<form onsubmit={handleSearch} class="relative">
 								<input
+									id="admin-search-input"
+									name="adminSearch"
 									type="search"
 									placeholder="Search records..."
+									aria-label="Search records"
 									bind:value={searchQuery}
 									class="w-48 rounded-lg border border-neutral-300 bg-white py-1.5 pr-3 pl-8 text-xs text-neutral-900 placeholder-neutral-400 transition-all focus:w-60 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:outline-none dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100"
 								/>
@@ -424,6 +427,7 @@
 						{#if col.dataType === 'boolean'}
 							<input
 								id={`create-${col.name}`}
+								name={col.name}
 								type="checkbox"
 								class="h-4 w-4 rounded border-neutral-300 text-primary-600 focus:ring-primary-500"
 								checked={Boolean(newRecordData[col.name])}
@@ -432,6 +436,7 @@
 						{:else if col.dataType === 'number' || col.dataType === 'integer'}
 							<input
 								id={`create-${col.name}`}
+								name={col.name}
 								type="number"
 								placeholder={col.primaryKey ? '(Auto-generated if empty)' : ''}
 								class="w-full rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs dark:border-neutral-700 dark:bg-neutral-900"
@@ -443,6 +448,7 @@
 						{:else}
 							<input
 								id={`create-${col.name}`}
+								name={col.name}
 								type="text"
 								placeholder={col.primaryKey ? '(Auto-generated UUID if empty)' : ''}
 								class="w-full rounded-md border border-neutral-300 bg-white px-3 py-1.5 text-xs dark:border-neutral-700 dark:bg-neutral-900"

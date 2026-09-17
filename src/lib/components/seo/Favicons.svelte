@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { SiteConfig } from '$lib/site/config';
-	import { getSiteConfigGetter } from '$lib/site/context';
+	import { useYaxa } from '$lib/site/context';
 
 	interface Props {
 		config?: SiteConfig;
@@ -24,8 +24,8 @@
 		tileColor
 	}: Props = $props();
 
-	const getContextConfig = getSiteConfigGetter();
-	let currentConfig = $derived(config || getContextConfig());
+	const yaxa = useYaxa();
+	let currentConfig = $derived(config || yaxa.config);
 	let primaryColor = $derived(currentConfig.theme?.primaryColor || '#ff3e00');
 	let resolvedTileColor = $derived(tileColor || primaryColor);
 	let resolvedAppleTouchIcon = $derived(appleTouchIcon || currentConfig.seo?.appleTouchIcon);
@@ -33,6 +33,7 @@
 
 <svelte:head>
 	<!-- Standard & Scalable Vector Favicon -->
+	<link rel="icon" href="/favicon.ico" sizes="32x32" />
 	{#if faviconSvg}
 		<link rel="icon" type="image/svg+xml" href={faviconSvg} />
 		<link rel="mask-icon" href={faviconSvg} color={primaryColor} />
@@ -60,7 +61,8 @@
 	<meta name="theme-color" media="(prefers-color-scheme: light)" content="#ffffff" />
 	<meta name="theme-color" content={primaryColor} />
 
-	<!-- Apple Mobile Web App Settings -->
+	<!-- Mobile Web App Settings -->
+	<meta name="mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-title" content={currentConfig.name} />
 	<meta name="apple-mobile-web-app-status-bar-style" content="default" />

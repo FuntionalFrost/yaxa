@@ -14,13 +14,13 @@ describe('yaxa Vite plugin', () => {
 		const configFn = plugin.config as () => Record<string, any>;
 		const config = configFn();
 
+		expect(config.resolve?.dedupe).toContain('svelte');
 		expect(config.optimizeDeps?.include).toContain('tailwind-variants');
-		expect(config.optimizeDeps?.include).toContain('bits-ui');
-		expect(config.optimizeDeps?.include).toContain('svelte-sonner');
-		expect(config.optimizeDeps?.include).toContain('runed');
-		expect(config.optimizeDeps?.include).toContain('mode-watcher');
-		expect(config.optimizeDeps?.include).toContain('clsx');
-		expect(config.optimizeDeps?.include).toContain('tailwind-merge');
+		expect(config.optimizeDeps?.exclude).toContain('svelte');
+		expect(config.optimizeDeps?.exclude).toContain('bits-ui');
+		expect(config.optimizeDeps?.exclude).toContain('svelte-sonner');
+		expect(config.optimizeDeps?.exclude).toContain('runed');
+		expect(config.optimizeDeps?.exclude).toContain('mode-watcher');
 
 		expect(config.ssr?.noExternal).toContain('yaxa-svelte');
 		expect(config.ssr?.noExternal).toContain('bits-ui');

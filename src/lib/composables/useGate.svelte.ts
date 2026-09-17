@@ -1,4 +1,4 @@
-import { getAuthUserContextGetter, type AuthUserContext } from '$lib/site/context';
+import { useYaxa, type AuthUserContext } from '$lib/site/context';
 
 export interface UseGateOptions {
 	/** Explicit user object to override Svelte context */
@@ -16,9 +16,9 @@ export interface UseGateOptions {
 export function useGate(options: UseGateOptions = {}) {
 	const plansOrder = options.plansOrder ?? ['free', 'starter', 'pro', 'business', 'enterprise'];
 	const allowAdminBypass = options.allowAdminBypass ?? true;
-	const getContextUser = getAuthUserContextGetter();
+	const yaxa = useYaxa();
 
-	const currentUser = $derived(options.user !== undefined ? options.user : getContextUser());
+	const currentUser = $derived(options.user !== undefined ? options.user : yaxa.user);
 	const currentRole = $derived(currentUser?.role ?? null);
 	const currentPlan = $derived(
 		(currentUser?.plan as string) ?? (currentUser?.tier as string) ?? 'free'
