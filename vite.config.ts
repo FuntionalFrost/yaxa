@@ -10,9 +10,7 @@ export default defineConfig(({ mode }) => ({
 		tailwindcss(),
 		Icons({ compiler: 'svelte', autoInstall: false }),
 		sveltekit({
-			adapter: adapter({
-				runtime: 'nodejs22.x'
-			}),
+			adapter: adapter(),
 			compilerOptions: {
 				runes: true
 			}
