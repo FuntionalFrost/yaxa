@@ -16,6 +16,12 @@ build/
 dist/
 coverage/
 
+# Playwright Test Artifacts
+test-results/
+playwright-report/
+blob-report/
+.playwright/
+
 # OS
 .DS_Store
 Thumbs.db
@@ -31,5 +37,4 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
 # AI
-GEMINI.md
-.gemini/
+AGENTS.md

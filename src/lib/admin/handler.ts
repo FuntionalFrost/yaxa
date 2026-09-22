@@ -14,6 +14,28 @@ import type { RequestEvent } from '@sveltejs/kit';
 import type { AdminColumnInfo, AdminTableData, AdminTableInfo, DrizzleAdminConfig } from './types';
 
 /**
+ * Typed view of Drizzle ORM column internals accessed during table introspection.
+ * Drizzle does not export these as public types, so we model only the properties
+ * we actually read. Narrower than `any` — keeps the handler refactor-safe.
+ */
+interface DrizzleColumnInternals {
+	/** SQL column name (may differ from the schema key) */
+	name?: string;
+	/** Generic JS data type: 'string' | 'number' | 'boolean' | 'date' | … */
+	dataType?: string;
+	/** Drizzle dialect-specific column class name, e.g. 'PgText', 'SQLiteInteger' */
+	columnType?: string;
+	/** Whether this column is the primary key */
+	primary?: boolean;
+	isPrimaryKey?: boolean;
+	/** Whether the column has a NOT NULL constraint */
+	notNull?: boolean;
+	/** Whether the column has a default value */
+	hasDefault?: boolean;
+	default?: unknown;
+}
+
+/**
  * Extracts table schema map from a Drizzle schema object.
  */
 export function introspectTables(
@@ -37,18 +59,18 @@ export function introspectTables(
 				let primaryKey = 'id';
 
 				for (const [colKey, col] of Object.entries(rawColumns)) {
-					const colAny = col as any;
-					const isPk = Boolean(colAny.primary || colAny.isPrimaryKey);
+					const colTyped = col as DrizzleColumnInternals;
+					const isPk = Boolean(colTyped.primary || colTyped.isPrimaryKey);
 					if (isPk) {
-						primaryKey = colAny.name || colKey;
+						primaryKey = colTyped.name || colKey;
 					}
 
 					columns.push({
-						name: colAny.name || colKey,
-						dataType: colAny.dataType || colAny.columnType || typeof colAny,
+						name: colTyped.name || colKey,
+						dataType: colTyped.dataType || colTyped.columnType || typeof colTyped,
 						primaryKey: isPk,
-						notNull: Boolean(colAny.notNull),
-						hasDefault: Boolean(colAny.hasDefault || colAny.default !== undefined)
+						notNull: Boolean(colTyped.notNull),
+						hasDefault: Boolean(colTyped.hasDefault || colTyped.default !== undefined)
 					});
 				}
 
@@ -142,15 +164,15 @@ export class DrizzleAdminService {
 			const textColFilters = [];
 
 			for (const [, col] of Object.entries(rawColumns)) {
-				const colAny = col as any;
+				const colTyped = col as DrizzleColumnInternals;
 				if (
-					colAny.dataType === 'string' ||
-					colAny.dataType === 'text' ||
-					colAny.columnType?.includes('Text') ||
-					colAny.columnType?.includes('Varchar')
+					colTyped.dataType === 'string' ||
+					colTyped.dataType === 'text' ||
+					colTyped.columnType?.includes('Text') ||
+					colTyped.columnType?.includes('Varchar')
 				) {
 					try {
-						textColFilters.push(like(colAny, searchTerm));
+						textColFilters.push(like(col, searchTerm));
 					} catch {
 						// fallback
 					}
