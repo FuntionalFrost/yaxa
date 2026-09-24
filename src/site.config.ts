@@ -62,6 +62,7 @@ export const siteConfig = defineSiteConfig({
 	},
 	nav: [
 		{ label: 'Docs', href: '/docs/intro' },
+		{ label: 'Theme Studio', href: '/theme', badge: 'New' },
 		{ label: 'Components', href: '/docs/comp-buttons' },
 		{ label: 'SEO Suite', href: '/docs/seo-og' },
 		{ label: 'SaaS Suite', href: '/saas' }

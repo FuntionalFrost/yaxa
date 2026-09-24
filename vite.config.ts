@@ -10,7 +10,7 @@ export default defineConfig({
 		tailwindcss(),
 		Icons({ compiler: 'svelte', autoInstall: false }),
 		sveltekit({
-			adapter: adapter()
+			adapter: adapter({ runtime: 'nodejs24.x' })
 		}),
 		yaxa()
 	],

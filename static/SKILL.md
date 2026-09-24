@@ -28,15 +28,16 @@ Always import from the specific subpath corresponding to the layer:
 
 | Subpath | Description & Key Exports |
 | :--- | :--- |
-| `yaxa-svelte` | **Core UI Primitives & Composables**: `Button`, `Input`, `Modal`, `DataTable`, `CodeBlock`, `Gate`, `YaxaApp`, `useGate`, `useUpload`, `useToast`, `definePageSeo`, `defineSiteConfig`, `cn`, `tv`. |
-| `yaxa-svelte/yaxa.css` | **Tailwind CSS v4 Stylesheet**: Theme variables (`@theme`) and base styles. |
-| `yaxa-svelte/server` | **Server Hooks & SEO Endpoints**: `createYaxaHook` (handles `/robots.txt`, `/sitemap.xml`, `/site.webmanifest`, `/api/og`). |
-| `yaxa-svelte/auth` | **Better-Auth Integration**: `createYaxaAuth`, `createYaxaAuthHook` (session parsing and route guards). |
+| `yaxa-svelte` | **Core UI Primitives, Layouts, AI Primitives, Charts & Composables**: `Button`, `Input`, `Modal`, `Drawer`, `DataTable`, `VirtualList`, `ResizablePanels`, `Carousel`, `DashboardShell`, `Combobox`, `MultiSelect`, `NumberInput`, `Stepper`, `Timeline`, `Tree`, `Terminal`, `OrgSwitcher`, `NotificationCenter`, `Testimonials`, `FAQ`, `FeatureGrid`, `Gate`, `YaxaApp`, `<ThemeStudio>`, `<AiChat>`, `<PromptBar>`, `<AiThought>`, `<AiToolCall>`, `<LineChart>`, `<BarChart>`, `<DonutChart>`, `<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`, `useIdle`, `useGate`, `useUpload`, `useToast`, `definePageSeo`, `defineSiteConfig`, `cn`, `tv`. |
+| `yaxa-svelte/yaxa.css` | **Tailwind CSS v4 Stylesheet**: Theme variables (`@theme`), harmonic radius multiplier scale (`--radius-xs` to `--radius-4xl`), chart series tokens (`--color-chart-1` to `--color-chart-5`), independent sidebar tokens, and adaptive scrollbars. |
+| `yaxa-svelte/server` | **Server Hooks & SEO Endpoints**: `createYaxaHook` (handles `/robots.txt`, `/sitemap.xml`, `/site.webmanifest`, `/api/og`), `createYaxaAuthHook` (multi-tenant session resolution on `event.locals.orgId`). |
+| `yaxa-svelte/auth` | **Better-Auth Integration**: `createYaxaAuth` (pre-wired for Drizzle & Multi-Tenant Organizations). |
 | `yaxa-svelte/admin` | **Drizzle ORM Admin Suite**: `createYaxaAdminHook`, `<AdminDashboard>`, `<DevSandbox>`, `<RecordDrawer>`. |
-| `yaxa-svelte/db` | **Multi-Dialect Drizzle Factory**: `getDb` supporting Neon (PostgreSQL) and Turso (LibSQL/SQLite). |
-| `yaxa-svelte/polar` | **Polar.sh Billing Engine**: `createPolarCheckout`, `createPolarWebhookHandler`. |
+| `yaxa-svelte/db` | **Multi-Dialect Drizzle Factory**: `getDb`, `schemaPg`, `schemaSqlite` supporting Neon (PostgreSQL) and Turso (LibSQL/SQLite) with users, sessions, subscriptions, organizations, members, and invitations. |
+| `yaxa-svelte/polar` | **Polar.sh Billing Engine**: `createPolarCheckout`, `createPolarWebhookHandler` (HMAC verification). |
 | `yaxa-svelte/email` | **Resend Email Dispatchers**: `sendMagicLinkEmail`, `sendWelcomeEmail`. |
 | `yaxa-svelte/storage` | **Presigned Uploads**: AWS S3 & Cloudflare R2 presigned URL generators. |
+| `yaxa-svelte/testing` | **Test Helpers**: `createMockSiteConfig`, `createMockUser`, `createTestWrapperProps`. |
 | `yaxa-svelte/vite` | **Vite Plugin**: `yaxa()` turnkey plugin. |
 
 ---

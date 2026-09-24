@@ -154,9 +154,8 @@ export const siteConfig = defineSiteConfig({
 		<p
 			class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed font-normal text-neutral-600 sm:text-xl dark:text-neutral-400"
 		>
-			45+ accessible components, layouts, SaaS page blocks, DOM virtualization, zero-WASM syntax
-			highlighter, automated runtime OpenGraph cards, XML sitemaps, and real-time Tailwind theme
-			customization.
+			50+ accessible Svelte 5 components, AI chat primitives, native SVG charts, SaaS page blocks,
+			DOM virtualization, automated OpenGraph cards, and the real-time Visual Web Theme Studio.
 		</p>
 
 		<!-- Action CTA Buttons -->
@@ -169,7 +168,12 @@ export const siteConfig = defineSiteConfig({
 				class="font-semibold shadow-lg shadow-primary-500/20"
 			>
 				<Icon name="bolt" class="mr-2 h-4 w-4" />
-				Explore Documentation
+				Get Started
+			</Button>
+
+			<Button href="/theme" size="lg" variant="solid" color="neutral" class="font-semibold">
+				<Icon name="palette" class="mr-2 h-4 w-4 text-primary-500" />
+				Theme Studio
 			</Button>
 
 			<Button
@@ -181,18 +185,6 @@ export const siteConfig = defineSiteConfig({
 			>
 				<Icon name="squares-2x2" class="mr-2 h-4 w-4" />
 				Browse Components
-			</Button>
-
-			<Button
-				href="https://github.com/FuntionalFrost/yaxa"
-				size="lg"
-				variant="ghost"
-				color="neutral"
-				target="_blank"
-				class="font-semibold"
-			>
-				<Icon name="github" class="mr-2 h-4 w-4" />
-				GitHub
 			</Button>
 		</div>
 

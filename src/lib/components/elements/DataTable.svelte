@@ -5,6 +5,7 @@
 		sortable?: boolean;
 		pinned?: 'left' | 'right';
 		resizable?: boolean;
+		hidden?: boolean;
 		width?: number;
 		minWidth?: number;
 		maxWidth?: number;
@@ -15,8 +16,10 @@
 <script lang="ts" generics="T extends Record<string, any>">
 	import type { Snippet } from 'svelte';
 	import Checkbox from '../forms/Checkbox.svelte';
+	import Button from './Button.svelte';
 	import Icon from './Icon.svelte';
 	import Skeleton from './Skeleton.svelte';
+	import Popover from '../overlays/Popover.svelte';
 
 	interface Props {
 		data: T[];
@@ -26,10 +29,19 @@
 		selected?: T[];
 		searchQuery?: string;
 		searchKeys?: (keyof T | string)[];
+		showSearch?: boolean;
+		showExport?: boolean;
+		showColumnToggle?: boolean;
+		pagination?: boolean;
+		pageSize?: number;
+		page?: number;
+		pageSizeOptions?: number[];
 		emptyText?: string;
 		class?: string;
 		cell?: Snippet<[T, Column<T>]>;
 		empty?: Snippet;
+		bulkActions?: Snippet<[{ selected: T[]; clearSelection: () => void }]>;
+		toolbar?: Snippet;
 	}
 
 	let {
@@ -38,17 +50,32 @@
 		loading = false,
 		selectable = false,
 		selected = $bindable([]),
-		searchQuery = '',
+		searchQuery = $bindable(''),
 		searchKeys = [],
+		showSearch = false,
+		showExport = false,
+		showColumnToggle = false,
+		pagination = false,
+		pageSize = $bindable(10),
+		page = $bindable(1),
+		pageSizeOptions = [10, 25, 50, 100],
 		emptyText = 'No data available',
 		class: className = '',
 		cell,
-		empty
+		empty,
+		bulkActions,
+		toolbar
 	}: Props = $props();
 
 	let sortKey = $state<string | null>(null);
 	let sortOrder = $state<'asc' | 'desc'>('asc');
 	let customWidths = $state<Record<string, number>>({});
+	let hiddenKeys = $state<string[]>([]);
+
+	// Visible columns
+	let visibleColumns = $derived(
+		columns.filter((c) => !c.hidden && !hiddenKeys.includes(String(c.key)))
+	);
 
 	let effectiveWidths = $derived.by(() => {
 		const widths: Record<string, number> = {};
@@ -63,6 +90,7 @@
 			sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
 		} else {
 			sortKey = key;
+			sortOrder = 'asc';
 		}
 	}
 
@@ -127,6 +155,14 @@
 		return result;
 	});
 
+	// Pagination calculation
+	let totalPages = $derived(Math.max(1, Math.ceil(filteredData.length / pageSize)));
+	let paginatedData = $derived.by(() => {
+		if (!pagination) return filteredData;
+		const start = (page - 1) * pageSize;
+		return filteredData.slice(start, start + pageSize);
+	});
+
 	let allSelected = $derived(filteredData.length > 0 && selected.length === filteredData.length);
 
 	function toggleSelectAll(isChecked: boolean) {
@@ -147,6 +183,49 @@
 		}
 	}
 
+	function toggleColumnVisibility(colKey: string) {
+		if (hiddenKeys.includes(colKey)) {
+			hiddenKeys = hiddenKeys.filter((k) => k !== colKey);
+		} else {
+			hiddenKeys = [...hiddenKeys, colKey];
+		}
+	}
+
+	function exportCsv(filename = 'export.csv') {
+		if (filteredData.length === 0) return;
+		const cols = visibleColumns;
+		const headers = cols.map((c) => `"${c.label}"`).join(',');
+		const rows = filteredData.map((row) =>
+			cols
+				.map((c) => {
+					const val = row[c.key as keyof T];
+					return val !== undefined && val !== null ? `"${String(val).replace(/"/g, '""')}"` : '""';
+				})
+				.join(',')
+		);
+
+		const csvContent = 'data:text/csv;charset=utf-8,' + [headers, ...rows].join('\n');
+		const encodedUri = encodeURI(csvContent);
+		const link = document.createElement('a');
+		link.setAttribute('href', encodedUri);
+		link.setAttribute('download', filename);
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+	}
+
+	function exportJson(filename = 'export.json') {
+		if (filteredData.length === 0) return;
+		const jsonString =
+			'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(filteredData, null, 2));
+		const link = document.createElement('a');
+		link.setAttribute('href', jsonString);
+		link.setAttribute('download', filename);
+		document.body.appendChild(link);
+		link.click();
+		document.body.removeChild(link);
+	}
+
 	function getPinClass(pinned?: 'left' | 'right') {
 		if (pinned === 'left') {
 			return 'sticky left-0 z-20 bg-white/95 dark:bg-neutral-900/95 backdrop-blur-xs border-r border-neutral-200 dark:border-neutral-800 shadow-xs';
@@ -158,156 +237,296 @@
 	}
 </script>
 
-<div
-	class="w-full overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950 {className}"
->
-	<div class="overflow-x-auto">
-		<table class="w-full text-left text-sm text-neutral-600 dark:text-neutral-300">
-			<!-- Table Header -->
-			<thead
-				class="border-b border-neutral-200 bg-neutral-50/80 text-sm font-semibold tracking-wider text-neutral-600 uppercase dark:border-neutral-800 dark:bg-neutral-900/80 dark:text-neutral-400"
-			>
-				<tr>
-					{#if selectable}
-						<th class="w-10 px-4 py-3 {getPinClass('left')}">
-							<Checkbox
-								checked={allSelected}
-								onchange={toggleSelectAll}
-								aria-label="Select all rows"
-							/>
-						</th>
-					{/if}
-					{#each columns as column}
-						{@const colKey = String(column.key)}
-						{@const widthStyle = effectiveWidths[colKey]
-							? `width: ${effectiveWidths[colKey]}px; min-width: ${effectiveWidths[colKey]}px;`
-							: ''}
-						<th
-							class="relative px-4 py-3 {getPinClass(column.pinned)} {column.class || ''}"
-							style={widthStyle}
-						>
-							<div class="flex items-center justify-between gap-2">
-								{#if column.sortable}
+<div class="w-full space-y-3 {className}">
+	<!-- Optional Header Toolbar -->
+	{#if showSearch || showExport || showColumnToggle || toolbar}
+		<div class="flex flex-wrap items-center justify-between gap-3">
+			<div class="flex items-center gap-2">
+				{#if showSearch}
+					<div class="relative w-64">
+						<Icon
+							name="search"
+							size="xs"
+							class="absolute top-1/2 left-3 -translate-y-1/2 text-neutral-400"
+						/>
+						<input
+							type="text"
+							bind:value={searchQuery}
+							placeholder="Search rows..."
+							aria-label="Search rows"
+							class="h-9 w-full rounded-lg border border-neutral-200 bg-white pr-3 pl-8 text-xs text-neutral-900 placeholder:text-neutral-400 focus:border-primary-500 focus:outline-none dark:border-neutral-800 dark:bg-neutral-900 dark:text-white"
+						/>
+					</div>
+				{/if}
+
+				{#if toolbar}
+					{@render toolbar()}
+				{/if}
+			</div>
+
+			<div class="flex items-center gap-2">
+				{#if showColumnToggle}
+					<Popover>
+						{#snippet trigger()}
+							<Button variant="outline" size="xs" class="h-9 gap-1.5 text-xs">
+								<Icon name="columns-3" size="xs" />
+								Columns
+							</Button>
+						{/snippet}
+						<div class="w-48 space-y-2 p-1 text-xs">
+							<div class="px-1 text-[10px] font-semibold text-neutral-500 uppercase">
+								Toggle Columns
+							</div>
+							{#each columns as col}
+								{@const colKey = String(col.key)}
+								{@const isVisible = !hiddenKeys.includes(colKey)}
+								<label
+									class="flex cursor-pointer items-center gap-2 rounded px-2 py-1 hover:bg-neutral-100 dark:hover:bg-neutral-800"
+								>
+									<Checkbox checked={isVisible} onchange={() => toggleColumnVisibility(colKey)} />
+									<span>{col.label}</span>
+								</label>
+							{/each}
+						</div>
+					</Popover>
+				{/if}
+
+				{#if showExport}
+					<Button
+						variant="outline"
+						size="xs"
+						onclick={() => exportCsv()}
+						class="h-9 gap-1.5 text-xs"
+					>
+						<Icon name="download" size="xs" />
+						CSV
+					</Button>
+					<Button
+						variant="outline"
+						size="xs"
+						onclick={() => exportJson()}
+						class="h-9 gap-1.5 text-xs"
+					>
+						<Icon name="code" size="xs" />
+						JSON
+					</Button>
+				{/if}
+			</div>
+		</div>
+	{/if}
+
+	<!-- Bulk Actions Floating Bar -->
+	{#if selected.length > 0 && bulkActions}
+		<div
+			class="flex items-center justify-between rounded-xl border border-primary-200 bg-primary-50/80 px-4 py-2.5 text-xs text-primary-900 shadow-sm dark:border-primary-900/60 dark:bg-primary-950/60 dark:text-primary-200"
+		>
+			<span class="font-medium">
+				{selected.length}
+				{selected.length === 1 ? 'row' : 'rows'} selected
+			</span>
+			<div class="flex items-center gap-2">
+				{@render bulkActions({ selected, clearSelection: () => (selected = []) })}
+			</div>
+		</div>
+	{/if}
+
+	<!-- Main Table Structure -->
+	<div
+		class="w-full overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950"
+	>
+		<div class="overflow-x-auto">
+			<table class="w-full text-left text-sm text-neutral-600 dark:text-neutral-300">
+				<!-- Table Header -->
+				<thead
+					class="border-b border-neutral-200 bg-neutral-50/80 text-sm font-semibold tracking-wider text-neutral-600 uppercase dark:border-neutral-800 dark:bg-neutral-900/80 dark:text-neutral-400"
+				>
+					<tr>
+						{#if selectable}
+							<th class="w-10 px-4 py-3 {getPinClass('left')}">
+								<Checkbox
+									checked={allSelected}
+									onchange={toggleSelectAll}
+									aria-label="Select all rows"
+								/>
+							</th>
+						{/if}
+						{#each visibleColumns as column}
+							{@const colKey = String(column.key)}
+							{@const widthStyle = effectiveWidths[colKey]
+								? `width: ${effectiveWidths[colKey]}px; min-width: ${effectiveWidths[colKey]}px;`
+								: ''}
+							<th
+								class="relative px-4 py-3 {getPinClass(column.pinned)} {column.class || ''}"
+								style={widthStyle}
+							>
+								<div class="flex items-center justify-between gap-2">
+									{#if column.sortable}
+										<button
+											type="button"
+											onclick={() => handleSort(colKey)}
+											class="group inline-flex items-center gap-1 font-semibold tracking-wider uppercase transition hover:text-neutral-900 dark:hover:text-white"
+										>
+											<span>{column.label}</span>
+											<span
+												class="text-neutral-400 transition-colors group-hover:text-primary-500 {sortKey ===
+												colKey
+													? 'text-primary-500'
+													: ''}"
+											>
+												{#if sortKey === colKey}
+													<Icon
+														name={sortOrder === 'asc' ? 'chevron-up' : 'chevron-down'}
+														size="xs"
+													/>
+												{:else}
+													<Icon name="chevron-down" size="xs" class="opacity-40" />
+												{/if}
+											</span>
+										</button>
+									{:else}
+										<span>{column.label}</span>
+									{/if}
+
+									{#if column.pinned}
+										<span
+											class="rounded bg-primary-100 px-1 text-[9px] font-bold text-primary-700 dark:bg-primary-950 dark:text-primary-300"
+										>
+											Pinned
+										</span>
+									{/if}
+								</div>
+
+								<!-- Column Resizing Handle -->
+								{#if column.resizable !== false}
 									<button
 										type="button"
-										onclick={() => handleSort(colKey)}
-										class="group inline-flex items-center gap-1 font-semibold tracking-wider uppercase transition hover:text-neutral-900 dark:hover:text-white"
-									>
-										<span>{column.label}</span>
-										<span
-											class="text-neutral-400 transition-colors group-hover:text-primary-500 {sortKey ===
-											colKey
-												? 'text-primary-500'
-												: ''}"
-										>
-											{#if sortKey === colKey}
-												<Icon
-													name={sortOrder === 'asc' ? 'chevron-up' : 'chevron-down'}
-													size="xs"
-												/>
-											{:else}
-												<Icon name="chevron-down" size="xs" class="opacity-40" />
-											{/if}
-										</span>
-									</button>
-								{:else}
-									<span>{column.label}</span>
+										onmousedown={(e) => startColumnResize(colKey, e)}
+										ontouchstart={(e) => startColumnResize(colKey, e)}
+										class="absolute top-0 right-0 bottom-0 w-1.5 cursor-col-resize transition-colors hover:bg-primary-500 active:bg-primary-600"
+										aria-label="Resize column {column.label}"
+									></button>
 								{/if}
-
-								{#if column.pinned}
-									<span
-										class="rounded bg-primary-100 px-1 text-[9px] font-bold text-primary-700 dark:bg-primary-950 dark:text-primary-300"
-									>
-										Pinned
-									</span>
-								{/if}
-							</div>
-
-							<!-- Column Resizing Handle -->
-							{#if column.resizable !== false}
-								<button
-									type="button"
-									onmousedown={(e) => startColumnResize(colKey, e)}
-									ontouchstart={(e) => startColumnResize(colKey, e)}
-									class="absolute top-0 right-0 bottom-0 w-1.5 cursor-col-resize transition-colors hover:bg-primary-500 active:bg-primary-600"
-									aria-label="Resize column {column.label}"
-								></button>
-							{/if}
-						</th>
-					{/each}
-				</tr>
-			</thead>
-
-			<!-- Table Body -->
-			<tbody class="divide-y divide-neutral-200/80 dark:divide-neutral-800/80">
-				{#if loading}
-					{#each Array(5)}
-						<tr>
-							{#if selectable}
-								<td class="px-4 py-3.5">
-									<Skeleton class="h-4 w-4 rounded" />
-								</td>
-							{/if}
-							{#each columns}
-								<td class="px-4 py-3.5">
-									<Skeleton class="h-4 w-24 rounded" />
-								</td>
-							{/each}
-						</tr>
-					{/each}
-				{:else if filteredData.length === 0}
-					<tr>
-						<td
-							colspan={columns.length + (selectable ? 1 : 0)}
-							class="px-4 py-12 text-center text-sm text-neutral-500 dark:text-neutral-400"
-						>
-							{#if empty}
-								{@render empty()}
-							{:else}
-								<div class="flex flex-col items-center justify-center gap-2">
-									<Icon name="search" size="md" class="text-neutral-400" />
-									<p>{emptyText}</p>
-								</div>
-							{/if}
-						</td>
+							</th>
+						{/each}
 					</tr>
-				{:else}
-					{#each filteredData as item}
-						{@const isSelected = selected.includes(item)}
-						<tr
-							class="transition-colors hover:bg-neutral-50/60 dark:hover:bg-neutral-900/50 {isSelected
-								? 'bg-primary-50/40 dark:bg-primary-950/20'
-								: ''}"
-						>
-							{#if selectable}
-								<td class="w-10 px-4 py-3.5 {getPinClass('left')}">
-									<Checkbox
-										checked={isSelected}
-										onchange={(checked) => toggleSelectRow(item, checked)}
-										aria-label="Select row"
-									/>
-								</td>
-							{/if}
-							{#each columns as column}
-								{@const colKey = String(column.key)}
-								{@const widthStyle = effectiveWidths[colKey]
-									? `width: ${effectiveWidths[colKey]}px; min-width: ${effectiveWidths[colKey]}px;`
-									: ''}
-								<td
-									class="px-4 py-3.5 {getPinClass(column.pinned)} {column.class || ''}"
-									style={widthStyle}
-								>
-									{#if cell}
-										{@render cell(item, column)}
-									{:else}
-										{item[column.key as keyof T] ?? '—'}
-									{/if}
-								</td>
-							{/each}
+				</thead>
+
+				<!-- Table Body -->
+				<tbody class="divide-y divide-neutral-200/80 dark:divide-neutral-800/80">
+					{#if loading}
+						{#each Array(pageSize > 5 ? 5 : pageSize)}
+							<tr>
+								{#if selectable}
+									<td class="px-4 py-3.5">
+										<Skeleton class="h-4 w-4 rounded" />
+									</td>
+								{/if}
+								{#each visibleColumns}
+									<td class="px-4 py-3.5">
+										<Skeleton class="h-4 w-24 rounded" />
+									</td>
+								{/each}
+							</tr>
+						{/each}
+					{:else if paginatedData.length === 0}
+						<tr>
+							<td
+								colspan={visibleColumns.length + (selectable ? 1 : 0)}
+								class="px-4 py-12 text-center text-sm text-neutral-500 dark:text-neutral-400"
+							>
+								{#if empty}
+									{@render empty()}
+								{:else}
+									<div class="flex flex-col items-center justify-center gap-2">
+										<Icon name="search" size="md" class="text-neutral-400" />
+										<p>{emptyText}</p>
+									</div>
+								{/if}
+							</td>
 						</tr>
-					{/each}
-				{/if}
-			</tbody>
-		</table>
+					{:else}
+						{#each paginatedData as item}
+							{@const isSelected = selected.includes(item)}
+							<tr
+								class="transition-colors hover:bg-neutral-50/60 dark:hover:bg-neutral-900/50 {isSelected
+									? 'bg-primary-50/40 dark:bg-primary-950/20'
+									: ''}"
+							>
+								{#if selectable}
+									<td class="w-10 px-4 py-3.5 {getPinClass('left')}">
+										<Checkbox
+											checked={isSelected}
+											onchange={(checked) => toggleSelectRow(item, checked)}
+											aria-label="Select row"
+										/>
+									</td>
+								{/if}
+								{#each visibleColumns as column}
+									{@const colKey = String(column.key)}
+									{@const widthStyle = effectiveWidths[colKey]
+										? `width: ${effectiveWidths[colKey]}px; min-width: ${effectiveWidths[colKey]}px;`
+										: ''}
+									<td
+										class="px-4 py-3.5 {getPinClass(column.pinned)} {column.class || ''}"
+										style={widthStyle}
+									>
+										{#if cell}
+											{@render cell(item, column)}
+										{:else}
+											{item[column.key as keyof T] ?? '—'}
+										{/if}
+									</td>
+								{/each}
+							</tr>
+						{/each}
+					{/if}
+				</tbody>
+			</table>
+		</div>
+
+		<!-- Pagination Footer Bar -->
+		{#if pagination && filteredData.length > 0}
+			<div
+				class="flex flex-wrap items-center justify-between gap-3 border-t border-neutral-200/80 bg-neutral-50/50 px-4 py-3 text-xs text-neutral-500 dark:border-neutral-800/80 dark:bg-neutral-900/40 dark:text-neutral-400"
+			>
+				<div class="flex items-center gap-2">
+					<span>Rows per page:</span>
+					<select
+						bind:value={pageSize}
+						onchange={() => (page = 1)}
+						class="rounded border border-neutral-200 bg-white px-2 py-1 text-xs text-neutral-700 dark:border-neutral-800 dark:bg-neutral-800 dark:text-neutral-200"
+					>
+						{#each pageSizeOptions as opt}
+							<option value={opt}>{opt}</option>
+						{/each}
+					</select>
+					<span class="ml-2">
+						Showing {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, filteredData.length)} of {filteredData.length}
+					</span>
+				</div>
+
+				<div class="flex items-center gap-1">
+					<Button
+						variant="ghost"
+						size="xs"
+						onclick={() => (page = Math.max(1, page - 1))}
+						disabled={page <= 1}
+						aria-label="Previous page"
+					>
+						<Icon name="chevron-left" size="xs" />
+					</Button>
+					<span class="px-2">Page {page} of {totalPages}</span>
+					<Button
+						variant="ghost"
+						size="xs"
+						onclick={() => (page = Math.min(totalPages, page + 1))}
+						disabled={page >= totalPages}
+						aria-label="Next page"
+					>
+						<Icon name="chevron-right" size="xs" />
+					</Button>
+				</div>
+			</div>
+		{/if}
 	</div>
 </div>

@@ -23,13 +23,16 @@ _Nuxt UI v4 & Nuxt UI Pro Equivalent for SvelteKit 2.7+ & Svelte 5 with Built-in
 
 **Yaxa** brings the full developer experience, visual elegance, and full-stack toolkit of **Nuxt UI** and the **Nuxt SEO + SaaS ecosystem** to **SvelteKit 2.7+** and **Svelte 5**.
 
-- 🎨 **Tailwind CSS v4 Native Tokens**: Styled with `@theme` variables; customize any color or token directly.
+- 🎨 **Tailwind CSS v4 Native Tokens**: Styled with `@theme` variables; harmonic radius scale (`--radius-xs` to `--radius-4xl`), chart palette tokens (`--color-chart-1` to `--color-chart-5`), and auto-adaptive scrollbars.
+- 🎛️ **Visual Web Theme Studio**: Interactive runtime palette designer (`/theme` and `<ThemeStudio />`) with live sandbox preview and 1-click token export.
+- 🤖 **AI-Native Primitives**: Drop-in `<AiChat>`, `<PromptBar>`, `<AiThought>`, and `<AiToolCall>` for conversational interfaces and agentic workflows.
+- 📊 **Zero-Dependency SVG Charts**: Pure Svelte 5 `<LineChart>`, `<BarChart>`, and `<DonutChart>` with responsive tooltips, curved splines, and theme-palette synchronisation.
 - ⚡ **Pure Svelte 5 Runes**: Built using `$state`, `$derived`, `$props`, and `$bindable` — zero Virtual DOM overhead.
 - ♿ **Accessible by Default**: Headless primitives powered by **Bits UI**.
 - 🚀 **100% DRY SEO Parity**: Automate dynamic Open Graph cards (`/api/og`), environment-aware `robots.txt`, XML sitemaps with human-readable `sitemap.xsl` stylesheets, PWA manifests, and Schema.org JSON-LD from a single `src/site.config.ts`.
 - 🔐 **Batteries-Included SaaS Suite**: Pre-integrated **Better-Auth**, multi-dialect **Drizzle ORM** (Neon PostgreSQL & Turso LibSQL/SQLite), **Polar.sh** payments & webhook sync, and **Resend** transactional emails.
-- 🧩 **35+ Production Components**: Elements, forms, layout, overlays, and drop-in SaaS widgets (`<AuthCard>`, `<UserMenu>`, `<PricingTable>`, `<SubscriptionCard>`).
-- 🛠️ **Composable Runes**: `useAuth`, `useShortcuts`, `useClipboard`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`.
+- 🧩 **45+ Production Components**: Elements, AI primitives, charts, advanced forms (`<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`), layout, overlays, and drop-in SaaS widgets (`<AuthCard>`, `<UserMenu>`, `<PricingTable>`, `<SubscriptionCard>`).
+- 🛠️ **Composable Runes**: `useAuth`, `useShortcuts`, `useClipboard`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`, `useIdle`.
 
 ---
 
@@ -228,15 +231,18 @@ export const POST = createPolarWebhookHandler();
 
 ## 🧩 Component Library
 
-| Category            | Components                                                                                                                                                                  |
-| :------------------ | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **SaaS Suite**      | `<Gate>`, `<AuthCard>`, `<UserMenu>`, `<PricingCard>`, `<PricingTable>`, `<SubscriptionCard>`, `useAuth`, `useGate`, `useUpload`                                            |
-| **Admin Suite**     | `<AdminDashboard>`, `<RecordDrawer>`, `<DevSandbox>`, `<ImpersonationBanner>`, `createYaxaAdminHook`, `createDrizzleAdmin`                                                  |
-| **Elements**        | `Button`, `ButtonGroup`, `Badge`, `Avatar`, `AvatarGroup`, `DataTable`, `Chip`, `Meter`, `MetricCard`, `Kbd`, `Icon`, `Spinner`, `Progress`, `Skeleton`, `Link`, `Logo`     |
-| **Forms**           | `Form`, `FormField`, `Input`, `InputOTP`, `Textarea`, `Checkbox`, `Switch`, `Select`, `RadioGroup`, `Slider`, `ColorPicker`, `ToggleGroup`, `DatePicker`, `DateRangePicker` |
-| **Layout & Blocks** | `Container`, `Header`, `Footer`, `Section`, `Card`, `Divider`, `YaxaApp`, Page Blocks (Hero, SaaS Metrics, 2FA Security)                                                    |
-| **Overlays & Nav**  | `Tabs`, `Breadcrumb`, `Pagination`, `CommandPalette` (`⌘K`), `DropdownMenu`, `ContextMenu`, `Modal`, `Slideover`, `Popover`, `Tooltip`, `Alert`, `Accordion`                |
-| **Composables**     | `useAuth`, `useGate`, `useUpload`, `useClipboard`, `useShortcuts`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`                                               |
+| Category              | Components                                                                                                                                                                                                                                                                                                           |
+| :-------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Theming & Studio**  | `<ThemeStudio>`, `theme`, `ACCENT_PALETTES`, `NEUTRAL_PALETTES`, `RADIUS_PRESETS`, Harmonic Radius Multiplier Scale, Chart Palette Series Tokens                                                                                                                                                                     |
+| **AI Primitives**     | `<AiChat>`, `<PromptBar>`, `<AiThought>`, `<AiToolCall>`                                                                                                                                                                                                                                                             |
+| **Charts (Pure SVG)** | `<LineChart>`, `<BarChart>`, `<DonutChart>` (0 external charting dependencies, auto-responsive, dark/light theme aware)                                                                                                                                                                                              |
+| **SaaS Suite**        | `<Gate>`, `<AuthCard>`, `<UserMenu>`, `<OrgSwitcher>`, `<PricingCard>`, `<PricingTable>`, `<SubscriptionCard>`, `useAuth`, `useGate`, `useUpload`                                                                                                                                                                    |
+| **Admin Suite**       | `<AdminDashboard>`, `<RecordDrawer>`, `<DevSandbox>`, `<ImpersonationBanner>`, `createYaxaAdminHook`, `createDrizzleAdmin`                                                                                                                                                                                           |
+| **Elements**          | `Button`, `ButtonGroup`, `Badge`, `Avatar`, `AvatarGroup`, `DataTable` (with Column Visibility & Export), `Chip`, `Meter`, `MetricCard`, `Kbd`, `Icon`, `Spinner`, `Progress`, `Skeleton`, `Link`, `Logo`, `CodeBlock` (with Svelte 5 Runes Highlighting), `Tree`, `Timeline`, `Terminal`, `VirtualList`, `Carousel` |
+| **Forms**             | `Form`, `FormField`, `Input`, `InputOTP`, `Textarea`, `Checkbox`, `Switch`, `Select`, `Combobox`, `MultiSelect`, `NumberInput`, `RadioGroup`, `Slider`, `ColorPicker`, `ToggleGroup`, `DatePicker`, `DateRangePicker`, `Dropzone`, `<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`                           |
+| **Layout & Blocks**   | `Container`, `Header`, `Footer`, `Section`, `Card`, `Divider`, `YaxaApp`, `DashboardShell` (with independent sidebar tokens), `ResizablePanels`, Page Blocks (`Hero`, `SaaS Metrics`, `FAQ`, `Testimonials`, `FeatureGrid`)                                                                                          |
+| **Overlays & Nav**    | `Tabs`, `Breadcrumb`, `Pagination`, `CommandPalette` (`⌘K`), `DropdownMenu`, `ContextMenu`, `Modal`, `Drawer`, `Slideover`, `Popover`, `Tooltip` (with `arrow={false}` & `unstyled`), `Alert`, `Accordion`, `NotificationCenter`, `Stepper`                                                                          |
+| **Composables**       | `useAuth`, `useGate`, `useUpload`, `useClipboard`, `useShortcuts`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`, `useIdle`, `useInfiniteScroll`, `useSortable`                                                                                                                                         |
 
 ---
 

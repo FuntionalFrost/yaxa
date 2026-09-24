@@ -51,6 +51,16 @@ export const DOC_NAV_GROUPS: DocNavGroup[] = [
 				badge: '100% DRY'
 			},
 			{
+				id: 'theming',
+				label: 'Theme Studio & Tokens',
+				href: '/docs/theming',
+				title: 'Theme Studio & Dynamic Tokens',
+				description:
+					'Interactive multi-palette customizer, harmonic radius scale, typography presets, and auto-adaptive scrollbar tokens.',
+				category: 'Getting Started',
+				badge: 'Interactive'
+			},
+			{
 				id: 'static-sites',
 				label: 'Static Sites (SSG)',
 				href: '/docs/static-sites',
@@ -149,6 +159,28 @@ export const DOC_NAV_GROUPS: DocNavGroup[] = [
 		title: 'Components',
 		items: [
 			{
+				id: 'ai-primitives',
+				label: 'AI & Chat Primitives',
+				href: '/docs/ai-primitives',
+				title: 'AI Chat, Prompts & Reasoning Tools',
+				description:
+					'Interactive chat threads, auto-expanding prompt bars with attachments & voice, collapsible reasoning thoughts, and tool execution cards.',
+				category: 'Components',
+				source: 'src/lib/components/ai/AiChat.svelte',
+				badge: 'AI Suite'
+			},
+			{
+				id: 'charts',
+				label: 'Native SVG Charts',
+				href: '/docs/charts',
+				title: 'Native SVG Theme-Aware Charts',
+				description:
+					'Zero-dependency Bézier line charts, grouped and stacked bar charts, and donut KPI charts with live theme adaptation.',
+				category: 'Components',
+				source: 'src/lib/components/charts/LineChart.svelte',
+				badge: 'Charts'
+			},
+			{
 				id: 'comp-buttons',
 				label: 'Buttons & Elements',
 				href: '/docs/comp-buttons',
@@ -171,12 +203,23 @@ export const DOC_NAV_GROUPS: DocNavGroup[] = [
 				badge: 'Forms'
 			},
 			{
+				id: 'advanced-forms',
+				label: 'Rich Text & Advanced Forms',
+				href: '/docs/advanced-forms',
+				title: 'Markdown WYSIWYG & Specialized Inputs',
+				description:
+					'Accessible markdown and rich text editor with live split preview, international phone numbers with country flags, and credit card inputs.',
+				category: 'Components',
+				source: 'src/lib/components/forms/RichTextEditor.svelte',
+				badge: 'New'
+			},
+			{
 				id: 'comp-overlays',
 				label: 'Overlays & Navigation',
 				href: '/docs/comp-overlays',
 				title: 'Modals, Overlays, Navigation & DataTables',
 				description:
-					'Accessible dialog overlays, slideover sheets, popovers, context menus, accordion FAQ panels, breadcrumbs, pagination, alert banners, and reactive data tables.',
+					'Accessible dialog overlays, slideover sheets, popovers, context menus, accordion FAQ panels, breadcrumbs, pagination, alert banners, and enhanced DataTables.',
 				category: 'Components',
 				source: 'src/lib/components/overlays/Modal.svelte',
 				badge: 'Overlays'

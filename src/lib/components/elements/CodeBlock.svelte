@@ -6,6 +6,7 @@
 		showLineNumbers?: boolean;
 		highlightLines?: number[];
 		wrap?: boolean;
+		themeMode?: 'dark' | 'adaptive';
 		class?: string;
 	}
 
@@ -22,6 +23,7 @@
 			| 'function'
 			| 'punctuation'
 			| 'macro'
+			| 'rune'
 			| 'heading'
 			| 'bold'
 			| 'italic'
@@ -30,7 +32,7 @@
 			| 'decorator';
 	}
 
-	// Zero-WASM Multi-Language Pure JavaScript Tokenizer
+	// Zero-WASM Multi-Language Pure JavaScript Tokenizer with Svelte 5 Rune Recognition
 	export function tokenizeCode(code: string, language: string = 'typescript'): Token[][] {
 		const lines = code.split('\n');
 		const lang = language.toLowerCase();
@@ -39,7 +41,7 @@
 		const isLatex = ['latex', 'tex', 'math'].includes(lang);
 		const isVue = lang === 'vue';
 		const isJsx = ['tsx', 'jsx', 'react'].includes(lang);
-		const isSvelte = lang === 'svelte';
+		const isSvelte = ['svelte', 'svelte5', 'sv'].includes(lang);
 		const isHtml = ['html', 'xml', 'svg'].includes(lang);
 		const isPython = ['python', 'py'].includes(lang);
 		const isSql = lang === 'sql';
@@ -85,14 +87,12 @@
 
 				// 2. LaTeX Math Macros and Math Blocks
 				if (isLatex) {
-					// Macros (\frac, \sqrt, \alpha, \sum, \int, \begin, etc.)
 					const macroMatch = remaining.match(/^(\\[a-zA-Z]+|\\\[|\\\]|\\\(|\\\))/);
 					if (macroMatch) {
 						tokens.push({ text: macroMatch[0], type: 'macro' });
 						remaining = remaining.slice(macroMatch[0].length);
 						continue;
 					}
-					// Inline math delimiters ($...$ or $$...$$)
 					const mathDelimMatch = remaining.match(/^(\${1,2})/);
 					if (mathDelimMatch) {
 						tokens.push({ text: mathDelimMatch[0], type: 'keyword' });
@@ -103,21 +103,18 @@
 
 				// 3. Markdown Formatting (Bold, Italic, Code, Links)
 				if (isMarkdown) {
-					// Inline code (`...`)
 					const codeMatch = remaining.match(/^(`[^`]+`)/);
 					if (codeMatch) {
 						tokens.push({ text: codeMatch[0], type: 'string' });
 						remaining = remaining.slice(codeMatch[0].length);
 						continue;
 					}
-					// Bold (**...**)
 					const boldMatch = remaining.match(/^(\*\*[^*]+\*\*)/);
 					if (boldMatch) {
 						tokens.push({ text: boldMatch[0], type: 'bold' });
 						remaining = remaining.slice(boldMatch[0].length);
 						continue;
 					}
-					// Link ([text](url))
 					const linkMatch = remaining.match(/^(\[[^\]]+\])(\([^)]+\))/);
 					if (linkMatch) {
 						tokens.push({ text: linkMatch[1], type: 'link' });
@@ -149,7 +146,6 @@
 
 				// 6. Vue / Svelte / JSX Directives & Tags
 				if (isVue || isSvelte || isHtml || isJsx) {
-					// HTML / Svelte / Vue / JSX Tags
 					const tagMatch = remaining.match(/^(<\/?[\w.:-]+|\/>|>)/);
 					if (tagMatch) {
 						tokens.push({ text: tagMatch[0], type: 'tag' });
@@ -157,7 +153,6 @@
 						continue;
 					}
 
-					// Vue Directives (v-if, v-for, :class, @click, #slot)
 					if (isVue) {
 						const vueDirMatch = remaining.match(/^((?:v-[\w-]+|:[\w-]+|@[\w-]+|#[\w-]+))(?=\s*=?)/);
 						if (vueDirMatch) {
@@ -167,7 +162,6 @@
 						}
 					}
 
-					// Attributes (bind:*, class=, onClick=, etc.)
 					const attrMatch = remaining.match(/^([\w:.-]+)(?=\s*=\s*)/);
 					if (attrMatch) {
 						tokens.push({ text: attrMatch[0], type: 'attr' });
@@ -176,7 +170,17 @@
 					}
 				}
 
-				// 7. Keywords Across Languages
+				// 7. Svelte 5 Native Runes ($state, $state.raw, $derived, $derived.by, $effect, $props, $bindable, etc.)
+				const svelteRuneMatch = remaining.match(
+					/^(\$(?:state(?:\.raw|\.snapshot)?|derived(?:\.by)?|effect(?:\.pre|\.root)?|props|bindable|inspect(?:\.trace)?|host))\b/
+				);
+				if (svelteRuneMatch) {
+					tokens.push({ text: svelteRuneMatch[0], type: 'rune' });
+					remaining = remaining.slice(svelteRuneMatch[0].length);
+					continue;
+				}
+
+				// 8. Keywords Across Languages
 				const kwMatch = remaining.match(
 					/^(import|export|from|default|const|let|var|function|return|async|await|class|interface|type|extends|implements|new|this|typeof|instanceof|if|else|switch|case|break|for|while|try|catch|finally|throw|as|in|of|true|false|null|undefined|fn|mut|struct|enum|impl|trait|pub|use|mod|crate|where|loop|unsafe|package|func|defer|go|chan|select|iota|def|self|yield|lambda|elif|except|with|None|True|False|pass|query|mutation|subscription|schema|scalar|fragment|directive|SELECT|INSERT|UPDATE|DELETE|FROM|WHERE|JOIN|GROUP|ORDER|BY|LIMIT|pnpm|npm|npx|bun|yarn|git|docker)\b/i
 				);
@@ -186,17 +190,15 @@
 					continue;
 				}
 
-				// 8. Svelte Runes ($state, $derived, $effect, $props, $bindable, $inspect) & React Hooks
-				const runeMatch = remaining.match(
-					/^(\$(?:state|derived|effect|props|bindable|inspect|host)|use[A-Z]\w+)\b/
-				);
-				if (runeMatch) {
-					tokens.push({ text: runeMatch[0], type: 'macro' });
-					remaining = remaining.slice(runeMatch[0].length);
+				// 9. React Hooks / Generic Macro tokens
+				const macroMatch = remaining.match(/^(use[A-Z]\w+)\b/);
+				if (macroMatch) {
+					tokens.push({ text: macroMatch[0], type: 'macro' });
+					remaining = remaining.slice(macroMatch[0].length);
 					continue;
 				}
 
-				// 9. Function invocations (funcName())
+				// 10. Function invocations (funcName())
 				const fnMatch = remaining.match(/^(\$?\w+)(?=\s*\()/);
 				if (fnMatch) {
 					tokens.push({ text: fnMatch[0], type: 'function' });
@@ -204,7 +206,7 @@
 					continue;
 				}
 
-				// 10. Numbers
+				// 11. Numbers
 				const numMatch = remaining.match(/^\b(\d+(?:\.\d+)?(?:px|rem|em|%|vh|vw|s|ms)?)\b/);
 				if (numMatch) {
 					tokens.push({ text: numMatch[0], type: 'number' });
@@ -212,7 +214,7 @@
 					continue;
 				}
 
-				// 11. Punctuation & Math Operators
+				// 12. Punctuation & Math Operators
 				const punctMatch = remaining.match(/^([{}()[\].,;:?!=<>+\-*/%&|^~_^\\]+)/);
 				if (punctMatch) {
 					tokens.push({ text: punctMatch[0], type: 'punctuation' });
@@ -220,7 +222,7 @@
 					continue;
 				}
 
-				// 12. Plain text / whitespace
+				// 13. Plain text / whitespace
 				const plainMatch = remaining.match(/^([\w$]+|\s+)/);
 				if (plainMatch) {
 					tokens.push({ text: plainMatch[0], type: 'plain' });
@@ -250,6 +252,7 @@
 		showLineNumbers = false,
 		highlightLines = [],
 		wrap = false,
+		themeMode = 'dark',
 		class: className = ''
 	}: CodeBlockProps = $props();
 
@@ -257,6 +260,7 @@
 	const toast = useToast();
 
 	let tokenizedLines = $derived(tokenizeCode(code.trim(), language));
+	let isAdaptive = $derived(themeMode === 'adaptive');
 
 	function copyToClipboard() {
 		if (typeof navigator !== 'undefined' && navigator.clipboard) {
@@ -271,22 +275,32 @@
 </script>
 
 <div
-	class="my-4 overflow-hidden rounded-xl border border-neutral-200/90 bg-neutral-950 shadow-md transition-all dark:border-neutral-800 {className}"
+	class="my-4 overflow-hidden rounded-xl border transition-all {isAdaptive
+		? 'border-neutral-200 bg-neutral-50 shadow-xs dark:border-neutral-800 dark:bg-neutral-950'
+		: 'border-neutral-200/90 bg-neutral-950 shadow-md dark:border-neutral-800'} {className}"
 >
 	<!-- Header Bar -->
 	{#if filename || language}
 		<div
-			class="flex items-center justify-between border-b border-neutral-800 bg-neutral-900/80 px-4 py-2 font-mono text-xs text-neutral-400"
+			class="flex items-center justify-between border-b px-4 py-2 font-mono text-xs {isAdaptive
+				? 'border-neutral-200 bg-neutral-100/80 text-neutral-600 dark:border-neutral-800 dark:bg-neutral-900/80 dark:text-neutral-400'
+				: 'border-neutral-800 bg-neutral-900/80 text-neutral-400'}"
 		>
 			<div class="flex items-center gap-2">
 				{#if filename}
-					<span class="flex items-center gap-1.5 font-medium text-neutral-200">
+					<span
+						class="flex items-center gap-1.5 font-medium {isAdaptive
+							? 'text-neutral-800 dark:text-neutral-200'
+							: 'text-neutral-200'}"
+					>
 						<span class="h-2 w-2 rounded-full bg-emerald-500"></span>
 						{filename}
 					</span>
 				{:else}
 					<span
-						class="rounded bg-neutral-800 px-1.5 py-0.5 text-[10px] font-bold tracking-wider text-neutral-400 uppercase"
+						class="rounded px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase {isAdaptive
+							? 'bg-neutral-200 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300'
+							: 'bg-neutral-800 text-neutral-400'}"
 					>
 						{language}
 					</span>
@@ -296,7 +310,9 @@
 			<div class="flex items-center gap-1.5">
 				{#if filename && language}
 					<span
-						class="rounded bg-neutral-800/80 px-1.5 py-0.5 text-[10px] font-bold tracking-wider text-neutral-400 uppercase"
+						class="rounded px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase {isAdaptive
+							? 'bg-neutral-200/80 text-neutral-700 dark:bg-neutral-800/80 dark:text-neutral-300'
+							: 'bg-neutral-800/80 text-neutral-400'}"
 					>
 						{language}
 					</span>
@@ -305,7 +321,9 @@
 					size="xs"
 					variant="ghost"
 					onclick={copyToClipboard}
-					class="h-6 px-2 text-xs text-neutral-400 hover:text-white"
+					class="h-6 px-2 text-xs {isAdaptive
+						? 'text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'
+						: 'text-neutral-400 hover:text-white'}"
 					aria-label="Copy code to clipboard"
 				>
 					<Icon name={copied ? 'check' : 'copy'} size="xs" class="mr-1" />
@@ -319,7 +337,9 @@
 				size="xs"
 				variant="ghost"
 				onclick={copyToClipboard}
-				class="h-6 px-2 text-xs text-neutral-400 hover:text-white"
+				class="h-6 px-2 text-xs {isAdaptive
+					? 'text-neutral-600 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'
+					: 'text-neutral-400 hover:text-white'}"
 				aria-label="Copy code to clipboard"
 			>
 				<Icon name={copied ? 'check' : 'copy'} size="xs" class="mr-1" />
@@ -330,43 +350,51 @@
 
 	<!-- Code Area -->
 	<pre
-		class="overflow-x-auto p-4 font-mono text-xs leading-relaxed text-neutral-200 {wrap
-			? 'whitespace-pre-wrap'
-			: 'whitespace-pre'}"><code class="language-{language}"
+		class="overflow-x-auto p-4 font-mono text-xs leading-relaxed {isAdaptive
+			? 'text-neutral-800 dark:text-neutral-200'
+			: 'text-neutral-200'} {wrap ? 'whitespace-pre-wrap' : 'whitespace-pre'}"><code
+			class="language-{language}"
 			>{#each tokenizedLines as lineTokens, lineIdx}{@const lineNum =
 					lineIdx + 1}{@const isHighlighted = highlightLines.includes(lineNum)}<div
 					class="table-row {isHighlighted
-						? '-mx-4 block border-l-2 border-primary-500 bg-primary-950/40 px-4'
+						? '-mx-4 block border-l-2 border-primary-500 bg-primary-500/10 px-4'
 						: ''}">{#if showLineNumbers}<span
-							class="table-cell pr-4 text-right text-neutral-600 select-none dark:text-neutral-500"
-							>{lineNum}</span
+							class="table-cell pr-4 text-right select-none {isAdaptive
+								? 'text-neutral-400 dark:text-neutral-600'
+								: 'text-neutral-600 dark:text-neutral-500'}">{lineNum}</span
 						>{/if}<span class="table-cell"
-						>{#each lineTokens as token}{#if token.type === 'keyword'}<span
-									class="font-semibold text-primary-400">{token.text}</span
-								>{:else if token.type === 'string'}<span class="text-emerald-400">{token.text}</span
-								>{:else if token.type === 'comment'}<span class="text-neutral-500 italic"
+						>{#each lineTokens as token}{#if token.type === 'rune'}<span
+									class="font-bold text-amber-500 dark:text-amber-400">{token.text}</span
+								>{:else if token.type === 'keyword'}<span class="font-semibold text-primary-500"
 									>{token.text}</span
-								>{:else if token.type === 'tag'}<span class="font-semibold text-rose-400"
+								>{:else if token.type === 'string'}<span
+									class="text-emerald-600 dark:text-emerald-400">{token.text}</span
+								>{:else if token.type === 'comment'}<span
+									class="text-neutral-400 italic dark:text-neutral-500">{token.text}</span
+								>{:else if token.type === 'tag'}<span
+									class="font-semibold text-rose-600 dark:text-rose-400">{token.text}</span
+								>{:else if token.type === 'directive'}<span
+									class="font-medium text-amber-600 dark:text-amber-400">{token.text}</span
+								>{:else if token.type === 'attr'}<span class="text-amber-600 dark:text-amber-300"
 									>{token.text}</span
-								>{:else if token.type === 'directive'}<span class="font-medium text-amber-400"
+								>{:else if token.type === 'function'}<span class="text-sky-600 dark:text-sky-400"
 									>{token.text}</span
-								>{:else if token.type === 'attr'}<span class="text-amber-300">{token.text}</span
-								>{:else if token.type === 'function'}<span class="text-sky-400">{token.text}</span
-								>{:else if token.type === 'macro'}<span class="font-semibold text-indigo-400"
-									>{token.text}</span
-								>{:else if token.type === 'heading'}<span class="font-bold text-amber-300"
-									>{token.text}</span
-								>{:else if token.type === 'bold'}<span class="font-bold text-white"
-									>{token.text}</span
-								>{:else if token.type === 'italic'}<span class="text-neutral-300 italic"
-									>{token.text}</span
-								>{:else if token.type === 'link'}<span class="text-sky-400 underline"
-									>{token.text}</span
-								>{:else if token.type === 'decorator'}<span class="text-purple-400"
-									>{token.text}</span
-								>{:else if token.type === 'number'}<span class="text-purple-400">{token.text}</span
-								>{:else if token.type === 'punctuation'}<span class="text-neutral-400"
-									>{token.text}</span
+								>{:else if token.type === 'macro'}<span
+									class="font-semibold text-indigo-600 dark:text-indigo-400">{token.text}</span
+								>{:else if token.type === 'heading'}<span
+									class="font-bold text-amber-600 dark:text-amber-300">{token.text}</span
+								>{:else if token.type === 'bold'}<span
+									class="font-bold text-neutral-900 dark:text-white">{token.text}</span
+								>{:else if token.type === 'italic'}<span
+									class="text-neutral-600 italic dark:text-neutral-300">{token.text}</span
+								>{:else if token.type === 'link'}<span
+									class="text-sky-600 underline dark:text-sky-400">{token.text}</span
+								>{:else if token.type === 'decorator'}<span
+									class="text-purple-600 dark:text-purple-400">{token.text}</span
+								>{:else if token.type === 'number'}<span
+									class="text-purple-600 dark:text-purple-400">{token.text}</span
+								>{:else if token.type === 'punctuation'}<span
+									class="text-neutral-500 dark:text-neutral-400">{token.text}</span
 								>{:else}<span>{token.text}</span>{/if}{/each}</span
 					></div>{/each}</code
 		></pre>

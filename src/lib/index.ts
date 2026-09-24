@@ -42,6 +42,33 @@ export type { VirtualListProps } from './components/elements/VirtualList.svelte'
 export { default as Carousel, carouselVariants } from './components/elements/Carousel.svelte';
 export type { CarouselProps } from './components/elements/Carousel.svelte';
 
+// AI-Native Primitives
+export { default as AiChat } from './components/ai/AiChat.svelte';
+export type {
+	AiChatProps,
+	AiMessage,
+	AiMessageThought,
+	AiMessageTool
+} from './components/ai/AiChat.svelte';
+export { default as PromptBar } from './components/ai/PromptBar.svelte';
+export type { PromptBarProps, SlashCommand } from './components/ai/PromptBar.svelte';
+export { default as AiThought } from './components/ai/AiThought.svelte';
+export type { AiThoughtProps } from './components/ai/AiThought.svelte';
+export { default as AiToolCall } from './components/ai/AiToolCall.svelte';
+export type { AiToolCallProps, ToolCallStatus } from './components/ai/AiToolCall.svelte';
+
+// Native Theme-Aware SVG Charts
+export { default as LineChart } from './components/charts/LineChart.svelte';
+export type {
+	LineChartProps,
+	LineSeries,
+	ChartDataPoint
+} from './components/charts/LineChart.svelte';
+export { default as BarChart } from './components/charts/BarChart.svelte';
+export type { BarChartProps, BarSeries } from './components/charts/BarChart.svelte';
+export { default as DonutChart } from './components/charts/DonutChart.svelte';
+export type { DonutChartProps, DonutDataItem } from './components/charts/DonutChart.svelte';
+
 // Form Controls
 export { default as Form } from './components/forms/Form.svelte';
 export type { FormSchema } from './components/forms/Form.svelte';
@@ -72,6 +99,15 @@ export { default as MultiSelect, multiSelectVariants } from './components/forms/
 export type { MultiSelectProps, MultiSelectOption } from './components/forms/MultiSelect.svelte';
 export { default as NumberInput, numberInputVariants } from './components/forms/NumberInput.svelte';
 export type { NumberInputProps } from './components/forms/NumberInput.svelte';
+export { default as RichTextEditor } from './components/forms/RichTextEditor.svelte';
+export type { RichTextEditorProps } from './components/forms/RichTextEditor.svelte';
+export { default as PhoneInput, COUNTRIES } from './components/forms/PhoneInput.svelte';
+export type { PhoneInputProps, Country } from './components/forms/PhoneInput.svelte';
+export {
+	default as CreditCardInput,
+	detectCardBrand
+} from './components/forms/CreditCardInput.svelte';
+export type { CreditCardInputProps, CardBrand } from './components/forms/CreditCardInput.svelte';
 
 // Layout & Shell
 export { default as Container } from './components/layout/Container.svelte';
@@ -177,7 +213,9 @@ export type { UseIdleOptions } from './composables/useIdle.svelte';
 // Feedback & Toast notification helper
 export { toast } from 'svelte-sonner';
 
-// Theming
+// Theming & Theme Studio
+export { default as ThemeStudio } from './components/theme/ThemeStudio.svelte';
+export type { ThemeStudioProps } from './components/theme/ThemeStudio.svelte';
 export {
 	theme,
 	themeInitScript,
@@ -185,7 +223,8 @@ export {
 	NEUTRAL_PALETTES,
 	FONT_PRESETS,
 	RADIUS_PRESETS,
-	FONT_SIZE_PRESETS
+	FONT_SIZE_PRESETS,
+	DEFAULT_CHART_COLORS
 } from './theme/theme.svelte';
 export type {
 	ThemeMode,

@@ -16,7 +16,7 @@ Never hallucinate or rely on outdated prop assumptions. Yaxa strictly maintains 
 1. **Public API & Export Index**: [`src/lib/index.ts`](file:///src/lib/index.ts)
    * The definitive index of every exported component, type definition, action, composable rune, and SEO utility.
 2. **Component Catalog & Categorized Index**: [`src/routes/docs/_data/docs-nav.ts`](file:///src/routes/docs/_data/docs-nav.ts)
-   * Contains all 40+ components organized by category (`elements`, `forms`, `layout`, `overlays`, `saas`, `seo`) with direct source paths.
+   * Contains all 45+ components organized by category (`theming`, `ai`, `charts`, `elements`, `forms`, `layout`, `overlays`, `saas`, `seo`) with direct source paths.
 3. **Component Props & Variants**: Inspect `<script module lang="ts">` in each component file
    * Every component defines its `Props` type and `tailwind-variants` (`tv`) contract inside `<script module lang="ts">` (e.g. [Button.svelte](file:///src/lib/components/elements/Button.svelte)).
 
@@ -28,8 +28,8 @@ Always import from the specific subpath corresponding to the layer:
 
 | Subpath | Description & Key Exports |
 | :--- | :--- |
-| `yaxa-svelte` | **Core UI Primitives, Layouts & Composables**: `Button`, `Input`, `Modal`, `Drawer`, `DataTable`, `VirtualList`, `ResizablePanels`, `Carousel`, `DashboardShell`, `Combobox`, `MultiSelect`, `NumberInput`, `Stepper`, `Timeline`, `Tree`, `Terminal`, `OrgSwitcher`, `NotificationCenter`, `Testimonials`, `FAQ`, `FeatureGrid`, `Gate`, `YaxaApp`, `useIdle`, `useGate`, `useUpload`, `useToast`, `definePageSeo`, `defineSiteConfig`, `cn`, `tv`. |
-| `yaxa-svelte/yaxa.css` | **Tailwind CSS v4 Stylesheet**: Theme variables (`@theme`) and base styles. |
+| `yaxa-svelte` | **Core UI Primitives, Layouts, AI Primitives, Charts & Composables**: `Button`, `Input`, `Modal`, `Drawer`, `DataTable`, `VirtualList`, `ResizablePanels`, `Carousel`, `DashboardShell`, `Combobox`, `MultiSelect`, `NumberInput`, `Stepper`, `Timeline`, `Tree`, `Terminal`, `OrgSwitcher`, `NotificationCenter`, `Testimonials`, `FAQ`, `FeatureGrid`, `Gate`, `YaxaApp`, `<ThemeStudio>`, `<AiChat>`, `<PromptBar>`, `<AiThought>`, `<AiToolCall>`, `<LineChart>`, `<BarChart>`, `<DonutChart>`, `<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`, `useIdle`, `useGate`, `useUpload`, `useToast`, `definePageSeo`, `defineSiteConfig`, `cn`, `tv`. |
+| `yaxa-svelte/yaxa.css` | **Tailwind CSS v4 Stylesheet**: Theme variables (`@theme`), harmonic radius multiplier scale (`--radius-xs` to `--radius-4xl`), chart series tokens (`--color-chart-1` to `--color-chart-5`), independent sidebar tokens, and adaptive scrollbars. |
 | `yaxa-svelte/server` | **Server Hooks & SEO Endpoints**: `createYaxaHook` (handles `/robots.txt`, `/sitemap.xml`, `/site.webmanifest`, `/api/og`), `createYaxaAuthHook` (multi-tenant session resolution on `event.locals.orgId`). |
 | `yaxa-svelte/auth` | **Better-Auth Integration**: `createYaxaAuth` (pre-wired for Drizzle & Multi-Tenant Organizations). |
 | `yaxa-svelte/admin` | **Drizzle ORM Admin Suite**: `createYaxaAdminHook`, `<AdminDashboard>`, `<DevSandbox>`, `<RecordDrawer>`. |
@@ -74,7 +74,7 @@ Never use `<slot />` or `<svelte:fragment>`. Use Svelte 5 `Snippet` props:
 ```svelte
 <Button leading={iconSnippet} trailing={chevronSnippet}>
   {#snippet iconSnippet()}
-    <Icon name="arrow-left" />
+    <Icon name="lucide:arrow-left" />
   {/snippet}
   Save Changes
 </Button>
@@ -99,10 +99,58 @@ Wrap your application in `<YaxaApp>` inside `src/routes/+layout.svelte`. It prov
   import { YaxaApp } from 'yaxa-svelte';
   import { siteConfig } from '../site.config';
 
-  let { children } = $props();
+  let { data, children } = $props();
 </script>
 
-<YaxaApp config={siteConfig}>
+<YaxaApp config={siteConfig} user={data.user}>
   {@render children()}
 </YaxaApp>
 ```
+
+### Feature & Plan Gating (`<Gate>` & `useGate`)
+Declarative and programmatic tier and RBAC gating with automatic context fallback:
+```svelte
+<script lang="ts">
+  import { Gate, useGate } from 'yaxa-svelte';
+
+  const gate = useGate(); // accesses user from <YaxaApp> automatically
+</script>
+
+<!-- Declarative component gating -->
+<Gate requiredPlan="pro" preview={true}>
+  <ProAnalyticsDashboard />
+</Gate>
+
+<!-- Programmatic gating -->
+{#if gate.allowsPlan('starter')}
+  <ExportButton />
+{/if}
+```
+
+### Type-Safe Page SEO (`definePageSeo`)
+Return SEO definitions directly from `+page.ts` or `+page.server.ts`. `<YaxaApp>` automatically renders the meta tags, OpenGraph cards, and JSON-LD schemas:
+```ts
+// src/routes/dashboard/+page.ts
+import { definePageSeo } from 'yaxa-svelte';
+
+export const load = () => {
+  return {
+    seo: definePageSeo({
+      title: 'Dashboard',
+      description: 'Manage your SaaS analytics and subscription.',
+      badge: 'App'
+    })
+  };
+};
+```
+
+---
+
+## 5. Verification Workflow for Coding Agents
+
+When adding or refactoring code in a Yaxa project, always run the automated verification pipeline:
+
+1. **Unit Tests**: `pnpm test` (Runs Vitest suite)
+2. **Type Check**: `pnpm check` (Runs `svelte-kit sync && svelte-check`)
+3. **Lint & Formatting**: `pnpm lint` (Runs ESLint and Prettier)
+4. **Production Build**: `pnpm build`

@@ -6,7 +6,7 @@
 		slots: {
 			root: 'flex min-h-screen w-full bg-neutral-50 text-neutral-900 antialiased dark:bg-neutral-950 dark:text-neutral-100',
 			sidebar:
-				'relative hidden flex-col border-r border-neutral-200 bg-white transition-all duration-300 ease-in-out md:flex dark:border-neutral-800 dark:bg-neutral-900',
+				'relative hidden flex-col border-r border-neutral-200 bg-[var(--yaxa-sidebar-bg,#ffffff)] text-[var(--yaxa-sidebar-fg,inherit)] transition-all duration-300 ease-in-out md:flex dark:border-neutral-800 dark:bg-[var(--yaxa-sidebar-bg,#18181b)]',
 			topbar:
 				'flex h-16 w-full items-center justify-between border-b border-neutral-200 bg-white/80 px-4 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-900/80 md:px-6',
 			main: 'flex flex-1 flex-col overflow-hidden',
@@ -38,6 +38,7 @@
 		actions?: Snippet;
 		children?: Snippet;
 		class?: string;
+		sidebarClass?: string;
 	};
 </script>
 
@@ -55,7 +56,8 @@
 		topbar,
 		actions,
 		children,
-		class: className = ''
+		class: className = '',
+		sidebarClass = ''
 	}: DashboardShellProps = $props();
 
 	const slots = $derived(dashboardShellVariants({ collapsed }));
@@ -75,8 +77,8 @@
 <svelte:window onkeydown={handleKeydown} />
 
 <div class="{slots.root()} {className}">
-	<!-- Desktop Sidebar -->
-	<aside class={slots.sidebar()} aria-label="Sidebar Navigation">
+	<!-- Desktop Sidebar with Independent Design Token Support -->
+	<aside class="{slots.sidebar()} {sidebarClass}" aria-label="Sidebar Navigation">
 		<!-- Sidebar Brand Header -->
 		<div
 			class="flex h-16 items-center justify-between border-b border-neutral-200 px-4 dark:border-neutral-800"

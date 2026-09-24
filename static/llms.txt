@@ -21,12 +21,16 @@
 - [Getting Started - Introduction](https://yaxa.vercel.app/docs/intro): Core value proposition and architecture.
 - [Getting Started - Installation](https://yaxa.vercel.app/docs/install): 4-step quickstart with pnpm, Tailwind CSS v4, and Vite plugin.
 - [Getting Started - Site Configuration](https://yaxa.vercel.app/docs/config): Using `defineSiteConfig` for DRY SEO and site metadata.
+- [Getting Started - Theming & Theme Studio](https://yaxa.vercel.app/docs/theming): Visual theme designer, harmonic radius scale, chart palettes, and `@theme` tokens.
 - [Getting Started - Static Sites (SSG)](https://yaxa.vercel.app/docs/static-sites): Deploying static websites with `@sveltejs/adapter-static`.
 - [Getting Started - Page Blocks](https://yaxa.vercel.app/docs/blocks): DashboardShell, Carousel, VirtualList, ResizablePanels, Terminal, Timeline, Testimonials, FAQ, FeatureGrid, MetricCard, and Stepper.
+- [AI Primitives](https://yaxa.vercel.app/docs/ai-primitives): AiChat, PromptBar, AiThought, and AiToolCall for conversational agent workflows.
+- [Charts Suite](https://yaxa.vercel.app/docs/charts): Zero-dependency pure SVG LineChart, BarChart, and DonutChart with auto-responsive tooltips.
 - [SEO Suite - Dynamic OpenGraph](https://yaxa.vercel.app/docs/seo-og): `/api/og` server route and `createOgImageHandler`.
 - [SEO Suite - Robots & Sitemaps](https://yaxa.vercel.app/docs/seo-robots): Automated `robots.txt` and XML sitemaps with human-readable XSL.
-- [Components - Buttons & Elements](https://yaxa.vercel.app/docs/comp-buttons): Button, ButtonGroup, Badge, Avatar, AvatarGroup, Chip, Kbd, Progress, Meter, Skeleton, Spinner, CodeBlock, SortableList, DataTable, Tree, Timeline, Terminal, VirtualList, Carousel.
+- [Components - Buttons & Elements](https://yaxa.vercel.app/docs/comp-buttons): Button, ButtonGroup, Badge, Avatar, AvatarGroup, Chip, Kbd, Progress, Meter, Skeleton, Spinner, CodeBlock, SortableList, DataTable (with column visibility & CSV/JSON export), Tree, Timeline, Terminal, VirtualList, Carousel.
 - [Components - Forms & Inputs](https://yaxa.vercel.app/docs/comp-forms): FormField, Input, Textarea, Select, Combobox, MultiSelect, NumberInput, Checkbox, RadioGroup, Switch, Slider, ColorPicker, ToggleGroup, DatePicker, DateRangePicker, InputOTP, Dropzone.
+- [Components - Advanced Form Controls](https://yaxa.vercel.app/docs/advanced-forms): RichTextEditor (Markdown WYSIWYG), PhoneInput (international country picker), CreditCardInput (brand detection & masking).
 - [Components - Overlays & Navigation](https://yaxa.vercel.app/docs/comp-overlays): Modal, Drawer (responsive modal ⇄ bottom sheet), Slideover, Popover, Tooltip, Alert, Accordion, ContextMenu, NotificationCenter, Breadcrumb, Pagination, Tabs, Stepper, CommandPalette, DropdownMenu.
 - [SaaS Suite - Full-Stack Auth & Multi-Tenancy](https://yaxa.vercel.app/docs/saas-suite): Better-Auth client/server hooks, Multi-Tenant OrgSwitcher, Drizzle ORM schemas (Postgres & SQLite), Polar checkout & webhooks, Resend emails, and S3 file uploads.
 

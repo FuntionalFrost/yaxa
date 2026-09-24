@@ -266,6 +266,8 @@ export const FONT_SIZE_PRESETS: Record<
 	spacious: { name: 'Spacious', value: '112.5%', label: '18px' }
 };
 
+export const DEFAULT_CHART_COLORS = ['#ff3e00', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6'];
+
 class ThemeStore {
 	mode = $state<ThemeMode>('system');
 	resolvedTheme = $state<'light' | 'dark'>('light');
@@ -274,6 +276,7 @@ class ThemeStore {
 	fontFamily = $state<FontFamily>('sans');
 	radius = $state<RadiusPreset>('default');
 	fontSize = $state<BaseFontSize>('base');
+	accentScrollbar = $state<boolean>(false);
 
 	constructor() {
 		if (browser) {
@@ -300,6 +303,10 @@ class ThemeStore {
 			const storedFontSize = localStorage.getItem('yaxa-size') as BaseFontSize | null;
 			if (storedFontSize && storedFontSize in FONT_SIZE_PRESETS) {
 				this.fontSize = storedFontSize;
+			}
+			const storedScrollbar = localStorage.getItem('yaxa-accent-scrollbar');
+			if (storedScrollbar !== null) {
+				this.accentScrollbar = storedScrollbar === 'true';
 			}
 
 			this.applyAllStyles();
@@ -334,6 +341,8 @@ class ThemeStore {
 		if (browser) {
 			localStorage.setItem('yaxa-accent', newAccent);
 			this.applyAccent();
+			this.applyCharts();
+			this.applyScrollbars();
 		}
 	}
 
@@ -342,6 +351,7 @@ class ThemeStore {
 		if (browser) {
 			localStorage.setItem('yaxa-neutral', newNeutral);
 			this.applyNeutral();
+			this.applyScrollbars();
 		}
 	}
 
@@ -369,6 +379,14 @@ class ThemeStore {
 		}
 	}
 
+	setAccentScrollbar(enabled: boolean) {
+		this.accentScrollbar = enabled;
+		if (browser) {
+			localStorage.setItem('yaxa-accent-scrollbar', String(enabled));
+			this.applyScrollbars();
+		}
+	}
+
 	reset() {
 		this.setMode('system');
 		this.setAccent('svelte');
@@ -376,12 +394,15 @@ class ThemeStore {
 		this.setFontFamily('sans');
 		this.setRadius('default');
 		this.setFontSize('base');
+		this.setAccentScrollbar(false);
 	}
 
 	private applyAllStyles() {
 		this.updateResolvedTheme();
 		this.applyAccent();
 		this.applyNeutral();
+		this.applyCharts();
+		this.applyScrollbars();
 		this.applyFont();
 		this.applyRadius();
 		this.applyFontSize();
@@ -409,6 +430,8 @@ class ThemeStore {
 			document.documentElement.classList.remove('dark');
 			document.documentElement.style.colorScheme = 'light';
 		}
+
+		this.applyScrollbars();
 	}
 
 	private applyAccent() {
@@ -434,6 +457,35 @@ class ThemeStore {
 		for (const [shade, hex] of Object.entries(palette.shades)) {
 			root.style.setProperty(`--yaxa-neutral-${shade}`, hex);
 			root.style.setProperty(`--color-neutral-${shade}`, hex);
+		}
+	}
+
+	private applyCharts() {
+		if (!browser) return;
+		const palette = ACCENT_PALETTES[this.accent] || ACCENT_PALETTES.svelte;
+		const root = document.documentElement;
+		root.style.setProperty('--yaxa-chart-1', palette.shades[500]);
+		root.style.setProperty('--yaxa-chart-2', '#3b82f6');
+		root.style.setProperty('--yaxa-chart-3', '#10b981');
+		root.style.setProperty('--yaxa-chart-4', '#f59e0b');
+		root.style.setProperty('--yaxa-chart-5', '#8b5cf6');
+	}
+
+	private applyScrollbars() {
+		if (!browser) return;
+		const root = document.documentElement;
+		const isDark = this.resolvedTheme === 'dark';
+		const neutral = NEUTRAL_PALETTES[this.neutral] || NEUTRAL_PALETTES.zinc;
+		const accent = ACCENT_PALETTES[this.accent] || ACCENT_PALETTES.svelte;
+
+		if (this.accentScrollbar) {
+			root.style.setProperty('--yaxa-scrollbar-thumb', accent.shades[500]);
+			root.style.setProperty('--yaxa-scrollbar-hover', accent.shades[600]);
+		} else {
+			const thumb = isDark ? neutral.shades[700] : neutral.shades[300];
+			const hover = isDark ? neutral.shades[600] : neutral.shades[400];
+			root.style.setProperty('--yaxa-scrollbar-thumb', thumb);
+			root.style.setProperty('--yaxa-scrollbar-hover', hover);
 		}
 	}
 
