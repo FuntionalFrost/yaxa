@@ -71,6 +71,24 @@
 						{legal.morNotice}
 					</p>
 				{/if}
+
+				<div class="pt-2 text-xs text-neutral-500 dark:text-neutral-400">
+					<div class="flex flex-wrap items-center gap-x-2 gap-y-1">
+						<span>© {currentYear} {entityName}.</span>
+						{#if currentConfig.project?.license}
+							<span>· {currentConfig.project.license} Licensed</span>
+						{/if}
+						{#if company?.address}
+							<span>· {company.address}</span>
+						{/if}
+						{#if company?.vatNumber}
+							<span>· VAT: {company.vatNumber}</span>
+						{/if}
+						{#if company?.registrationCourt}
+							<span>· {company.registrationCourt}</span>
+						{/if}
+					</div>
+				</div>
 			</div>
 
 			<!-- Quick Links -->
@@ -185,36 +203,6 @@
 						{@render newsletter()}
 					</div>
 				{/if}
-			</div>
-		</div>
-
-		<!-- Footer Bottom Identification Bar -->
-		<div
-			class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-neutral-200 pt-8 text-xs text-neutral-500 sm:flex-row dark:border-neutral-800 dark:text-neutral-400"
-		>
-			<div class="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 sm:justify-start">
-				<span>© {currentYear} {entityName}.</span>
-				{#if currentConfig.project?.license}
-					<span>· {currentConfig.project.license} Licensed</span>
-				{/if}
-				{#if company?.address}
-					<span>· {company.address}</span>
-				{/if}
-				{#if company?.vatNumber}
-					<span>· VAT: {company.vatNumber}</span>
-				{/if}
-				{#if company?.registrationCourt}
-					<span>· {company.registrationCourt}</span>
-				{/if}
-			</div>
-
-			<div class="flex items-center gap-2">
-				<span
-					class="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-medium text-emerald-600 dark:text-emerald-400"
-				>
-					<span class="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500"></span>
-					All Systems Operational
-				</span>
 			</div>
 		</div>
 	</Container>
