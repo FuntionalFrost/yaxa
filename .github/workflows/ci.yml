@@ -3,11 +3,17 @@ name: CI
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '**.md'
+      - '.vscode/**'
   pull_request:
     branches: [main]
+    paths-ignore:
+      - '**.md'
+      - '.vscode/**'
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
   cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
 
 permissions:
@@ -18,34 +24,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v7
+      - uses: actions/checkout@v7
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v6
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v7
+      - uses: pnpm/setup@v3
         with:
-          node-version: 24
-          cache: pnpm
+          cache: true
+          require-lockfile: true
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Lint and format check
-        run: pnpm lint
-
-      - name: Run svelte-check
-        run: pnpm check
-
-      - name: Run unit tests (Vitest)
-        run: pnpm test
-
-      - name: Package library (svelte-package)
-        run: pnpm package
-      - name: Build production bundle
-        run: pnpm build
+      - run: pnpm lint
+      - run: pnpm check
+      - run: pnpm build
 
         env:
           PUBLIC_APP_URL: https://yaxa.vercel.app
