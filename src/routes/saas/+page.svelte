@@ -6,6 +6,8 @@
 	import Tabs from '$lib/components/navigation/Tabs.svelte';
 	import Seo from '$lib/components/seo/Seo.svelte';
 	import AuthCard from '$lib/components/saas/AuthCard.svelte';
+	import PasskeyUI from '$lib/components/saas/PasskeyUI.svelte';
+	import TwoFactorModal from '$lib/components/saas/TwoFactorModal.svelte';
 	import UserMenu from '$lib/components/saas/UserMenu.svelte';
 	import PricingTable from '$lib/components/saas/PricingTable.svelte';
 	import SubscriptionCard from '$lib/components/saas/SubscriptionCard.svelte';
@@ -20,10 +22,11 @@
 	let mockUserTier = $state('Pro');
 	let mockSubscriptionStatus = $state<SubscriptionStatus>('active');
 	let mockInterval = $state<'month' | 'year'>('month');
+	let show2faModal = $state(false);
 
 	const showcaseTabs = [
 		{ value: 'overview', label: 'Complete SaaS Flow' },
-		{ value: 'auth', label: 'Auth & Onboarding' },
+		{ value: 'auth', label: 'Auth, Passkeys & 2FA' },
 		{ value: 'pricing', label: 'Pricing & Checkout' },
 		{ value: 'billing', label: 'Customer Billing' },
 		{ value: 'gating', label: 'Feature Gating (<Gate />)' }
@@ -331,22 +334,70 @@
 					<div class="space-y-1 text-center">
 						<Badge color="primary" size="xs">Module 1</Badge>
 						<h2 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
-							Drop-In Authentication
+							Auth, Passkeys & Two-Factor (2FA)
 						</h2>
 						<p class="text-sm text-zinc-500 dark:text-zinc-400">
-							Supports social OAuth, email/password, and passwordless magic links.
+							Polymorphic credentials card, WebAuthn passkey management, and turnkey TOTP 2FA.
 						</p>
 					</div>
 
-					<div class="mx-auto max-w-md">
-						<AuthCard
-							showSocial={true}
-							showMagicLinkToggle={true}
-							onsuccess={() => {
-								toast.success('Auth Simulation Success', 'User authenticated via Better-Auth');
-							}}
-						/>
+					<div class="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:items-start">
+						<!-- Auth Card Showcase -->
+						<div class="space-y-4">
+							<h3 class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+								1. Polymorphic Authentication (<code class="text-xs">&lt;AuthCard /&gt;</code>)
+							</h3>
+							<AuthCard
+								showSocial={true}
+								showMagicLinkToggle={true}
+								onsuccess={() => {
+									toast.success('Auth Simulation Success', 'User authenticated via Better-Auth');
+								}}
+							/>
+						</div>
+
+						<!-- Passkeys & 2FA Suite -->
+						<div class="space-y-6">
+							<div class="space-y-4">
+								<h3 class="text-sm font-semibold text-zinc-700 dark:text-zinc-300">
+									2. WebAuthn Biometric Management (<code class="text-xs"
+										>&lt;PasskeyUI mode="card" /&gt;</code
+									>)
+								</h3>
+								<PasskeyUI
+									mode="card"
+									onsuccess={() => {
+										toast.success('Passkey Added', 'Biometric credential enrolled');
+									}}
+								/>
+							</div>
+
+							<div
+								class="space-y-3 rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900/60"
+							>
+								<div class="flex items-center justify-between">
+									<div class="space-y-0.5">
+										<h4 class="text-sm font-bold text-zinc-900 dark:text-zinc-100">
+											Two-Factor Authentication
+										</h4>
+										<p class="text-xs text-zinc-500">
+											Protect account with TOTP authenticator app verification.
+										</p>
+									</div>
+									<Button size="sm" color="primary" onclick={() => (show2faModal = true)}>
+										Setup 2FA
+									</Button>
+								</div>
+							</div>
+						</div>
 					</div>
+
+					<TwoFactorModal
+						bind:open={show2faModal}
+						onsuccess={() => {
+							toast.success('2FA Configured', 'Two-factor authenticator setup complete');
+						}}
+					/>
 				</div>
 			{:else if activeTab === 'pricing'}
 				<!-- Dedicated Pricing Module View -->
