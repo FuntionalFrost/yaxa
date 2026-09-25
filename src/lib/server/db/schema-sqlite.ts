@@ -15,7 +15,8 @@ export const user = sqliteTable('user', {
 	role: text('role').default('user'),
 	banned: integer('banned', { mode: 'boolean' }).default(false),
 	banReason: text('ban_reason'),
-	banExpires: integer('ban_expires', { mode: 'timestamp' })
+	banExpires: integer('ban_expires', { mode: 'timestamp' }),
+	twoFactorEnabled: integer('two_factor_enabled', { mode: 'boolean' }).default(false)
 });
 
 export const session = sqliteTable('session', {
@@ -57,6 +58,34 @@ export const verification = sqliteTable('verification', {
 	expiresAt: integer('expires_at', { mode: 'timestamp' }).notNull(),
 	createdAt: integer('created_at', { mode: 'timestamp' }),
 	updatedAt: integer('updated_at', { mode: 'timestamp' })
+});
+
+// ---------------------------------------------------------------------------
+// Better-Auth Passkey (WebAuthn) & Two-Factor (2FA) Tables (SQLite / Turso)
+// ---------------------------------------------------------------------------
+
+export const passkey = sqliteTable('passkey', {
+	id: text('id').primaryKey(),
+	name: text('name'),
+	publicKey: text('public_key').notNull(),
+	userId: text('user_id')
+		.notNull()
+		.references(() => user.id, { onDelete: 'cascade' }),
+	credentialID: text('credential_id').notNull(),
+	counter: integer('counter').notNull().default(0),
+	deviceType: text('device_type').notNull().default('singleDevice'),
+	backedUp: integer('backed_up', { mode: 'boolean' }).notNull().default(false),
+	transports: text('transports'),
+	createdAt: integer('created_at', { mode: 'timestamp' }).notNull()
+});
+
+export const twoFactor = sqliteTable('two_factor', {
+	id: text('id').primaryKey(),
+	secret: text('secret').notNull(),
+	backupCodes: text('backup_codes').notNull(),
+	userId: text('user_id')
+		.notNull()
+		.references(() => user.id, { onDelete: 'cascade' })
 });
 
 // ---------------------------------------------------------------------------
@@ -122,11 +151,11 @@ export const subscription = sqliteTable('subscription', {
 		.notNull()
 		.references(() => user.id, { onDelete: 'cascade' }),
 	polarId: text('polar_id').unique(),
-	status: text('status').notNull().default('incomplete'),
+	status: text('status').notNull().default('incomplete'), // 'active' | 'canceled' | 'past_due' | 'trialing' | 'incomplete'
 	priceId: text('price_id'),
 	productId: text('product_id'),
-	tier: text('tier').notNull().default('free'),
-	interval: text('interval'),
+	tier: text('tier').notNull().default('free'), // e.g. 'free' | 'pro' | 'enterprise'
+	interval: text('interval'), // 'month' | 'year'
 	currentPeriodEnd: integer('current_period_end', { mode: 'timestamp' }),
 	cancelAtPeriodEnd: integer('cancel_at_period_end', { mode: 'boolean' }).notNull().default(false),
 	createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),

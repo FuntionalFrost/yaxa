@@ -1,8 +1,11 @@
 <script lang="ts">
 	import Badge from '$lib/components/elements/Badge.svelte';
 	import Card from '$lib/components/layout/Card.svelte';
+	import Button from '$lib/components/elements/Button.svelte';
 	import Tabs from '$lib/components/navigation/Tabs.svelte';
 	import AuthCard from '$lib/components/saas/AuthCard.svelte';
+	import PasskeyUI from '$lib/components/saas/PasskeyUI.svelte';
+	import TwoFactorModal from '$lib/components/saas/TwoFactorModal.svelte';
 	import UserMenu from '$lib/components/saas/UserMenu.svelte';
 	import PricingTable from '$lib/components/saas/PricingTable.svelte';
 	import SubscriptionCard from '$lib/components/saas/SubscriptionCard.svelte';
@@ -13,6 +16,7 @@
 	import CodeBlock from '$lib/components/elements/CodeBlock.svelte';
 
 	let activeDemo = $state('auth');
+	let show2FAModal = $state(false);
 
 	let demoOrgId = $state('org-1');
 	const demoOrgs: OrgItem[] = [
@@ -47,10 +51,12 @@
 
 	const demoTabs = [
 		{ value: 'auth', label: 'Auth Card' },
+		{ value: 'passkey', label: 'Passkeys' },
+		{ value: 'two-factor', label: '2FA Modal' },
 		{ value: 'org-switcher', label: 'Org Switcher' },
 		{ value: 'notifications', label: 'Notifications' },
 		{ value: 'pricing', label: 'Pricing Table' },
-		{ value: 'subscription', label: 'Subscription Widget' },
+		{ value: 'subscription', label: 'Subscription' },
 		{ value: 'user-menu', label: 'User Menu' }
 	];
 
@@ -71,7 +77,11 @@ import { createYaxaHook, createYaxaAuth, createYaxaAuthHook } from 'yaxa-svelte/
 import { siteConfig } from './site.config';
 
 const yaxaHook = createYaxaHook(siteConfig);
-const auth = createYaxaAuth();
+const auth = createYaxaAuth({
+  passkey: { enabled: true },
+  twoFactor: { enabled: true, issuer: 'My SaaS' }
+});
+
 const authHook = createYaxaAuthHook({
   auth,
   protectedPaths: ['/dashboard', '/settings', '/billing'],
@@ -92,13 +102,13 @@ export const POST = createPolarWebhookHandler({
 `;
 
 	const subpathsSnippet = `// 1. Core UI Components & Headless Actions (Zero Backend Overhead)
-import { Button, Modal, UserMenu, useToast, useColorMode } from 'yaxa-svelte';
+import { Button, Modal, UserMenu, useToast, useColorMode, springTilt } from 'yaxa-svelte';
 
-// 2. Full-Stack Client Auth (Better-Auth Runes & Cards)
-import { useAuth, AuthCard } from 'yaxa-svelte/auth';
+// 2. Full-Stack Client Auth (Passkeys, 2FA, & Polymorphic AuthCards)
+import { useAuth, AuthCard, PasskeyUI, TwoFactorModal } from 'yaxa-svelte/auth';
 
-// 3. SvelteKit Server Hooks, Auth Factory & SEO Handlers
-import { createYaxaHook, createYaxaAuth, createYaxaAuthHook } from 'yaxa-svelte/server';
+// 3. SvelteKit Server Hooks, Auth Factory, Pagination & SEO Handlers
+import { createYaxaHook, createYaxaAuth, createYaxaAuthHook, parseDataTableQuery } from 'yaxa-svelte/server';
 
 // 4. Drizzle ORM Database Schema & Client
 import { getDb, schemaPg, schemaSqlite } from 'yaxa-svelte/db';
@@ -125,7 +135,9 @@ import { createPresignedUploadUrl } from 'yaxa-svelte/storage';
 			Everything a solo developer needs to ship a paid SaaS in record time: <strong
 				>Better-Auth</strong
 			>
-			authentication, switchable <strong>Drizzle ORM</strong> (Neon PostgreSQL or Turso LibSQL),
+			authentication (including Passkeys/WebAuthn and TOTP 2FA), switchable
+			<strong>Drizzle ORM</strong>
+			(Neon PostgreSQL or Turso LibSQL),
 			<strong>Polar.sh</strong>
 			payments & subscriptions, <strong>Resend</strong> transactional emails, and drop-in Svelte 5 runes
 			components.
@@ -153,7 +165,21 @@ import { createPresignedUploadUrl } from 'yaxa-svelte/storage';
 		>
 			{#if activeDemo === 'auth'}
 				<div class="w-full max-w-md">
-					<AuthCard showSocial={true} showMagicLinkToggle={true} />
+					<AuthCard showSocial={true} showMagicLinkToggle={true} showPasskey={true} />
+				</div>
+			{:else if activeDemo === 'passkey'}
+				<div class="w-full max-w-md">
+					<PasskeyUI mode="card" />
+				</div>
+			{:else if activeDemo === 'two-factor'}
+				<div class="flex flex-col items-center justify-center gap-4 p-8 text-center">
+					<div class="text-xs text-neutral-500 dark:text-neutral-400">
+						3-step Turnkey TOTP Two-Factor Enrollment Modal paired with InputOTP
+					</div>
+					<Button variant="solid" color="primary" onclick={() => (show2FAModal = true)}>
+						Open 2FA Setup Modal
+					</Button>
+					<TwoFactorModal bind:open={show2FAModal} />
 				</div>
 			{:else if activeDemo === 'org-switcher'}
 				<div class="flex flex-col items-center justify-center gap-4 p-8 text-center">

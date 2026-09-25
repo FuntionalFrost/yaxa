@@ -22,7 +22,9 @@
 				default:
 					'border-neutral-300 focus-within:border-primary-500 focus-within:ring-primary-500/20 dark:border-neutral-700',
 				error:
-					'border-rose-500 text-rose-900 focus-within:border-rose-500 focus-within:ring-rose-500/20 dark:text-rose-100'
+					'border-rose-500 text-rose-900 focus-within:border-rose-500 focus-within:ring-rose-500/20 dark:text-rose-100',
+				success:
+					'border-emerald-500 focus-within:border-emerald-500 focus-within:ring-emerald-500/20 dark:border-emerald-500'
 			}
 		},
 		defaultVariants: {
@@ -32,6 +34,7 @@
 	});
 
 	export type MultiSelectProps = VariantProps<typeof multiSelectVariants> & {
+		id?: string;
 		values?: string[];
 		options?: MultiSelectOption[];
 		placeholder?: string;
@@ -40,6 +43,8 @@
 		disabled?: boolean;
 		clearable?: boolean;
 		name?: string;
+		'aria-label'?: string;
+		ariaLabel?: string;
 		class?: string;
 	};
 </script>
@@ -48,8 +53,10 @@
 	import { Popover } from 'bits-ui';
 	import Icon from '../elements/Icon.svelte';
 	import Badge from '../elements/Badge.svelte';
+	import { getFormFieldContext } from './form-context';
 
 	let {
+		id,
 		values = $bindable([]),
 		options = [],
 		placeholder = 'Select options...',
@@ -58,10 +65,25 @@
 		disabled = false,
 		clearable = true,
 		name,
+		'aria-label': ariaLabelAttr,
+		ariaLabel,
 		size = 'md',
 		status = 'default',
 		class: className = ''
 	}: MultiSelectProps = $props();
+
+	const fieldCtx = getFormFieldContext();
+
+	let effectiveId = $derived(id ?? fieldCtx?.id);
+	let effectiveName = $derived(name ?? fieldCtx?.name);
+	let effectiveStatus = $derived(status !== 'default' ? status : (fieldCtx?.status ?? 'default'));
+	let ariaInvalid = $derived(effectiveStatus === 'error' || Boolean(fieldCtx?.error));
+	let ariaDescribedBy = $derived(
+		[fieldCtx?.descriptionId, fieldCtx?.errorId].filter(Boolean).join(' ') || undefined
+	);
+	let effectiveAriaLabel = $derived(
+		ariaLabelAttr || ariaLabel || fieldCtx?.name || placeholder || 'MultiSelect'
+	);
 
 	let open = $state(false);
 	let searchQuery = $state('');
@@ -111,16 +133,16 @@
 	}
 </script>
 
-{#if name}
-	{#each values as val}
-		<input type="hidden" {name} value={val} />
+{#if effectiveName}
+	{#each values as val (val)}
+		<input type="hidden" name={effectiveName} value={val} />
 	{/each}
 {/if}
 
 <Popover.Root bind:open>
-	<div class={multiSelectVariants({ size, status, class: className })}>
+	<div class={multiSelectVariants({ size, status: effectiveStatus, class: className })}>
 		<!-- Selected Chips -->
-		{#each selectedOptions as opt}
+		{#each selectedOptions as opt (opt.value)}
 			<Badge variant="subtle" color="primary" size={size === 'sm' ? 'xs' : 'sm'} class="shrink-0">
 				{#if opt.icon}
 					<Icon name={opt.icon} size="xs" class="mr-1" />
@@ -140,10 +162,14 @@
 		{/each}
 
 		<Popover.Trigger
+			id={effectiveId}
 			{disabled}
 			class="flex min-w-[120px] flex-1 items-center justify-between text-left focus:outline-none"
 			aria-haspopup="listbox"
 			aria-expanded={open}
+			aria-label={effectiveAriaLabel}
+			aria-invalid={ariaInvalid || undefined}
+			aria-describedby={ariaDescribedBy}
 		>
 			<span class="truncate text-xs text-neutral-400 dark:text-neutral-500">
 				{values.length === 0 ? placeholder : ''}
@@ -198,7 +224,7 @@
 						No options match "{searchQuery}".
 					</div>
 				{:else}
-					{#each filteredOptions as option}
+					{#each filteredOptions as option (option.value)}
 						{@const isSelected = values.includes(option.value)}
 						{@const isMaxReached = Boolean(max && values.length >= max && !isSelected)}
 

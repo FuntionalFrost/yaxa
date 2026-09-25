@@ -13,7 +13,9 @@
 				default:
 					'border-neutral-300 focus-within:border-primary-500 focus-within:ring-primary-500/20 dark:border-neutral-700',
 				error:
-					'border-rose-500 text-rose-900 focus-within:border-rose-500 focus-within:ring-rose-500/20 dark:text-rose-100'
+					'border-rose-500 text-rose-900 focus-within:border-rose-500 focus-within:ring-rose-500/20 dark:text-rose-100',
+				success:
+					'border-emerald-500 focus-within:border-emerald-500 focus-within:ring-emerald-500/20 dark:border-emerald-500'
 			}
 		},
 		defaultVariants: {
@@ -42,6 +44,7 @@
 
 <script lang="ts">
 	import Icon from '../elements/Icon.svelte';
+	import { getFormFieldContext } from './form-context';
 
 	let {
 		id,
@@ -61,6 +64,19 @@
 		status = 'default',
 		class: className = ''
 	}: NumberInputProps = $props();
+
+	const fieldCtx = getFormFieldContext();
+
+	let effectiveId = $derived(id ?? fieldCtx?.id);
+	let effectiveName = $derived(name ?? fieldCtx?.name);
+	let effectiveStatus = $derived(status !== 'default' ? status : (fieldCtx?.status ?? 'default'));
+	let ariaInvalid = $derived(effectiveStatus === 'error' || Boolean(fieldCtx?.error));
+	let ariaDescribedBy = $derived(
+		[fieldCtx?.descriptionId, fieldCtx?.errorId].filter(Boolean).join(' ') || undefined
+	);
+	let effectiveAriaLabel = $derived(
+		ariaLabelAttr || ariaLabel || label || placeholder || fieldCtx?.name || 'Number input'
+	);
 
 	function clamp(val: number): number {
 		let res = val;
@@ -99,7 +115,7 @@
 	}
 </script>
 
-<div class={numberInputVariants({ size, status, class: className })}>
+<div class={numberInputVariants({ size, status: effectiveStatus, class: className })}>
 	<!-- Decrement Button -->
 	<button
 		type="button"
@@ -118,16 +134,18 @@
 		{/if}
 
 		<input
-			id={id || name}
+			id={effectiveId}
 			type="number"
-			name={name || id || 'number-input'}
+			name={effectiveName}
 			{min}
 			{max}
 			{step}
 			{disabled}
 			{placeholder}
 			{value}
-			aria-label={ariaLabelAttr || ariaLabel || label || placeholder || name || 'Number input'}
+			aria-label={effectiveAriaLabel}
+			aria-invalid={ariaInvalid || undefined}
+			aria-describedby={ariaDescribedBy}
 			oninput={handleInput}
 			onkeydown={handleKeydown}
 			class="w-full [appearance:textfield] bg-transparent text-center font-mono focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"

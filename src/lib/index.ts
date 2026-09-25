@@ -18,12 +18,21 @@ export type { SkeletonProps } from './components/elements/Skeleton.svelte';
 export { default as Link } from './components/elements/Link.svelte';
 export { default as Logo } from './components/elements/Logo.svelte';
 export { default as DataTable } from './components/elements/DataTable.svelte';
-export type { Column } from './components/elements/DataTable.svelte';
+export type { Column, DataTablePaginateEvent } from './components/elements/DataTable.svelte';
 export { default as Chip } from './components/elements/Chip.svelte';
 export { default as Meter } from './components/elements/Meter.svelte';
 export { default as MetricCard } from './components/elements/MetricCard.svelte';
 export { default as CodeBlock, tokenizeCode } from './components/elements/CodeBlock.svelte';
 export type { CodeBlockProps } from './components/elements/CodeBlock.svelte';
+export { default as CodeDiff, computeDiff } from './components/elements/CodeDiff.svelte';
+export type {
+	CodeDiffProps,
+	DiffViewMode,
+	DiffLineType,
+	UnifiedDiffLine,
+	SplitDiffRow,
+	SplitDiffSide
+} from './components/elements/CodeDiff.svelte';
 export { default as SortableList } from './components/elements/SortableList.svelte';
 export type { SortableListProps } from './components/elements/SortableList.svelte';
 export { default as EmptyState, emptyStateVariants } from './components/elements/EmptyState.svelte';
@@ -69,10 +78,21 @@ export type { BarChartProps, BarSeries } from './components/charts/BarChart.svel
 export { default as DonutChart } from './components/charts/DonutChart.svelte';
 export type { DonutChartProps, DonutDataItem } from './components/charts/DonutChart.svelte';
 
-// Form Controls
+// Form Controls & Superforms Context
 export { default as Form } from './components/forms/Form.svelte';
 export type { FormSchema } from './components/forms/Form.svelte';
 export { default as FormField } from './components/forms/FormField.svelte';
+export {
+	setFormContext,
+	getFormContext,
+	setFormFieldContext,
+	getFormFieldContext
+} from './components/forms/form-context';
+export type {
+	SuperFormContract,
+	FormContextValue,
+	FormFieldContextValue
+} from './components/forms/form-context';
 export { default as Input } from './components/forms/Input.svelte';
 export type { InputProps } from './components/forms/Input.svelte';
 export { default as InputOTP } from './components/forms/InputOTP.svelte';
@@ -172,15 +192,21 @@ export {
 	clickOutside,
 	portal,
 	infiniteScroll as infiniteScrollAction,
-	sortableItem
+	sortableItem,
+	springTilt
 } from './actions';
 export type {
 	AutosizeOptions,
 	ClickOutsideOptions,
 	PortalOptions,
 	InfiniteScrollActionOptions,
-	SortableItemOptions
+	SortableItemOptions,
+	SpringTiltOptions
 } from './actions';
+
+// Motion & Physics Transitions
+export { staggerFly, smoothSlide } from './motion/transitions';
+export type { StaggerFlyOptions, SmoothSlideOptions } from './motion/transitions';
 
 // Composables & Runes (Nuxt UI v4 Composables Parity)
 export { useClipboard } from './composables/useClipboard.svelte';
@@ -205,6 +231,8 @@ export {
 export type { UseLocaleOptions, TextDirection } from './composables/useLocale.svelte';
 export { Sortable, useSortable } from './composables/useSortable.svelte';
 export type { UseSortableOptions } from './composables/useSortable.svelte';
+export { useDataTable } from './composables/useDataTable.svelte';
+export type { UseDataTableOptions, DataTableStore } from './composables/useDataTable.svelte';
 export { useFormAction } from './composables/useFormAction.svelte';
 export type { UseFormActionOptions } from './composables/useFormAction.svelte';
 export { useIdle } from './composables/useIdle.svelte';
@@ -295,10 +323,17 @@ export type { OrgSwitcherProps, OrgItem } from './components/saas/OrgSwitcher.sv
 export { default as PricingCard } from './components/saas/PricingCard.svelte';
 export { default as PricingTable } from './components/saas/PricingTable.svelte';
 export { default as SubscriptionCard } from './components/saas/SubscriptionCard.svelte';
+export { default as AuthCard } from './components/saas/AuthCard.svelte';
+export type { AuthCardMode } from './components/saas/AuthCard.svelte';
+export { default as PasskeyUI, passkeyUiVariants } from './components/saas/PasskeyUI.svelte';
+export type { PasskeyUiProps } from './components/saas/PasskeyUI.svelte';
+export { default as TwoFactorModal } from './components/saas/TwoFactorModal.svelte';
 export { useGate } from './composables/useGate.svelte';
 export type { UseGateOptions } from './composables/useGate.svelte';
 export { useUpload } from './composables/useUpload.svelte';
 export type { UseUploadOptions, UploadResult } from './composables/useUpload.svelte';
+export { useAuth } from './composables/useAuth.svelte';
+export type { UseAuthOptions, SocialProvider, PasskeyInfo } from './composables/useAuth.svelte';
 
 // Pre-Built SaaS Blocks
 export {

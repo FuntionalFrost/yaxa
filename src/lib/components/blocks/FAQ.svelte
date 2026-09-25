@@ -25,6 +25,7 @@
 <script lang="ts">
 	import Icon from '../elements/Icon.svelte';
 	import Badge from '../elements/Badge.svelte';
+	import { smoothSlide } from '../../motion/transitions';
 
 	let {
 		title = 'Frequently Asked Questions',
@@ -120,14 +121,15 @@
 					<Icon
 						name="chevron-down"
 						size="sm"
-						class="ml-4 shrink-0 text-neutral-400 transition-transform duration-200 {isOpen
-							? 'rotate-180'
+						class="ml-4 shrink-0 text-neutral-400 transition-transform duration-250 ease-out {isOpen
+							? 'rotate-180 text-primary-600 dark:text-primary-400'
 							: ''}"
 					/>
 				</button>
 
 				{#if isOpen}
 					<div
+						transition:smoothSlide={{ duration: 220 }}
 						class="border-t border-neutral-100/60 px-5 pt-3 pb-5 text-xs leading-relaxed text-neutral-600 dark:border-neutral-800/60 dark:text-neutral-400"
 					>
 						{item.answer}

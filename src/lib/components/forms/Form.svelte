@@ -2,6 +2,7 @@
 	import type { Snippet } from 'svelte';
 	import type { ZodSchema } from 'zod';
 	import Alert from '../overlays/Alert.svelte';
+	import { setFormContext, type SuperFormContract } from './form-context';
 
 	export interface FormSchema<T = any> {
 		parse?: (data: unknown) => T;
@@ -13,6 +14,7 @@
 	interface Props {
 		schema?: FormSchema | ZodSchema | any;
 		values?: Record<string, any>;
+		superform?: SuperFormContract;
 		loading?: boolean;
 		errorSummary?: boolean;
 		class?: string;
@@ -23,6 +25,7 @@
 	let {
 		schema,
 		values = {},
+		superform,
 		loading = false,
 		errorSummary = false,
 		class: className = '',
@@ -32,7 +35,69 @@
 
 	let errors = $state<Record<string, string>>({});
 	let isSubmitting = $state(false);
-	let isBusy = $derived(loading || isSubmitting);
+
+	// Safe store/getter reader
+	function getVal(target: any) {
+		if (!target) return undefined;
+		if (typeof target === 'function') {
+			try {
+				return target();
+			} catch {
+				return undefined;
+			}
+		}
+		if (typeof target === 'object' && 'subscribe' in target) {
+			let val: any;
+			const unsub = target.subscribe((v: any) => {
+				val = v;
+			});
+			unsub?.();
+			return val;
+		}
+		return target.value ?? target;
+	}
+
+	let sfErrors = $derived(getVal(superform?.errors) || {});
+	let sfConstraints = $derived(getVal(superform?.constraints) || {});
+	let sfTainted = $derived(getVal(superform?.tainted) || {});
+	let sfSubmitting = $derived(Boolean(getVal(superform?.submitting) || getVal(superform?.delayed)));
+
+	let isBusy = $derived(loading || isSubmitting || sfSubmitting);
+
+	function getFieldError(name: string): string | undefined {
+		if (errors[name]) return errors[name];
+		const sfErr = sfErrors[name];
+		if (!sfErr) return undefined;
+		if (Array.isArray(sfErr)) return sfErr[0];
+		if (typeof sfErr === 'string') return sfErr;
+		if (typeof sfErr === 'object' && sfErr._errors && Array.isArray(sfErr._errors)) {
+			return sfErr._errors[0];
+		}
+		return String(sfErr);
+	}
+
+	function getFieldConstraint(name: string): Record<string, any> | undefined {
+		return sfConstraints[name];
+	}
+
+	function isFieldTainted(name: string): boolean {
+		return Boolean(sfTainted[name]);
+	}
+
+	setFormContext({
+		get superform() {
+			return superform;
+		},
+		get errors() {
+			return errors;
+		},
+		getFieldError,
+		getFieldConstraint,
+		isFieldTainted,
+		get isSubmitting() {
+			return isBusy;
+		}
+	});
 
 	function validate() {
 		if (!schema) return true;
@@ -74,6 +139,11 @@
 	}
 
 	async function handleSubmit(e: SubmitEvent) {
+		if (superform?.enhance) {
+			// Superforms enhance handles submission
+			return;
+		}
+
 		e.preventDefault();
 		if (!validate()) {
 			return;
@@ -88,19 +158,39 @@
 			}
 		}
 	}
+
+	function enhanceAction(node: HTMLFormElement) {
+		if (superform?.enhance && typeof superform.enhance === 'function') {
+			return superform.enhance(node);
+		}
+	}
+
+	let summaryErrors = $derived.by(() => {
+		const list: string[] = [];
+		for (const k of Object.keys(errors)) {
+			if (errors[k]) list.push(errors[k]);
+		}
+		for (const k of Object.keys(sfErrors)) {
+			const val = sfErrors[k];
+			if (Array.isArray(val) && val.length > 0) list.push(val[0]);
+			else if (typeof val === 'string') list.push(val);
+		}
+		return list;
+	});
 </script>
 
 <form
+	use:enhanceAction
 	onsubmit={handleSubmit}
 	aria-busy={isBusy}
 	class="space-y-4 {className} {isBusy ? 'pointer-events-none opacity-80' : ''}"
 	novalidate
 >
-	{#if errorSummary && Object.keys(errors).length > 0}
+	{#if errorSummary && summaryErrors.length > 0}
 		<Alert
 			color="error"
 			title="Please correct the following errors:"
-			description={Object.values(errors).join(' · ')}
+			description={summaryErrors.join(' · ')}
 		/>
 	{/if}
 

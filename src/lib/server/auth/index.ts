@@ -1,6 +1,6 @@
 import { betterAuth, type BetterAuthOptions } from 'better-auth';
 import { drizzleAdapter } from 'better-auth/adapters/drizzle';
-import { organization } from 'better-auth/plugins';
+import { organization, twoFactor } from 'better-auth/plugins';
 import { schemaPg, schemaSqlite, getDb, type AnyDb } from '../db';
 
 export interface YaxaAuthConfig {
@@ -13,6 +13,20 @@ export interface YaxaAuthConfig {
 		allowUserToCreateOrganization?: boolean;
 		creatorRole?: 'owner' | 'admin';
 		membershipLimit?: number;
+	};
+	passkey?: {
+		enabled?: boolean;
+		rpID?: string;
+		rpName?: string;
+		origin?: string;
+	};
+	twoFactor?: {
+		enabled?: boolean;
+		issuer?: string;
+		otpOptions?: {
+			digits?: number;
+			period?: number;
+		};
 	};
 	socialProviders?: {
 		github?: {
@@ -31,6 +45,8 @@ export interface YaxaAuthConfig {
 	emailAndPassword?: {
 		enabled: boolean;
 		requireEmailVerification?: boolean;
+		sendResetPassword?: (data: { user: any; url: string; token: string }) => Promise<void>;
+		sendEmailVerification?: (data: { user: any; url: string; token: string }) => Promise<void>;
 	};
 	magicLink?: {
 		enabled: boolean;
@@ -39,7 +55,7 @@ export interface YaxaAuthConfig {
 }
 
 /**
- * Creates and initializes a Better-Auth instance pre-configured for Yaxa, Drizzle, and Multi-Tenant Organizations.
+ * Creates and initializes a Better-Auth instance pre-configured for Yaxa, Drizzle, Multi-Tenant Organizations, and 2FA.
  */
 export function createYaxaAuth(config: YaxaAuthConfig = {}) {
 	const driver =
@@ -51,13 +67,22 @@ export function createYaxaAuth(config: YaxaAuthConfig = {}) {
 
 	const database = config.db || getDb({ driver });
 
-	const plugins = [];
+	const plugins: any[] = [];
 	if (config.organization?.enabled ?? true) {
 		plugins.push(
 			organization({
 				allowUserToCreateOrganization: config.organization?.allowUserToCreateOrganization ?? true,
 				creatorRole: config.organization?.creatorRole ?? 'owner',
 				membershipLimit: config.organization?.membershipLimit
+			})
+		);
+	}
+
+	if (config.twoFactor?.enabled ?? true) {
+		plugins.push(
+			twoFactor({
+				issuer: config.twoFactor?.issuer || 'Yaxa App',
+				otpOptions: config.twoFactor?.otpOptions
 			})
 		);
 	}
@@ -80,7 +105,8 @@ export function createYaxaAuth(config: YaxaAuthConfig = {}) {
 		plugins,
 		emailAndPassword: {
 			enabled: config.emailAndPassword?.enabled ?? true,
-			requireEmailVerification: config.emailAndPassword?.requireEmailVerification ?? false
+			requireEmailVerification: config.emailAndPassword?.requireEmailVerification ?? false,
+			sendResetPassword: config.emailAndPassword?.sendResetPassword
 		},
 		socialProviders: {
 			...(config.socialProviders?.github

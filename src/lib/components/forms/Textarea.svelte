@@ -45,8 +45,11 @@
 
 <script lang="ts">
 	import { autosize as autosizeAction } from '$lib/actions/autosize';
+	import { getFormFieldContext } from './form-context';
 
 	let {
+		id,
+		name,
 		value = $bindable(''),
 		rows = 4,
 		maxlength,
@@ -60,31 +63,49 @@
 		...restProps
 	}: TextareaProps = $props();
 
+	const fieldCtx = getFormFieldContext();
+
+	let effectiveId = $derived(id ?? fieldCtx?.id);
+	let effectiveName = $derived(name ?? fieldCtx?.name);
+	let effectiveStatus = $derived(status !== 'default' ? status : (fieldCtx?.status ?? 'default'));
+	let ariaInvalid = $derived(effectiveStatus === 'error' || Boolean(fieldCtx?.error));
+	let ariaDescribedBy = $derived(
+		[fieldCtx?.descriptionId, fieldCtx?.errorId].filter(Boolean).join(' ') || undefined
+	);
+
 	let charCount = $derived(value ? value.length : 0);
 </script>
 
 <div class="relative w-full">
 	{#if autosize}
 		<textarea
+			id={effectiveId}
+			name={effectiveName}
 			bind:value
 			rows={1}
 			{maxlength}
+			aria-invalid={ariaInvalid || undefined}
+			aria-describedby={ariaDescribedBy}
 			use:autosizeAction={{ maxHeight }}
 			class={textareaVariants({
 				size,
-				status,
+				status: effectiveStatus,
 				resize: 'none',
 				class: className
 			})}
 			{...restProps}></textarea>
 	{:else}
 		<textarea
+			id={effectiveId}
+			name={effectiveName}
 			bind:value
 			{rows}
 			{maxlength}
+			aria-invalid={ariaInvalid || undefined}
+			aria-describedby={ariaDescribedBy}
 			class={textareaVariants({
 				size,
-				status,
+				status: effectiveStatus,
 				resize,
 				class: className
 			})}

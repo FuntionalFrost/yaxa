@@ -1,4 +1,4 @@
-import { pgTable, text, timestamp, boolean } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, boolean, integer } from 'drizzle-orm/pg-core';
 
 // ---------------------------------------------------------------------------
 // Better-Auth Core Tables (PostgreSQL)
@@ -15,7 +15,8 @@ export const user = pgTable('user', {
 	role: text('role').default('user'),
 	banned: boolean('banned').default(false),
 	banReason: text('ban_reason'),
-	banExpires: timestamp('ban_expires', { mode: 'date' })
+	banExpires: timestamp('ban_expires', { mode: 'date' }),
+	twoFactorEnabled: boolean('two_factor_enabled').default(false)
 });
 
 export const session = pgTable('session', {
@@ -57,6 +58,34 @@ export const verification = pgTable('verification', {
 	expiresAt: timestamp('expires_at', { mode: 'date' }).notNull(),
 	createdAt: timestamp('created_at', { mode: 'date' }),
 	updatedAt: timestamp('updated_at', { mode: 'date' })
+});
+
+// ---------------------------------------------------------------------------
+// Better-Auth Passkey (WebAuthn) & Two-Factor (2FA) Tables (PostgreSQL)
+// ---------------------------------------------------------------------------
+
+export const passkey = pgTable('passkey', {
+	id: text('id').primaryKey(),
+	name: text('name'),
+	publicKey: text('public_key').notNull(),
+	userId: text('user_id')
+		.notNull()
+		.references(() => user.id, { onDelete: 'cascade' }),
+	credentialID: text('credential_id').notNull(),
+	counter: integer('counter').notNull().default(0),
+	deviceType: text('device_type').notNull().default('singleDevice'),
+	backedUp: boolean('backed_up').notNull().default(false),
+	transports: text('transports'),
+	createdAt: timestamp('created_at', { mode: 'date' }).notNull()
+});
+
+export const twoFactor = pgTable('two_factor', {
+	id: text('id').primaryKey(),
+	secret: text('secret').notNull(),
+	backupCodes: text('backup_codes').notNull(),
+	userId: text('user_id')
+		.notNull()
+		.references(() => user.id, { onDelete: 'cascade' })
 });
 
 // ---------------------------------------------------------------------------

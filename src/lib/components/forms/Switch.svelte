@@ -37,6 +37,7 @@
 		description?: string;
 		disabled?: boolean;
 		name?: string;
+		status?: 'default' | 'error' | 'success';
 		'aria-label'?: string;
 		ariaLabel?: string;
 		class?: string;
@@ -46,6 +47,7 @@
 
 <script lang="ts">
 	import { Switch } from 'bits-ui';
+	import { getFormFieldContext } from './form-context';
 
 	let {
 		id,
@@ -55,24 +57,41 @@
 		description,
 		disabled = false,
 		name,
+		status = 'default',
 		'aria-label': ariaLabelAttr,
 		ariaLabel,
 		class: className = '',
 		children
 	}: SwitchProps = $props();
+
+	const fieldCtx = getFormFieldContext();
+
+	let effectiveId = $derived(id ?? fieldCtx?.id);
+	let effectiveName = $derived(name ?? fieldCtx?.name);
+	let effectiveStatus = $derived(status !== 'default' ? status : (fieldCtx?.status ?? 'default'));
+	let ariaInvalid = $derived(effectiveStatus === 'error' || Boolean(fieldCtx?.error));
+	let ariaDescribedBy = $derived(
+		[fieldCtx?.descriptionId, fieldCtx?.errorId].filter(Boolean).join(' ') || undefined
+	);
+	let effectiveAriaLabel = $derived(
+		ariaLabelAttr || ariaLabel || label || fieldCtx?.name || 'Switch'
+	);
 </script>
 
 <label
+	for={effectiveId}
 	class="inline-flex items-start gap-3 select-none {disabled
 		? 'cursor-not-allowed opacity-60'
 		: 'cursor-pointer'} {className}"
 >
 	<Switch.Root
-		id={id || name}
+		id={effectiveId}
 		bind:checked
 		{disabled}
-		{name}
-		aria-label={ariaLabelAttr || ariaLabel || label}
+		name={effectiveName}
+		aria-label={effectiveAriaLabel}
+		aria-invalid={ariaInvalid || undefined}
+		aria-describedby={ariaDescribedBy}
 		class={switchVariants({ size })}
 	>
 		<Switch.Thumb class={thumbVariants({ size })} />

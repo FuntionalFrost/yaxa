@@ -11,6 +11,14 @@
 		maxWidth?: number;
 		class?: string;
 	}
+
+	export interface DataTablePaginateEvent {
+		page: number;
+		pageSize: number;
+		sortKey?: string;
+		sortOrder: 'asc' | 'desc';
+		searchQuery: string;
+	}
 </script>
 
 <script lang="ts" generics="T extends Record<string, any>">
@@ -24,6 +32,8 @@
 	interface Props {
 		data: T[];
 		columns: Column<T>[];
+		mode?: 'client' | 'server';
+		totalRows?: number;
 		loading?: boolean;
 		selectable?: boolean;
 		selected?: T[];
@@ -36,8 +46,13 @@
 		pageSize?: number;
 		page?: number;
 		pageSizeOptions?: number[];
+		sortKey?: string | null;
+		sortOrder?: 'asc' | 'desc';
 		emptyText?: string;
 		class?: string;
+		onpaginate?: (event: DataTablePaginateEvent) => void;
+		onsort?: (event: { sortKey: string; sortOrder: 'asc' | 'desc' }) => void;
+		onsearch?: (query: string) => void;
 		cell?: Snippet<[T, Column<T>]>;
 		empty?: Snippet;
 		bulkActions?: Snippet<[{ selected: T[]; clearSelection: () => void }]>;
@@ -47,6 +62,8 @@
 	let {
 		data = [],
 		columns = [],
+		mode = 'client',
+		totalRows,
 		loading = false,
 		selectable = false,
 		selected = $bindable([]),
@@ -59,16 +76,19 @@
 		pageSize = $bindable(10),
 		page = $bindable(1),
 		pageSizeOptions = [10, 25, 50, 100],
+		sortKey = $bindable<string | null>(null),
+		sortOrder = $bindable<'asc' | 'desc'>('asc'),
 		emptyText = 'No data available',
 		class: className = '',
+		onpaginate,
+		onsort,
+		onsearch,
 		cell,
 		empty,
 		bulkActions,
 		toolbar
 	}: Props = $props();
 
-	let sortKey = $state<string | null>(null);
-	let sortOrder = $state<'asc' | 'desc'>('asc');
 	let customWidths = $state<Record<string, number>>({});
 	let hiddenKeys = $state<string[]>([]);
 
@@ -85,13 +105,47 @@
 		return { ...widths, ...customWidths };
 	});
 
+	function emitPaginate() {
+		onpaginate?.({
+			page,
+			pageSize,
+			sortKey: sortKey || undefined,
+			sortOrder,
+			searchQuery
+		});
+	}
+
 	function handleSort(key: string) {
+		let newOrder: 'asc' | 'desc' = 'asc';
 		if (sortKey === key) {
-			sortOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-		} else {
-			sortKey = key;
-			sortOrder = 'asc';
+			newOrder = sortOrder === 'asc' ? 'desc' : 'asc';
 		}
+		sortKey = key;
+		sortOrder = newOrder;
+
+		onsort?.({ sortKey: key, sortOrder: newOrder });
+		emitPaginate();
+	}
+
+	function handleSearchInput(e: Event) {
+		const val = (e.target as HTMLInputElement).value;
+		searchQuery = val;
+		if (mode === 'server') {
+			page = 1;
+			onsearch?.(val);
+			emitPaginate();
+		}
+	}
+
+	function handlePageChange(newPage: number) {
+		page = newPage;
+		emitPaginate();
+	}
+
+	function handlePageSizeChange(newSize: number) {
+		pageSize = newSize;
+		page = 1;
+		emitPaginate();
 	}
 
 	function startColumnResize(columnKey: string, e: MouseEvent | TouchEvent) {
@@ -125,6 +179,10 @@
 	}
 
 	let filteredData = $derived.by(() => {
+		if (mode === 'server') {
+			return data;
+		}
+
 		let result = [...data];
 
 		// Filter by search query
@@ -155,10 +213,16 @@
 		return result;
 	});
 
+	// Total count: server totalRows or client filtered count
+	let effectiveTotalCount = $derived(
+		mode === 'server' ? (totalRows ?? data.length) : filteredData.length
+	);
+
 	// Pagination calculation
-	let totalPages = $derived(Math.max(1, Math.ceil(filteredData.length / pageSize)));
+	let totalPages = $derived(Math.max(1, Math.ceil(effectiveTotalCount / pageSize)));
+
 	let paginatedData = $derived.by(() => {
-		if (!pagination) return filteredData;
+		if (!pagination || mode === 'server') return filteredData;
 		const start = (page - 1) * pageSize;
 		return filteredData.slice(start, start + pageSize);
 	});
@@ -251,7 +315,8 @@
 						/>
 						<input
 							type="text"
-							bind:value={searchQuery}
+							value={searchQuery}
+							oninput={handleSearchInput}
 							placeholder="Search rows..."
 							aria-label="Search rows"
 							class="h-9 w-full rounded-lg border border-neutral-200 bg-white pr-3 pl-8 text-xs text-neutral-900 placeholder:text-neutral-400 focus:border-primary-500 focus:outline-none dark:border-neutral-800 dark:bg-neutral-900 dark:text-white"
@@ -307,7 +372,7 @@
 						onclick={() => exportJson()}
 						class="h-9 gap-1.5 text-xs"
 					>
-						<Icon name="code" size="xs" />
+						<Icon name="download" size="xs" />
 						JSON
 					</Button>
 				{/if}
@@ -315,14 +380,13 @@
 		</div>
 	{/if}
 
-	<!-- Bulk Actions Floating Bar -->
-	{#if selected.length > 0 && bulkActions}
+	<!-- Bulk Actions Bar -->
+	{#if selectable && selected.length > 0 && bulkActions}
 		<div
-			class="flex items-center justify-between rounded-xl border border-primary-200 bg-primary-50/80 px-4 py-2.5 text-xs text-primary-900 shadow-sm dark:border-primary-900/60 dark:bg-primary-950/60 dark:text-primary-200"
+			class="flex items-center justify-between rounded-xl border border-primary-500/30 bg-primary-50/50 px-4 py-2.5 dark:bg-primary-950/30"
 		>
-			<span class="font-medium">
-				{selected.length}
-				{selected.length === 1 ? 'row' : 'rows'} selected
+			<span class="text-xs font-semibold text-primary-900 dark:text-primary-200">
+				{selected.length} row{selected.length > 1 ? 's' : ''} selected
 			</span>
 			<div class="flex items-center gap-2">
 				{@render bulkActions({ selected, clearSelection: () => (selected = []) })}
@@ -330,101 +394,85 @@
 		</div>
 	{/if}
 
-	<!-- Main Table Structure -->
+	<!-- Table Container -->
 	<div
-		class="w-full overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-950"
+		class="overflow-hidden rounded-xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900"
 	>
-		<div class="overflow-x-auto">
-			<table class="w-full text-left text-sm text-neutral-600 dark:text-neutral-300">
-				<!-- Table Header -->
+		<div class="w-full overflow-x-auto">
+			<table class="w-full text-left text-xs text-neutral-600 dark:text-neutral-400">
+				<!-- Head -->
 				<thead
-					class="border-b border-neutral-200 bg-neutral-50/80 text-sm font-semibold tracking-wider text-neutral-600 uppercase dark:border-neutral-800 dark:bg-neutral-900/80 dark:text-neutral-400"
+					class="border-b border-neutral-200 bg-neutral-50/75 text-[11px] font-semibold text-neutral-900 uppercase dark:border-neutral-800 dark:bg-neutral-950 dark:text-neutral-200"
 				>
 					<tr>
 						{#if selectable}
 							<th class="w-10 px-4 py-3 {getPinClass('left')}">
 								<Checkbox
 									checked={allSelected}
-									onchange={toggleSelectAll}
-									aria-label="Select all rows"
+									onchange={(checked) => toggleSelectAll(checked)}
+									aria-label="Select all"
 								/>
 							</th>
 						{/if}
 						{#each visibleColumns as column}
 							{@const colKey = String(column.key)}
+							{@const isSorted = sortKey === colKey}
 							{@const widthStyle = effectiveWidths[colKey]
 								? `width: ${effectiveWidths[colKey]}px; min-width: ${effectiveWidths[colKey]}px;`
 								: ''}
 							<th
-								class="relative px-4 py-3 {getPinClass(column.pinned)} {column.class || ''}"
+								class="group/th relative px-4 py-3 select-none {getPinClass(
+									column.pinned
+								)} {column.class || ''}"
 								style={widthStyle}
 							>
-								<div class="flex items-center justify-between gap-2">
+								<div class="flex items-center justify-between gap-1.5">
 									{#if column.sortable}
 										<button
 											type="button"
+											class="inline-flex items-center gap-1 font-semibold hover:text-neutral-900 dark:hover:text-white"
 											onclick={() => handleSort(colKey)}
-											class="group inline-flex items-center gap-1 font-semibold tracking-wider uppercase transition hover:text-neutral-900 dark:hover:text-white"
 										>
 											<span>{column.label}</span>
-											<span
-												class="text-neutral-400 transition-colors group-hover:text-primary-500 {sortKey ===
-												colKey
-													? 'text-primary-500'
-													: ''}"
-											>
-												{#if sortKey === colKey}
-													<Icon
-														name={sortOrder === 'asc' ? 'chevron-up' : 'chevron-down'}
-														size="xs"
-													/>
-												{:else}
-													<Icon name="chevron-down" size="xs" class="opacity-40" />
-												{/if}
-											</span>
+											<Icon
+												name={isSorted
+													? sortOrder === 'asc'
+														? 'arrow-up'
+														: 'arrow-down'
+													: 'chevrons-up-down'}
+												size="xs"
+												class={isSorted ? 'text-primary-600 dark:text-primary-400' : 'opacity-40'}
+											/>
 										</button>
 									{:else}
 										<span>{column.label}</span>
 									{/if}
 
-									{#if column.pinned}
-										<span
-											class="rounded bg-primary-100 px-1 text-[9px] font-bold text-primary-700 dark:bg-primary-950 dark:text-primary-300"
-										>
-											Pinned
-										</span>
+									{#if column.resizable}
+										<button
+											type="button"
+											class="absolute top-0 right-0 h-full w-1.5 cursor-col-resize opacity-0 transition-opacity group-hover/th:opacity-100 hover:bg-primary-500"
+											onmousedown={(e) => startColumnResize(colKey, e)}
+											ontouchstart={(e) => startColumnResize(colKey, e)}
+											aria-label={`Resize column ${column.label}`}
+										></button>
 									{/if}
 								</div>
-
-								<!-- Column Resizing Handle -->
-								{#if column.resizable !== false}
-									<button
-										type="button"
-										onmousedown={(e) => startColumnResize(colKey, e)}
-										ontouchstart={(e) => startColumnResize(colKey, e)}
-										class="absolute top-0 right-0 bottom-0 w-1.5 cursor-col-resize transition-colors hover:bg-primary-500 active:bg-primary-600"
-										aria-label="Resize column {column.label}"
-									></button>
-								{/if}
 							</th>
 						{/each}
 					</tr>
 				</thead>
 
-				<!-- Table Body -->
-				<tbody class="divide-y divide-neutral-200/80 dark:divide-neutral-800/80">
+				<!-- Body -->
+				<tbody class="divide-y divide-neutral-200 dark:divide-neutral-800">
 					{#if loading}
-						{#each Array(pageSize > 5 ? 5 : pageSize)}
+						{#each Array.from({ length: pageSize > 0 ? Math.min(pageSize, 5) : 5 }, (_, i) => i) as rowIndex (rowIndex)}
 							<tr>
 								{#if selectable}
-									<td class="px-4 py-3.5">
-										<Skeleton class="h-4 w-4 rounded" />
-									</td>
+									<td class="px-4 py-3.5"><Skeleton class="h-4 w-4" /></td>
 								{/if}
-								{#each visibleColumns}
-									<td class="px-4 py-3.5">
-										<Skeleton class="h-4 w-24 rounded" />
-									</td>
+								{#each visibleColumns as column (column.key)}
+									<td class="px-4 py-3.5"><Skeleton class="h-4 w-full" /></td>
 								{/each}
 							</tr>
 						{/each}
@@ -432,20 +480,20 @@
 						<tr>
 							<td
 								colspan={visibleColumns.length + (selectable ? 1 : 0)}
-								class="px-4 py-12 text-center text-sm text-neutral-500 dark:text-neutral-400"
+								class="px-4 py-12 text-center text-neutral-400"
 							>
 								{#if empty}
 									{@render empty()}
 								{:else}
-									<div class="flex flex-col items-center justify-center gap-2">
-										<Icon name="search" size="md" class="text-neutral-400" />
-										<p>{emptyText}</p>
+									<div class="flex flex-col items-center justify-center space-y-2">
+										<Icon name="inbox" size="lg" class="opacity-40" />
+										<p class="text-sm font-medium">{emptyText}</p>
 									</div>
 								{/if}
 							</td>
 						</tr>
 					{:else}
-						{#each paginatedData as item}
+						{#each paginatedData as item, idx (idx)}
 							{@const isSelected = selected.includes(item)}
 							<tr
 								class="transition-colors hover:bg-neutral-50/60 dark:hover:bg-neutral-900/50 {isSelected
@@ -485,15 +533,15 @@
 		</div>
 
 		<!-- Pagination Footer Bar -->
-		{#if pagination && filteredData.length > 0}
+		{#if pagination && effectiveTotalCount > 0}
 			<div
 				class="flex flex-wrap items-center justify-between gap-3 border-t border-neutral-200/80 bg-neutral-50/50 px-4 py-3 text-xs text-neutral-500 dark:border-neutral-800/80 dark:bg-neutral-900/40 dark:text-neutral-400"
 			>
 				<div class="flex items-center gap-2">
 					<span>Rows per page:</span>
 					<select
-						bind:value={pageSize}
-						onchange={() => (page = 1)}
+						value={pageSize}
+						onchange={(e) => handlePageSizeChange(Number((e.target as HTMLSelectElement).value))}
 						class="rounded border border-neutral-200 bg-white px-2 py-1 text-xs text-neutral-700 dark:border-neutral-800 dark:bg-neutral-800 dark:text-neutral-200"
 					>
 						{#each pageSizeOptions as opt}
@@ -501,7 +549,7 @@
 						{/each}
 					</select>
 					<span class="ml-2">
-						Showing {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, filteredData.length)} of {filteredData.length}
+						Showing {(page - 1) * pageSize + 1}–{Math.min(page * pageSize, effectiveTotalCount)} of {effectiveTotalCount}
 					</span>
 				</div>
 
@@ -509,7 +557,7 @@
 					<Button
 						variant="ghost"
 						size="xs"
-						onclick={() => (page = Math.max(1, page - 1))}
+						onclick={() => handlePageChange(Math.max(1, page - 1))}
 						disabled={page <= 1}
 						aria-label="Previous page"
 					>
@@ -519,7 +567,7 @@
 					<Button
 						variant="ghost"
 						size="xs"
-						onclick={() => (page = Math.min(totalPages, page + 1))}
+						onclick={() => handlePageChange(Math.min(totalPages, page + 1))}
 						disabled={page >= totalPages}
 						aria-label="Next page"
 					>

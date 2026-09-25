@@ -2,12 +2,15 @@
 	export type CardBrand = 'visa' | 'mastercard' | 'amex' | 'discover' | 'generic';
 
 	export interface CreditCardInputProps {
+		id?: string;
 		cardNumber?: string;
 		expiry?: string;
 		cvc?: string;
 		cardBrand?: CardBrand;
 		disabled?: boolean;
 		required?: boolean;
+		name?: string;
+		status?: 'default' | 'error' | 'success';
 		class?: string;
 	}
 
@@ -23,16 +26,30 @@
 
 <script lang="ts">
 	import Icon from '../elements/Icon.svelte';
+	import { getFormFieldContext } from './form-context';
 
 	let {
+		id,
 		cardNumber = $bindable(''),
 		expiry = $bindable(''),
 		cvc = $bindable(''),
 		cardBrand = $bindable('generic'),
 		disabled = false,
 		required = false,
+		name,
+		status = 'default',
 		class: className = ''
 	}: CreditCardInputProps = $props();
+
+	const fieldCtx = getFormFieldContext();
+
+	let effectiveId = $derived(id ?? fieldCtx?.id ?? 'card-number-input');
+	let effectiveStatus = $derived(status !== 'default' ? status : (fieldCtx?.status ?? 'default'));
+	let ariaInvalid = $derived(effectiveStatus === 'error' || Boolean(fieldCtx?.error));
+	let ariaDescribedBy = $derived(
+		[fieldCtx?.descriptionId, fieldCtx?.errorId].filter(Boolean).join(' ') || undefined
+	);
+	let effectiveBrand = $derived(cardBrand !== 'generic' ? cardBrand : detectCardBrand(cardNumber));
 
 	function formatCardNumber(val: string): string {
 		const digits = val.replace(/\D/g, '').slice(0, 16);
@@ -74,20 +91,25 @@
 </script>
 
 <div
-	class="flex flex-col gap-3 rounded-2xl border border-neutral-200 bg-white p-4 shadow-xs transition-all focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20 dark:border-neutral-800 dark:bg-neutral-900 {className}"
+	class="flex flex-col gap-3 rounded-2xl border bg-white p-4 shadow-xs transition-all focus-within:ring-2 {effectiveStatus ===
+	'error'
+		? 'border-rose-500 text-rose-900 focus-within:border-rose-500 focus-within:ring-rose-500/20 dark:text-rose-100'
+		: effectiveStatus === 'success'
+			? 'border-emerald-500 focus-within:border-emerald-500 focus-within:ring-emerald-500/20 dark:border-emerald-500'
+			: 'border-neutral-200 focus-within:border-primary-500 focus-within:ring-primary-500/20 dark:border-neutral-800'} dark:bg-neutral-900 {className}"
 >
 	<!-- Card Number Field -->
 	<div>
 		<label
-			for="card-number-input"
+			for={effectiveId}
 			class="mb-1 block text-xs font-semibold text-neutral-600 dark:text-neutral-400"
 		>
 			Card Number
 		</label>
 		<div class="relative flex items-center">
 			<input
-				id="card-number-input"
-				name="cardNumber"
+				id={effectiveId}
+				name={name || 'cardNumber'}
 				type="text"
 				bind:value={cardNumber}
 				oninput={handleCardNumberInput}
@@ -95,18 +117,20 @@
 				{disabled}
 				{required}
 				autocomplete="cc-number"
+				aria-invalid={ariaInvalid || undefined}
+				aria-describedby={ariaDescribedBy}
 				class="h-10 w-full rounded-xl border border-neutral-200 bg-neutral-50 pr-12 pl-3 font-mono text-sm text-neutral-900 placeholder:text-neutral-400 focus:border-primary-500 focus:bg-white focus:outline-none dark:border-neutral-800 dark:bg-neutral-800 dark:text-white dark:focus:bg-neutral-900"
 			/>
 
 			<!-- Brand Badge -->
 			<div class="absolute right-3 flex items-center text-xs font-bold text-neutral-400 uppercase">
-				{#if cardBrand === 'visa'}
+				{#if effectiveBrand === 'visa'}
 					<span class="font-extrabold text-blue-600 italic">VISA</span>
-				{:else if cardBrand === 'mastercard'}
+				{:else if effectiveBrand === 'mastercard'}
 					<span class="font-extrabold text-amber-600">MC</span>
-				{:else if cardBrand === 'amex'}
+				{:else if effectiveBrand === 'amex'}
 					<span class="font-extrabold text-sky-600">AMEX</span>
-				{:else if cardBrand === 'discover'}
+				{:else if effectiveBrand === 'discover'}
 					<span class="font-extrabold text-orange-600">DISC</span>
 				{:else}
 					<Icon name="credit-card" size="sm" class="text-neutral-400" />

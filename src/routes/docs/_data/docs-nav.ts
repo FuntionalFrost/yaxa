@@ -118,7 +118,7 @@ export const DOC_NAV_GROUPS: DocNavGroup[] = [
 				href: '/docs/saas-suite',
 				title: 'Full-Stack Solo SaaS Toolkit',
 				description:
-					'Batteries-included Auth (Better-Auth), Database ORM (Drizzle with Neon & Turso), Billing (Polar.sh), Resend email, and drop-in Svelte 5 components.',
+					'Batteries-included Auth (Better-Auth, Passkey WebAuthn <PasskeyUI>, 2FA <TwoFactorModal>), Database ORM (Drizzle with Neon & Turso), Billing (Polar.sh), Resend email, and drop-in Svelte 5 components.',
 				category: 'Solo SaaS Suite',
 				badge: 'Full-Stack'
 			},
@@ -186,7 +186,7 @@ export const DOC_NAV_GROUPS: DocNavGroup[] = [
 				href: '/docs/comp-buttons',
 				title: 'Buttons, Badges & Visual Elements',
 				description:
-					'Accessible action triggers, button groups, avatars, presence indicators, keyboard shortcuts, status chips, spinners, progress meters, and skeletons.',
+					'Accessible action triggers, button groups, code diff viewers (<CodeDiff />), hierarchical trees, avatars, presence indicators, status chips, spinners, and progress meters.',
 				category: 'Components',
 				source: 'src/lib/components/elements/Button.svelte',
 				badge: 'Elements'

@@ -12,3 +12,6 @@ export type { InfiniteScrollActionOptions } from './infiniteScroll';
 
 export { sortableItem } from './sortable';
 export type { SortableItemOptions } from './sortable';
+
+export { springTilt } from './springTilt';
+export type { SpringTiltOptions } from './springTilt';

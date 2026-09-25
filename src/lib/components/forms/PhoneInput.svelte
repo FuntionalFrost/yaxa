@@ -24,11 +24,16 @@
 	];
 
 	export interface PhoneInputProps {
+		id?: string;
 		value?: string;
 		countryCode?: string;
 		placeholder?: string;
 		disabled?: boolean;
 		required?: boolean;
+		name?: string;
+		status?: 'default' | 'error' | 'success';
+		'aria-label'?: string;
+		ariaLabel?: string;
 		class?: string;
 	}
 </script>
@@ -36,15 +41,34 @@
 <script lang="ts">
 	import Popover from '../overlays/Popover.svelte';
 	import Icon from '../elements/Icon.svelte';
+	import { getFormFieldContext } from './form-context';
 
 	let {
+		id,
 		value = $bindable(''),
 		countryCode = $bindable('US'),
 		placeholder = '(555) 000-0000',
 		disabled = false,
 		required = false,
+		name,
+		status = 'default',
+		'aria-label': ariaLabelAttr,
+		ariaLabel,
 		class: className = ''
 	}: PhoneInputProps = $props();
+
+	const fieldCtx = getFormFieldContext();
+
+	let effectiveId = $derived(id ?? fieldCtx?.id);
+	let effectiveName = $derived(name ?? fieldCtx?.name);
+	let effectiveStatus = $derived(status !== 'default' ? status : (fieldCtx?.status ?? 'default'));
+	let ariaInvalid = $derived(effectiveStatus === 'error' || Boolean(fieldCtx?.error));
+	let ariaDescribedBy = $derived(
+		[fieldCtx?.descriptionId, fieldCtx?.errorId].filter(Boolean).join(' ') || undefined
+	);
+	let effectiveAriaLabel = $derived(
+		ariaLabelAttr || ariaLabel || placeholder || fieldCtx?.name || 'Phone number'
+	);
 
 	let searchQuery = $state('');
 	let openDropdown = $state(false);
@@ -77,7 +101,12 @@
 </script>
 
 <div
-	class="flex w-full items-center overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-xs transition-all focus-within:border-primary-500 focus-within:ring-2 focus-within:ring-primary-500/20 dark:border-neutral-800 dark:bg-neutral-900 {className}"
+	class="flex w-full items-center overflow-hidden rounded-xl border bg-white shadow-xs transition-all focus-within:ring-2 {effectiveStatus ===
+	'error'
+		? 'border-rose-500 text-rose-900 focus-within:border-rose-500 focus-within:ring-rose-500/20 dark:text-rose-100'
+		: effectiveStatus === 'success'
+			? 'border-emerald-500 focus-within:border-emerald-500 focus-within:ring-emerald-500/20 dark:border-emerald-500'
+			: 'border-neutral-200 focus-within:border-primary-500 focus-within:ring-primary-500/20 dark:border-neutral-800'} dark:bg-neutral-900 {className}"
 >
 	<!-- Country Selector Popover -->
 	<Popover bind:open={openDropdown}>
@@ -107,7 +136,7 @@
 			</div>
 
 			<div class="max-h-48 overflow-y-auto">
-				{#each filteredCountries as country}
+				{#each filteredCountries as country (country.code)}
 					<button
 						type="button"
 						onclick={() => selectCountry(country)}
@@ -129,12 +158,17 @@
 
 	<!-- Phone Number Input Field -->
 	<input
+		id={effectiveId}
+		name={effectiveName}
 		type="tel"
 		bind:value
 		oninput={handleInput}
 		{placeholder}
 		{disabled}
 		{required}
+		aria-label={effectiveAriaLabel}
+		aria-invalid={ariaInvalid || undefined}
+		aria-describedby={ariaDescribedBy}
 		class="h-10 w-full bg-transparent px-3 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none dark:text-white"
 	/>
 </div>

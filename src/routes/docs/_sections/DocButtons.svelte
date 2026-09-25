@@ -14,6 +14,7 @@
 	import Meter from '$lib/components/elements/Meter.svelte';
 	import MetricCard from '$lib/components/elements/MetricCard.svelte';
 	import CodeBlock from '$lib/components/elements/CodeBlock.svelte';
+	import CodeDiff from '$lib/components/elements/CodeDiff.svelte';
 	import SortableList from '$lib/components/elements/SortableList.svelte';
 	import Tree, { type TreeNode } from '$lib/components/elements/Tree.svelte';
 	import Icon from '$lib/components/elements/Icon.svelte';
@@ -152,15 +153,39 @@ export const Metric: React.FC<MetricProps> = ({ label, initialValue = 0 }) => {
   <Kbd value="⌘" />
   <Kbd value="K" />
 </div>`;
+
+	const diffBeforeSnippet = `// Svelte 4 Legacy Syntax
+<script>
+  export let data;
+  let count = 0;
+  function increment() {
+    count += 1;
+  }
+\${'<'}/script>
+
+<button on:click={increment}>
+  Count: {count}
+</button>`;
+
+	const diffAfterSnippet = `// Svelte 5 Modern Runes
+<script lang="ts">
+  import { Button } from 'yaxa-svelte';
+  let { data } = $props();
+  let count = $state(0);
+\${'<'}/script>
+
+<Button onclick={() => count++} color="primary">
+  Count: {count}
+</Button>`;
 </script>
 
 <DocHeader
 	title="Buttons, Badges, Trees & Visual Elements"
-	description="Accessible action triggers, button groups, avatars, presence indicators, keyboard shortcuts, status chips, hierarchical trees, progress meters, and skeletons."
+	description="Accessible action triggers, button groups, code diff viewers, avatars, presence indicators, keyboard shortcuts, status chips, hierarchical trees, progress meters, and skeletons."
 	badge="Elements"
 	source="src/lib/components/elements/Button.svelte"
 	category="Components"
-	importStatement={"import { Button, ButtonGroup, Badge, Tree, Chip, Skeleton, Avatar, Kbd } from 'yaxa-svelte';"}
+	importStatement={"import { Button, ButtonGroup, Badge, CodeDiff, CodeBlock, Tree, Chip, Skeleton, Avatar, Kbd } from 'yaxa-svelte';"}
 />
 
 <div class="space-y-8">
@@ -424,6 +449,18 @@ export const Metric: React.FC<MetricProps> = ({ label, initialValue = 0 }) => {
 				language="tsx"
 				filename="Metric.tsx"
 				showLineNumbers={true}
+			/>
+		</div>
+	</DocSandbox>
+
+	<!-- Interactive Code Diff & Changelog Sandbox -->
+	<DocSandbox title="Interactive Code Diff & Changelog (<CodeDiff />)">
+		<div class="w-full max-w-2xl">
+			<CodeDiff
+				original={diffBeforeSnippet}
+				modified={diffAfterSnippet}
+				filename="Counter.svelte"
+				language="svelte"
 			/>
 		</div>
 	</DocSandbox>

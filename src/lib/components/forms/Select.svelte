@@ -21,7 +21,8 @@
 				default:
 					'border-neutral-300 dark:border-neutral-700 focus:border-primary-500 focus:ring-primary-500/20',
 				error:
-					'border-rose-500 text-rose-900 dark:text-rose-100 focus:border-rose-500 focus:ring-rose-500/20'
+					'border-rose-500 text-rose-900 dark:text-rose-100 focus:border-rose-500 focus:ring-rose-500/20',
+				success: 'border-emerald-500 focus:border-emerald-500 focus:ring-emerald-500/20'
 			}
 		},
 		defaultVariants: {
@@ -48,6 +49,7 @@
 
 <script lang="ts">
 	import Icon from '../elements/Icon.svelte';
+	import { getFormFieldContext } from './form-context';
 
 	let {
 		id,
@@ -65,41 +67,57 @@
 		class: className = '',
 		...restProps
 	}: SelectProps = $props();
+
+	const fieldCtx = getFormFieldContext();
+
+	let effectiveId = $derived(id ?? fieldCtx?.id);
+	let effectiveName = $derived(name ?? fieldCtx?.name);
+	let effectiveStatus = $derived(status !== 'default' ? status : (fieldCtx?.status ?? 'default'));
+	let ariaInvalid = $derived(effectiveStatus === 'error' || Boolean(fieldCtx?.error));
+	let ariaDescribedBy = $derived(
+		[fieldCtx?.descriptionId, fieldCtx?.errorId].filter(Boolean).join(' ') || undefined
+	);
+
+	let effectiveAriaLabel = $derived(
+		ariaLabelAttr || ariaLabel || label || fieldCtx?.name || 'Select'
+	);
 </script>
 
 <div class="relative w-full">
 	{#if icon}
-		<div class="pointer-events-none absolute top-1/2 left-3 -translate-y-1/2 text-neutral-400">
+		<div
+			class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-neutral-400"
+		>
 			<Icon name={icon} size={size === 'sm' ? 'xs' : 'sm'} />
 		</div>
 	{/if}
 
 	<select
-		id={id || name}
+		id={effectiveId}
+		name={effectiveName}
 		bind:value
 		{disabled}
-		{name}
-		aria-label={ariaLabelAttr || ariaLabel || label || placeholder || name || 'Select option'}
-		class="{selectVariants({ size, status, class: className })} {icon
-			? size === 'sm'
-				? 'pl-8'
-				: 'pl-10'
-			: ''}"
+		aria-label={effectiveAriaLabel}
+		aria-invalid={ariaInvalid || undefined}
+		aria-describedby={ariaDescribedBy}
+		class={selectVariants({
+			size,
+			status: effectiveStatus,
+			class: `${icon ? 'pl-9' : ''} ${className}`
+		})}
 		{...restProps}
 	>
 		{#if placeholder}
-			<option value="" disabled selected={!value}>
-				{placeholder}
-			</option>
+			<option value="" disabled selected={!value}>{placeholder}</option>
 		{/if}
 		{#each options as opt}
-			<option value={opt.value} disabled={opt.disabled}>
-				{opt.label}
-			</option>
+			<option value={opt.value} disabled={opt.disabled}>{opt.label}</option>
 		{/each}
 	</select>
 
-	<div class="pointer-events-none absolute top-1/2 right-3 -translate-y-1/2 text-neutral-400">
-		<Icon name="chevron-down" size="xs" />
+	<div
+		class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-neutral-400"
+	>
+		<Icon name="chevron-down" size={size === 'sm' ? 'xs' : 'sm'} />
 	</div>
 </div>

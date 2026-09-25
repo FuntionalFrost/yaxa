@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { cn } from '$lib/utils/cn';
+	import { getFormFieldContext } from './form-context';
 
 	interface Props {
 		id?: string;
@@ -20,7 +21,7 @@
 
 	let {
 		id,
-		name = 'otp',
+		name,
 		length = 6,
 		value = $bindable(''),
 		type = 'number',
@@ -34,6 +35,12 @@
 		oncomplete,
 		onchange
 	}: Props = $props();
+
+	const fieldCtx = getFormFieldContext();
+
+	let effectiveId = $derived(id ?? fieldCtx?.id ?? 'otp');
+	let effectiveName = $derived(name ?? fieldCtx?.name ?? 'otp');
+	let ariaInvalid = $derived(fieldCtx?.status === 'error' || Boolean(fieldCtx?.error));
 
 	let inputRefs: HTMLInputElement[] = $state([]);
 
@@ -143,8 +150,8 @@
 		{/if}
 
 		<input
-			id={`${id || name}-${index + 1}`}
-			name={`${name}-${index + 1}`}
+			id={`${effectiveId}-${index + 1}`}
+			name={`${effectiveName}-${index + 1}`}
 			bind:this={inputRefs[index]}
 			type={type === 'password' ? 'password' : 'text'}
 			inputmode={type === 'number' ? 'numeric' : 'text'}
@@ -154,12 +161,14 @@
 			placeholder={slots[index] ? '' : placeholder}
 			{disabled}
 			aria-label={`Digit ${index + 1} of ${length}`}
+			aria-invalid={ariaInvalid || undefined}
 			class={cn(
 				'rounded-lg border text-center font-mono font-semibold transition-all duration-150 outline-none',
 				'border-neutral-300 bg-white text-neutral-900 focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20',
 				'dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100 dark:focus:border-primary-400 dark:focus:ring-primary-400/20',
 				'disabled:cursor-not-allowed disabled:opacity-50',
 				slots[index] ? 'border-neutral-400 dark:border-neutral-500' : '',
+				ariaInvalid ? 'border-rose-500 dark:border-rose-500' : '',
 				sizeClasses
 			)}
 			oninput={(e) => handleInput(e, index)}

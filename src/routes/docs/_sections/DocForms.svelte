@@ -120,18 +120,83 @@
 
 <!-- Date Range Picker with Presets -->
 <DateRangePicker bind:value={dateRange} placeholder="Select analytics reporting window" />`;
+
+	const superformsSnippet = `<script lang="ts">
+  import { superForm } from 'sveltekit-superforms';
+  import { Form, FormField, Input, Select, Checkbox, Button } from 'yaxa-svelte';
+
+  let { data } = $props();
+  const superform = superForm(data.form);
+${'<'}/script>
+
+<!-- All child FormFields and controls automatically inherit error states and ARIA attrs -->
+<Form {superform} errorSummary={true}>
+  <FormField name="email" label="Email Address">
+    <Input placeholder="alex@company.com" icon="envelope" />
+  </FormField>
+
+  <FormField name="role" label="Account Role">
+    <Select options={roleOptions} />
+  </FormField>
+
+  <FormField name="terms">
+    <Checkbox label="I agree to terms of service" />
+  </FormField>
+
+  <Button type="submit" color="primary">Save Changes</Button>
+</Form>`;
 </script>
 
 <DocHeader
 	title="Forms, Inputs & Pickers"
-	description="Typed FormFields with validation states, character counters, OTP/2FA code inputs, Comboboxes, MultiSelect chips, NumberInputs, ToggleGroups, DatePickers, switches, checkboxes, and sliders."
+	description="Typed FormFields with validation states, Superforms context auto-wiring, character counters, OTP/2FA code inputs, Comboboxes, MultiSelect chips, NumberInputs, ToggleGroups, DatePickers, switches, checkboxes, and sliders."
 	badge="Forms"
 	source="src/lib/components/forms/FormField.svelte"
 	category="Components"
-	importStatement={"import { FormField, Input, Select, Combobox, MultiSelect, NumberInput, Checkbox, Switch, DatePicker } from 'yaxa-svelte';"}
+	importStatement={"import { Form, FormField, Input, Select, Combobox, MultiSelect, NumberInput, Checkbox, Switch, DatePicker } from 'yaxa-svelte';"}
 />
 
 <div class="space-y-8">
+	<!-- Superforms Context Auto-Wiring Showcase -->
+	<DocSandbox title="Zero-Boilerplate Superforms Auto-Wiring" code={superformsSnippet}>
+		<div class="w-full max-w-lg space-y-4">
+			<div
+				class="rounded-xl border border-primary-200 bg-primary-50/50 p-4 text-xs text-primary-950 dark:border-primary-900/50 dark:bg-primary-950/20 dark:text-primary-200"
+			>
+				<strong class="font-semibold">Context Auto-Wiring:</strong> When placed inside a
+				<code class="rounded bg-primary-100 px-1 py-0.5 font-mono dark:bg-primary-900"
+					>&lt;Form &#123;superform&#125;&gt;</code
+				>
+				and
+				<code class="rounded bg-primary-100 px-1 py-0.5 font-mono dark:bg-primary-900"
+					>&lt;FormField name="field"&gt;</code
+				>, all inputs (<code class="font-mono">Input</code>, <code class="font-mono">Select</code>,
+				<code class="font-mono">Combobox</code>, <code class="font-mono">Checkbox</code>, etc.)
+				automatically receive their <code class="font-mono">id</code>,
+				<code class="font-mono">name</code>, <code class="font-mono">aria-describedby</code>, and
+				reactive error highlights without manual prop plumbing.
+			</div>
+
+			<FormField
+				label="Email Address"
+				name="email"
+				required
+				hint="Automatically receives validation errors"
+			>
+				<Input
+					type="email"
+					bind:value={sampleEmail}
+					placeholder="name@company.com"
+					icon="envelope"
+				/>
+			</FormField>
+
+			<FormField label="Select Role" name="role" required>
+				<Select options={roleOptions} bind:value={sampleRole} />
+			</FormField>
+		</div>
+	</DocSandbox>
+
 	<!-- FormField & Inputs Sandbox -->
 	<DocSandbox title="FormField, Input & Textarea" code={formSnippet}>
 		<div class="w-full max-w-lg space-y-4">

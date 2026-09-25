@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { flushSync } from 'svelte';
 import { renderComponent } from '$lib/testing';
 import DataTable, { type Column } from './DataTable.svelte';
@@ -42,7 +42,7 @@ describe('DataTable Component (DOM & Interactions)', () => {
 		cleanup();
 	});
 
-	it('filters rows according to searchQuery', () => {
+	it('filters rows according to searchQuery in client mode', () => {
 		const { target, cleanup } = renderComponent(DataTable, {
 			data: testData,
 			columns: testColumns,
@@ -92,6 +92,42 @@ describe('DataTable Component (DOM & Interactions)', () => {
 		flushSync();
 		firstRowName = target.querySelector('tbody tr td')?.textContent;
 		expect(firstRowName).toContain('Charlie Brown');
+
+		cleanup();
+	});
+
+	it('supports server mode pagination and event triggers', () => {
+		const onpaginate = vi.fn();
+		const onsort = vi.fn();
+
+		const { target, cleanup } = renderComponent(DataTable, {
+			data: testData.slice(0, 2),
+			columns: testColumns,
+			mode: 'server',
+			totalRows: 10,
+			pagination: true,
+			pageSize: 2,
+			page: 1,
+			onpaginate,
+			onsort
+		});
+
+		const paginationFooter = target.textContent;
+		expect(paginationFooter).toContain('Page 1 of 5');
+		expect(paginationFooter).toContain('Showing 1–2 of 10');
+
+		// Click next page button
+		const nextBtn = target.querySelector('button[aria-label="Next page"]') as HTMLButtonElement;
+		expect(nextBtn).toBeDefined();
+		nextBtn.click();
+		flushSync();
+
+		expect(onpaginate).toHaveBeenCalledWith(
+			expect.objectContaining({
+				page: 2,
+				pageSize: 2
+			})
+		);
 
 		cleanup();
 	});

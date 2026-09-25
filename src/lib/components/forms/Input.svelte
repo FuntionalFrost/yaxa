@@ -46,8 +46,11 @@
 <script lang="ts">
 	import Icon from '../elements/Icon.svelte';
 	import Spinner from '../elements/Spinner.svelte';
+	import { getFormFieldContext } from './form-context';
 
 	let {
+		id,
+		name,
 		value = $bindable(''),
 		type = 'text',
 		size = 'md',
@@ -64,6 +67,16 @@
 		trailing,
 		...restProps
 	}: InputProps = $props();
+
+	const fieldCtx = getFormFieldContext();
+
+	let effectiveId = $derived(id ?? fieldCtx?.id);
+	let effectiveName = $derived(name ?? fieldCtx?.name);
+	let effectiveStatus = $derived(status !== 'default' ? status : (fieldCtx?.status ?? 'default'));
+	let ariaInvalid = $derived(effectiveStatus === 'error' || Boolean(fieldCtx?.error));
+	let ariaDescribedBy = $derived(
+		[fieldCtx?.descriptionId, fieldCtx?.errorId].filter(Boolean).join(' ') || undefined
+	);
 
 	let paddingLeftClass = $derived.by(() => {
 		if (icon || leading) {
@@ -98,12 +111,16 @@
 	{/if}
 
 	<input
+		id={effectiveId}
+		name={effectiveName}
 		{type}
 		bind:value
 		{disabled}
+		aria-invalid={ariaInvalid || undefined}
+		aria-describedby={ariaDescribedBy}
 		class="{inputVariants({
 			size,
-			status,
+			status: effectiveStatus,
 			class: className
 		})} {paddingLeftClass} {paddingRightClass}"
 		{...restProps}
