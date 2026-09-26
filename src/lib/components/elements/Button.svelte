@@ -5,7 +5,7 @@
 	import type { IconSource } from './Icon.svelte';
 
 	export const buttonVariants = tv({
-		base: 'inline-flex items-center justify-center font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 select-none active:scale-[0.98]',
+		base: 'inline-flex items-center justify-center font-medium transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 select-none active:scale-[0.98] whitespace-nowrap max-w-full overflow-hidden text-ellipsis shrink-0 [&>svg]:shrink-0',
 		variants: {
 			variant: {
 				solid: 'shadow-xs text-white',

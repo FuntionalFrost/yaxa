@@ -68,7 +68,7 @@
 	let demoInputValue = $state('user@yaxa.dev');
 
 	let copiedInstall = $state(false);
-	const installCommand = 'pnpm add yaxa-svelte @tailwindcss/vite tailwindcss';
+	const installCommand = 'pnpm add yaxa-svelte';
 
 	function copyInstall() {
 		if (typeof navigator !== 'undefined' && navigator.clipboard) {
@@ -189,18 +189,20 @@ export const siteConfig = defineSiteConfig({
 		</div>
 
 		<!-- One-Click Install Command Pill -->
-		<div class="mx-auto mt-8 max-w-md">
+		<div class="mt-8 flex justify-center">
 			<button
 				type="button"
 				onclick={copyInstall}
-				class="group flex w-full items-center justify-between gap-3 rounded-xl border border-neutral-200/80 bg-white/80 p-2.5 pl-4 font-mono text-xs shadow-xs backdrop-blur-md transition-all hover:border-primary-500/50 hover:bg-neutral-50/90 dark:border-neutral-800 dark:bg-neutral-900/80 dark:hover:border-primary-500/40 dark:hover:bg-neutral-800/80"
+				class="group inline-flex items-center gap-4 rounded-xl border border-neutral-200/80 bg-white/80 py-2 pr-2.5 pl-4 font-mono text-xs shadow-xs backdrop-blur-md transition-all hover:border-primary-500/50 hover:bg-neutral-50/90 dark:border-neutral-800 dark:bg-neutral-900/80 dark:hover:border-primary-500/40 dark:hover:bg-neutral-800/80"
 			>
-				<span class="flex items-center gap-2 text-neutral-600 dark:text-neutral-300">
+				<span
+					class="flex items-center gap-2 whitespace-nowrap text-neutral-600 dark:text-neutral-300"
+				>
 					<span class="font-bold text-primary-500">$</span>
 					<span>{installCommand}</span>
 				</span>
 				<span
-					class="flex items-center gap-1 rounded-lg bg-neutral-100 px-2.5 py-1 text-xs font-semibold text-neutral-600 transition-colors group-hover:bg-primary-100 group-hover:text-primary-700 dark:bg-neutral-800 dark:text-neutral-300 dark:group-hover:bg-primary-950 dark:group-hover:text-primary-300"
+					class="flex items-center gap-1.5 rounded-lg bg-neutral-100 px-2.5 py-1 text-xs font-semibold text-neutral-600 transition-colors group-hover:bg-primary-100 group-hover:text-primary-700 dark:bg-neutral-800 dark:text-neutral-300 dark:group-hover:bg-primary-950 dark:group-hover:text-primary-300"
 				>
 					<Icon name={copiedInstall ? 'check' : 'clipboard-document'} class="h-3.5 w-3.5" />
 					<span>{copiedInstall ? 'Copied!' : 'Copy'}</span>
@@ -289,16 +291,28 @@ export const siteConfig = defineSiteConfig({
 					<div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
 						{#each neutralList as item}
 							{@const active = theme.neutral === item.id}
+							{@const pal = NEUTRAL_PALETTES[item.id]}
 							<button
 								type="button"
 								onclick={() => theme.setNeutral(item.id)}
-								class="flex items-center gap-2 rounded-lg border px-3 py-2 text-xs font-semibold transition-all {active
+								class="flex flex-col gap-1.5 rounded-lg border p-2 text-left text-xs font-semibold transition-all {active
 									? 'border-primary-500 bg-primary-50/50 text-primary-700 ring-1 ring-primary-500 dark:bg-primary-950/40 dark:text-primary-300'
 									: 'border-neutral-200 bg-neutral-50/50 text-neutral-700 hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-800/40 dark:text-neutral-300 dark:hover:bg-neutral-800'}"
 							>
-								<span class="h-3 w-3 shrink-0 rounded-full" style="background-color: {item.color};"
-								></span>
-								<span>{item.name}</span>
+								<div class="flex items-center justify-between">
+									<span>{item.name}</span>
+									{#if active}
+										<span class="h-1.5 w-1.5 rounded-full bg-primary-500"></span>
+									{/if}
+								</div>
+								<div class="flex items-center gap-1">
+									<span class="h-2 flex-1 rounded-xs" style="background-color: {pal.shades[200]};"
+									></span>
+									<span class="h-2 flex-1 rounded-xs" style="background-color: {pal.shades[500]};"
+									></span>
+									<span class="h-2 flex-1 rounded-xs" style="background-color: {pal.shades[900]};"
+									></span>
+								</div>
 							</button>
 						{/each}
 					</div>
@@ -327,6 +341,7 @@ export const siteConfig = defineSiteConfig({
 								class="rounded-lg border px-3 py-2 text-center text-xs font-semibold transition-all {active
 									? 'border-primary-500 bg-primary-50/50 text-primary-700 ring-1 ring-primary-500 dark:bg-primary-950/40 dark:text-primary-300'
 									: 'border-neutral-200 bg-neutral-50/50 text-neutral-700 hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-800/40 dark:text-neutral-300'}"
+								style="font-family: {FONT_PRESETS[item.id].value} !important;"
 							>
 								<div class="capitalize">{item.id}</div>
 								<div class="text-[10px] font-normal text-neutral-500">{item.name}</div>
@@ -349,9 +364,10 @@ export const siteConfig = defineSiteConfig({
 								<button
 									type="button"
 									onclick={() => theme.setRadius(item.id)}
-									class="rounded-md border px-2.5 py-1 text-xs font-medium transition-all {active
+									class="border px-2.5 py-1 text-xs font-medium transition-all {active
 										? 'border-primary-500 bg-primary-500 font-bold text-white'
 										: 'border-neutral-200 text-neutral-600 hover:bg-neutral-100 dark:border-neutral-800 dark:text-neutral-400 dark:hover:bg-neutral-800'}"
+									style="border-radius: {item.value} !important;"
 								>
 									{item.name}
 								</button>
@@ -386,9 +402,26 @@ export const siteConfig = defineSiteConfig({
 				<div
 					class="flex items-center justify-between border-t border-neutral-200 pt-4 dark:border-neutral-800"
 				>
-					<Button variant="ghost" size="xs" color="neutral" onclick={() => theme.reset()}>
-						<Icon name="arrow-path" class="mr-1 h-3.5 w-3.5" /> Reset Defaults
-					</Button>
+					<div class="flex items-center gap-2">
+						<Button
+							variant="outline"
+							size="xs"
+							color="neutral"
+							onclick={() => {
+								const chosen = theme.randomize();
+								toast.info(
+									'Theme Randomized',
+									`${chosen.accent} · ${chosen.neutral} · ${chosen.radius} · ${chosen.fontFamily}`
+								);
+							}}
+						>
+							<Icon name="sparkles" class="mr-1 h-3.5 w-3.5 text-primary-500" /> Randomize
+						</Button>
+
+						<Button variant="ghost" size="xs" color="neutral" onclick={() => theme.reset()}>
+							<Icon name="rotate-ccw" class="mr-1 h-3.5 w-3.5" /> Reset
+						</Button>
+					</div>
 
 					<Button size="xs" color="primary" variant="solid" onclick={copyConfigSnippet}>
 						<Icon name="code-bracket" class="mr-1 h-3.5 w-3.5" /> Copy site.config.ts

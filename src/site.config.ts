@@ -20,13 +20,11 @@ export const siteConfig = defineSiteConfig({
 	},
 	legal: {
 		jurisdiction: 'EU',
-		paymentProcessor: 'polar',
+		paymentProcessor: 'none',
 		adNetwork: 'ethicalads',
-		refundDays: 14,
 		links: {
 			privacy: '/privacy',
 			terms: '/terms',
-			refunds: '/refunds',
 			impressum: '/impressum'
 		}
 	},

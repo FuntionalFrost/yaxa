@@ -72,18 +72,18 @@
 </script>
 
 <Card
-	class="relative flex flex-col justify-between p-6 transition-all duration-200 sm:p-8 {popular
+	class="relative flex flex-col justify-between overflow-visible p-6 transition-all duration-200 sm:p-8 {popular
 		? 'border-2 border-primary-500 shadow-xl ring-1 ring-primary-500/20 dark:border-primary-500'
 		: 'border-zinc-200 shadow-md dark:border-zinc-800'} {className}"
 >
 	<!-- Popular Banner / Badge -->
 	{#if popular || badge}
-		<div class="absolute -top-3 left-1/2 -translate-x-1/2">
+		<div class="absolute -top-3.5 left-1/2 z-20 -translate-x-1/2">
 			<Badge
 				color="primary"
 				variant="solid"
 				size="sm"
-				class="font-semibold tracking-wider uppercase shadow-sm"
+				class="px-3 py-0.5 text-[11px] font-semibold tracking-wider uppercase shadow-md"
 			>
 				{badge || 'Most Popular'}
 			</Badge>

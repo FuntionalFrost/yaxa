@@ -83,6 +83,72 @@
 		}
 	});
 
+	function formatInline(str: string): string {
+		return str
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(
+				/\*\*(.+?)\*\*/g,
+				'<strong class="font-semibold text-neutral-900 dark:text-white">$1</strong>'
+			)
+			.replace(
+				/`(.+?)`/g,
+				'<code class="rounded bg-neutral-100 px-1 py-0.5 text-xs font-mono text-neutral-800 dark:bg-neutral-800 dark:text-neutral-200">$1</code>'
+			)
+			.replace(
+				/\[(.+?)\]\((https?:\/\/[^\s)]+|mailto:[^\s)]+)\)/g,
+				'<a href="$2" class="font-medium text-primary-600 transition-colors hover:underline dark:text-primary-400" target="_blank" rel="noopener noreferrer">$1</a>'
+			)
+			.replace(
+				/\[(.+?)\]\(([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})\)/g,
+				'<a href="mailto:$2" class="font-medium text-primary-600 transition-colors hover:underline dark:text-primary-400">$1</a>'
+			);
+	}
+
+	function formatLegalHtml(text: string): string {
+		if (!text) return '';
+		const lines = text.split('\n');
+		let html = '';
+		let inList = false;
+
+		for (let i = 0; i < lines.length; i++) {
+			const line = lines[i].trim();
+			if (line.startsWith('- ')) {
+				if (!inList) {
+					html +=
+						'<ul class="my-3 space-y-1.5 list-disc pl-5 text-neutral-600 dark:text-neutral-300">';
+					inList = true;
+				}
+				html += `<li>${formatInline(line.slice(2))}</li>`;
+			} else {
+				if (inList) {
+					html += '</ul>';
+					inList = false;
+				}
+				if (line) {
+					html += `<p class="mb-3 text-neutral-600 dark:text-neutral-300 leading-relaxed">${formatInline(line)}</p>`;
+				}
+			}
+		}
+		if (inList) {
+			html += '</ul>';
+		}
+		return html;
+	}
+
+	let copiedLegalEmail = $state(false);
+
+	function copyLegalEmail(email: string) {
+		if (typeof navigator !== 'undefined' && navigator.clipboard) {
+			navigator.clipboard.writeText(email);
+			copiedLegalEmail = true;
+			setTimeout(() => {
+				copiedLegalEmail = false;
+			}, 2000);
+		}
+	}
+
 	// Default sections by type
 	let defaultSections = $derived.by(() => {
 		if (type === 'privacy') {
@@ -99,13 +165,15 @@
 				},
 				{
 					id: 'payments',
-					title: '3. Payments & Merchant of Record',
+					title: '3. Open Source & Payment Processing',
 					content:
 						processor === 'polar'
 							? `All payments, recurring billing, and European Union VAT / sales tax calculations are handled by **Polar Payments Inc. ("Polar.sh")** acting as Merchant of Record.\n\nWe never receive, store, or process your credit card numbers or raw banking credentials on our local servers. Polar processes transaction data under strict PCI-DSS Level 1 compliance.`
 							: processor === 'lemonsqueezy'
 								? `Payments and VAT compliance are processed securely by **Lemon Squeezy, LLC** acting as Merchant of Record. We never collect or store your payment card details.`
-								: `Payment transactions are securely processed by our authorized payment gateway. We do not store sensitive payment card details on our infrastructure.`
+								: processor === 'stripe'
+									? `Payment transactions are securely processed by our authorized payment gateway. We do not store sensitive payment card details on our infrastructure.`
+									: `**${currentConfig.name}** is an open-source software project distributed under the MIT license. The documentation and showcase site does not collect, charge, or process payment transactions or store credit card details.`
 				},
 				{
 					id: 'advertising',
@@ -127,7 +195,7 @@
 				{
 					id: 'contact',
 					title: '7. Contact & Data Protection',
-					content: `If you have any questions or data requests regarding this Privacy Policy, please contact our Data Protection representative at **${dpoEmail}**.`
+					content: `If you have any questions or data requests regarding this Privacy Policy, please contact our Data Protection representative at [${dpoEmail}](mailto:${dpoEmail}).`
 				}
 			];
 		}
@@ -146,11 +214,13 @@
 				},
 				{
 					id: 'subscriptions',
-					title: '3. Subscriptions, Invoicing & Taxes',
+					title: '3. Free & Open Source Licensing (MIT)',
 					content:
 						processor === 'polar'
 							? `Subscriptions and paid tiers are billed in advance on a recurring monthly or annual basis. Invoicing, payment collection, and applicable VAT / sales taxes are managed by **Polar.sh** as Merchant of Record.\n\nYou can manage or cancel your subscription at any time directly through your account dashboard or billing portal.`
-							: `Paid subscription tiers are billed in advance on a recurring cycle. You may cancel your subscription at any time before your next billing cycle.`
+							: processor === 'none' || !processor
+								? `**${currentConfig.name}** is provided completely free of charge under the permissive **MIT License**. You are granted full rights to use, copy, modify, merge, publish, distribute, sublicense, and sell copies of the software in both commercial and non-commercial projects without subscription fees.`
+								: `Paid subscription tiers are billed in advance on a recurring cycle. You may cancel your subscription at any time before your next billing cycle.`
 				},
 				{
 					id: 'liability',
@@ -279,12 +349,27 @@
 			>
 			{#if contactEmail}
 				<span>•</span>
-				<a
-					href="mailto:{contactEmail}"
-					class="text-primary-600 hover:underline dark:text-primary-400"
-				>
-					{contactEmail}
-				</a>
+				<div class="inline-flex items-center gap-1.5">
+					<a
+						href="mailto:{contactEmail}"
+						class="font-medium text-primary-600 hover:underline dark:text-primary-400"
+					>
+						{contactEmail}
+					</a>
+					<button
+						type="button"
+						onclick={() => copyLegalEmail(contactEmail)}
+						class="inline-flex items-center justify-center rounded p-1 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
+						aria-label="Copy email address"
+						title={copiedLegalEmail ? 'Copied to clipboard!' : 'Copy email address'}
+					>
+						{#if copiedLegalEmail}
+							<Icon name="check" size="xs" class="text-emerald-500" />
+						{:else}
+							<Icon name="clipboard" size="xs" />
+						{/if}
+					</button>
+				</div>
 			{/if}
 		</div>
 	</div>
@@ -325,9 +410,9 @@
 						{sec.title}
 					</h2>
 					<div
-						class="prose max-w-none leading-relaxed whitespace-pre-line text-neutral-600 prose-neutral dark:text-neutral-300 dark:prose-invert"
+						class="prose max-w-none text-neutral-600 prose-neutral dark:text-neutral-300 dark:prose-invert"
 					>
-						{sec.content}
+						{@html formatLegalHtml(sec.content || '')}
 					</div>
 				</section>
 			{/each}

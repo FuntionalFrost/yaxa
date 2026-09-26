@@ -276,7 +276,7 @@ class ThemeStore {
 	fontFamily = $state<FontFamily>('sans');
 	radius = $state<RadiusPreset>('default');
 	fontSize = $state<BaseFontSize>('base');
-	accentScrollbar = $state<boolean>(false);
+	accentScrollbar = $state<boolean>(true);
 
 	constructor() {
 		if (browser) {
@@ -307,6 +307,8 @@ class ThemeStore {
 			const storedScrollbar = localStorage.getItem('yaxa-accent-scrollbar');
 			if (storedScrollbar !== null) {
 				this.accentScrollbar = storedScrollbar === 'true';
+			} else {
+				this.accentScrollbar = true;
 			}
 
 			this.applyAllStyles();
@@ -387,6 +389,30 @@ class ThemeStore {
 		}
 	}
 
+	randomize() {
+		const accents = Object.keys(ACCENT_PALETTES) as AccentName[];
+		const neutrals = Object.keys(NEUTRAL_PALETTES) as NeutralName[];
+		const fonts = Object.keys(FONT_PRESETS) as FontFamily[];
+		const radii = Object.keys(RADIUS_PRESETS) as RadiusPreset[];
+
+		const randomAccent = accents[Math.floor(Math.random() * accents.length)];
+		const randomNeutral = neutrals[Math.floor(Math.random() * neutrals.length)];
+		const randomFont = fonts[Math.floor(Math.random() * fonts.length)];
+		const randomRadius = radii[Math.floor(Math.random() * radii.length)];
+
+		this.setAccent(randomAccent);
+		this.setNeutral(randomNeutral);
+		this.setFontFamily(randomFont);
+		this.setRadius(randomRadius);
+
+		return {
+			accent: randomAccent,
+			neutral: randomNeutral,
+			fontFamily: randomFont,
+			radius: randomRadius
+		};
+	}
+
 	reset() {
 		this.setMode('system');
 		this.setAccent('svelte');
@@ -394,7 +420,7 @@ class ThemeStore {
 		this.setFontFamily('sans');
 		this.setRadius('default');
 		this.setFontSize('base');
-		this.setAccentScrollbar(false);
+		this.setAccentScrollbar(true);
 	}
 
 	private applyAllStyles() {

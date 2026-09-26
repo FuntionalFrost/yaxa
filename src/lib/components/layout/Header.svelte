@@ -104,9 +104,9 @@
 					aria-label="Toggle color mode"
 				>
 					{#if theme.resolvedTheme === 'dark'}
-						<Icon name="sun" size="sm" class="text-amber-400" />
+						<Icon name="moon" size="sm" class="text-primary-400" />
 					{:else}
-						<Icon name="moon" size="sm" class="text-neutral-600" />
+						<Icon name="sun" size="sm" class="text-amber-500" />
 					{/if}
 				</Button>
 

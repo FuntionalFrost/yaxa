@@ -31,6 +31,18 @@
 			legalLinks?.privacy || legalLinks?.terms || legalLinks?.refunds || legalLinks?.impressum
 		)
 	);
+
+	let copiedEmail = $state(false);
+
+	function copyEmail(email: string) {
+		if (typeof navigator !== 'undefined' && navigator.clipboard) {
+			navigator.clipboard.writeText(email);
+			copiedEmail = true;
+			setTimeout(() => {
+				copiedEmail = false;
+			}, 2000);
+		}
+	}
 </script>
 
 <footer
@@ -56,20 +68,28 @@
 					{currentConfig.description}
 				</p>
 				{#if currentConfig.email}
-					<p class="text-xs text-neutral-500 dark:text-neutral-400">
-						Contact:
+					<div class="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400">
+						<span>Contact:</span>
 						<a
 							href="mailto:{currentConfig.email}"
-							class="font-medium text-neutral-700 hover:underline dark:text-neutral-300"
+							class="font-medium text-neutral-700 transition-colors hover:text-primary-600 hover:underline dark:text-neutral-300 dark:hover:text-primary-400"
 						>
 							{currentConfig.email}
 						</a>
-					</p>
-				{/if}
-				{#if legal?.morNotice}
-					<p class="text-xs text-neutral-500 dark:text-neutral-500">
-						{legal.morNotice}
-					</p>
+						<button
+							type="button"
+							onclick={() => copyEmail(currentConfig.email!)}
+							class="inline-flex items-center justify-center rounded p-1 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
+							aria-label="Copy email address"
+							title={copiedEmail ? 'Copied to clipboard!' : 'Copy email address'}
+						>
+							{#if copiedEmail}
+								<Icon name="check" size="xs" class="text-emerald-500" />
+							{:else}
+								<Icon name="clipboard" size="xs" />
+							{/if}
+						</button>
+					</div>
 				{/if}
 
 				<div class="pt-2 text-xs text-neutral-500 dark:text-neutral-400">

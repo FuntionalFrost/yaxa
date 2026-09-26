@@ -100,6 +100,21 @@
 		</div>
 
 		<div class="flex items-center gap-2.5">
+			<Button
+				variant="outline"
+				size="sm"
+				onclick={() => {
+					const chosen = theme.randomize();
+					toast.info(
+						'Theme Randomized',
+						`${chosen.accent} · ${chosen.neutral} · ${chosen.radius} · ${chosen.fontFamily}`
+					);
+				}}
+			>
+				<Icon name="sparkles" size="xs" class="mr-1.5" />
+				Randomize
+			</Button>
+
 			<Button variant="outline" size="sm" onclick={() => theme.reset()}>
 				<Icon name="rotate-ccw" size="xs" class="mr-1.5" />
 				Reset
@@ -146,7 +161,12 @@
 					<div class="text-xs font-bold tracking-wider text-neutral-900 uppercase dark:text-white">
 						Primary Accent
 					</div>
-					<span class="text-xs font-semibold text-primary-500 capitalize">{theme.accent}</span>
+					<span
+						class="text-xs font-bold capitalize"
+						style="color: {ACCENT_PALETTES[theme.accent].color};"
+					>
+						{theme.accent}
+					</span>
 				</div>
 				<div class="grid grid-cols-4 gap-2">
 					{#each Object.entries(ACCENT_PALETTES) as [key, pal]}
@@ -155,7 +175,7 @@
 							onclick={() => theme.setAccent(key as AccentName)}
 							class="group relative flex flex-col items-center gap-1.5 rounded-xl border p-2 text-center transition-all {theme.accent ===
 							key
-								? 'border-primary-500 bg-primary-50/50 dark:bg-primary-950/40'
+								? 'border-primary-500 bg-primary-50/50 shadow-xs dark:bg-primary-950/40'
 								: 'border-neutral-200 hover:border-neutral-300 dark:border-neutral-800'}"
 						>
 							<span
@@ -163,7 +183,8 @@
 								style="background-color: {pal.color}"
 							></span>
 							<span
-								class="text-[10px] font-medium text-neutral-700 capitalize dark:text-neutral-300"
+								class="text-[10px] font-bold capitalize transition-transform group-hover:scale-105"
+								style="color: {pal.color};"
 							>
 								{key}
 							</span>
@@ -182,18 +203,42 @@
 						{theme.neutral}
 					</span>
 				</div>
-				<div class="grid grid-cols-2 gap-2">
+				<div class="grid grid-cols-2 gap-2.5">
 					{#each Object.entries(NEUTRAL_PALETTES) as [key, pal]}
-						<Button
-							variant={theme.neutral === key ? 'solid' : 'outline'}
-							size="xs"
+						{@const active = theme.neutral === key}
+						<button
+							type="button"
 							onclick={() => theme.setNeutral(key as NeutralName)}
-							class="justify-start gap-2 capitalize"
+							class="group relative flex flex-col gap-2 rounded-xl border p-2.5 text-left transition-all {active
+								? 'border-primary-500 bg-primary-50/50 ring-1 ring-primary-500 dark:bg-primary-950/40'
+								: 'border-neutral-200 hover:border-neutral-300 dark:border-neutral-800 dark:hover:border-neutral-700'}"
 						>
-							<span class="h-3.5 w-3.5 rounded-full" style="background-color: {pal.shades[500]}"
-							></span>
-							{pal.name}
-						</Button>
+							<div class="flex items-center justify-between">
+								<span class="text-xs font-semibold text-neutral-900 dark:text-neutral-100"
+									>{pal.name}</span
+								>
+								{#if active}
+									<span class="h-2 w-2 rounded-full bg-primary-500"></span>
+								{/if}
+							</div>
+							<div class="flex items-center gap-1.5">
+								<span
+									class="h-3.5 flex-1 rounded-sm border border-black/10 dark:border-white/10"
+									style="background-color: {pal.shades[200]}"
+									title="Light {pal.name}"
+								></span>
+								<span
+									class="h-3.5 flex-1 rounded-sm border border-black/10 dark:border-white/10"
+									style="background-color: {pal.shades[500]}"
+									title="Mid {pal.name}"
+								></span>
+								<span
+									class="h-3.5 flex-1 rounded-sm border border-black/10 dark:border-white/10"
+									style="background-color: {pal.shades[900]}"
+									title="Dark {pal.name}"
+								></span>
+							</div>
+						</button>
 					{/each}
 				</div>
 			</Card>
@@ -208,14 +253,17 @@
 				</div>
 				<div class="grid grid-cols-3 gap-1.5">
 					{#each Object.entries(RADIUS_PRESETS) as [key, r]}
-						<Button
-							variant={theme.radius === key ? 'solid' : 'outline'}
-							size="xs"
+						{@const active = theme.radius === key}
+						<button
+							type="button"
 							onclick={() => theme.setRadius(key as RadiusPreset)}
-							class="text-xs"
+							class="border px-2.5 py-1.5 text-xs font-semibold transition-all {active
+								? 'border-primary-500 bg-primary-500 font-bold text-white shadow-xs'
+								: 'border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'}"
+							style="border-radius: {r.value} !important;"
 						>
 							{r.name}
-						</Button>
+						</button>
 					{/each}
 				</div>
 			</Card>
@@ -226,15 +274,18 @@
 					Typography & Sizing
 				</div>
 				<div class="grid grid-cols-3 gap-1.5">
-					{#each Object.entries(FONT_PRESETS) as [key]}
-						<Button
-							variant={theme.fontFamily === key ? 'solid' : 'outline'}
-							size="xs"
+					{#each Object.entries(FONT_PRESETS) as [key, font]}
+						{@const active = theme.fontFamily === key}
+						<button
+							type="button"
 							onclick={() => theme.setFontFamily(key as FontFamily)}
-							class="text-xs capitalize"
+							class="rounded-md border px-2.5 py-1.5 text-xs font-semibold capitalize transition-all {active
+								? 'border-primary-500 bg-primary-500 text-white shadow-xs'
+								: 'border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'}"
+							style="font-family: {font.value} !important;"
 						>
 							{key}
-						</Button>
+						</button>
 					{/each}
 				</div>
 
