@@ -1,4 +1,4 @@
-import { toast } from 'svelte-sonner';
+import { toast } from './useToast.svelte';
 import type { SubmitFunction } from '@sveltejs/kit';
 
 export interface UseFormActionOptions {

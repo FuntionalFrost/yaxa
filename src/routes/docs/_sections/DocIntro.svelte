@@ -43,8 +43,8 @@
 			</div>
 			<h3 class="mb-1 text-sm font-bold text-zinc-900 dark:text-white">Svelte 5 Runes Native</h3>
 			<p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
-				Pure runes reactivity (`$state`, `$derived`, `&#123;#snippet&#125;`) with zero Svelte 4
-				store overhead.
+				Pure runes reactivity (`$state`, `$derived`, `&#123;#snippet&#125;`) with SSR leak-proof
+				class state containers and zero store overhead.
 			</p>
 		</div>
 
@@ -57,11 +57,11 @@
 				<Icon name="cube" class="h-5 w-5" />
 			</div>
 			<h3 class="mb-1 text-sm font-bold text-zinc-900 dark:text-white">
-				createContext & Class State
+				Bits UI Headless Primitives
 			</h3>
 			<p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
-				SSR-safe `createContext` state containers. Direct property access via `useYaxa()` with zero
-				prop drilling or leaks.
+				WAI-ARIA accessibility, keyboard navigation, focus management, and collision-aware floating
+				positioning baked into every overlay.
 			</p>
 		</div>
 
@@ -71,12 +71,14 @@
 			<div
 				class="mb-3 flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400"
 			>
-				<Icon name="swatch" class="h-5 w-5" />
+				<Icon name="layers" class="h-5 w-5" />
 			</div>
-			<h3 class="mb-1 text-sm font-bold text-zinc-900 dark:text-white">Tailwind CSS v4 Ready</h3>
+			<h3 class="mb-1 text-sm font-bold text-zinc-900 dark:text-white">
+				Tailwind Variants & CSS v4
+			</h3>
 			<p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
-				CSS-first `@theme` configuration with instant reactive CSS variables for dynamic 11-shade
-				color paletting.
+				Type-safe variant matrices via `tv()`, conflict-free class merging, CSS `@theme` variables,
+				and harmonic radius scaling.
 			</p>
 		</div>
 
@@ -88,12 +90,10 @@
 			>
 				<Icon name="globe" class="h-5 w-5" />
 			</div>
-			<h3 class="mb-1 text-sm font-bold text-zinc-900 dark:text-white">
-				100% DRY SEO & Edge Parity
-			</h3>
+			<h3 class="mb-1 text-sm font-bold text-zinc-900 dark:text-white">Solo SaaS & SEO Suite</h3>
 			<p class="text-xs leading-relaxed text-zinc-600 dark:text-zinc-400">
-				Single-file `site.config.ts` powers runtime SVG OpenGraph cards, XML sitemaps, robots.txt,
-				and Schema.org.
+				Batteries-included Better-Auth, Drizzle ORM, Polar billing, dynamic edge `/api/og` image
+				generation, and automated XML sitemaps.
 			</p>
 		</div>
 	</div>

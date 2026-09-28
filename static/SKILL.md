@@ -16,7 +16,7 @@ Never hallucinate or rely on outdated prop assumptions. Yaxa strictly maintains 
 1. **Public API & Export Index**: [`src/lib/index.ts`](file:///src/lib/index.ts)
    * The definitive index of every exported component, type definition, action, composable rune, and SEO utility.
 2. **Component Catalog & Categorized Index**: [`src/routes/docs/_data/docs-nav.ts`](file:///src/routes/docs/_data/docs-nav.ts)
-   * Contains all 35+ components organized by category (`elements`, `forms`, `layout`, `overlays`, `saas`, `seo`) with direct source paths.
+   * Contains all 50+ components organized by category (`theming`, `ai`, `charts`, `elements`, `forms`, `layout`, `overlays`, `saas`, `seo`) with direct source paths.
 3. **Component Props & Variants**: Inspect `<script module lang="ts">` in each component file
    * Every component defines its `Props` type and `tailwind-variants` (`tv`) contract inside `<script module lang="ts">` (e.g. [Button.svelte](file:///src/lib/components/elements/Button.svelte)).
 
@@ -28,7 +28,7 @@ Always import from the specific subpath corresponding to the layer:
 
 | Subpath | Description & Key Exports |
 | :--- | :--- |
-| `yaxa-svelte` | **Core UI Primitives, Layouts, AI Primitives, Charts & Composables**: `Button`, `Input`, `Modal`, `Drawer`, `DataTable`, `VirtualList`, `ResizablePanels`, `Carousel`, `DashboardShell`, `Combobox`, `MultiSelect`, `NumberInput`, `Stepper`, `Timeline`, `Tree`, `Terminal`, `OrgSwitcher`, `NotificationCenter`, `Testimonials`, `FAQ`, `FeatureGrid`, `Gate`, `YaxaApp`, `<ThemeStudio>`, `<AiChat>`, `<PromptBar>`, `<AiThought>`, `<AiToolCall>`, `<LineChart>`, `<BarChart>`, `<DonutChart>`, `<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`, `useIdle`, `useGate`, `useUpload`, `useToast`, `definePageSeo`, `defineSiteConfig`, `cn`, `tv`. |
+| `yaxa-svelte` | **Core UI Primitives, Layouts, AI Primitives, Charts & Composables**: `Button`, `Input`, `Modal`, `Drawer`, `Toast`, `Toaster`, `DataTable`, `VirtualList`, `ResizablePanels`, `Carousel`, `DashboardShell`, `Combobox`, `MultiSelect`, `NumberInput`, `Stepper`, `Timeline`, `Tree`, `Terminal`, `OrgSwitcher`, `NotificationCenter`, `Testimonials`, `FAQ`, `FeatureGrid`, `Gate`, `YaxaApp`, `<ThemeStudio>`, `<AiChat>`, `<PromptBar>`, `<AiThought>`, `<AiToolCall>`, `<LineChart>`, `<BarChart>`, `<DonutChart>`, `<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`, `useIdle`, `useGate`, `useUpload`, `useToast`, `toast`, `definePageSeo`, `defineSiteConfig`, `cn`, `tv`. |
 | `yaxa-svelte/yaxa.css` | **Tailwind CSS v4 Stylesheet**: Theme variables (`@theme`), harmonic radius multiplier scale (`--radius-xs` to `--radius-4xl`), chart series tokens (`--color-chart-1` to `--color-chart-5`), independent sidebar tokens, and adaptive scrollbars. |
 | `yaxa-svelte/server` | **Server Hooks & SEO Endpoints**: `createYaxaHook` (handles `/robots.txt`, `/sitemap.xml`, `/site.webmanifest`, `/api/og`), `createYaxaAuthHook` (multi-tenant session resolution on `event.locals.orgId`). |
 | `yaxa-svelte/auth` | **Better-Auth Integration**: `createYaxaAuth` (pre-wired for Drizzle & Multi-Tenant Organizations). |
@@ -74,7 +74,7 @@ Never use `<slot />` or `<svelte:fragment>`. Use Svelte 5 `Snippet` props:
 ```svelte
 <Button leading={iconSnippet} trailing={chevronSnippet}>
   {#snippet iconSnippet()}
-    <Icon name="lucide:arrow-left" />
+    <Icon name="arrow-left" />
   {/snippet}
   Save Changes
 </Button>

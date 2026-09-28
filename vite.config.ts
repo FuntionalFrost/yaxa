@@ -1,14 +1,12 @@
 import tailwindcss from '@tailwindcss/vite';
 import adapter from '@sveltejs/adapter-vercel';
 import { sveltekit } from '@sveltejs/kit/vite';
-import Icons from 'unplugin-icons/vite';
 import { defineConfig } from 'vitest/config';
 import { yaxa } from './src/lib/vite/index.ts';
 
 export default defineConfig({
 	plugins: [
 		tailwindcss(),
-		Icons({ compiler: 'svelte', autoInstall: false }),
 		sveltekit({
 			adapter: adapter({ runtime: 'nodejs24.x' })
 		}),
@@ -19,10 +17,10 @@ export default defineConfig({
 		conditions: ['browser', 'svelte']
 	},
 	optimizeDeps: {
-		exclude: ['bits-ui', 'svelte-sonner', 'runed', 'mode-watcher', 'svelte']
+		exclude: ['bits-ui', 'svelte']
 	},
 	ssr: {
-		noExternal: ['bits-ui', 'svelte-sonner', 'runed', 'mode-watcher', 'yaxa-svelte']
+		noExternal: ['bits-ui', 'yaxa-svelte']
 	},
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}'],

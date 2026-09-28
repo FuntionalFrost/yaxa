@@ -1,9 +1,9 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import { Toaster } from 'svelte-sonner';
+	import Toaster from '../overlays/Toaster.svelte';
 	import { Tooltip } from 'bits-ui';
 	import { type SiteConfig, DEFAULT_SITE_CONFIG } from '$lib/site/config';
-	import { theme, themeInitScript } from '$lib/theme/theme.svelte';
+	import { themeInitScript } from '$lib/theme/theme.svelte';
 	import Favicons from '../seo/Favicons.svelte';
 	import Seo from '../seo/Seo.svelte';
 	import { initYaxaState, type AuthUserContext } from '$lib/site/context';
@@ -53,5 +53,5 @@
 	</div>
 </Tooltip.Provider>
 
-<!-- Global Toast Container with dynamic theme synchronization -->
-<Toaster richColors theme={theme.resolvedTheme} position="top-right" closeButton />
+<!-- Global Toast Container -->
+<Toaster richColors position="top-right" closeButton />

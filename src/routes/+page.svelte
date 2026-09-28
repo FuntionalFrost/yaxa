@@ -10,7 +10,7 @@
 	import Input from '$lib/components/forms/Input.svelte';
 	import Switch from '$lib/components/forms/Switch.svelte';
 	import Tabs from '$lib/components/navigation/Tabs.svelte';
-	import { useToast } from '$lib/composables/useToast';
+	import { useToast } from '$lib/composables/useToast.svelte';
 	import {
 		theme,
 		ACCENT_PALETTES,
@@ -138,7 +138,7 @@ export const siteConfig = defineSiteConfig({
 			class="mb-8 inline-flex items-center gap-2 rounded-full border border-primary-500/30 bg-primary-50/50 px-4 py-1.5 text-xs font-semibold text-primary-700 shadow-xs backdrop-blur-md dark:border-primary-400/20 dark:bg-primary-950/40 dark:text-primary-300"
 		>
 			<span class="flex h-2 w-2 animate-pulse rounded-full bg-primary-500"></span>
-			<span>Svelte 5 Runes · Tailwind CSS v4 · Nuxt UI & Nuxt SEO Parity</span>
+			<span>Svelte 5 Runes · Bits UI Primitives · Tailwind Variants · Tailwind CSS v4</span>
 		</div>
 
 		<!-- Main Headline -->
@@ -154,8 +154,8 @@ export const siteConfig = defineSiteConfig({
 		<p
 			class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed font-normal text-neutral-600 sm:text-xl dark:text-neutral-400"
 		>
-			50+ accessible Svelte 5 components, AI chat primitives, native SVG charts, SaaS page blocks,
-			DOM virtualization, automated OpenGraph cards, and the real-time Visual Web Theme Studio.
+			50+ accessible components powered by Bits UI & Tailwind Variants. Includes AI chat primitives,
+			native SVG charts, solo SaaS workflows, and the real-time Visual Web Theme Studio.
 		</p>
 
 		<!-- Action CTA Buttons -->
@@ -172,7 +172,7 @@ export const siteConfig = defineSiteConfig({
 			</Button>
 
 			<Button href="/theme" size="lg" variant="solid" color="neutral" class="font-semibold">
-				<Icon name="palette" class="mr-2 h-4 w-4 text-primary-500" />
+				<Icon name="palette" class="mr-2 h-4 w-4" />
 				Theme Studio
 			</Button>
 
@@ -222,7 +222,7 @@ export const siteConfig = defineSiteConfig({
 			<div
 				class="mb-3 inline-flex items-center gap-1.5 rounded-full bg-primary-100 px-3 py-1 text-xs font-bold text-primary-700 dark:bg-primary-950/60 dark:text-primary-300"
 			>
-				<Icon name="swatch" class="h-3.5 w-3.5" /> Live Tailwind CSS v4 Theme Studio
+				<Icon name="palette" class="h-3.5 w-3.5" /> Live Tailwind CSS v4 Theme Studio
 			</div>
 			<h2
 				class="text-3xl font-extrabold tracking-tight text-neutral-900 sm:text-4xl dark:text-white"
@@ -568,11 +568,11 @@ export const siteConfig = defineSiteConfig({
 					<Icon name="bolt" class="h-5 w-5" />
 				</div>
 				<h3 class="mb-2 text-base font-bold text-neutral-900 dark:text-white">
-					Pure Svelte 5 Runes & createContext
+					Pure Svelte 5 Runes Native
 				</h3>
 				<p class="text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">
-					Zero legacy store baggage. Svelte 5.40+ `createContext` with SSR leak-proof reactive class
-					containers and direct composables (`useYaxa()`, `useSiteConfig()`).
+					Zero legacy store baggage. Svelte 5 runes reactivity (`$state`, `$derived`, Snippets) with
+					SSR leak-proof class state containers and direct composables (`useToast()`, `useGate()`).
 				</p>
 			</div>
 
@@ -619,14 +619,14 @@ export const siteConfig = defineSiteConfig({
 				<div
 					class="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-violet-100 text-violet-600 dark:bg-violet-950/60 dark:text-violet-400"
 				>
-					<Icon name="swatch" class="h-5 w-5" />
+					<Icon name="layers" class="h-5 w-5" />
 				</div>
 				<h3 class="mb-2 text-base font-bold text-neutral-900 dark:text-white">
-					Tailwind CSS v4 Ready
+					Tailwind Variants & CSS v4
 				</h3>
 				<p class="text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">
-					Built for `@tailwindcss/vite` with pure CSS `@theme` variables. Dynamic 11-shade color
-					paletting without configuring giant JavaScript theme objects.
+					Type-safe variant matrices via `tv()`, conflict-free class merging, CSS `@theme`
+					variables, and harmonic radius scaling without JavaScript theme objects.
 				</p>
 			</div>
 
@@ -640,11 +640,11 @@ export const siteConfig = defineSiteConfig({
 					<Icon name="squares-plus" class="h-5 w-5" />
 				</div>
 				<h3 class="mb-2 text-base font-bold text-neutral-900 dark:text-white">
-					45+ Accessible Primitives
+					Bits UI Accessible Primitives
 				</h3>
 				<p class="text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">
-					DashboardShell, Carousel, VirtualList, ResizablePanels, Terminal, Timeline, Tree,
-					MultiSelect, Combobox, Stepper, Modals, Slideovers, and DataTables ready for deployment.
+					WAI-ARIA compliance, keyboard navigation, focus management, and collision-aware floating
+					positioning under the hood for every overlay and picker.
 				</p>
 			</div>
 
@@ -658,11 +658,11 @@ export const siteConfig = defineSiteConfig({
 					<Icon name="sparkles" class="h-5 w-5" />
 				</div>
 				<h3 class="mb-2 text-base font-bold text-neutral-900 dark:text-white">
-					Solo Dev DX & 100% DRY
+					Ultra-Lean Runtime (Only 2 Deps)
 				</h3>
 				<p class="text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">
-					Single-email mode, automated project licensing badges, and turnkey Polar.sh billing. Never
-					repeat metadata or boilerplate across files.
+					Only 2 direct production dependencies (`bits-ui` + `tailwind-variants`). Zero bloat, zero
+					runtime CSS conflicts, and ultra-fast SSR hydration.
 				</p>
 			</div>
 		</div>

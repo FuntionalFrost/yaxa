@@ -1,5 +1,22 @@
 <script module lang="ts">
+	import { tv } from '$lib/utils/cn';
 	import type { Component, Snippet } from 'svelte';
+
+	export const iconVariants = tv({
+		base: 'inline-flex shrink-0 items-center justify-center',
+		variants: {
+			size: {
+				xs: 'w-3.5 h-3.5',
+				sm: 'w-4 h-4',
+				md: 'w-5 h-5',
+				lg: 'w-6 h-6',
+				xl: 'w-8 h-8'
+			}
+		},
+		defaultVariants: {
+			size: 'md'
+		}
+	});
 
 	export type IconSource =
 		string | Component<{ class?: string; size?: string | number; [key: string]: any }>;
@@ -24,22 +41,11 @@
 		...restProps
 	}: IconProps = $props();
 
-	let sizeClass = $derived.by(() => {
-		if (typeof size === 'number') return `w-[${size}px] h-[${size}px]`;
-		switch (size) {
-			case 'xs':
-				return 'w-3.5 h-3.5';
-			case 'sm':
-				return 'w-4 h-4';
-			case 'lg':
-				return 'w-6 h-6';
-			case 'xl':
-				return 'w-8 h-8';
-			case 'md':
-			default:
-				return 'w-5 h-5';
-		}
-	});
+	let classes = $derived(
+		typeof size === 'number'
+			? `inline-flex shrink-0 items-center justify-center w-[${size}px] h-[${size}px] ${className}`
+			: iconVariants({ size: size as 'xs' | 'sm' | 'md' | 'lg' | 'xl', class: className })
+	);
 
 	let IconComponent = $derived.by(() => {
 		if (icon && typeof icon !== 'string') return icon;
@@ -51,6 +57,43 @@
 		if (typeof icon === 'string') return icon;
 		if (typeof name === 'string') return name;
 		return null;
+	});
+
+	const iconAliases: Record<string, string> = {
+		close: 'cross',
+		x: 'cross',
+		'x-mark': 'cross',
+		pencil: 'edit',
+		lightning: 'bolt',
+		zap: 'bolt',
+		'arrow-right-on-rectangle': 'log-out',
+		logout: 'log-out',
+		document: 'file',
+		envelope: 'mail',
+		email: 'mail',
+		'shield-check': 'shield',
+		security: 'shield',
+		paintbrush: 'paint-brush',
+		swatches: 'swatch',
+		laptop: 'computer',
+		desktop: 'computer',
+		monitor: 'computer',
+		menu: 'bars-3',
+		adjustments: 'sliders',
+		'adjustments-horizontal': 'sliders',
+		'adjustments-vertical': 'sliders',
+		'square-3-stack-3d': 'layers',
+		'chart-bar': 'chart',
+		'bar-chart': 'chart',
+		book: 'book-open',
+		building: 'building-office-2',
+		'cursor-arrow-rays': 'cursor',
+		receipt: 'receipt-percent'
+	};
+
+	let resolvedIconName = $derived.by(() => {
+		if (!stringIconName) return null;
+		return iconAliases[stringIconName] || stringIconName;
 	});
 
 	// Common built-in SVGs for immediate zero-config use
@@ -134,7 +177,7 @@
 		bolt: '<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
 		cube: '<path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><polyline points="3.27 6.96 12 12.01 20.73 6.96" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="12" y1="22.08" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
 		swatch:
-			'<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c.88 0 1.6-.72 1.6-1.6 0-.41-.17-.79-.44-1.06-.27-.28-.44-.65-.44-1.06 0-.88.72-1.6 1.6-1.6h1.88c3.15 0 5.72-2.57 5.72-5.72C21.32 6.16 17.14 2 12 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="6.5" cy="11.5" r="1.5" fill="currentColor"/><circle cx="9.5" cy="7.5" r="1.5" fill="currentColor"/><circle cx="14.5" cy="7.5" r="1.5" fill="currentColor"/><circle cx="17.5" cy="11.5" r="1.5" fill="currentColor"/>',
+			'<path d="M11 17a4 4 0 0 1-8 0V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M16.7 13H19a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="7" cy="17" r="1.5" fill="currentColor"/><path d="m11 8 2.3-2.3a2.4 2.4 0 0 1 3.4.004L18.6 7.6a2.4 2.4 0 0 1 .002 3.4L13 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
 		star: '<polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
 		photo:
 			'<rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="8.5" cy="8.5" r="1.5" fill="currentColor"/><polyline points="21 15 16 10 5 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
@@ -163,38 +206,65 @@
 		'layout-top':
 			'<rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><line x1="3" y1="9" x2="21" y2="9" stroke="currentColor" stroke-width="2"/>',
 		'panel-right':
-			'<rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><line x1="15" y1="3" x2="15" y2="21" stroke="currentColor" stroke-width="2"/>'
+			'<rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><line x1="15" y1="3" x2="15" y2="21" stroke="currentColor" stroke-width="2"/>',
+		bell: '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M13.73 21a2 2 0 0 1-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
+		fingerprint:
+			'<path d="M12 10a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M14 13.12c0 2.38 0 6.38-1 8.88" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M2 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M21.8 16c.2-2 .131-5.354 0-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M5 19.5C5.5 18 6 15 6 12a6 6 0 0 1 .34-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M8.65 22c.21-.66.45-1.32.57-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/><path d="M9 6.8a6 6 0 0 1 9 5.2v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>',
+		key: '<path d="M21 2l-2 2m-1.5 1.5L14 9l-3-3L2 15l7 7 9-9 3.5-3.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="7.5" cy="16.5" r="1.5" fill="currentColor"/>',
+		'credit-card':
+			'<rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><line x1="2" y1="10" x2="22" y2="10" stroke="currentColor" stroke-width="2"/><line x1="6" y1="15" x2="10" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+		home: '<path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><polyline points="9 22 9 12 15 12 15 22" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
+		settings:
+			'<circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2" fill="none"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
+		'log-out':
+			'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><polyline points="16 17 21 12 16 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="21" y1="12" x2="9" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>',
+		mail: '<path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" stroke="currentColor" stroke-width="2" fill="none"/><polyline points="22,6 12,13 2,6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
+		inbox:
+			'<polyline points="22 12 16 12 14 15 10 15 8 12 2 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
+		palette:
+			'<circle cx="13.5" cy="6.5" r="1.5" fill="currentColor"/><circle cx="17.5" cy="10.5" r="1.5" fill="currentColor"/><circle cx="8.5" cy="7.5" r="1.5" fill="currentColor"/><circle cx="6.5" cy="12.5" r="1.5" fill="currentColor"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
+		'paint-brush':
+			'<path d="m9.53 16.122 9.72-9.72a.75.75 0 0 0-.01-1.06l-4.58-4.58a.75.75 0 0 0-1.06 0l-9.72 9.72a3.75 3.75 0 0 0-1.1 2.652v2.368a.75.75 0 0 0 .75.75h2.368a3.75 3.75 0 0 0 2.652-1.12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
+		layers:
+			'<path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
+		sliders:
+			'<line x1="4" y1="21" x2="4" y2="14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="4" y1="10" x2="4" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="21" x2="12" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="12" y1="8" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="20" y1="21" x2="20" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="20" y1="12" x2="20" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="1" y1="14" x2="7" y2="14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="9" y1="8" x2="15" y2="8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="17" y1="16" x2="23" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+		shield:
+			'<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
+		chart:
+			'<line x1="12" y1="20" x2="12" y2="10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="18" y1="20" x2="18" y2="4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="6" y1="20" x2="6" y2="16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+		'building-office-2':
+			'<path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M6 12H4a2 2 0 0 0-2 2v8h20v-8a2 2 0 0 0-2-2h-2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="10" y1="6" x2="10" y2="6.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="14" y1="6" x2="14" y2="6.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="10" y1="10" x2="10" y2="10.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="14" y1="10" x2="14" y2="10.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="10" y1="14" x2="10" y2="14.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="14" y1="14" x2="14" y2="14.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="10" y1="18" x2="14" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+		table:
+			'<rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><line x1="3" y1="9" x2="21" y2="9" stroke="currentColor" stroke-width="2"/><line x1="3" y1="15" x2="21" y2="15" stroke="currentColor" stroke-width="2"/><line x1="9" y1="3" x2="9" y2="21" stroke="currentColor" stroke-width="2"/><line x1="15" y1="3" x2="15" y2="21" stroke="currentColor" stroke-width="2"/>',
+		window:
+			'<rect x="2" y="3" width="20" height="18" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><line x1="2" y1="8" x2="22" y2="8" stroke="currentColor" stroke-width="2"/><circle cx="5" cy="5.5" r="1" fill="currentColor"/><circle cx="8" cy="5.5" r="1" fill="currentColor"/><circle cx="11" cy="5.5" r="1" fill="currentColor"/>',
+		'bars-3-bottom-right':
+			'<line x1="3" y1="6" x2="21" y2="6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="3" y1="12" x2="21" y2="12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="9" y1="18" x2="21" y2="18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+		cursor:
+			'<path d="m4 4 7 17 2.5-6.5L20 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
+		'book-open':
+			'<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>',
+		'receipt-percent':
+			'<path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><line x1="9" y1="9" x2="15" y2="15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="9.5" cy="9.5" r=".75" fill="currentColor"/><circle cx="14.5" cy="14.5" r=".75" fill="currentColor"/>',
+		'document-magnifying-glass':
+			'<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="11" cy="14" r="3" stroke="currentColor" stroke-width="2" fill="none"/><line x1="13.2" y1="16.2" x2="16.5" y2="19.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'
 	};
 </script>
 
 {#if children}
-	<span class="inline-flex shrink-0 items-center justify-center {sizeClass} {className}">
+	<span class={classes}>
 		{@render children()}
 	</span>
 {:else if IconComponent}
 	{@const RenderIcon = IconComponent}
-	<RenderIcon
-		class="inline-flex shrink-0 items-center justify-center {sizeClass} {className}"
-		{...restProps}
-	/>
-{:else if stringIconName && builtInIcons[stringIconName]}
-	<svg
-		class="inline-flex shrink-0 items-center justify-center {sizeClass} {className}"
-		viewBox="0 0 24 24"
-		fill="none"
-		aria-hidden="true"
-		{...restProps}
-	>
-		{@html builtInIcons[stringIconName]}
+	<RenderIcon class={classes} {...restProps} />
+{:else if resolvedIconName && builtInIcons[resolvedIconName]}
+	<svg class={classes} viewBox="0 0 24 24" fill="none" aria-hidden="true" {...restProps}>
+		{@html builtInIcons[resolvedIconName]}
 	</svg>
 {:else}
-	<svg
-		class="inline-flex shrink-0 items-center justify-center {sizeClass} {className}"
-		viewBox="0 0 24 24"
-		fill="none"
-		aria-hidden="true"
-		{...restProps}
-	>
+	<svg class={classes} viewBox="0 0 24 24" fill="none" aria-hidden="true" {...restProps}>
 		<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4" />
 	</svg>
 {/if}

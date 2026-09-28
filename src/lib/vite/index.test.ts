@@ -18,15 +18,10 @@ describe('yaxa Vite plugin', () => {
 		expect(config.optimizeDeps?.include).toContain('tailwind-variants');
 		expect(config.optimizeDeps?.exclude).toContain('svelte');
 		expect(config.optimizeDeps?.exclude).toContain('bits-ui');
-		expect(config.optimizeDeps?.exclude).toContain('svelte-sonner');
-		expect(config.optimizeDeps?.exclude).toContain('runed');
-		expect(config.optimizeDeps?.exclude).toContain('mode-watcher');
+		expect(config.optimizeDeps?.exclude).toContain('yaxa-svelte');
 
 		expect(config.ssr?.noExternal).toContain('yaxa-svelte');
 		expect(config.ssr?.noExternal).toContain('bits-ui');
-		expect(config.ssr?.noExternal).toContain('runed');
-		expect(config.ssr?.noExternal).toContain('mode-watcher');
-		expect(config.ssr?.noExternal).toContain('svelte-sonner');
 	});
 
 	it('respects optimizeDeps: false', () => {

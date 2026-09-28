@@ -31,8 +31,8 @@ _Nuxt UI v4 & Nuxt UI Pro Equivalent for SvelteKit 2.7+ & Svelte 5 with Built-in
 - ♿ **Accessible by Default**: Headless primitives powered by **Bits UI**.
 - 🚀 **100% DRY SEO Parity**: Automate dynamic Open Graph cards (`/api/og`), environment-aware `robots.txt`, XML sitemaps with human-readable `sitemap.xsl` stylesheets, PWA manifests, and Schema.org JSON-LD from a single `src/site.config.ts`.
 - 🔐 **Batteries-Included SaaS Suite**: Pre-integrated **Better-Auth**, multi-dialect **Drizzle ORM** (Neon PostgreSQL & Turso LibSQL/SQLite), **Polar.sh** payments & webhook sync, and **Resend** transactional emails.
-- 🧩 **45+ Production Components**: Elements, AI primitives, charts, advanced forms (`<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`), layout, overlays, and drop-in SaaS widgets (`<AuthCard>`, `<UserMenu>`, `<PricingTable>`, `<SubscriptionCard>`).
-- 🛠️ **Composable Runes**: `useAuth`, `useShortcuts`, `useClipboard`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`, `useIdle`.
+- 🧩 **50+ Production Components**: Elements, AI primitives, charts, advanced forms (`<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`), layout, overlays, native `<Toast>` / `<Toaster>`, and drop-in SaaS widgets (`<AuthCard>`, `<UserMenu>`, `<PricingTable>`, `<SubscriptionCard>`).
+- 🛠️ **Composable Runes**: `useAuth`, `useShortcuts`, `useClipboard`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`, `useIdle`, `useGate`.
 
 ---
 
@@ -40,7 +40,7 @@ _Nuxt UI v4 & Nuxt UI Pro Equivalent for SvelteKit 2.7+ & Svelte 5 with Built-in
 
 ### 1. Install Dependencies
 
-Install `yaxa-svelte` along with Tailwind CSS v4 and `@lucide/svelte`:
+Install `yaxa-svelte` along with Tailwind CSS v4:
 
 ```bash
 # Core package & icons

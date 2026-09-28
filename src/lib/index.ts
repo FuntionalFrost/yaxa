@@ -9,7 +9,7 @@ export type { BadgeProps } from './components/elements/Badge.svelte';
 export { default as Avatar } from './components/elements/Avatar.svelte';
 export { default as AvatarGroup } from './components/elements/AvatarGroup.svelte';
 export { default as Kbd } from './components/elements/Kbd.svelte';
-export { default as Icon } from './components/elements/Icon.svelte';
+export { default as Icon, iconVariants } from './components/elements/Icon.svelte';
 export type { IconProps, IconSource } from './components/elements/Icon.svelte';
 export { default as Spinner } from './components/elements/Spinner.svelte';
 export { default as Progress } from './components/elements/Progress.svelte';
@@ -185,6 +185,10 @@ export type {
 	NotificationCenterProps,
 	NotificationItem
 } from './components/overlays/NotificationCenter.svelte';
+export { default as Toast, toastVariants } from './components/overlays/Toast.svelte';
+export type { ToastProps } from './components/overlays/Toast.svelte';
+export { default as Toaster } from './components/overlays/Toaster.svelte';
+export type { ToasterProps } from './components/overlays/Toaster.svelte';
 
 // Headless Actions Suite
 export {
@@ -214,8 +218,15 @@ export type { UseClipboardOptions } from './composables/useClipboard.svelte';
 export { useShortcuts } from './composables/useShortcuts.svelte';
 export type { ShortcutItem, ShortcutConfig } from './composables/useShortcuts.svelte';
 export { useColorMode } from './composables/useColorMode.svelte';
-export { useToast } from './composables/useToast';
-export type { ToastOptions, ToastAction } from './composables/useToast';
+export { toast, useToast, ToastStore } from './composables/useToast.svelte';
+export type {
+	ToastOptions,
+	ToastItem,
+	ToastAction,
+	ToastColor,
+	ToastVariant,
+	ToastPosition
+} from './composables/useToast.svelte';
 export { useMediaQuery } from './composables/useMediaQuery.svelte';
 export { useDebounce } from './composables/useDebounce.svelte';
 export { InfiniteScroll, useInfiniteScroll } from './composables/useInfiniteScroll.svelte';
@@ -237,9 +248,6 @@ export { useFormAction } from './composables/useFormAction.svelte';
 export type { UseFormActionOptions } from './composables/useFormAction.svelte';
 export { useIdle } from './composables/useIdle.svelte';
 export type { UseIdleOptions } from './composables/useIdle.svelte';
-
-// Feedback & Toast notification helper
-export { toast } from 'svelte-sonner';
 
 // Theming & Theme Studio
 export { default as ThemeStudio } from './components/theme/ThemeStudio.svelte';

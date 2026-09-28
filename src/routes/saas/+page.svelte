@@ -13,7 +13,7 @@
 	import SubscriptionCard from '$lib/components/saas/SubscriptionCard.svelte';
 	import Gate from '$lib/components/saas/Gate.svelte';
 	import Icon from '$lib/components/elements/Icon.svelte';
-	import { useToast } from '$lib/composables/useToast';
+	import { useToast } from '$lib/composables/useToast.svelte';
 	import type { SubscriptionStatus } from '$lib/server/db/types';
 
 	const toast = useToast();
@@ -41,7 +41,7 @@
 <div class="space-y-12 pb-16">
 	<!-- Hero & Interactive Control Section -->
 	<section
-		class="border-b border-zinc-200 bg-gradient-to-b from-primary-500/5 via-transparent to-transparent py-12 sm:py-16 dark:border-zinc-800"
+		class="border-b border-zinc-200 bg-linear-to-b from-primary-500/5 via-transparent to-transparent py-12 sm:py-16 dark:border-zinc-800"
 	>
 		<Container size="2xl">
 			<div class="mx-auto max-w-3xl space-y-4 text-center">

@@ -54,21 +54,14 @@ export function yaxa(options: YaxaPluginOptions = {}): Plugin[] {
 						? {
 								optimizeDeps: {
 									include: ['tailwind-variants'],
-									exclude: [
-										'svelte',
-										'bits-ui',
-										'svelte-sonner',
-										'runed',
-										'mode-watcher',
-										'yaxa-svelte'
-									]
+									exclude: ['svelte', 'bits-ui', 'yaxa-svelte']
 								}
 							}
 						: {}),
 					...(noExternal
 						? {
 								ssr: {
-									noExternal: ['yaxa-svelte', 'bits-ui', 'svelte-sonner', 'mode-watcher', 'runed']
+									noExternal: ['yaxa-svelte', 'bits-ui']
 								}
 							}
 						: {})

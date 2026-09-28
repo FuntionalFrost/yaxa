@@ -4,7 +4,7 @@ export const siteConfig = defineSiteConfig({
 	name: 'Yaxa',
 	title: 'Yaxa — The Intuitive Svelte UI Library',
 	description:
-		'A comprehensive Svelte 5 UI component library with 45+ accessible, Tailwind CSS components and automated SEO for building modern web applications.',
+		'A comprehensive Svelte 5 UI component library with 50+ accessible components powered by Bits UI & Tailwind Variants and automated SEO for building modern web applications.',
 	url: 'https://yaxa.vercel.app',
 	email: 'devfrost@protonmail.com',
 	logo: '/favicon.svg',

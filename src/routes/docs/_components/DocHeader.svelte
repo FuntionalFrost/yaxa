@@ -3,7 +3,7 @@
 	import Link from '$lib/components/elements/Link.svelte';
 	import Icon from '$lib/components/elements/Icon.svelte';
 	import { useClipboard } from '$lib/composables/useClipboard.svelte';
-	import { useToast } from '$lib/composables/useToast';
+	import { useToast } from '$lib/composables/useToast.svelte';
 
 	interface Props {
 		title: string;

@@ -1,6 +1,7 @@
 <script module lang="ts">
 	export interface ThemeStudioProps {
 		class?: string;
+		showHeader?: boolean;
 	}
 </script>
 
@@ -28,9 +29,9 @@
 	import DonutChart from '../charts/DonutChart.svelte';
 	import CodeBlock from '../elements/CodeBlock.svelte';
 	import Modal from '../overlays/Modal.svelte';
-	import { useToast } from '$lib/composables/useToast';
+	import { useToast } from '$lib/composables/useToast.svelte';
 
-	let { class: className = '' }: ThemeStudioProps = $props();
+	let { class: className = '', showHeader = true }: ThemeStudioProps = $props();
 
 	const toast = useToast();
 	let exportModalOpen = $state(false);
@@ -87,19 +88,48 @@
 </script>
 
 <div class="space-y-8 {className}">
-	<!-- Top Bar -->
-	<div
-		class="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-800 dark:bg-neutral-900"
-	>
-		<div>
-			<h1 class="text-xl font-bold text-neutral-900 dark:text-white">Visual Web Theme Studio</h1>
-			<p class="mt-1 text-xs text-neutral-500">
-				Visually customize palettes, harmonic radii, fonts, and scrollbars with instant live preview
-				and zero FOUC.
-			</p>
-		</div>
+	{#if showHeader}
+		<!-- Top Bar -->
+		<div
+			class="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-800 dark:bg-neutral-900"
+		>
+			<div>
+				<h1 class="text-xl font-bold text-neutral-900 dark:text-white">Visual Web Theme Studio</h1>
+				<p class="mt-1 text-xs text-neutral-500">
+					Visually customize palettes, harmonic radii, fonts, and scrollbars with instant live
+					preview and zero FOUC.
+				</p>
+			</div>
 
-		<div class="flex items-center gap-2.5">
+			<div class="flex items-center gap-2.5">
+				<Button
+					variant="outline"
+					size="sm"
+					onclick={() => {
+						const chosen = theme.randomize();
+						toast.info(
+							'Theme Randomized',
+							`${chosen.accent} · ${chosen.neutral} · ${chosen.radius} · ${chosen.fontFamily}`
+						);
+					}}
+				>
+					<Icon name="sparkles" size="xs" class="mr-1.5" />
+					Randomize
+				</Button>
+
+				<Button variant="outline" size="sm" onclick={() => theme.reset()}>
+					<Icon name="rotate-ccw" size="xs" class="mr-1.5" />
+					Reset
+				</Button>
+
+				<Button variant="solid" size="sm" onclick={() => (exportModalOpen = true)}>
+					<Icon name="download" size="xs" class="mr-1.5" />
+					Export Theme Tokens
+				</Button>
+			</div>
+		</div>
+	{:else}
+		<div class="flex items-center justify-end gap-2.5">
 			<Button
 				variant="outline"
 				size="sm"
@@ -125,38 +155,38 @@
 				Export Theme Tokens
 			</Button>
 		</div>
-	</div>
+	{/if}
 
 	<!-- Main Studio Grid -->
-	<div class="grid grid-cols-1 gap-8 lg:grid-cols-12">
-		<!-- Left Controls Sidebar (4 cols) -->
-		<div class="space-y-6 lg:col-span-4">
+	<div class="grid grid-cols-1 gap-6 xl:grid-cols-12">
+		<!-- Left Controls Sidebar (5 cols on xl, 4 cols on 2xl) -->
+		<div class="space-y-5 xl:col-span-5 2xl:col-span-4">
 			<!-- Color Mode -->
-			<Card padding="sm" class="space-y-3">
+			<Card padding="sm" class="space-y-2.5">
 				<div class="text-xs font-bold tracking-wider text-neutral-900 uppercase dark:text-white">
 					Color Mode
 				</div>
-				<div class="grid grid-cols-3 gap-2">
+				<div class="grid grid-cols-3 gap-1.5">
 					{#each ['light', 'dark', 'system'] as const as mode}
 						<Button
 							variant={theme.mode === mode ? 'solid' : 'outline'}
 							size="xs"
 							onclick={() => theme.setMode(mode)}
-							class="capitalize"
+							class="w-full justify-center px-1.5 py-1 text-[11px] capitalize"
 						>
 							<Icon
 								name={mode === 'light' ? 'sun' : mode === 'dark' ? 'moon' : 'laptop'}
 								size="xs"
-								class="mr-1"
+								class="mr-1 shrink-0"
 							/>
-							{mode}
+							<span class="truncate">{mode}</span>
 						</Button>
 					{/each}
 				</div>
 			</Card>
 
 			<!-- Primary Accent Palette -->
-			<Card padding="sm" class="space-y-3">
+			<Card padding="sm" class="space-y-2.5">
 				<div class="flex items-center justify-between">
 					<div class="text-xs font-bold tracking-wider text-neutral-900 uppercase dark:text-white">
 						Primary Accent
@@ -168,22 +198,22 @@
 						{theme.accent}
 					</span>
 				</div>
-				<div class="grid grid-cols-4 gap-2">
+				<div class="grid grid-cols-4 gap-1.5">
 					{#each Object.entries(ACCENT_PALETTES) as [key, pal]}
 						<button
 							type="button"
 							onclick={() => theme.setAccent(key as AccentName)}
-							class="group relative flex flex-col items-center gap-1.5 rounded-xl border p-2 text-center transition-all {theme.accent ===
+							class="group relative flex flex-col items-center gap-1 rounded-xl border p-1.5 text-center transition-all {theme.accent ===
 							key
-								? 'border-primary-500 bg-primary-50/50 shadow-xs dark:bg-primary-950/40'
-								: 'border-neutral-200 hover:border-neutral-300 dark:border-neutral-800'}"
+								? 'border-primary-500 bg-primary-50/50 shadow-xs ring-1 ring-primary-500 dark:bg-primary-950/40'
+								: 'border-neutral-200 hover:border-neutral-300 dark:border-neutral-800 dark:hover:border-neutral-700'}"
 						>
 							<span
-								class="h-6 w-6 rounded-full shadow-xs transition-transform group-hover:scale-110"
+								class="h-5 w-5 rounded-full shadow-xs transition-transform group-hover:scale-110"
 								style="background-color: {pal.color}"
 							></span>
 							<span
-								class="text-[10px] font-bold capitalize transition-transform group-hover:scale-105"
+								class="w-full truncate text-[10px] font-bold capitalize"
 								style="color: {pal.color};"
 							>
 								{key}
@@ -194,7 +224,7 @@
 			</Card>
 
 			<!-- Neutral Scale -->
-			<Card padding="sm" class="space-y-3">
+			<Card padding="sm" class="space-y-2.5">
 				<div class="flex items-center justify-between">
 					<div class="text-xs font-bold tracking-wider text-neutral-900 uppercase dark:text-white">
 						Neutral Scale
@@ -203,37 +233,39 @@
 						{theme.neutral}
 					</span>
 				</div>
-				<div class="grid grid-cols-2 gap-2.5">
+				<div class="grid grid-cols-2 gap-2">
 					{#each Object.entries(NEUTRAL_PALETTES) as [key, pal]}
 						{@const active = theme.neutral === key}
 						<button
 							type="button"
 							onclick={() => theme.setNeutral(key as NeutralName)}
-							class="group relative flex flex-col gap-2 rounded-xl border p-2.5 text-left transition-all {active
+							class="group relative flex flex-col gap-1.5 rounded-xl border p-2 text-left transition-all {active
 								? 'border-primary-500 bg-primary-50/50 ring-1 ring-primary-500 dark:bg-primary-950/40'
 								: 'border-neutral-200 hover:border-neutral-300 dark:border-neutral-800 dark:hover:border-neutral-700'}"
 						>
 							<div class="flex items-center justify-between">
-								<span class="text-xs font-semibold text-neutral-900 dark:text-neutral-100"
-									>{pal.name}</span
+								<span
+									class="truncate text-xs font-semibold text-neutral-900 capitalize dark:text-neutral-100"
 								>
+									{key}
+								</span>
 								{#if active}
-									<span class="h-2 w-2 rounded-full bg-primary-500"></span>
+									<span class="h-1.5 w-1.5 shrink-0 rounded-full bg-primary-500"></span>
 								{/if}
 							</div>
-							<div class="flex items-center gap-1.5">
+							<div class="flex items-center gap-1">
 								<span
-									class="h-3.5 flex-1 rounded-sm border border-black/10 dark:border-white/10"
+									class="h-2.5 flex-1 rounded-xs border border-black/10 dark:border-white/10"
 									style="background-color: {pal.shades[200]}"
 									title="Light {pal.name}"
 								></span>
 								<span
-									class="h-3.5 flex-1 rounded-sm border border-black/10 dark:border-white/10"
+									class="h-2.5 flex-1 rounded-xs border border-black/10 dark:border-white/10"
 									style="background-color: {pal.shades[500]}"
 									title="Mid {pal.name}"
 								></span>
 								<span
-									class="h-3.5 flex-1 rounded-sm border border-black/10 dark:border-white/10"
+									class="h-2.5 flex-1 rounded-xs border border-black/10 dark:border-white/10"
 									style="background-color: {pal.shades[900]}"
 									title="Dark {pal.name}"
 								></span>
@@ -244,62 +276,64 @@
 			</Card>
 
 			<!-- Harmonic Radius Scale -->
-			<Card padding="sm" class="space-y-3">
+			<Card padding="sm" class="space-y-2.5">
 				<div class="flex items-center justify-between">
 					<div class="text-xs font-bold tracking-wider text-neutral-900 uppercase dark:text-white">
 						Harmonic Radius
 					</div>
 					<span class="text-xs font-semibold text-primary-500 capitalize">{theme.radius}</span>
 				</div>
-				<div class="grid grid-cols-3 gap-1.5">
+				<div class="grid grid-cols-5 gap-1">
 					{#each Object.entries(RADIUS_PRESETS) as [key, r]}
 						{@const active = theme.radius === key}
 						<button
 							type="button"
 							onclick={() => theme.setRadius(key as RadiusPreset)}
-							class="border px-2.5 py-1.5 text-xs font-semibold transition-all {active
+							class="border px-1 py-1.5 text-center text-[10px] font-semibold transition-all {active
 								? 'border-primary-500 bg-primary-500 font-bold text-white shadow-xs'
 								: 'border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'}"
 							style="border-radius: {r.value} !important;"
 						>
-							{r.name}
+							<span class="block truncate">{r.name}</span>
 						</button>
 					{/each}
 				</div>
 			</Card>
 
 			<!-- Typography & Font Size -->
-			<Card padding="sm" class="space-y-3">
+			<Card padding="sm" class="space-y-2.5">
 				<div class="text-xs font-bold tracking-wider text-neutral-900 uppercase dark:text-white">
 					Typography & Sizing
 				</div>
-				<div class="grid grid-cols-3 gap-1.5">
+				<div class="grid grid-cols-3 gap-1">
 					{#each Object.entries(FONT_PRESETS) as [key, font]}
 						{@const active = theme.fontFamily === key}
 						<button
 							type="button"
 							onclick={() => theme.setFontFamily(key as FontFamily)}
-							class="rounded-md border px-2.5 py-1.5 text-xs font-semibold capitalize transition-all {active
+							class="rounded-md border px-1 py-1.5 text-center text-[11px] font-semibold capitalize transition-all {active
 								? 'border-primary-500 bg-primary-500 text-white shadow-xs'
 								: 'border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'}"
 							style="font-family: {font.value} !important;"
 						>
-							{key}
+							<span class="block truncate">{key}</span>
 						</button>
 					{/each}
 				</div>
 
-				<div class="pt-2">
-					<div class="mb-1.5 text-[11px] font-semibold text-neutral-500">Density / Size Scale</div>
-					<div class="grid grid-cols-3 gap-1.5">
+				<div class="pt-1.5">
+					<div class="mb-1 text-[10px] font-semibold tracking-wide text-neutral-500 uppercase">
+						Density / Size Scale
+					</div>
+					<div class="grid grid-cols-3 gap-1">
 						{#each Object.entries(FONT_SIZE_PRESETS) as [key, sz]}
 							<Button
 								variant={theme.fontSize === key ? 'solid' : 'outline'}
 								size="xs"
 								onclick={() => theme.setFontSize(key as BaseFontSize)}
-								class="text-xs"
+								class="w-full justify-center px-1 py-1 text-[11px]"
 							>
-								{sz.name}
+								<span class="truncate">{sz.name}</span>
 							</Button>
 						{/each}
 					</div>
@@ -324,8 +358,8 @@
 			</Card>
 		</div>
 
-		<!-- Right Live Sandbox Canvas (8 cols) -->
-		<div class="space-y-6 lg:col-span-8">
+		<!-- Right Live Sandbox Canvas (7 cols on xl, 8 cols on 2xl) -->
+		<div class="space-y-6 xl:col-span-7 2xl:col-span-8">
 			<!-- Elements Preview Card -->
 			<Card>
 				{#snippet header()}
@@ -343,12 +377,12 @@
 						<div class="mb-2 text-xs font-semibold text-neutral-500 uppercase">
 							Buttons & Variants
 						</div>
-						<div class="flex flex-wrap gap-2.5">
-							<Button variant="solid" color="primary">Solid Primary</Button>
-							<Button variant="outline" color="primary">Outline</Button>
-							<Button variant="soft" color="primary">Soft</Button>
-							<Button variant="ghost" color="primary">Ghost</Button>
-							<Button variant="solid" color="primary">
+						<div class="flex flex-wrap gap-2">
+							<Button variant="solid" color="primary" size="sm">Solid Primary</Button>
+							<Button variant="outline" color="primary" size="sm">Outline</Button>
+							<Button variant="soft" color="primary" size="sm">Soft</Button>
+							<Button variant="ghost" color="primary" size="sm">Ghost</Button>
+							<Button variant="solid" color="primary" size="sm">
 								<Icon name="sparkles" size="xs" class="mr-1.5" />
 								With Icon
 							</Button>

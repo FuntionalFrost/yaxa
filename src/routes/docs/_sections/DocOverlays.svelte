@@ -12,7 +12,7 @@
 	import Badge from '$lib/components/elements/Badge.svelte';
 	import Icon from '$lib/components/elements/Icon.svelte';
 	import Input from '$lib/components/forms/Input.svelte';
-	import { useToast } from '$lib/composables/useToast';
+	import { useToast } from '$lib/composables/useToast.svelte';
 
 	import Popover from '$lib/components/overlays/Popover.svelte';
 	import Accordion, { type AccordionItem } from '$lib/components/overlays/Accordion.svelte';
@@ -350,13 +350,52 @@
 				</div>
 			</Popover>
 
-			<Button
-				variant="solid"
-				color="success"
-				onclick={() => toast.success('Success notification', 'Changes saved automatically')}
-			>
-				Trigger Toast
-			</Button>
+			<div class="flex flex-wrap items-center gap-2">
+				<Button
+					variant="solid"
+					color="success"
+					size="sm"
+					onclick={() => toast.success('Changes Saved', 'Project settings updated live')}
+				>
+					Success Toast
+				</Button>
+
+				<Button
+					variant="soft"
+					color="error"
+					size="sm"
+					onclick={() =>
+						toast.error('Sync Failed', {
+							description: 'Unable to connect to remote repository',
+							actions: [{ label: 'Retry', onClick: () => toast.info('Retrying sync...') }]
+						})}
+				>
+					Error Toast
+				</Button>
+
+				<Button
+					variant="soft"
+					color="warning"
+					size="sm"
+					onclick={() => toast.warning('Storage Quota', '85% of team bandwidth used')}
+				>
+					Warning
+				</Button>
+
+				<Button
+					variant="soft"
+					color="primary"
+					size="sm"
+					onclick={() =>
+						toast.promise(new Promise<string>((res) => setTimeout(() => res('v2.4.0'), 1500)), {
+							loading: 'Deploying edge worker...',
+							success: (version) => `Production deploy live (${version})`,
+							error: 'Deploy aborted'
+						})}
+				>
+					Promise Toast
+				</Button>
+			</div>
 		</div>
 
 		<!-- Context Menu Target Area -->
