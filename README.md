@@ -216,10 +216,10 @@ export const POST = createPolarWebhookHandler();
 
 | Subpath                | Description                                                                                                                               |
 | :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
-| `yaxa-svelte`          | Core UI Primitives, SEO Components, `<Gate />`, Theme System & Composables (`useGate`, `useUpload`, `useAuth`, `useClipboard`, etc.)      |
+| `yaxa-svelte`          | Core UI Primitives, SEO Components, `<Gate />`, Theme System & Composables (`useGate`, `useUpload`, `useToast`, `useClipboard`, etc.)     |
 | `yaxa-svelte/admin`    | Drizzle ORM Schema Introspection, `<AdminDashboard />`, `createYaxaAdminHook`, `createDrizzleAdmin`, `<DevSandbox />`, `<RecordDrawer />` |
 | `yaxa-svelte/server`   | Universal Server Hooks, SEO endpoints, Drizzle DB drivers, Cloud Storage handlers, and Email dispatch                                     |
-| `yaxa-svelte/auth`     | Better-Auth integration and protected route server guards (`createYaxaAuth`, `createYaxaAuthHook`)                                        |
+| `yaxa-svelte/auth`     | Better-Auth client & server integration (`useAuth`, `<AuthCard />`, `<PasskeyUI />`, `<TwoFactorModal />`, `createYaxaAuth`)              |
 | `yaxa-svelte/db`       | Multi-dialect Drizzle ORM clients & schemas for Neon (PostgreSQL) and Turso (SQLite/LibSQL)                                               |
 | `yaxa-svelte/polar`    | Polar.sh billing, customer portal sessions, and webhook synchronization                                                                   |
 | `yaxa-svelte/email`    | Resend transactional email templates with automatic development console fallback                                                          |

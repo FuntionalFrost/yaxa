@@ -331,17 +331,10 @@ export type { OrgSwitcherProps, OrgItem } from './components/saas/OrgSwitcher.sv
 export { default as PricingCard } from './components/saas/PricingCard.svelte';
 export { default as PricingTable } from './components/saas/PricingTable.svelte';
 export { default as SubscriptionCard } from './components/saas/SubscriptionCard.svelte';
-export { default as AuthCard } from './components/saas/AuthCard.svelte';
-export type { AuthCardMode } from './components/saas/AuthCard.svelte';
-export { default as PasskeyUI, passkeyUiVariants } from './components/saas/PasskeyUI.svelte';
-export type { PasskeyUiProps } from './components/saas/PasskeyUI.svelte';
-export { default as TwoFactorModal } from './components/saas/TwoFactorModal.svelte';
 export { useGate } from './composables/useGate.svelte';
 export type { UseGateOptions } from './composables/useGate.svelte';
 export { useUpload } from './composables/useUpload.svelte';
 export type { UseUploadOptions, UploadResult } from './composables/useUpload.svelte';
-export { useAuth } from './composables/useAuth.svelte';
-export type { UseAuthOptions, SocialProvider, PasskeyInfo } from './composables/useAuth.svelte';
 
 // Pre-Built SaaS Blocks
 export {
