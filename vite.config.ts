@@ -8,6 +8,9 @@ export default defineConfig({
 	plugins: [
 		tailwindcss(),
 		sveltekit({
+			compilerOptions: {
+				runes: true
+			},
 			adapter: adapter({ runtime: 'nodejs24.x' })
 		}),
 		yaxa()
