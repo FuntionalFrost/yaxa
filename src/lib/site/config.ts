@@ -215,15 +215,17 @@ export function defineSiteConfig(config: SiteConfig): SiteConfig {
 		project: resolvedProject,
 		legal: {
 			refundDays: 14,
-			paymentProcessor: 'polar',
+			paymentProcessor: 'none',
 			morNotice: defaultMorNotice,
 			dpoEmail: config.legal?.dpoEmail || primaryEmail,
 			...config.legal,
 			links: {
 				privacy: '/privacy',
 				terms: '/terms',
-				refunds: '/refunds',
 				impressum: '/impressum',
+				...(config.legal?.paymentProcessor && config.legal?.paymentProcessor !== 'none'
+					? { refunds: '/refunds' }
+					: {}),
 				...config.legal?.links
 			}
 		},
@@ -247,31 +249,26 @@ export function defineSiteConfig(config: SiteConfig): SiteConfig {
 }
 
 export const DEFAULT_SITE_CONFIG: SiteConfig = defineSiteConfig({
-	name: 'Yaxa',
-	title: 'Yaxa — Intuitive Svelte UI Library',
-	description: 'A comprehensive Svelte 5 UI component and SEO library with Tailwind CSS v4.',
-	url: 'https://yaxa.vercel.app',
-	email: 'support@yaxa.vercel.app',
+	name: 'App',
+	title: 'My Application',
+	description: 'A modern web application built with Svelte 5 and Tailwind CSS v4.',
+	url: 'http://localhost:5173',
+	email: 'contact@example.com',
 	logo: '/favicon.svg',
 	project: {
 		license: 'MIT',
 		type: 'open-source',
-		pricingModel: 'open-source',
-		repositoryUrl: 'https://github.com/FuntionalFrost/yaxa'
+		pricingModel: 'free'
 	},
 	theme: {
 		primaryColor: '#ff3e00',
 		neutralColor: '#71717a',
-		defaultMode: 'dark'
+		defaultMode: 'system'
 	},
 	seo: {
-		titleTemplate: '%s · Yaxa',
+		titleTemplate: '%s · App',
 		defaultOgImage: '/api/og',
 		twitterCard: 'summary_large_image'
 	},
-	nav: [
-		{ label: 'Docs', href: '/docs' },
-		{ label: 'Components', href: '/docs/comp-buttons' },
-		{ label: 'SEO Suite', href: '/docs/seo-og' }
-	]
+	nav: []
 });

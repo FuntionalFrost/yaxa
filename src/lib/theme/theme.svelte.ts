@@ -276,7 +276,7 @@ class ThemeStore {
 	fontFamily = $state<FontFamily>('sans');
 	radius = $state<RadiusPreset>('default');
 	fontSize = $state<BaseFontSize>('base');
-	accentScrollbar = $state<boolean>(true);
+	accentScrollbar = $state<boolean>(false);
 
 	constructor() {
 		if (browser) {
@@ -308,7 +308,7 @@ class ThemeStore {
 			if (storedScrollbar !== null) {
 				this.accentScrollbar = storedScrollbar === 'true';
 			} else {
-				this.accentScrollbar = true;
+				this.accentScrollbar = false;
 			}
 
 			this.applyAllStyles();
@@ -420,7 +420,7 @@ class ThemeStore {
 		this.setFontFamily('sans');
 		this.setRadius('default');
 		this.setFontSize('base');
-		this.setAccentScrollbar(true);
+		this.setAccentScrollbar(false);
 	}
 
 	private applyAllStyles() {

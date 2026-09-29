@@ -1,5 +1,7 @@
 <script lang="ts">
 	import './layout.css';
+	import { onMount } from 'svelte';
+	import { browser } from '$app/environment';
 	import { goto } from '$app/navigation';
 	import YaxaApp from '$lib/components/layout/YaxaApp.svelte';
 	import Header from '$lib/components/layout/Header.svelte';
@@ -9,8 +11,15 @@
 	} from '$lib/components/navigation/CommandPalette.svelte';
 	import { DOC_NAV_GROUPS } from './docs/_data/docs-nav';
 	import { siteConfig } from '../site.config';
+	import { theme } from '$lib/theme/theme.svelte';
 
 	let { children } = $props();
+
+	onMount(() => {
+		if (browser && localStorage.getItem('yaxa-accent-scrollbar') === null) {
+			theme.setAccentScrollbar(true);
+		}
+	});
 
 	let commandOpen = $state(false);
 

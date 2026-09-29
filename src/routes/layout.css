@@ -1,1 +1,6 @@
 @import '../lib/styles/yaxa.css';
+
+:root {
+	--yaxa-scrollbar-thumb: var(--color-primary-500, #ff3e00);
+	--yaxa-scrollbar-hover: var(--color-primary-600, #ea3400);
+}
