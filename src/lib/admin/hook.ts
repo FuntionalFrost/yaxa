@@ -184,8 +184,8 @@ function renderAdminHtml(data: any, title: string, adminPath: string): string {
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>${title}</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
+  <${'script'} src="https://cdn.tailwindcss.com"></${'script'}>
+  <${'script'}>
     tailwind.config = {
       darkMode: 'class',
       theme: {
@@ -200,8 +200,8 @@ function renderAdminHtml(data: any, title: string, adminPath: string): string {
           }
         }
       }
-    }
-  </script>
+    };
+  </${'script'}>
 </head>
 <body class="bg-neutral-950 text-neutral-100 antialiased min-h-screen font-sans">
   <div class="flex h-14 items-center justify-between border-b border-neutral-800 bg-neutral-900/90 px-6 backdrop-blur">

@@ -48,8 +48,8 @@ describe('CodeDiff Component & Diff Algorithm', () => {
 	});
 
 	it('should render split side-by-side mode', () => {
-		const original = `<script>\n  export let name = 'world';\n</script>`;
-		const modified = `<script>\n  let { name = 'world' } = $props();\n</script>`;
+		const original = `<${'script'}>\n  export let name = 'world';\n</${'script'}>`;
+		const modified = `<${'script'}>\n  let { name = 'world' } = $props();\n</${'script'}>`;
 
 		const { target, cleanup } = renderComponent(CodeDiff, {
 			original,

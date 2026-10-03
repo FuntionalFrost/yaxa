@@ -17,7 +17,7 @@ export function generateSitemapXsl(config?: SiteConfig): string {
         <title>XML Sitemap · ${siteName}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <style type="text/css">
+        <${'style'} type="text/css">
           :root {
             --primary: ${primaryColor};
           }
@@ -106,7 +106,7 @@ export function generateSitemapXsl(config?: SiteConfig): string {
             color: #71717a;
             text-align: center;
           }
-        </style>
+        </${'style'}>
       </head>
       <body>
         <div class="container">
