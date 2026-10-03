@@ -2,10 +2,10 @@
 	import { browser } from '$app/env';
 	import { page } from '$app/state';
 	import { DOC_NAV_GROUPS, ALL_DOC_ITEMS } from './_data/docs-nav';
-	import Container from '$lib/components/layout/Container.svelte';
-	import Badge from '$lib/components/elements/Badge.svelte';
-	import Icon from '$lib/components/elements/Icon.svelte';
-	import Kbd from '$lib/components/elements/Kbd.svelte';
+	import Container from '#lib/components/layout/Container.svelte';
+	import Badge from '#lib/components/elements/Badge.svelte';
+	import Icon from '#lib/components/elements/Icon.svelte';
+	import Kbd from '#lib/components/elements/Kbd.svelte';
 	import DocSearchModal from './_components/DocSearchModal.svelte';
 	import DocToc from './_components/DocToc.svelte';
 	import DocPagination from './_components/DocPagination.svelte';

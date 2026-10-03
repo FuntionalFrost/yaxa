@@ -1,10 +1,10 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import { computeProjectBadge, type SiteConfig } from '$lib/site/config';
+	import { computeProjectBadge, type SiteConfig } from '#lib/site/config.js';
 	import Container from './Container.svelte';
 	import Icon from '../elements/Icon.svelte';
 	import Logo from '../elements/Logo.svelte';
-	import { useYaxa } from '$lib/site/context';
+	import { useYaxa } from '#lib/site/context.js';
 
 	interface Props {
 		config?: SiteConfig;

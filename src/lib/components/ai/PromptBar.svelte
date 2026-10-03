@@ -22,7 +22,7 @@
 </script>
 
 <script lang="ts">
-	import { autosize } from '$lib/actions';
+	import { autosize } from '#lib/actions/index.js';
 	import Button from '../elements/Button.svelte';
 	import Icon from '../elements/Icon.svelte';
 

@@ -1,5 +1,5 @@
 <script module lang="ts">
-	import type { ToastPosition } from '$lib/composables/useToast.svelte';
+	import type { ToastPosition } from '#lib/composables/useToast.svelte.js';
 
 	export interface ToasterProps {
 		position?: ToastPosition;
@@ -13,7 +13,7 @@
 </script>
 
 <script lang="ts">
-	import { toast } from '$lib/composables/useToast.svelte';
+	import { toast } from '#lib/composables/useToast.svelte.js';
 	import Toast from './Toast.svelte';
 	import { fly } from 'svelte/transition';
 	import { cubicOut } from 'svelte/easing';

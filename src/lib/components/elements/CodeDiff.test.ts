@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { renderComponent } from '$lib/testing';
+import { renderComponent } from '#lib/testing/index.js';
 import CodeDiff, { computeDiff } from './CodeDiff.svelte';
 
 describe('CodeDiff Component & Diff Algorithm', () => {

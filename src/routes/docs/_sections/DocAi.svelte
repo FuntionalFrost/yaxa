@@ -2,10 +2,10 @@
 	import DocHeader from '../_components/DocHeader.svelte';
 	import DocSandbox from '../_components/DocSandbox.svelte';
 	import DocPropsTable from '../_components/DocPropsTable.svelte';
-	import AiChat, { type AiMessage } from '$lib/components/ai/AiChat.svelte';
-	import PromptBar from '$lib/components/ai/PromptBar.svelte';
-	import AiThought from '$lib/components/ai/AiThought.svelte';
-	import AiToolCall from '$lib/components/ai/AiToolCall.svelte';
+	import AiChat, { type AiMessage } from '#lib/components/ai/AiChat.svelte';
+	import PromptBar from '#lib/components/ai/PromptBar.svelte';
+	import AiThought from '#lib/components/ai/AiThought.svelte';
+	import AiToolCall from '#lib/components/ai/AiToolCall.svelte';
 
 	let samplePrompt = $state('');
 	let sampleMessages = $state<AiMessage[]>([

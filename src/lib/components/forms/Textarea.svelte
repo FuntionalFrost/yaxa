@@ -1,5 +1,5 @@
 <script module lang="ts">
-	import { tv, type VariantProps } from '$lib/utils/cn';
+	import { tv, type VariantProps } from '#lib/utils/cn.js';
 	import type { HTMLTextareaAttributes } from 'svelte/elements';
 
 	export const textareaVariants = tv({
@@ -44,7 +44,7 @@
 </script>
 
 <script lang="ts">
-	import { autosize as autosizeAction } from '$lib/actions/autosize';
+	import { autosize as autosizeAction } from '#lib/actions/autosize.js';
 	import { getFormFieldContext } from './form-context';
 
 	let {

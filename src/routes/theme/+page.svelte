@@ -1,6 +1,6 @@
 <script lang="ts">
-	import ThemeStudio from '$lib/components/theme/ThemeStudio.svelte';
-	import Container from '$lib/components/layout/Container.svelte';
+	import ThemeStudio from '#lib/components/theme/ThemeStudio.svelte';
+	import Container from '#lib/components/layout/Container.svelte';
 </script>
 
 <main class="py-8">

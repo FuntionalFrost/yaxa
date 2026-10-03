@@ -1,28 +1,28 @@
 <script lang="ts">
 	import DocHeader from '../_components/DocHeader.svelte';
 	import DocSandbox from '../_components/DocSandbox.svelte';
-	import Modal from '$lib/components/overlays/Modal.svelte';
-	import Drawer from '$lib/components/overlays/Drawer.svelte';
-	import Slideover from '$lib/components/overlays/Slideover.svelte';
-	import Tooltip from '$lib/components/overlays/Tooltip.svelte';
-	import DropdownMenu, { type MenuItem } from '$lib/components/navigation/DropdownMenu.svelte';
-	import Alert from '$lib/components/overlays/Alert.svelte';
-	import DataTable, { type Column } from '$lib/components/elements/DataTable.svelte';
-	import Button from '$lib/components/elements/Button.svelte';
-	import Badge from '$lib/components/elements/Badge.svelte';
-	import Icon from '$lib/components/elements/Icon.svelte';
-	import Input from '$lib/components/forms/Input.svelte';
-	import { useToast } from '$lib/composables/useToast.svelte';
+	import Modal from '#lib/components/overlays/Modal.svelte';
+	import Drawer from '#lib/components/overlays/Drawer.svelte';
+	import Slideover from '#lib/components/overlays/Slideover.svelte';
+	import Tooltip from '#lib/components/overlays/Tooltip.svelte';
+	import DropdownMenu, { type MenuItem } from '#lib/components/navigation/DropdownMenu.svelte';
+	import Alert from '#lib/components/overlays/Alert.svelte';
+	import DataTable, { type Column } from '#lib/components/elements/DataTable.svelte';
+	import Button from '#lib/components/elements/Button.svelte';
+	import Badge from '#lib/components/elements/Badge.svelte';
+	import Icon from '#lib/components/elements/Icon.svelte';
+	import Input from '#lib/components/forms/Input.svelte';
+	import { useToast } from '#lib/composables/useToast.svelte.js';
 
-	import Popover from '$lib/components/overlays/Popover.svelte';
-	import Accordion, { type AccordionItem } from '$lib/components/overlays/Accordion.svelte';
-	import ContextMenu, { type ContextMenuItem } from '$lib/components/overlays/ContextMenu.svelte';
+	import Popover from '#lib/components/overlays/Popover.svelte';
+	import Accordion, { type AccordionItem } from '#lib/components/overlays/Accordion.svelte';
+	import ContextMenu, { type ContextMenuItem } from '#lib/components/overlays/ContextMenu.svelte';
 	import Breadcrumb, {
 		type BreadcrumbItem as NavBreadcrumbItem
-	} from '$lib/components/navigation/Breadcrumb.svelte';
-	import Pagination from '$lib/components/navigation/Pagination.svelte';
-	import { useLocale, useRtl } from '$lib/composables/useLocale.svelte';
-	import { useInfiniteScroll } from '$lib/composables/useInfiniteScroll.svelte';
+	} from '#lib/components/navigation/Breadcrumb.svelte';
+	import Pagination from '#lib/components/navigation/Pagination.svelte';
+	import { useLocale, useRtl } from '#lib/composables/useLocale.svelte.js';
+	import { useInfiniteScroll } from '#lib/composables/useInfiniteScroll.svelte.js';
 
 	let modalOpen = $state(false);
 	let slideoverOpen = $state(false);

@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { renderComponent } from '$lib/testing';
+import { renderComponent } from '#lib/testing/index.js';
 import Form from './Form.svelte';
 import FormField from './FormField.svelte';
 

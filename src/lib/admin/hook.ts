@@ -12,8 +12,8 @@ import type { YaxaAdminHookOptions } from './types';
  * // src/hooks.server.ts
  * import { sequence } from '@sveltejs/kit/hooks';
  * import { createYaxaAdminHook } from 'yaxa-svelte/admin';
- * import { db } from '$lib/server/db';
- * import * as schema from '$lib/server/db/schema-pg';
+ * import { db } from '#lib/server/db/index.js';
+ * import * as schema from '#lib/server/db/schema-pg.js';
  *
  * export const handle = sequence(
  *   createYaxaAdminHook({ db, schema, path: '/admin' })

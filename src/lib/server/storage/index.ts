@@ -152,18 +152,13 @@ export function createS3UploadHandler(options: S3UploadHandlerOptions = {}) {
 			const { filename, contentType, size } = body;
 
 			if (!filename) {
-				return new Response(JSON.stringify({ error: 'Filename is required' }), {
-					status: 400,
-					headers: { 'Content-Type': 'application/json' }
-				});
+				return Response.json({ error: 'Filename is required' }, { status: 400 });
 			}
 
 			if (options.maxFileSize && size && size > options.maxFileSize) {
-				return new Response(
-					JSON.stringify({
-						error: `File size exceeds maximum allowed of ${options.maxFileSize} bytes`
-					}),
-					{ status: 400, headers: { 'Content-Type': 'application/json' } }
+				return Response.json(
+					{ error: `File size exceeds maximum allowed of ${options.maxFileSize} bytes` },
+					{ status: 400 }
 				);
 			}
 
@@ -176,10 +171,10 @@ export function createS3UploadHandler(options: S3UploadHandlerOptions = {}) {
 				});
 
 				if (!isAllowed) {
-					return new Response(JSON.stringify({ error: `File type '${contentType}' not allowed` }), {
-						status: 400,
-						headers: { 'Content-Type': 'application/json' }
-					});
+					return Response.json(
+						{ error: `File type '${contentType}' not allowed` },
+						{ status: 400 }
+					);
 				}
 			}
 
@@ -190,16 +185,10 @@ export function createS3UploadHandler(options: S3UploadHandlerOptions = {}) {
 				config: options.config
 			});
 
-			return new Response(JSON.stringify(result), {
-				status: 200,
-				headers: { 'Content-Type': 'application/json' }
-			});
+			return Response.json(result, { status: 200 });
 		} catch (err: unknown) {
 			const message = err instanceof Error ? err.message : 'Upload generation failed';
-			return new Response(JSON.stringify({ error: message }), {
-				status: 500,
-				headers: { 'Content-Type': 'application/json' }
-			});
+			return Response.json({ error: message }, { status: 500 });
 		}
 	};
 }

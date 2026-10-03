@@ -2,7 +2,7 @@
 	import DocHeader from '../_components/DocHeader.svelte';
 	import DocCodeBlock from '../_components/DocCodeBlock.svelte';
 	import DocSandbox from '../_components/DocSandbox.svelte';
-	import LegalDocument from '$lib/components/legal/LegalDocument.svelte';
+	import LegalDocument from '#lib/components/legal/LegalDocument.svelte';
 
 	let activeDocType = $state('privacy');
 

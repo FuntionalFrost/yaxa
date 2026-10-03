@@ -1,4 +1,4 @@
-import { theme, type ThemeMode } from '$lib/theme/theme.svelte';
+import { theme, type ThemeMode } from '#lib/theme/theme.svelte.js';
 
 export function useColorMode() {
 	return {

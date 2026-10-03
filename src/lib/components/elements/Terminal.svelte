@@ -1,5 +1,5 @@
 <script module lang="ts">
-	import { tv, type VariantProps } from '$lib/utils/cn';
+	import { tv, type VariantProps } from '#lib/utils/cn.js';
 
 	export interface TerminalLine {
 		command?: string;
@@ -22,7 +22,7 @@
 
 <script lang="ts">
 	import Icon from './Icon.svelte';
-	import { useClipboard } from '$lib/composables/useClipboard.svelte';
+	import { useClipboard } from '#lib/composables/useClipboard.svelte.js';
 
 	let {
 		title = 'bash',

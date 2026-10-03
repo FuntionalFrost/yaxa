@@ -1,4 +1,4 @@
-import { defineSiteConfig } from '$lib/site/config';
+import { defineSiteConfig } from '#lib/site/config.js';
 
 export const siteConfig = defineSiteConfig({
 	name: 'Yaxa',

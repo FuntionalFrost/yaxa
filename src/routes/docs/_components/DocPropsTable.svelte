@@ -1,6 +1,6 @@
 <script lang="ts">
-	import Badge from '$lib/components/elements/Badge.svelte';
-	import Icon from '$lib/components/elements/Icon.svelte';
+	import Badge from '#lib/components/elements/Badge.svelte';
+	import Icon from '#lib/components/elements/Icon.svelte';
 
 	export interface PropItem {
 		name: string;

@@ -1,17 +1,17 @@
 <script lang="ts">
-	import Badge from '$lib/components/elements/Badge.svelte';
-	import Card from '$lib/components/layout/Card.svelte';
-	import DevSandbox from '$lib/admin/components/DevSandbox.svelte';
-	import ImpersonationBanner from '$lib/admin/components/ImpersonationBanner.svelte';
-	import CodeBlock from '$lib/components/elements/CodeBlock.svelte';
+	import Badge from '#lib/components/elements/Badge.svelte';
+	import Card from '#lib/components/layout/Card.svelte';
+	import DevSandbox from '#lib/admin/components/DevSandbox.svelte';
+	import ImpersonationBanner from '#lib/admin/components/ImpersonationBanner.svelte';
+	import CodeBlock from '#lib/components/elements/CodeBlock.svelte';
 
 	let isImpersonatingDemo = $state(true);
 
 	const approachACode = `// src/hooks.server.ts (Zero-File Approach A)
 import { sequence } from '@sveltejs/kit/hooks';
 import { createYaxaAdminHook } from 'yaxa-svelte/admin';
-import { db } from '$lib/server/db';
-import * as schema from '$lib/server/db/schema-pg';
+import { db } from '#lib/server/db/index.js';
+import * as schema from '#lib/server/db/schema-pg.js';
 
 export const handle = sequence(
   createYaxaAdminHook({
@@ -27,8 +27,8 @@ export const handle = sequence(
 `;
 
 	const approachBServerCode = `// src/routes/admin/+page.server.ts (Custom Route Approach B)
-import { db } from '$lib/server/db';
-import * as schema from '$lib/server/db/schema-pg';
+import { db } from '#lib/server/db/index.js';
+import * as schema from '#lib/server/db/schema-pg.js';
 import { createDrizzleAdmin } from 'yaxa-svelte/admin';
 
 export const { load, actions } = createDrizzleAdmin({

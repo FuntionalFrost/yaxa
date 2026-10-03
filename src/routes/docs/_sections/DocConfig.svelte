@@ -2,7 +2,7 @@
 	import DocHeader from '../_components/DocHeader.svelte';
 	import DocCodeBlock from '../_components/DocCodeBlock.svelte';
 	import DocSandbox from '../_components/DocSandbox.svelte';
-	import { theme, ACCENT_PALETTES, NEUTRAL_PALETTES } from '$lib/theme/theme.svelte';
+	import { theme, ACCENT_PALETTES, NEUTRAL_PALETTES } from '#lib/theme/theme.svelte.js';
 
 	let sampleName = $state('My SaaS App');
 	let sampleUrl = $state('https://mysaas.com');

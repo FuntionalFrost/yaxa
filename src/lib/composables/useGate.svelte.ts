@@ -1,4 +1,4 @@
-import { useYaxa, type AuthUserContext } from '$lib/site/context';
+import { useYaxa, type AuthUserContext } from '#lib/site/context.js';
 
 export interface UseGateOptions {
 	/** Explicit user object to override Svelte context */

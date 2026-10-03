@@ -1,4 +1,3 @@
-import { json } from '@sveltejs/kit';
 import type { RequestEvent } from '@sveltejs/kit';
 import { validateEvent } from '@polar-sh/sdk/webhooks';
 import { eq } from 'drizzle-orm';
@@ -144,7 +143,7 @@ export function createPolarWebhookHandler(options: PolarWebhookOptions = {}) {
 				}
 			}
 
-			return json({ received: true });
+			return Response.json({ received: true });
 		} catch (err: any) {
 			console.error('[Polar Webhook Error]', err);
 			return new Response('Internal Server Error', { status: 500 });

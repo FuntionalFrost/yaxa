@@ -1,6 +1,6 @@
 <script lang="ts">
-	import type { SiteConfig } from '$lib/site/config';
-	import { useYaxa } from '$lib/site/context';
+	import type { SiteConfig } from '#lib/site/config.js';
+	import { useYaxa } from '#lib/site/context.js';
 
 	interface Props {
 		title?: string;

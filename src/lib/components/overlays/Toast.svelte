@@ -1,6 +1,6 @@
 <script module lang="ts">
-	import { tv, type VariantProps } from '$lib/utils/cn';
-	import type { ToastItem } from '$lib/composables/useToast.svelte';
+	import { tv, type VariantProps } from '#lib/utils/cn.js';
+	import type { ToastItem } from '#lib/composables/useToast.svelte.js';
 
 	export const toastVariants = tv({
 		base: 'yaxa-toast group relative pointer-events-auto flex w-full max-w-sm items-start gap-3 overflow-hidden rounded-xl border p-4 shadow-lg backdrop-blur-md transition-all duration-200 select-none',
@@ -135,7 +135,7 @@
 </script>
 
 <script lang="ts">
-	import { toast } from '$lib/composables/useToast.svelte';
+	import { toast } from '#lib/composables/useToast.svelte.js';
 	import Icon, { type IconSource } from '../elements/Icon.svelte';
 	import Spinner from '../elements/Spinner.svelte';
 	import Button from '../elements/Button.svelte';

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import LegalDocument from '$lib/components/legal/LegalDocument.svelte';
-	import Seo from '$lib/components/seo/Seo.svelte';
+	import LegalDocument from '#lib/components/legal/LegalDocument.svelte';
+	import Seo from '#lib/components/seo/Seo.svelte';
 	import { siteConfig } from '../../site.config';
 </script>
 

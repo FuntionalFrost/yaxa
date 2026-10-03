@@ -49,7 +49,7 @@
 	import PromptBar from './PromptBar.svelte';
 	import AiThought from './AiThought.svelte';
 	import AiToolCall from './AiToolCall.svelte';
-	import { useToast } from '$lib/composables/useToast.svelte';
+	import { useToast } from '#lib/composables/useToast.svelte.js';
 
 	let {
 		messages = [],

@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
-import { createMockRequestEvent, createMockSiteConfig } from '$lib/testing';
-import { createOgImageHandler } from '$lib/site/og';
-import { createRobotsHandler } from '$lib/site/robots';
+import { createMockRequestEvent, createMockSiteConfig } from '#lib/testing/index.js';
+import { createOgImageHandler } from '#lib/site/og.js';
+import { createRobotsHandler } from '#lib/site/robots.js';
 
 describe('Server Route Endpoints Contract Tests', () => {
 	const mockConfig = createMockSiteConfig({
@@ -64,7 +64,7 @@ describe('Server Route Endpoints Contract Tests', () => {
 	});
 
 	it('generates valid sitemap XML with routes and changefreq', async () => {
-		const { createSitemapHandler } = await import('$lib/site/sitemap');
+		const { createSitemapHandler } = await import('#lib/site/sitemap.js');
 		const sitemapHandler = createSitemapHandler({
 			config: mockConfig,
 			staticRoutes: ['/', '/docs', '/saas', '/admin']
@@ -86,7 +86,7 @@ describe('Server Route Endpoints Contract Tests', () => {
 	});
 
 	it('generates styled sitemap XSL stylesheet with branding', async () => {
-		const { createSitemapXslHandler } = await import('$lib/site/sitemap-xsl');
+		const { createSitemapXslHandler } = await import('#lib/site/sitemap-xsl.js');
 		const xslHandler = createSitemapXslHandler({ config: mockConfig });
 		const event = createMockRequestEvent({
 			url: 'https://yaxa.dev/sitemap.xsl'

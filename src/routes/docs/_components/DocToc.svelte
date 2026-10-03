@@ -2,7 +2,7 @@
 	import { browser } from '$app/env';
 	import { page } from '$app/state';
 	import { SvelteSet } from 'svelte/reactivity';
-	import Icon from '$lib/components/elements/Icon.svelte';
+	import Icon from '#lib/components/elements/Icon.svelte';
 
 	interface TocItem {
 		id: string;

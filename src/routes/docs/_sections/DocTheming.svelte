@@ -1,8 +1,8 @@
 <script lang="ts">
 	import DocHeader from '../_components/DocHeader.svelte';
-	import Button from '$lib/components/elements/Button.svelte';
-	import Icon from '$lib/components/elements/Icon.svelte';
-	import ThemeStudio from '$lib/components/theme/ThemeStudio.svelte';
+	import Button from '#lib/components/elements/Button.svelte';
+	import Icon from '#lib/components/elements/Icon.svelte';
+	import ThemeStudio from '#lib/components/theme/ThemeStudio.svelte';
 </script>
 
 <div class="space-y-8">

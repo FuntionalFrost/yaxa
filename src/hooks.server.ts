@@ -1,5 +1,5 @@
 import type { HandleServerError } from '@sveltejs/kit/hooks';
-import { createYaxaHook } from '$lib/site/hook';
+import { createYaxaHook } from '#lib/site/hook.js';
 import { siteConfig } from './site.config';
 
 /**
