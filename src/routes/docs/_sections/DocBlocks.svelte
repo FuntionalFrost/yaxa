@@ -28,7 +28,7 @@
 	];
 
 	const terminalLines = [
-		{ comment: 'Create modern full-stack SvelteKit 2 + Svelte 5 app' },
+		{ comment: 'Create modern full-stack SvelteKit 2 / 3 + Svelte 5 app' },
 		{ command: 'pnpm create yaxa-app my-saas' },
 		{
 			output:
@@ -96,7 +96,7 @@
 	const demoFAQ: FAQItem[] = [
 		{
 			id: '1',
-			question: 'Is Yaxa compatible with Svelte 5 and SvelteKit 2.7+?',
+			question: 'Is Yaxa compatible with Svelte 5 and SvelteKit 2 & 3?',
 			answer:
 				'Yes, 100%. Yaxa is built from the ground up using native Svelte 5 Runes ($state, $derived, $props, $bindable, snippets).',
 			category: 'General'
@@ -173,7 +173,7 @@
 		time: `${Math.floor(i / 10) + 1}m ago`
 	}));
 
-	const terminalSnippet = `<Terminal\n  title="zsh / yaxa-scaffold"\n  lines={[\n    { comment: 'Scaffold full-stack SvelteKit 2 + Svelte 5 app' },\n    { command: 'pnpm create yaxa-app my-saas' }\n  ]}\n  copyable={true}\n/>`;
+	const terminalSnippet = `<Terminal\n  title="zsh / yaxa-scaffold"\n  lines={[\n    { comment: 'Scaffold full-stack SvelteKit 2 / 3 + Svelte 5 app' },\n    { command: 'pnpm create yaxa-app my-saas' }\n  ]}\n  copyable={true}\n/>`;
 </script>
 
 <div class="space-y-12">

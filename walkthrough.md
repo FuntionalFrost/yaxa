@@ -1,6 +1,6 @@
-# Yaxa — Nuxt UI & Solo SaaS Parity for SvelteKit 2.7+ & Svelte 5
+# Yaxa — Nuxt UI & Solo SaaS Parity for SvelteKit 2 & 3 and Svelte 5
 
-**Yaxa** delivers the full developer experience, component toolkit, and full-stack SaaS engine of **Nuxt UI v4 / Nuxt UI Pro** and the **Nuxt SEO ecosystem** to **SvelteKit 2.7+** and **Svelte 5**, with authentic Svelte flame branding (`#ff3e00` / `#121212`).
+**Yaxa** delivers the full developer experience, component toolkit, and full-stack SaaS engine of **Nuxt UI v4 / Nuxt UI Pro** and the **Nuxt SEO ecosystem** to **SvelteKit 2 & 3** and **Svelte 5**, with authentic Svelte flame branding (`#ff3e00` / `#121212`).
 
 ---
 

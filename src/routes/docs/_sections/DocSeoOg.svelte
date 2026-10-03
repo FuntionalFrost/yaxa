@@ -27,7 +27,7 @@
 <OgImage
   title="My Blog Post Title"
   description="A concise summary for Twitter and LinkedIn cards"
-  badge="SvelteKit 2.7"
+  badge="SvelteKit 2 & 3"
   theme="dark"
 />`;
 </script>

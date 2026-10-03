@@ -1,11 +1,11 @@
 ---
 name: yaxa-ui-guide
-description: Architectural and composition guide for Yaxa (Nuxt UI v4 equivalent for SvelteKit 2.7+ & Svelte 5). MUST be used whenever writing, building, or modifying pages with Yaxa UI components, SaaS feature gating, SEO metadata, or server hooks.
+description: Architectural and composition guide for Yaxa (Nuxt UI v4 equivalent for SvelteKit 2 & 3 and Svelte 5). MUST be used whenever writing, building, or modifying pages with Yaxa UI components, SaaS feature gating, SEO metadata, or server hooks.
 ---
 
 # Yaxa UI Architecture Guide
 
-**Yaxa** is the idiomatic Svelte 5 and SvelteKit 2.7+ equivalent of Nuxt UI v4 / Nuxt UI Pro, styled with Tailwind CSS v4 design tokens and headless primitives powered by Bits UI.
+**Yaxa** is the idiomatic Svelte 5 and SvelteKit 2 & 3 equivalent of Nuxt UI v4 / Nuxt UI Pro, styled with Tailwind CSS v4 design tokens and headless primitives powered by Bits UI.
 
 ---
 

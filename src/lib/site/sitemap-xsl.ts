@@ -116,7 +116,7 @@ export function generateSitemapXsl(config?: SiteConfig): string {
                 <h1>${siteName} Sitemap</h1>
                 <span class="badge"><xsl:value-of select="count(sitemap:urlset/sitemap:url)"/> URLs</span>
               </div>
-              <p>Generated dynamically by Yaxa for SvelteKit 2.7+ and search crawlers.</p>
+              <p>Generated dynamically by Yaxa for SvelteKit 2 &amp; 3 and search crawlers.</p>
             </div>
           </div>
           <table>
@@ -147,7 +147,7 @@ export function generateSitemapXsl(config?: SiteConfig): string {
             </tbody>
           </table>
           <div class="footer">
-            Powered by Yaxa · SvelteKit 2.7+ · Svelte 5
+            Powered by Yaxa · SvelteKit 2 &amp; 3 · Svelte 5
           </div>
         </div>
       </body>

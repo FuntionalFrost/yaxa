@@ -156,7 +156,7 @@
 		},
 		{
 			value: 'q2',
-			title: 'Does it support SvelteKit 2.7+ and Svelte 5 Runes?',
+			title: 'Does it support SvelteKit 2 & 3 and Svelte 5 Runes?',
 			content:
 				'Yes! 100% of Yaxa primitives are written natively with Svelte 5 runes ($state, $derived, $effect, and snippet slots) and Tailwind CSS v4.',
 			icon: 'sparkles'
@@ -543,7 +543,7 @@
 			<Alert
 				color="info"
 				title="Svelte 5 Runes Support"
-				description="Yaxa requires Svelte 5.0.0 or later and SvelteKit 2.7+."
+				description="Yaxa supports Svelte 5.0.0 or later and SvelteKit 2 & 3."
 			/>
 			<Alert
 				color="warning"

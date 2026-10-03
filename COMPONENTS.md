@@ -1,6 +1,6 @@
 # Yaxa UI - Architectural & Component Specification
 
-> **A Next-Generation UI & SaaS Architecture Primitive Library for Svelte 5 and SvelteKit 2.7+**
+> **A Next-Generation UI & SaaS Architecture Primitive Library for Svelte 5 and SvelteKit 2 & 3**
 
 ---
 

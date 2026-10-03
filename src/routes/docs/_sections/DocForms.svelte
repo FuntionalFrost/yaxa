@@ -39,7 +39,7 @@
 
 	const frameworkOptions: ComboboxOption[] = [
 		{ label: 'Svelte 5', value: 'svelte', description: 'Runes-driven high performance UI' },
-		{ label: 'SvelteKit 2', value: 'sveltekit', description: 'Full-stack meta-framework' },
+		{ label: 'SvelteKit 2 & 3', value: 'sveltekit', description: 'Full-stack meta-framework' },
 		{ label: 'Tailwind CSS v4', value: 'tailwind', description: 'Utility-first modern CSS engine' },
 		{ label: 'TypeScript', value: 'typescript', description: 'Typed JavaScript' },
 		{ label: 'Vite', value: 'vite', description: 'Next-gen frontend tooling' }

@@ -1,7 +1,7 @@
 {
 	"name": "yaxa-svelte",
 	"version": "1.14.0",
-	"description": "The Intuitive Svelte UI Library — Nuxt UI v4 equivalent for SvelteKit 2.7+ & Svelte 5 with automated SEO, dynamic OpenGraph cards, sitemaps, robots.txt, and Tailwind CSS v4.",
+	"description": "The Intuitive Svelte UI Library — Nuxt UI v4 equivalent for SvelteKit 2 & 3 and Svelte 5 with automated SEO, dynamic OpenGraph cards, sitemaps, robots.txt, and Tailwind CSS v4.",
 	"license": "MIT",
 	"homepage": "https://yaxa.vercel.app",
 	"repository": {
@@ -154,7 +154,7 @@
 		"@lucide/svelte": "^1.0.0",
 		"@neondatabase/serverless": ">=1.1.0",
 		"@polar-sh/sdk": ">=0.49.0",
-		"@sveltejs/kit": "^2.0.0",
+		"@sveltejs/kit": "^2.0.0 || ^3.0.0",
 		"better-auth": ">=1.7.0",
 		"drizzle-orm": ">=0.45.0",
 		"resend": ">=6.27.0",

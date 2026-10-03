@@ -1,4 +1,4 @@
-// Yaxa - Nuxt UI v4 Equivalent for SvelteKit 2.7+ & Svelte 5
+// Yaxa - Nuxt UI v4 Equivalent for SvelteKit 2 & 3 and Svelte 5
 
 // Elements
 export { default as Button } from './components/elements/Button.svelte';
