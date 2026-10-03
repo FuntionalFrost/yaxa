@@ -1,7 +1,7 @@
 <script lang="ts">
 	import './layout.css';
 	import { onMount } from 'svelte';
-	import { browser } from '$app/environment';
+	import { browser } from '$app/env';
 	import { goto } from '$app/navigation';
 	import YaxaApp from '$lib/components/layout/YaxaApp.svelte';
 	import Header from '$lib/components/layout/Header.svelte';
@@ -39,9 +39,8 @@
 
 <YaxaApp config={siteConfig}>
 	<Header config={siteConfig} onOpenCommand={() => (commandOpen = true)} />
-	<div class="flex-1">
-		{@render children()}
-	</div>
+
+	<div class="flex-1">{@render children()}</div>
 	<Footer config={siteConfig} />
 	<CommandPalette bind:open={commandOpen} items={commandItems} />
 </YaxaApp>

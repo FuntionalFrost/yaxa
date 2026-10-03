@@ -1,4 +1,4 @@
-import type { HandleServerError } from '@sveltejs/kit';
+import type { HandleServerError } from '@sveltejs/kit/hooks';
 import { createYaxaHook } from '$lib/site/hook';
 import { siteConfig } from './site.config';
 
@@ -13,9 +13,11 @@ export const handle = createYaxaHook(siteConfig);
  * Logs the full error internally while returning a safe generic message
  * to the client so stack traces are never exposed in production.
  */
-export const handleError: HandleServerError = ({ error, event, status }) => {
+export const handleError: HandleServerError = ({ error, event, kind }) => {
+	const status =
+		kind === 'framework' || kind === 'validation' ? error.status : (error as any)?.status || 500;
 	// Log the full error server-side (picked up by Vercel log drain / console)
-	console.error(`[handleError] ${status} on ${event.url.pathname}:`, error);
+	console.error(`[handleError] [${kind}] ${status} on ${event.url.pathname}:`, error);
 
 	// Never surface raw error details to the client
 	return {

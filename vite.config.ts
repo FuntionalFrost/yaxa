@@ -11,6 +11,10 @@ export default defineConfig({
 			compilerOptions: {
 				runes: true
 			},
+			alias: {
+				$lib: 'src/lib',
+				'$lib/*': 'src/lib/*'
+			},
 			adapter: adapter({ runtime: 'nodejs24.x' })
 		}),
 		yaxa()

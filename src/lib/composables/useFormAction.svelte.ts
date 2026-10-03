@@ -1,5 +1,5 @@
 import { toast } from './useToast.svelte';
-import type { SubmitFunction } from '@sveltejs/kit';
+import type { SubmitFunction } from '$app/forms';
 
 export interface UseFormActionOptions {
 	/** Toast message to show on successful form submission */
@@ -19,17 +19,18 @@ export interface UseFormActionOptions {
  * toast feedback, and auto-reset behavior.
  *
  * Usage:
+ * ```ts
+ * import { enhance } from '$app/forms';
+ * import { useFormAction } from 'yaxa-svelte';
+ *
+ * const formAction = useFormAction({
+ *   successToast: 'Changes saved successfully!',
+ *   resetOnSuccess: false
+ * });
+ * ```
+ *
+ * Inside template:
  * ```svelte
- * <script>
- *   import { enhance } from '$app/forms';
- *   import { useFormAction } from '$lib';
- *
- *   const formAction = useFormAction({
- *     successToast: 'Changes saved successfully!',
- *     resetOnSuccess: false
- *   });
- * </script>
- *
  * <form method="POST" use:enhance={formAction.enhance}>
  *   <Button type="submit" loading={formAction.isSubmitting}>Submit</Button>
  * </form>

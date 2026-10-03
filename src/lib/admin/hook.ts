@@ -1,4 +1,4 @@
-import type { Handle } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit/hooks';
 import { DrizzleAdminService } from './handler';
 import { sendMagicLinkEmail, sendWelcomeEmail } from '../server/email/index';
 import { createPresignedUploadUrl } from '../server/storage/index';

@@ -1,4 +1,4 @@
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 
 export interface ShortcutItem {
 	handler: (e: KeyboardEvent) => void;
@@ -43,7 +43,6 @@ export function useShortcuts(
 			const ctrlMatch = requiresCtrl ? e.ctrlKey : true;
 			const shiftMatch = requiresShift ? e.shiftKey : true;
 			const altMatch = requiresAlt ? e.altKey : true;
-
 			const keyMatch =
 				e.key.toLowerCase() === mainKey ||
 				e.code.toLowerCase() === `key${mainKey}` ||

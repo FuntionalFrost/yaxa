@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
+	import { browser } from '$app/env';
 	import { page } from '$app/state';
 	import { SvelteSet } from 'svelte/reactivity';
 	import Icon from '$lib/components/elements/Icon.svelte';

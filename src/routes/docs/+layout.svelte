@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { browser } from '$app/environment';
+	import { browser } from '$app/env';
 	import { page } from '$app/state';
 	import { DOC_NAV_GROUPS, ALL_DOC_ITEMS } from './_data/docs-nav';
 	import Container from '$lib/components/layout/Container.svelte';

@@ -1,4 +1,4 @@
-import type { Handle } from '@sveltejs/kit';
+import type { Handle } from '@sveltejs/kit/hooks';
 import type { SiteConfig } from './config';
 import { createRobotsHandler, type RobotsOptions } from './robots';
 import { createSitemapHandler, type SitemapOptions } from './sitemap';

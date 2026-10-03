@@ -1,4 +1,4 @@
-import { browser } from '$app/environment';
+import { browser } from '$app/env';
 import { createContext } from 'svelte';
 
 export type TextDirection = 'ltr' | 'rtl';
@@ -140,8 +140,8 @@ export class LocaleStore {
 					: typeof date === 'string'
 						? Date.parse(date)
 						: date.getTime();
-			const diffInSeconds = Math.round((timeMs - Date.now()) / 1000);
 
+			const diffInSeconds = Math.round((timeMs - Date.now()) / 1000);
 			const rtf = new Intl.RelativeTimeFormat(this.locale, { numeric: 'auto' });
 
 			const absSeconds = Math.abs(diffInSeconds);
