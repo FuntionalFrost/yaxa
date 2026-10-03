@@ -1,7 +1,7 @@
 <script lang="ts">
 	import Icon, { type IconSource } from '../elements/Icon.svelte';
 	import Badge from '../elements/Badge.svelte';
-	import { cn } from '#lib/utils/cn.js';
+	import { cn } from '../../utils/cn.js';
 
 	export interface ToggleItem {
 		value: string;

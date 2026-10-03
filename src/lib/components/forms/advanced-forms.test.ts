@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { renderComponent } from '#lib/testing/index.js';
+import { renderComponent } from '../../testing/index.js';
 import RichTextEditor from './RichTextEditor.svelte';
 import PhoneInput, { COUNTRIES } from './PhoneInput.svelte';
 import CreditCardInput, { detectCardBrand } from './CreditCardInput.svelte';

@@ -1,5 +1,5 @@
 <script module lang="ts">
-	import { tv, type VariantProps } from '#lib/utils/cn.js';
+	import { tv, type VariantProps } from '../../utils/cn.js';
 
 	export const numberInputVariants = tv({
 		base: 'flex items-center rounded-lg border bg-white text-neutral-900 transition-all duration-150 focus-within:ring-2 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-neutral-900 dark:text-neutral-100',

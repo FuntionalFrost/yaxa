@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { renderComponent } from '#lib/testing/index.js';
+import { renderComponent } from '../../testing/index.js';
 import Icon from './Icon.svelte';
 
 describe('Icon Component', () => {

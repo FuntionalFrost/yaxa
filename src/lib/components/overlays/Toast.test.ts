@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
-import { renderComponent } from '#lib/testing/index.js';
+import { renderComponent } from '../../testing/index.js';
 import Toast, { toastVariants } from './Toast.svelte';
 import Toaster from './Toaster.svelte';
-import { toast } from '#lib/composables/useToast.svelte.js';
+import { toast } from '../../composables/useToast.svelte.js';
 
 describe('Toast & Toaster Components', () => {
 	it('computes correct variant and color classes via toastVariants', () => {

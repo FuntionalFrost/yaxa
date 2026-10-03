@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { renderComponent } from '#lib/testing/index.js';
+import { renderComponent } from '../../testing/index.js';
 import Skeleton, { skeletonVariants } from './Skeleton.svelte';
 
 describe('Skeleton Component (DOM & Variants)', () => {

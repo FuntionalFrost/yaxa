@@ -1,5 +1,5 @@
 <script module lang="ts">
-	import { tv } from '#lib/utils/cn.js';
+	import { tv } from '../../utils/cn.js';
 	import type { Component, Snippet } from 'svelte';
 
 	export const iconVariants = tv({

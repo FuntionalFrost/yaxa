@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { cn } from '#lib/utils/cn.js';
+	import { cn } from '../../utils/cn.js';
 	import { getFormFieldContext } from './form-context';
 
 	interface Props {

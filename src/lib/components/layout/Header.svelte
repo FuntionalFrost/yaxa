@@ -1,14 +1,14 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
-	import type { SiteConfig, NavItem } from '#lib/site/config.js';
-	import { theme } from '#lib/theme/theme.svelte.js';
+	import type { SiteConfig, NavItem } from '../../site/config.js';
+	import { theme } from '../../theme/theme.svelte.js';
 	import Container from './Container.svelte';
 	import Button from '../elements/Button.svelte';
 	import Icon from '../elements/Icon.svelte';
 	import Kbd from '../elements/Kbd.svelte';
 	import Link from '../elements/Link.svelte';
 	import Logo from '../elements/Logo.svelte';
-	import { useYaxa } from '#lib/site/context.js';
+	import { useYaxa } from '../../site/context.js';
 
 	interface Props {
 		config?: SiteConfig;

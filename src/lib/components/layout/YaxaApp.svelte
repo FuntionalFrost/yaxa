@@ -2,11 +2,11 @@
 	import type { Snippet } from 'svelte';
 	import Toaster from '../overlays/Toaster.svelte';
 	import { Tooltip } from 'bits-ui';
-	import { type SiteConfig, DEFAULT_SITE_CONFIG } from '#lib/site/config.js';
-	import { themeInitScript } from '#lib/theme/theme.svelte.js';
+	import { type SiteConfig, DEFAULT_SITE_CONFIG } from '../../site/config.js';
+	import { themeInitScript } from '../../theme/theme.svelte.js';
 	import Favicons from '../seo/Favicons.svelte';
 	import Seo from '../seo/Seo.svelte';
-	import { initYaxaState, type AuthUserContext } from '#lib/site/context.js';
+	import { initYaxaState, type AuthUserContext } from '../../site/context.js';
 	import '#lib/styles/yaxa.css';
 
 	export interface YaxaAppProps {

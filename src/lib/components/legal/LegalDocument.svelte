@@ -1,6 +1,6 @@
 <script module lang="ts">
 	import type { Snippet } from 'svelte';
-	import type { SiteConfig } from '#lib/site/config.js';
+	import type { SiteConfig } from '../../site/config.js';
 
 	export type LegalDocumentType = 'privacy' | 'terms' | 'refunds' | 'impressum';
 
@@ -23,7 +23,7 @@
 </script>
 
 <script lang="ts">
-	import { useYaxa } from '#lib/site/context.js';
+	import { useYaxa } from '../../site/context.js';
 	import Container from '../layout/Container.svelte';
 	import Badge from '../elements/Badge.svelte';
 	import Icon from '../elements/Icon.svelte';

@@ -1,5 +1,5 @@
 <script module lang="ts">
-	import { tv, type VariantProps } from '#lib/utils/cn.js';
+	import { tv, type VariantProps } from '../../utils/cn.js';
 
 	export const avatarVariants = tv({
 		base: 'relative inline-flex shrink-0 items-center justify-center font-medium select-none overflow-hidden rounded-full bg-neutral-200 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300',

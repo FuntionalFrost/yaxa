@@ -18,7 +18,7 @@
 		type RadiusPreset,
 		type FontFamily,
 		type BaseFontSize
-	} from '#lib/theme/theme.svelte.js';
+	} from '../../theme/theme.svelte.js';
 	import Button from '../elements/Button.svelte';
 	import Badge from '../elements/Badge.svelte';
 	import Card from '../layout/Card.svelte';
@@ -29,7 +29,7 @@
 	import DonutChart from '../charts/DonutChart.svelte';
 	import CodeBlock from '../elements/CodeBlock.svelte';
 	import Modal from '../overlays/Modal.svelte';
-	import { useToast } from '#lib/composables/useToast.svelte.js';
+	import { useToast } from '../../composables/useToast.svelte.js';
 
 	let { class: className = '', showHeader = true }: ThemeStudioProps = $props();
 

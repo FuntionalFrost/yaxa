@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { renderComponent } from '#lib/testing/index.js';
+import { renderComponent } from '../../testing/index.js';
 import InputOTP from './InputOTP.svelte';
 
 describe('InputOTP Component (DOM & Interactions)', () => {

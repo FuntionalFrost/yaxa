@@ -1,4 +1,4 @@
-import { infiniteScroll as infiniteScrollAction } from '#lib/actions/infiniteScroll.js';
+import { infiniteScroll as infiniteScrollAction } from '../actions/infiniteScroll.js';
 import type { Action } from 'svelte/action';
 
 export interface UseInfiniteScrollOptions {

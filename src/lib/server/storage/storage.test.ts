@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { createMockRequestEvent } from '#lib/testing/index.js';
+import { createMockRequestEvent } from '../../testing/index.js';
 import { createS3UploadHandler } from './index';
 
 describe('Server S3 Storage Upload Handler', () => {

@@ -3,7 +3,7 @@
 	import Icon, { type IconSource } from './Icon.svelte';
 	import Badge from './Badge.svelte';
 	import Skeleton from './Skeleton.svelte';
-	import { cn } from '#lib/utils/cn.js';
+	import { cn } from '../../utils/cn.js';
 
 	interface Props {
 		title: string;

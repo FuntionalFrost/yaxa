@@ -1,12 +1,12 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { computeProjectBadge, type SiteConfig } from '#lib/site/config.js';
-	import { useYaxa } from '#lib/site/context.js';
+	import { computeProjectBadge, type SiteConfig } from '../../site/config.js';
+	import { useYaxa } from '../../site/context.js';
 	import {
 		generateWebSiteSchema,
 		generateSoftwareApplicationSchema,
 		generateSoftwareSourceCodeSchema
-	} from '#lib/site/schema.js';
+	} from '../../site/schema.js';
 
 	interface Props {
 		title?: string;

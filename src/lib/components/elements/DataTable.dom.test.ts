@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { flushSync } from 'svelte';
-import { renderComponent } from '#lib/testing/index.js';
+import { renderComponent } from '../../testing/index.js';
 import DataTable, { type Column } from './DataTable.svelte';
 
 interface TestItem extends Record<string, any> {
