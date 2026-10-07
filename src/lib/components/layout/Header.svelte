@@ -90,7 +90,7 @@
 					>
 						<Icon name="search" size="xs" />
 						<span>Search documentation...</span>
-						<Kbd value="CTRL K" size="xs" class="ml-3" />
+						<Kbd combo={['meta', 'k']} size="xs" class="ml-3" />
 					</button>
 				{/if}
 

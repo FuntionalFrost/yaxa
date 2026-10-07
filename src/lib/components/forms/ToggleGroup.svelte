@@ -123,7 +123,7 @@
 			onclick={() => handleSelect(item.value)}
 			aria-pressed={selected}
 			class={cn(
-				'yaxa-press relative z-10 inline-flex items-center justify-center rounded-md font-medium transition-all duration-150',
+				'relative z-10 inline-flex yaxa-press items-center justify-center rounded-md font-medium transition-all duration-150',
 				block ? 'flex-1' : '',
 				sizeClasses.item,
 				selected

@@ -274,7 +274,7 @@
 	{#if item.progress && item.duration > 0 && item.duration < Infinity}
 		<div class="absolute right-0 bottom-0 left-0 h-0.5 overflow-hidden bg-current/10">
 			<div
-				class="yaxa-toast-progress-bar h-full bg-current/40"
+				class="h-full bg-current/40 yaxa-toast-progress-bar"
 				style:animation-duration="{item.duration}ms"
 				style:animation-play-state={item.paused ? 'paused' : 'running'}
 			></div>

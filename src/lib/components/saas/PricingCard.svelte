@@ -4,6 +4,7 @@
 	import Badge from '../elements/Badge.svelte';
 	import Icon from '../elements/Icon.svelte';
 	import type { PricingFeature } from '../../server/db/types';
+	import { cn } from '../../utils/cn';
 
 	interface Props {
 		name: string;
@@ -51,10 +52,10 @@
 		}
 
 		if (!productId) return;
-
 		isSubmitting = true;
+
 		try {
-			const res = await fetch('/api/checkout', {
+			const res = await fetch('/api/billing/checkout', {
 				method: 'POST',
 				headers: { 'Content-Type': 'application/json' },
 				body: JSON.stringify({ productId })
@@ -72,9 +73,13 @@
 </script>
 
 <Card
-	class="relative flex flex-col justify-between overflow-visible p-6 transition-all duration-200 sm:p-8 {popular
-		? 'border-2 border-primary-500 shadow-xl ring-1 ring-primary-500/20 dark:border-primary-500'
-		: 'border-zinc-200 shadow-md dark:border-zinc-800'} {className}"
+	class={cn(
+		'relative flex flex-col justify-between overflow-visible p-6 transition-all duration-200 sm:p-8',
+		popular
+			? 'border-2 border-primary-500 shadow-xl ring-1 ring-primary-500/20 dark:border-primary-500'
+			: 'border-zinc-200 shadow-md dark:border-zinc-800',
+		className
+	)}
 >
 	<!-- Popular Banner / Badge -->
 	{#if popular || badge}
@@ -122,14 +127,17 @@
 				Included features:
 			</span>
 			<ul class="space-y-2.5 text-sm">
-				{#each features as feat}
+				{#each features as feat, idx (typeof feat === 'object' ? feat.name : feat || idx)}
 					{@const isObj = typeof feat === 'object'}
 					{@const featName = isObj ? feat.name : feat}
 					{@const included = isObj ? feat.included !== false : true}
 					<li
-						class="flex items-center gap-2.5 {included
-							? 'text-zinc-700 dark:text-zinc-200'
-							: 'text-zinc-400 line-through dark:text-zinc-600'}"
+						class={cn(
+							'flex items-center gap-2.5',
+							included
+								? 'text-zinc-700 dark:text-zinc-200'
+								: 'text-zinc-400 line-through dark:text-zinc-600'
+						)}
 					>
 						{#if included}
 							<div

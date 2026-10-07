@@ -12,6 +12,7 @@
 
 <script lang="ts">
 	import Icon from '../elements/Icon.svelte';
+	import { cn } from '../../utils/cn';
 
 	let {
 		duration,
@@ -29,7 +30,10 @@
 </script>
 
 <div
-	class="my-2 overflow-hidden rounded-xl border border-neutral-200/80 bg-neutral-50/60 transition-all dark:border-neutral-800/80 dark:bg-neutral-900/40 {className}"
+	class={cn(
+		'my-2 overflow-hidden rounded-xl border border-neutral-200/80 bg-neutral-50/60 transition-all dark:border-neutral-800/80 dark:bg-neutral-900/40',
+		className
+	)}
 >
 	<!-- Header Bar -->
 	<button

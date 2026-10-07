@@ -24,7 +24,7 @@
 
 <DocHeader
 	title="Introduction to Yaxa"
-	description="The intuitive, production-grade UI component and automated SEO library for SvelteKit 2.7+ and Svelte 5 Runes. Bringing full Nuxt UI v4 & Nuxt SEO DX to the Svelte ecosystem."
+	description="The intuitive, production-grade UI component and automated SEO library for SvelteKit 2 & 3 and Svelte 5 Runes. Bringing full Nuxt UI v4 & Nuxt SEO DX to the Svelte ecosystem."
 	badge="Svelte 5 Runes"
 	category="Getting Started"
 	importStatement={"import { YaxaApp, Button, defineSiteConfig } from 'yaxa-svelte';"}
@@ -157,6 +157,14 @@
 							>$state, $derived, $props</td
 						>
 						<td class="px-4 py-2.5"><Badge color="primary" size="xs">100% Native</Badge></td>
+					</tr>
+					<tr>
+						<td class="px-4 py-2.5 font-bold text-zinc-900 dark:text-white"
+							>Compound Slot Styling</td
+						>
+						<td class="px-4 py-2.5">Nuxt UI v4 `ui` Prop</td>
+						<td class="px-4 py-2.5 font-mono">ui prop + data-slot + snippets</td>
+						<td class="px-4 py-2.5"><Badge color="primary" size="xs">100% Parity</Badge></td>
 					</tr>
 					<tr>
 						<td class="px-4 py-2.5 font-bold text-zinc-900 dark:text-white">Single Source Config</td

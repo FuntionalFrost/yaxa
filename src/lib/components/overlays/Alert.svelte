@@ -1,5 +1,5 @@
 <script module lang="ts">
-	import { tv, type VariantProps } from '$lib/utils/cn';
+	import { tv, cn, type VariantProps } from '$lib/utils/cn';
 	import type { Snippet } from 'svelte';
 	import type { IconSource } from '../elements/Icon.svelte';
 
@@ -21,6 +21,16 @@
 		}
 	});
 
+	export interface AlertSlots {
+		root?: string;
+		icon?: string;
+		title?: string;
+		description?: string;
+		body?: string;
+		actions?: string;
+		close?: string;
+	}
+
 	export type AlertProps = VariantProps<typeof alertVariants> & {
 		title?: string;
 		description?: string;
@@ -29,6 +39,7 @@
 		onclose?: () => void;
 		actions?: Snippet;
 		class?: string;
+		ui?: AlertSlots;
 		children?: Snippet;
 	};
 </script>
@@ -45,6 +56,7 @@
 		onclose,
 		actions,
 		class: className = '',
+		ui,
 		children
 	}: AlertProps = $props();
 
@@ -71,26 +83,32 @@
 </script>
 
 {#if visible}
-	<div class={alertVariants({ color, class: className })} role="alert">
+	<div
+		data-slot="root"
+		class={cn(alertVariants({ color, class: className }), ui?.root)}
+		role="alert"
+	>
 		<div class="flex items-start gap-3">
-			<div class="mt-0.5 shrink-0">
+			<div data-slot="icon" class={cn('mt-0.5 shrink-0', ui?.icon)}>
 				<Icon name={defaultIcon} size="sm" />
 			</div>
 
 			<div class="flex-1">
 				{#if title}
-					<h5 class="text-base font-semibold">{title}</h5>
+					<h5 data-slot="title" class={cn('text-base font-semibold', ui?.title)}>{title}</h5>
 				{/if}
 				{#if description}
-					<div class="mt-1 text-sm opacity-90">{description}</div>
+					<div data-slot="description" class={cn('mt-1 text-sm opacity-90', ui?.description)}>
+						{description}
+					</div>
 				{/if}
 				{#if children}
-					<div class="mt-1 text-sm">
+					<div data-slot="body" class={cn('mt-1 text-sm', ui?.body)}>
 						{@render children()}
 					</div>
 				{/if}
 				{#if actions}
-					<div class="mt-3 flex items-center gap-2">
+					<div data-slot="actions" class={cn('mt-3 flex items-center gap-2', ui?.actions)}>
 						{@render actions()}
 					</div>
 				{/if}
@@ -99,8 +117,12 @@
 			{#if closable}
 				<button
 					type="button"
+					data-slot="close"
 					onclick={handleClose}
-					class="rounded-lg p-1 opacity-70 transition-opacity hover:opacity-100"
+					class={cn(
+						'rounded-lg p-1 opacity-70 transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-[var(--yaxa-ring)] focus-visible:outline-none',
+						ui?.close
+					)}
 					aria-label="Dismiss alert"
 				>
 					<Icon name="cross" size="xs" />

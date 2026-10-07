@@ -1,11 +1,11 @@
 <script module lang="ts">
-	import { tv, type VariantProps } from '$lib/utils/cn';
+	import { tv, cn, type VariantProps } from '../../utils/cn';
 	import type { Snippet } from 'svelte';
 	import type { HTMLInputAttributes } from 'svelte/elements';
 	import type { IconSource } from '../elements/Icon.svelte';
 
 	export const inputVariants = tv({
-		base: 'w-full rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus:ring-2 transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-neutral-50 dark:disabled:bg-neutral-950',
+		base: 'w-full rounded-lg border bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--yaxa-ring)] focus-visible:border-primary-500 transition-all duration-150 disabled:cursor-not-allowed disabled:opacity-50 disabled:bg-neutral-50 dark:disabled:bg-neutral-950 motion-reduce:transition-none',
 		variants: {
 			size: {
 				xs: 'text-xs py-1 px-2',
@@ -15,11 +15,10 @@
 				xl: 'text-lg py-3 px-4.5'
 			},
 			status: {
-				default:
-					'border-neutral-300 dark:border-neutral-700 focus:border-primary-500 focus:ring-primary-500/20',
+				default: 'border-neutral-300 dark:border-neutral-700 focus:border-primary-500',
 				error:
-					'border-rose-500 text-rose-900 dark:text-rose-100 focus:border-rose-500 focus:ring-rose-500/20',
-				success: 'border-emerald-500 focus:border-emerald-500 focus:ring-emerald-500/20'
+					'border-rose-500 text-rose-900 dark:text-rose-100 focus:border-rose-500 focus-visible:ring-rose-500/30',
+				success: 'border-emerald-500 focus:border-emerald-500 focus-visible:ring-emerald-500/30'
 			}
 		},
 		defaultVariants: {
@@ -27,6 +26,14 @@
 			status: 'default'
 		}
 	});
+
+	export interface InputSlots {
+		root?: string;
+		base?: string;
+		leading?: string;
+		trailing?: string;
+		clear?: string;
+	}
 
 	export type InputProps = Omit<HTMLInputAttributes, 'size'> &
 		VariantProps<typeof inputVariants> & {
@@ -38,6 +45,7 @@
 			prefix?: string;
 			suffix?: string;
 			class?: string;
+			ui?: InputSlots;
 			leading?: Snippet;
 			trailing?: Snippet;
 		};
@@ -63,6 +71,7 @@
 		suffix,
 		disabled = false,
 		class: className = '',
+		ui,
 		leading,
 		trailing,
 		...restProps
@@ -95,17 +104,35 @@
 	});
 </script>
 
-<div class="relative flex w-full items-center">
+<div data-slot="root" class={cn('relative flex w-full items-center', ui?.root)}>
 	{#if leading}
-		<div class="pointer-events-none absolute left-3 flex items-center text-neutral-400">
+		<div
+			data-slot="leading"
+			class={cn(
+				'pointer-events-none absolute left-3 flex items-center text-neutral-400',
+				ui?.leading
+			)}
+		>
 			{@render leading()}
 		</div>
 	{:else if icon}
-		<div class="pointer-events-none absolute left-3 flex items-center text-neutral-400">
+		<div
+			data-slot="leading"
+			class={cn(
+				'pointer-events-none absolute left-3 flex items-center text-neutral-400',
+				ui?.leading
+			)}
+		>
 			<Icon name={icon} size={size === 'xs' ? 'xs' : 'sm'} />
 		</div>
 	{:else if prefix}
-		<span class="pointer-events-none absolute left-3 text-sm font-medium text-neutral-500">
+		<span
+			data-slot="leading"
+			class={cn(
+				'pointer-events-none absolute left-3 text-sm font-medium text-neutral-500',
+				ui?.leading
+			)}
+		>
 			{prefix}
 		</span>
 	{/if}
@@ -118,38 +145,69 @@
 		{disabled}
 		aria-invalid={ariaInvalid || undefined}
 		aria-describedby={ariaDescribedBy}
-		class="{inputVariants({
-			size,
-			status: effectiveStatus,
-			class: className
-		})} {paddingLeftClass} {paddingRightClass}"
+		data-slot="base"
+		class={cn(
+			inputVariants({
+				size,
+				status: effectiveStatus
+			}),
+			paddingLeftClass,
+			paddingRightClass,
+			className,
+			ui?.base
+		)}
 		{...restProps}
 	/>
 
 	{#if loading}
-		<div class="absolute right-3 flex items-center text-neutral-400">
+		<div
+			data-slot="trailing"
+			class={cn('absolute right-3 flex items-center text-neutral-400', ui?.trailing)}
+		>
 			<Spinner size={size === 'xs' || size === 'sm' ? 'xs' : 'sm'} />
 		</div>
 	{:else if clearable && value && !disabled}
 		<button
 			type="button"
+			data-slot="clear"
 			onclick={() => (value = '')}
-			class="absolute right-3 flex items-center text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"
+			class={cn(
+				'absolute right-3 flex items-center rounded-sm text-neutral-400 hover:text-neutral-600 focus-visible:ring-2 focus-visible:ring-[var(--yaxa-ring)] focus-visible:outline-none dark:hover:text-neutral-200',
+				ui?.clear
+			)}
 			tabindex={-1}
 			aria-label="Clear input"
 		>
 			<Icon name="cross" size="xs" />
 		</button>
 	{:else if trailing}
-		<div class="pointer-events-none absolute right-3 flex items-center text-neutral-400">
+		<div
+			data-slot="trailing"
+			class={cn(
+				'pointer-events-none absolute right-3 flex items-center text-neutral-400',
+				ui?.trailing
+			)}
+		>
 			{@render trailing()}
 		</div>
 	{:else if trailingIcon}
-		<div class="pointer-events-none absolute right-3 flex items-center text-neutral-400">
+		<div
+			data-slot="trailing"
+			class={cn(
+				'pointer-events-none absolute right-3 flex items-center text-neutral-400',
+				ui?.trailing
+			)}
+		>
 			<Icon name={trailingIcon} size={size === 'xs' ? 'xs' : 'sm'} />
 		</div>
 	{:else if suffix}
-		<span class="pointer-events-none absolute right-3 text-sm font-medium text-neutral-500">
+		<span
+			data-slot="trailing"
+			class={cn(
+				'pointer-events-none absolute right-3 text-sm font-medium text-neutral-500',
+				ui?.trailing
+			)}
+		>
 			{suffix}
 		</span>
 	{/if}

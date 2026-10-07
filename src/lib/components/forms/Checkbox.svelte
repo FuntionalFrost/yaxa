@@ -1,9 +1,12 @@
-<script lang="ts">
-	import type { Snippet } from 'svelte';
-	import Icon from '../elements/Icon.svelte';
-	import { getFormFieldContext } from './form-context';
+<script module lang="ts">
+	export interface CheckboxSlots {
+		root?: string;
+		box?: string;
+		label?: string;
+		description?: string;
+	}
 
-	interface Props {
+	export interface CheckboxProps {
 		id?: string;
 		checked?: boolean;
 		label?: string;
@@ -15,9 +18,17 @@
 		'aria-label'?: string;
 		ariaLabel?: string;
 		class?: string;
+		ui?: CheckboxSlots;
 		onchange?: (checked: boolean) => void;
 		children?: Snippet;
 	}
+</script>
+
+<script lang="ts">
+	import type { Snippet } from 'svelte';
+	import Icon from '../elements/Icon.svelte';
+	import { getFormFieldContext } from './form-context';
+	import { cn } from '../../utils/cn';
 
 	let {
 		id,
@@ -31,9 +42,10 @@
 		'aria-label': ariaLabelAttr,
 		ariaLabel,
 		class: className = '',
+		ui,
 		onchange,
 		children
-	}: Props = $props();
+	}: CheckboxProps = $props();
 
 	const fieldCtx = getFormFieldContext();
 
@@ -51,9 +63,13 @@
 
 <label
 	for={effectiveId}
-	class="relative flex items-start gap-3 select-none {disabled
-		? 'cursor-not-allowed opacity-60'
-		: 'cursor-pointer'} {className}"
+	data-slot="root"
+	class={cn(
+		'relative flex items-start gap-3 select-none',
+		disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer',
+		className,
+		ui?.root
+	)}
 >
 	<div class="flex h-5 items-center">
 		<input
@@ -70,18 +86,23 @@
 			{disabled}
 			name={effectiveName}
 			{value}
-			class="sr-only"
+			class="peer sr-only"
 		/>
 		<div
-			class="flex h-4.5 w-4.5 items-center justify-center rounded border transition-all duration-150 {checked
-				? effectiveStatus === 'error'
-					? 'border-rose-600 bg-rose-600 text-white shadow-xs'
-					: effectiveStatus === 'success'
-						? 'border-emerald-600 bg-emerald-600 text-white shadow-xs'
-						: 'border-primary-600 bg-primary-600 text-white shadow-xs'
-				: effectiveStatus === 'error'
-					? 'border-rose-500 bg-rose-50 dark:border-rose-500 dark:bg-rose-950/30'
-					: 'border-neutral-300 bg-white hover:border-neutral-400 dark:border-neutral-700 dark:bg-neutral-900'}"
+			data-slot="box"
+			class={cn(
+				'flex h-4.5 w-4.5 items-center justify-center rounded border transition-all duration-150 peer-focus-visible:ring-2 peer-focus-visible:ring-[var(--yaxa-ring)] peer-focus-visible:ring-offset-2 peer-focus-visible:ring-offset-[var(--yaxa-bg)] peer-focus-visible:outline-none motion-reduce:transition-none',
+				checked
+					? effectiveStatus === 'error'
+						? 'border-rose-600 bg-rose-600 text-white shadow-xs'
+						: effectiveStatus === 'success'
+							? 'border-emerald-600 bg-emerald-600 text-white shadow-xs'
+							: 'border-primary-600 bg-primary-600 text-white shadow-xs'
+					: effectiveStatus === 'error'
+						? 'border-rose-500 bg-rose-50 dark:border-rose-500 dark:bg-rose-950/30'
+						: 'border-neutral-300 bg-white hover:border-neutral-400 dark:border-neutral-700 dark:bg-neutral-900',
+				ui?.box
+			)}
 		>
 			{#if checked}
 				<Icon name="check" size="xs" />
@@ -92,13 +113,23 @@
 	{#if label || description || children}
 		<div class="text-sm leading-5">
 			{#if label}
-				<span class="font-medium text-neutral-800 dark:text-neutral-200">{label}</span>
+				<span
+					data-slot="label"
+					class={cn('font-medium text-neutral-800 dark:text-neutral-200', ui?.label)}
+				>
+					{label}
+				</span>
 			{/if}
 			{#if children}
 				{@render children()}
 			{/if}
 			{#if description}
-				<p class="text-sm text-neutral-500 dark:text-neutral-400">{description}</p>
+				<p
+					data-slot="description"
+					class={cn('text-sm text-neutral-500 dark:text-neutral-400', ui?.description)}
+				>
+					{description}
+				</p>
 			{/if}
 		</div>
 	{/if}

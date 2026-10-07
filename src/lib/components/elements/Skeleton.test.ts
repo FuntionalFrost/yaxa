@@ -55,4 +55,31 @@ describe('Skeleton Component (DOM & Variants)', () => {
 		expect(container?.children.length).toBe(4);
 		cleanup();
 	});
+
+	it('renders compound recipes: card, user, metric, table-row', () => {
+		const { target: cardTarget, cleanup: cardCleanup } = renderComponent(Skeleton, {
+			recipe: 'card'
+		});
+		expect(cardTarget.querySelector('[aria-hidden="true"]')).toBeDefined();
+		expect(cardTarget.innerHTML).toContain('rounded-xl');
+		cardCleanup();
+
+		const { target: userTarget, cleanup: userCleanup } = renderComponent(Skeleton, {
+			recipe: 'user'
+		});
+		expect(userTarget.innerHTML).toContain('rounded-full');
+		userCleanup();
+
+		const { target: metricTarget, cleanup: metricCleanup } = renderComponent(Skeleton, {
+			recipe: 'metric'
+		});
+		expect(metricTarget.innerHTML).toContain('rounded-xl');
+		metricCleanup();
+
+		const { target: tableTarget, cleanup: tableCleanup } = renderComponent(Skeleton, {
+			recipe: 'table-row'
+		});
+		expect(tableTarget.innerHTML).toContain('border-b');
+		tableCleanup();
+	});
 });

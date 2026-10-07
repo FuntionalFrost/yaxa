@@ -96,7 +96,7 @@
 	const demoFAQ: FAQItem[] = [
 		{
 			id: '1',
-			question: 'Is Yaxa compatible with Svelte 5 and SvelteKit 2.7+?',
+			question: 'Is Yaxa compatible with Svelte 5 and SvelteKit 2 & 3?',
 			answer:
 				'Yes, 100%. Yaxa is built from the ground up using native Svelte 5 Runes ($state, $derived, $props, $bindable, snippets).',
 			category: 'General'

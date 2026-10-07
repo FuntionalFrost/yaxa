@@ -1,5 +1,5 @@
 <script module lang="ts">
-	import { tv, type VariantProps } from '$lib/utils/cn';
+	import { tv, cn, type VariantProps } from '../../utils/cn';
 
 	export const avatarVariants = tv({
 		base: 'relative inline-flex shrink-0 items-center justify-center font-medium select-none overflow-hidden rounded-full bg-neutral-200 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300',
@@ -100,7 +100,11 @@
 
 	{#if presence}
 		<span
-			class="absolute right-0 bottom-0 rounded-full ring-white dark:ring-neutral-900 {presenceColor} {presenceSize}"
+			class={cn(
+				'absolute right-0 bottom-0 rounded-full ring-white dark:ring-neutral-900',
+				presenceColor,
+				presenceSize
+			)}
 		></span>
 	{/if}
 </div>

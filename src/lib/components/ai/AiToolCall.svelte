@@ -15,6 +15,7 @@
 <script lang="ts">
 	import Icon from '../elements/Icon.svelte';
 	import CodeBlock from '../elements/CodeBlock.svelte';
+	import { cn } from '../../utils/cn';
 
 	let {
 		name,
@@ -40,7 +41,10 @@
 </script>
 
 <div
-	class="my-2.5 overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-xs transition-all dark:border-neutral-800 dark:bg-neutral-900 {className}"
+	class={cn(
+		'my-2.5 overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-xs transition-all dark:border-neutral-800 dark:bg-neutral-900',
+		className
+	)}
 >
 	<!-- Header Bar -->
 	<button

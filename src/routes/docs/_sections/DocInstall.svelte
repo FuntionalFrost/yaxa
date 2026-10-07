@@ -45,6 +45,11 @@ export const siteConfig = defineSiteConfig({
   {@render children()}
 </YaxaApp>`;
 
+	const appCssSnippet = `@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@import 'yaxa-svelte/theme.css';
+@source "../node_modules/yaxa-svelte/dist/**/*.{js,svelte}";`;
+
 	const hooksSnippet = `import { createYaxaHook } from 'yaxa-svelte';
 import { siteConfig } from './site.config';
 
@@ -162,7 +167,8 @@ pnpm add -D tailwindcss @tailwindcss/vite @tailwindcss/typography"
 			</h3>
 		</div>
 		<p class="text-xs text-zinc-600 dark:text-zinc-400">
-			Import <code class="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-xs dark:bg-zinc-800"
+			<strong>Option A (Turnkey Zero-Config):</strong> Import
+			<code class="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-xs dark:bg-zinc-800"
 				>yaxa-svelte/yaxa.css</code
 			>
 			and wrap your application in
@@ -175,6 +181,14 @@ pnpm add -D tailwindcss @tailwindcss/vite @tailwindcss/typography"
 			>:
 		</p>
 		<DocCodeBlock code={layoutSnippet} filename="src/routes/+layout.svelte" language="svelte" />
+		<p class="text-xs text-zinc-600 dark:text-zinc-400">
+			<strong>Option B (Optimized Tailwind v4 Pipeline):</strong> If your project already imports
+			Tailwind in
+			<code class="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-xs dark:bg-zinc-800"
+				>src/app.css</code
+			>, import the standalone theme tokens and tell Tailwind to scan Yaxa:
+		</p>
+		<DocCodeBlock code={appCssSnippet} filename="src/app.css" language="css" />
 	</div>
 
 	<!-- Optional Step 6 -->
@@ -205,7 +219,7 @@ pnpm add -D tailwindcss @tailwindcss/vite @tailwindcss/typography"
 		</div>
 		<p class="text-xs text-zinc-600 dark:text-zinc-400">
 			Give AI assistants (Google Antigravity, Gemini CLI, Cursor, Windsurf, Claude Code) complete
-			architectural context on Yaxa's 35+ components, Svelte 5 runes patterns, and subpaths. You can
+			architectural context on Yaxa's 50+ components, Svelte 5 runes patterns, and subpaths. You can
 			download the guide directly via terminal or view the raw file at <a
 				href="/skills.md"
 				target="_blank"

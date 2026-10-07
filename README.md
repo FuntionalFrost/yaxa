@@ -23,7 +23,7 @@ _Nuxt UI v4 & Nuxt UI Pro Equivalent for SvelteKit 2.7+ & Svelte 5 with Built-in
 
 **Yaxa** brings the full developer experience, visual elegance, and full-stack toolkit of **Nuxt UI** and the **Nuxt SEO + SaaS ecosystem** to **SvelteKit 2.7+** and **Svelte 5**.
 
-- 🎨 **Tailwind CSS v4 Native Tokens**: Styled with `@theme` variables; harmonic radius scale (`--radius-xs` to `--radius-4xl`), chart palette tokens (`--color-chart-1` to `--color-chart-5`), and auto-adaptive scrollbars.
+- 🎨 **Tailwind CSS v4 Native Tokens**: Styled with `@theme` variables; harmonic radius scale (`--radius-xs` to `--radius-4xl`), chart palette tokens (`--color-chart-1` to `--color-chart-5`), atmospheric utilities (`yaxa-grain` & `yaxa-mesh-glow`), and auto-adaptive scrollbars.
 - 🎛️ **Visual Web Theme Studio**: Interactive runtime palette designer (`/theme` and `<ThemeStudio />`) with live sandbox preview and 1-click token export.
 - 🤖 **AI-Native Primitives**: Drop-in `<AiChat>`, `<PromptBar>`, `<AiThought>`, and `<AiToolCall>` for conversational interfaces and agentic workflows.
 - 📊 **Zero-Dependency SVG Charts**: Pure Svelte 5 `<LineChart>`, `<BarChart>`, and `<DonutChart>` with responsive tooltips, curved splines, and theme-palette synchronisation.
@@ -31,7 +31,7 @@ _Nuxt UI v4 & Nuxt UI Pro Equivalent for SvelteKit 2.7+ & Svelte 5 with Built-in
 - ♿ **Accessible by Default**: Headless primitives powered by **Bits UI**.
 - 🚀 **100% DRY SEO Parity**: Automate dynamic Open Graph cards (`/api/og`), environment-aware `robots.txt`, XML sitemaps with human-readable `sitemap.xsl` stylesheets, PWA manifests, and Schema.org JSON-LD from a single `src/site.config.ts`.
 - 🔐 **Batteries-Included SaaS Suite**: Pre-integrated **Better-Auth**, multi-dialect **Drizzle ORM** (Neon PostgreSQL & Turso LibSQL/SQLite), **Polar.sh** payments & webhook sync, and **Resend** transactional emails.
-- 🧩 **50+ Production Components**: Elements, AI primitives, charts, advanced forms (`<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`), layout, overlays, native `<Toast>` / `<Toaster>`, and drop-in SaaS widgets (`<AuthCard>`, `<UserMenu>`, `<PricingTable>`, `<SubscriptionCard>`).
+- 🧩 **50+ Production Components**: Elements, compound `<Skeleton recipe="...">` layouts, AI primitives, charts, advanced forms (`<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`), layout, overlays, sliding segmented `<Tabs>`, native `<Toast>` / `<Toaster>`, and drop-in SaaS widgets (`<AuthCard>`, `<UserMenu>`, `<PricingTable>`, `<SubscriptionCard>`).
 - 🛠️ **Composable Runes**: `useAuth`, `useShortcuts`, `useClipboard`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`, `useIdle`, `useGate`.
 
 ---
@@ -107,6 +107,7 @@ export const siteConfig = defineSiteConfig({
 
 ### 4. Import CSS & Wrap Root Layout
 
+**Option A: Turnkey Zero-Config** (Default)
 Import `yaxa-svelte/yaxa.css` and wrap your app in `<YaxaApp>`:
 
 ```svelte
@@ -122,6 +123,17 @@ Import `yaxa-svelte/yaxa.css` and wrap your app in `<YaxaApp>`:
 <YaxaApp config={siteConfig}>
 	{@render children()}
 </YaxaApp>
+```
+
+**Option B: Optimized Tailwind CSS v4 Pipeline** (Maximum build performance & deduplication)
+If your project already imports Tailwind in `src/app.css`, import the standalone theme tokens and tell Tailwind to scan Yaxa:
+
+```css
+/* src/app.css */
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@import 'yaxa-svelte/theme.css';
+@source '../node_modules/yaxa-svelte/dist/**/*.{js,svelte}';
 ```
 
 ---

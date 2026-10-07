@@ -24,6 +24,16 @@
 	let selectedTreeId = $state('page-svelte');
 	let expandedTreeIds = $state<string[]>(['src', 'routes', 'components']);
 
+	// Interactive Button Playground State
+	let pgVariant = $state<'solid' | 'outline' | 'soft' | 'subtle' | 'ghost' | 'link'>('solid');
+	let pgColor = $state<'primary' | 'neutral' | 'success' | 'warning' | 'error'>('primary');
+	let pgSize = $state<'xs' | 'sm' | 'md' | 'lg' | 'xl'>('md');
+	let pgDisabled = $state(false);
+
+	let dynamicButtonSnippet = $derived(
+		`<Button variant="${pgVariant}" color="${pgColor}" size="${pgSize}"${pgDisabled ? ' disabled' : ''}>\n  Interactive Button\n</Button>`
+	);
+
 	const demoTreeData: TreeNode[] = [
 		{
 			id: 'src',
@@ -189,6 +199,70 @@ export const Metric: React.FC<MetricProps> = ({ label, initialValue = 0 }) => {
 />
 
 <div class="space-y-8">
+	<!-- Live Interactive Button Playground -->
+	<DocSandbox title="Interactive Button Playground" code={dynamicButtonSnippet}>
+		<div class="flex min-h-[80px] items-center justify-center">
+			<Button variant={pgVariant} color={pgColor} size={pgSize} disabled={pgDisabled}>
+				Interactive Button
+			</Button>
+		</div>
+		{#snippet controls()}
+			<div class="flex flex-wrap items-center justify-between gap-4 text-xs">
+				<div class="flex flex-wrap items-center gap-1.5">
+					<span class="mr-1 font-semibold text-neutral-500">Variant:</span>
+					{#each ['solid', 'outline', 'soft', 'subtle', 'ghost', 'link'] as const as v}
+						<button
+							type="button"
+							onclick={() => (pgVariant = v)}
+							class="rounded px-2 py-0.5 font-medium transition-all {pgVariant === v
+								? 'bg-primary-600 text-white shadow-xs'
+								: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300'}"
+						>
+							{v}
+						</button>
+					{/each}
+				</div>
+
+				<div class="flex flex-wrap items-center gap-1.5">
+					<span class="mr-1 font-semibold text-neutral-500">Color:</span>
+					{#each ['primary', 'neutral', 'success', 'warning', 'error'] as const as c}
+						<button
+							type="button"
+							onclick={() => (pgColor = c)}
+							class="rounded px-2 py-0.5 font-medium transition-all {pgColor === c
+								? 'bg-primary-600 text-white shadow-xs'
+								: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300'}"
+						>
+							{c}
+						</button>
+					{/each}
+				</div>
+
+				<div class="flex items-center gap-1.5">
+					<span class="mr-1 font-semibold text-neutral-500">Size:</span>
+					{#each ['xs', 'sm', 'md', 'lg', 'xl'] as const as s}
+						<button
+							type="button"
+							onclick={() => (pgSize = s)}
+							class="rounded px-2 py-0.5 font-medium transition-all {pgSize === s
+								? 'bg-primary-600 text-white shadow-xs'
+								: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300'}"
+						>
+							{s}
+						</button>
+					{/each}
+				</div>
+
+				<label
+					class="flex cursor-pointer items-center gap-1.5 font-medium text-neutral-600 dark:text-neutral-300"
+				>
+					<input type="checkbox" bind:checked={pgDisabled} class="rounded text-primary-600" />
+					<span>Disabled</span>
+				</label>
+			</div>
+		{/snippet}
+	</DocSandbox>
+
 	<!-- Variants Sandbox -->
 	<DocSandbox title="Button Variants" code={buttonSnippet}>
 		<div class="flex flex-wrap items-center justify-center gap-3">
@@ -382,6 +456,21 @@ export const Metric: React.FC<MetricProps> = ({ label, initialValue = 0 }) => {
 					>Multi-Line Paragraph Stagger</span
 				>
 				<Skeleton lines={3} variant="shimmer" />
+			</div>
+
+			<!-- Compound Skeleton Layout Recipes -->
+			<div class="space-y-3">
+				<span class="text-xs font-semibold tracking-wider text-neutral-500 uppercase"
+					>Turnkey Compound Recipes</span
+				>
+				<div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+					<Skeleton recipe="card" variant="shimmer" />
+					<div class="space-y-3">
+						<Skeleton recipe="metric" variant="shimmer" />
+						<Skeleton recipe="user" variant="shimmer" />
+					</div>
+				</div>
+				<Skeleton recipe="table-row" variant="shimmer" />
 			</div>
 		</div>
 	</DocSandbox>

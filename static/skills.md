@@ -1,11 +1,11 @@
 ---
 name: yaxa-ui-guide
-description: Architectural and composition guide for Yaxa (Nuxt UI v4 equivalent for SvelteKit 2.7+ & Svelte 5). MUST be used whenever writing, building, or modifying pages with Yaxa UI components, SaaS feature gating, SEO metadata, or server hooks.
+description: Architectural and composition guide for Yaxa (Nuxt UI v4 equivalent for SvelteKit 2 & 3 & Svelte 5). MUST be used whenever writing, building, or modifying pages with Yaxa UI components, SaaS feature gating, SEO metadata, or server hooks.
 ---
 
 # Yaxa UI Architecture Guide
 
-**Yaxa** is the idiomatic Svelte 5 and SvelteKit 2.7+ equivalent of Nuxt UI v4 / Nuxt UI Pro, styled with Tailwind CSS v4 design tokens and headless primitives powered by Bits UI.
+**Yaxa** is the idiomatic Svelte 5 and SvelteKit 2 & 3 equivalent of Nuxt UI v4 / Nuxt UI Pro, styled with Tailwind CSS v4 design tokens and headless primitives powered by Bits UI.
 
 ---
 
@@ -29,7 +29,8 @@ Always import from the specific subpath corresponding to the layer:
 | Subpath | Description & Key Exports |
 | :--- | :--- |
 | `yaxa-svelte` | **Core UI Primitives, Layouts, AI Primitives, Charts & Composables**: `Button`, `Input`, `Modal`, `Drawer`, `Toast`, `Toaster`, `DataTable`, `VirtualList`, `ResizablePanels`, `Carousel`, `DashboardShell`, `Combobox`, `MultiSelect`, `NumberInput`, `Stepper`, `Timeline`, `Tree`, `Terminal`, `OrgSwitcher`, `NotificationCenter`, `Testimonials`, `FAQ`, `FeatureGrid`, `Gate`, `YaxaApp`, `<ThemeStudio>`, `<AiChat>`, `<PromptBar>`, `<AiThought>`, `<AiToolCall>`, `<LineChart>`, `<BarChart>`, `<DonutChart>`, `<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`, `useIdle`, `useGate`, `useUpload`, `useToast`, `toast`, `definePageSeo`, `defineSiteConfig`, `cn`, `tv`. |
-| `yaxa-svelte/yaxa.css` | **Tailwind CSS v4 Stylesheet**: Theme variables (`@theme`), harmonic radius multiplier scale (`--radius-xs` to `--radius-4xl`), chart series tokens (`--color-chart-1` to `--color-chart-5`), independent sidebar tokens, and adaptive scrollbars. |
+| `yaxa-svelte/yaxa.css` | **Turnkey Tailwind CSS v4 Stylesheet**: Full standalone stylesheet importing `@import 'tailwindcss'`, `@plugin '@tailwindcss/typography'`, theme variables (`@theme`), harmonic radius multiplier scale, and adaptive scrollbars. |
+| `yaxa-svelte/theme.css` | **Standalone Tailwind CSS v4 Design Tokens**: Pure `@theme` variables, `:root` CSS variables, dark mode variants, and harmonic radius scale without `@import 'tailwindcss'`. Ideal for custom Tailwind pipelines using `@source`. |
 | `yaxa-svelte/server` | **Server Hooks & SEO Endpoints**: `createYaxaHook` (handles `/robots.txt`, `/sitemap.xml`, `/site.webmanifest`, `/api/og`), `createYaxaAuthHook` (multi-tenant session resolution on `event.locals.orgId`). |
 | `yaxa-svelte/auth` | **Better-Auth Integration**: `<AuthCard>`, `<PasskeyUI>`, `<TwoFactorModal>`, `useAuth`, `createYaxaAuth` (pre-wired for Drizzle & Multi-Tenant Organizations). |
 | `yaxa-svelte/admin` | **Drizzle ORM Admin Suite**: `createYaxaAdminHook`, `<AdminDashboard>`, `<DevSandbox>`, `<RecordDrawer>`. |
@@ -86,12 +87,42 @@ Never use Svelte 4 `on:click`. Use modern HTML/runes event handlers:
 * `onkeydown={(e) => ...}`
 * `onchange={(e) => ...}`
 
+### D. Universal Compound `ui` Prop & Semantic `data-slot`
+To achieve full Nuxt UI v4 parity, all composite components (`Card`, `Modal`, `Drawer`, `Tabs`, `Accordion`, `Alert`, `Breadcrumb`, `Tooltip`, `Input`, `Checkbox`, `Switch`, `CommandPalette`) accept a typed `ui?: Partial<Record<SlotKey, string>>` prop for type-safe slot overrides, and render semantic `data-slot="..."` attributes on internal DOM elements:
+```svelte
+<!-- Direct slot styling via ui prop -->
+<Card ui={{ root: 'rounded-2xl', header: 'bg-neutral-50/50 p-6', body: 'space-y-4' }}>
+  ...
+</Card>
+
+<!-- Or targeting via data-slot in Tailwind classes -->
+<Card class="[&_[data-slot=header]]:border-b-2" />
+```
+
+### E. Platform-Adaptive Shortcuts (`<Kbd>`)
+`<Kbd>` dynamically adapts modifier keys based on the user's operating system:
+```svelte
+<!-- Automatically displays ⌘K on macOS/iOS and Ctrl K on Windows/Linux -->
+<Kbd combo={['meta', 'k']} size="xs" />
+```
+
+### F. Dark Mode Surface Elevation & Reduced Motion Compliance
+* **Surface Elevation**: Elevated components (`Modal`, `Drawer`, `Card`, `CommandPalette`, active segmented `Tabs`) utilize `.yaxa-surface-elevated` for subtle inner rim lighting (`inset 0 0 0 1px rgba(255, 255, 255, 0.08)`) and high-fidelity depth in dark mode.
+* **WCAG 2.2 AAA Motion**: `theme.css` enforces `@media (prefers-reduced-motion: reduce)` zero-specificity safeguards, while components support `motion-reduce:transition-none` and `motion-reduce:animate-none`.
+
+### G. Atmospheric Utilities, Skeleton Recipes & Segmented Tabs
+* **Atmospheric Utilities**: `theme.css` provides `@utility yaxa-grain` (tactile inline SVG data-URI noise texture) and `@utility yaxa-mesh-glow` (dark/light radial ambient gradient backdrops) with zero runtime bundle overhead.
+* **Turnkey Skeleton Recipes**: `<Skeleton recipe="card" | "user" | "metric" | "table-row">` generates instant compound loading skeletons with circular avatars, badges, and staggered lines.
+* **Segmented Sliding Tabs**: `<Tabs variant="segmented" />` features a dynamic sliding active indicator element that measures bounding box offsets and glides between tabs via CSS transitions with graceful SSR hydration fallback.
+
 ---
 
 ## 4. Context & Full-Stack SaaS Composition
 
 ### Root Layout (`<YaxaApp>`)
 Wrap your application in `<YaxaApp>` inside `src/routes/+layout.svelte`. It provides dynamic theme tokens, SEO fallbacks, and auth context to descendant components:
+
+**Option A (Turnkey Zero-Config)**:
 ```svelte
 <!-- src/routes/+layout.svelte -->
 <script lang="ts">
@@ -105,6 +136,15 @@ Wrap your application in `<YaxaApp>` inside `src/routes/+layout.svelte`. It prov
 <YaxaApp config={siteConfig} user={data.user}>
   {@render children()}
 </YaxaApp>
+```
+
+**Option B (Optimized Tailwind CSS v4 Pipeline)**:
+```css
+/* src/app.css */
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@import 'yaxa-svelte/theme.css';
+@source "../node_modules/yaxa-svelte/dist/**/*.{js,svelte}";
 ```
 
 ### Feature & Plan Gating (`<Gate>` & `useGate`)

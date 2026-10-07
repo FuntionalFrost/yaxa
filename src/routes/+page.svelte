@@ -447,7 +447,7 @@ export const siteConfig = defineSiteConfig({
 					</div>
 
 					<!-- Sandbox Tab Strip -->
-					<Tabs items={demoTabs} bind:value={activeDemoTab} />
+					<Tabs items={demoTabs} bind:value={activeDemoTab} variant="segmented" />
 
 					{#if activeDemoTab === 'buttons'}
 						<div class="space-y-4">
@@ -851,6 +851,7 @@ export const siteConfig = defineSiteConfig({
 		<div
 			class="relative overflow-hidden rounded-3xl border border-primary-500/30 bg-linear-to-br from-primary-900/40 via-neutral-900/90 to-neutral-950 p-8 text-center shadow-2xl backdrop-blur-md sm:p-12"
 		>
+			<div class="pointer-events-none absolute inset-0 yaxa-grain opacity-20"></div>
 			<div
 				class="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-primary-500/20 blur-3xl"
 			></div>

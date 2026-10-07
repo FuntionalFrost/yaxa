@@ -21,6 +21,7 @@
 		type BreadcrumbItem as NavBreadcrumbItem
 	} from '$lib/components/navigation/Breadcrumb.svelte';
 	import Pagination from '$lib/components/navigation/Pagination.svelte';
+	import Tabs from '$lib/components/navigation/Tabs.svelte';
 	import { useLocale, useRtl } from '$lib/composables/useLocale.svelte';
 	import { useInfiniteScroll } from '$lib/composables/useInfiniteScroll.svelte';
 
@@ -156,7 +157,7 @@
 		},
 		{
 			value: 'q2',
-			title: 'Does it support SvelteKit 2.7+ and Svelte 5 Runes?',
+			title: 'Does it support SvelteKit 2 & 3 and Svelte 5 Runes?',
 			content:
 				'Yes! 100% of Yaxa primitives are written natively with Svelte 5 runes ($state, $derived, $effect, and snippet slots) and Tailwind CSS v4.',
 			icon: 'sparkles'
@@ -444,6 +445,38 @@
 		</div>
 	</DocSandbox>
 
+	<!-- Navigation: Tabs Sandbox -->
+	<DocSandbox title="Tabs (Segmented with Sliding Pill Indicator, Underline & Pill)">
+		<div class="w-full max-w-lg space-y-6">
+			<div>
+				<span class="mb-2 block text-[11px] font-bold tracking-wider text-neutral-500 uppercase">
+					Segmented Variant (Smooth Sliding Indicator)
+				</span>
+				<Tabs
+					items={[
+						{ value: 'overview', label: 'Overview', icon: 'window' },
+						{ value: 'analytics', label: 'Analytics', icon: 'bolt', badge: 'New' },
+						{ value: 'settings', label: 'Settings', icon: 'adjustments-horizontal' }
+					]}
+				/>
+			</div>
+
+			<div>
+				<span class="mb-2 block text-[11px] font-bold tracking-wider text-neutral-500 uppercase">
+					Underline Variant
+				</span>
+				<Tabs
+					variant="underline"
+					items={[
+						{ value: 'account', label: 'Account' },
+						{ value: 'billing', label: 'Billing' },
+						{ value: 'team', label: 'Team Members' }
+					]}
+				/>
+			</div>
+		</div>
+	</DocSandbox>
+
 	<!-- RTL & Localization Helpers Sandbox -->
 	<DocSandbox title="Localization & Right-to-Left (useLocale / useRtl)">
 		<div class="w-full max-w-lg space-y-5">
@@ -543,12 +576,12 @@
 			<Alert
 				color="info"
 				title="Svelte 5 Runes Support"
-				description="Yaxa requires Svelte 5.0.0 or later and SvelteKit 2.7+."
+				description="Yaxa requires Svelte 5.0.0 or later and SvelteKit 2 & 3."
 			/>
 			<Alert
 				color="warning"
 				title="Tailwind CSS v4 Requirement"
-				description="Make sure to install @tailwindcss/vite and import 'yaxa/yaxa.css' in your root layout."
+				description="Make sure to install @tailwindcss/vite and import 'yaxa-svelte/yaxa.css' (or 'yaxa-svelte/theme.css') in your root layout."
 			/>
 		</div>
 	</div>

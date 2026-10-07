@@ -1,6 +1,7 @@
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import { getFormContext, setFormFieldContext } from './form-context';
+	import { cn } from '../../utils/cn';
 
 	interface Props {
 		id?: string;
@@ -77,7 +78,7 @@
 	});
 </script>
 
-<div class="space-y-1.5 {className}">
+<div class={cn('space-y-1.5', className)}>
 	{#if label || hint || (showTainted && isTainted)}
 		<div class="flex items-center justify-between">
 			{#if label}

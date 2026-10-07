@@ -9,45 +9,75 @@
 		disabled?: boolean;
 	}
 
+	export interface AccordionSlots {
+		root?: string;
+		item?: string;
+		header?: string;
+		trigger?: string;
+		title?: string;
+		icon?: string;
+		chevron?: string;
+		content?: string;
+	}
+
 	export interface AccordionProps {
 		items: AccordionItem[];
 		type?: 'single' | 'multiple';
 		class?: string;
+		ui?: AccordionSlots;
 	}
 </script>
 
 <script lang="ts">
 	import { Accordion } from 'bits-ui';
 	import Icon from '../elements/Icon.svelte';
+	import { cn } from '../../utils/cn';
 
-	let { items, type = 'single', class: className = '' }: AccordionProps = $props();
+	let { items, type = 'single', class: className = '', ui }: AccordionProps = $props();
 </script>
 
 <Accordion.Root
 	{type}
-	class="w-full divide-y divide-neutral-200 dark:divide-neutral-800 {className}"
+	data-slot="root"
+	class={cn('w-full divide-y divide-neutral-200 dark:divide-neutral-800', className, ui?.root)}
 >
-	{#each items as item}
-		<Accordion.Item value={item.value} disabled={item.disabled} class="py-1">
-			<Accordion.Header>
+	{#each items as item (item.value)}
+		<Accordion.Item
+			value={item.value}
+			disabled={item.disabled}
+			data-slot="item"
+			class={cn('py-1', ui?.item)}
+		>
+			<Accordion.Header data-slot="header" class={ui?.header}>
 				<Accordion.Trigger
-					class="flex w-full items-center justify-between py-4 text-left text-sm font-medium text-neutral-900 transition-all hover:underline dark:text-white [&[data-state=open]>svg]:rotate-180"
+					data-slot="trigger"
+					class={cn(
+						'flex w-full items-center justify-between rounded-md py-4 text-left text-sm font-medium text-neutral-900 transition-all hover:underline focus-visible:ring-2 focus-visible:ring-[var(--yaxa-ring)] focus-visible:outline-none motion-reduce:transition-none dark:text-white [&[data-state=open]>svg]:rotate-180',
+						ui?.trigger
+					)}
 				>
 					<div class="flex items-center gap-2.5">
 						{#if item.icon}
-							<Icon name={item.icon} size="xs" class="text-neutral-500" />
+							<Icon name={item.icon} size="xs" class={cn('text-neutral-500', ui?.icon)} />
 						{/if}
-						<span>{item.title}</span>
+						<span data-slot="title" class={ui?.title}>{item.title}</span>
 					</div>
 					<Icon
 						name="chevron-down"
 						size="xs"
-						class="text-neutral-500 transition-transform duration-200"
+						class={cn(
+							'text-neutral-500 transition-transform duration-200 motion-reduce:transition-none',
+							ui?.chevron
+						)}
 					/>
 				</Accordion.Trigger>
 			</Accordion.Header>
 			<Accordion.Content
-				class="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden pb-4 text-sm text-neutral-600 dark:text-neutral-400"
+				data-slot="content"
+				class={cn(
+					'data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden pb-4 text-sm text-neutral-600 motion-reduce:transition-none dark:text-neutral-400',
+					ui?.content
+				)}
 			>
 				{item.content}
 			</Accordion.Content>

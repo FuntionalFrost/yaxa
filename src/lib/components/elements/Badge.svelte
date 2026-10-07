@@ -1,5 +1,5 @@
 <script module lang="ts">
-	import { tv, type VariantProps } from '$lib/utils/cn';
+	import { tv, cn, type VariantProps } from '../../utils/cn';
 	import type { Snippet } from 'svelte';
 	import type { IconSource } from './Icon.svelte';
 
@@ -183,13 +183,16 @@
 <span class={classes}>
 	{#if dot}
 		<span
-			class="h-1.5 w-1.5 rounded-full {color === 'success'
-				? 'bg-emerald-500'
-				: color === 'warning'
-					? 'bg-amber-500'
-					: color === 'error'
-						? 'bg-rose-500'
-						: 'bg-primary-500'}"
+			class={cn(
+				'h-1.5 w-1.5 rounded-full',
+				color === 'success'
+					? 'bg-emerald-500'
+					: color === 'warning'
+						? 'bg-amber-500'
+						: color === 'error'
+							? 'bg-rose-500'
+							: 'bg-primary-500'
+			)}
 		></span>
 	{/if}
 

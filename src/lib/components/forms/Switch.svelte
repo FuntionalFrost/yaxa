@@ -1,9 +1,9 @@
 <script module lang="ts">
-	import { tv, type VariantProps } from '$lib/utils/cn';
+	import { tv, cn, type VariantProps } from '$lib/utils/cn';
 	import type { Snippet } from 'svelte';
 
 	export const switchVariants = tv({
-		base: 'peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary-600 data-[state=unchecked]:bg-neutral-300 dark:data-[state=unchecked]:bg-neutral-700',
+		base: 'peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--yaxa-ring)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--yaxa-bg)] disabled:cursor-not-allowed disabled:opacity-50 motion-reduce:transition-none data-[state=checked]:bg-primary-600 data-[state=unchecked]:bg-neutral-300 dark:data-[state=unchecked]:bg-neutral-700',
 		variants: {
 			size: {
 				sm: 'h-5 w-9',
@@ -17,7 +17,7 @@
 	});
 
 	export const thumbVariants = tv({
-		base: 'pointer-events-none block rounded-full bg-white shadow-lg ring-0 transition-transform duration-200 data-[state=unchecked]:translate-x-0',
+		base: 'pointer-events-none block rounded-full bg-white shadow-lg ring-0 transition-transform duration-200 motion-reduce:transition-none data-[state=unchecked]:translate-x-0',
 		variants: {
 			size: {
 				sm: 'h-4 w-4 data-[state=checked]:translate-x-4',
@@ -30,6 +30,14 @@
 		}
 	});
 
+	export interface SwitchSlots {
+		root?: string;
+		track?: string;
+		thumb?: string;
+		label?: string;
+		description?: string;
+	}
+
 	export type SwitchProps = VariantProps<typeof switchVariants> & {
 		id?: string;
 		checked?: boolean;
@@ -41,6 +49,7 @@
 		'aria-label'?: string;
 		ariaLabel?: string;
 		class?: string;
+		ui?: SwitchSlots;
 		children?: Snippet;
 	};
 </script>
@@ -61,6 +70,7 @@
 		'aria-label': ariaLabelAttr,
 		ariaLabel,
 		class: className = '',
+		ui,
 		children
 	}: SwitchProps = $props();
 
@@ -80,9 +90,13 @@
 
 <label
 	for={effectiveId}
-	class="inline-flex items-start gap-3 select-none {disabled
-		? 'cursor-not-allowed opacity-60'
-		: 'cursor-pointer'} {className}"
+	data-slot="root"
+	class={cn(
+		'inline-flex items-start gap-3 select-none',
+		disabled ? 'cursor-not-allowed opacity-60' : 'cursor-pointer',
+		className,
+		ui?.root
+	)}
 >
 	<Switch.Root
 		id={effectiveId}
@@ -92,21 +106,32 @@
 		aria-label={effectiveAriaLabel}
 		aria-invalid={ariaInvalid || undefined}
 		aria-describedby={ariaDescribedBy}
-		class={switchVariants({ size })}
+		data-slot="track"
+		class={cn(switchVariants({ size }), ui?.track)}
 	>
-		<Switch.Thumb class={thumbVariants({ size })} />
+		<Switch.Thumb data-slot="thumb" class={cn(thumbVariants({ size }), ui?.thumb)} />
 	</Switch.Root>
 
 	{#if label || description || children}
 		<div class="text-sm leading-5">
 			{#if label}
-				<span class="font-medium text-neutral-800 dark:text-neutral-200">{label}</span>
+				<span
+					data-slot="label"
+					class={cn('font-medium text-neutral-800 dark:text-neutral-200', ui?.label)}
+				>
+					{label}
+				</span>
 			{/if}
 			{#if children}
 				{@render children()}
 			{/if}
 			{#if description}
-				<p class="text-sm text-neutral-500 dark:text-neutral-400">{description}</p>
+				<p
+					data-slot="description"
+					class={cn('text-sm text-neutral-500 dark:text-neutral-400', ui?.description)}
+				>
+					{description}
+				</p>
 			{/if}
 		</div>
 	{/if}

@@ -22,9 +22,10 @@
 </script>
 
 <script lang="ts">
-	import { autosize } from '$lib/actions';
+	import { autosize } from '../../actions';
 	import Button from '../elements/Button.svelte';
 	import Icon from '../elements/Icon.svelte';
+	import { cn } from '../../utils/cn';
 
 	let {
 		value = $bindable(''),
@@ -60,25 +61,11 @@
 	});
 
 	let showCommands = $derived(
-		value.startsWith('/') && filteredCommands.length > 0 && dismissedQuery !== value
+		value.startsWith('/') &&
+			filteredCommands.length > 0 &&
+			dismissedQuery !== value &&
+			!value.includes(' ')
 	);
-
-	function handleSubmit() {
-		if (loading) {
-			if (onstop) onstop();
-			return;
-		}
-
-		if ((!value.trim() && attachments.length === 0) || disabled) return;
-
-		if (onsubmit) {
-			onsubmit(value.trim(), [...attachments]);
-		}
-
-		value = '';
-		attachments = [];
-		dismissedQuery = '';
-	}
 
 	function handleKeydown(e: KeyboardEvent) {
 		if (showCommands) {
@@ -95,11 +82,7 @@
 			}
 			if (e.key === 'Enter' || e.key === 'Tab') {
 				e.preventDefault();
-				const cmd = filteredCommands[selectedCommandIdx];
-				if (cmd) {
-					value = `${cmd.name} `;
-					dismissedQuery = '';
-				}
+				selectCommand(filteredCommands[selectedCommandIdx]);
 				return;
 			}
 			if (e.key === 'Escape') {
@@ -114,14 +97,32 @@
 		}
 	}
 
+	function handleSubmit() {
+		if (loading) {
+			if (onstop) onstop();
+			return;
+		}
+
+		if ((!value.trim() && attachments.length === 0) || disabled) return;
+
+		if (onsubmit) {
+			onsubmit(value.trim(), attachments);
+		}
+
+		value = '';
+		attachments = [];
+		dismissedQuery = '';
+	}
+
 	function triggerFileUpload() {
 		fileInputEl?.click();
 	}
 
 	function handleFileChange(e: Event) {
 		const target = e.target as HTMLInputElement;
-		if (target.files && target.files.length > 0) {
+		if (target.files) {
 			attachments = [...attachments, ...Array.from(target.files)];
+			target.value = '';
 		}
 	}
 
@@ -135,7 +136,7 @@
 	}
 </script>
 
-<div class="relative w-full {className}">
+<div class={cn('relative w-full', className)}>
 	<!-- Slash Command Autocomplete Menu -->
 	{#if showCommands}
 		<div
@@ -144,14 +145,16 @@
 			<div class="px-2.5 py-1 text-[11px] font-semibold text-neutral-400 uppercase">
 				Quick Commands
 			</div>
-			{#each filteredCommands as cmd, i}
+			{#each filteredCommands as cmd, i (cmd.name)}
 				<button
 					type="button"
 					onclick={() => selectCommand(cmd)}
-					class="flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-left text-xs transition-colors {i ===
-					selectedCommandIdx
-						? 'bg-primary-50 text-primary-900 dark:bg-primary-950/60 dark:text-primary-100'
-						: 'text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800/60'}"
+					class={cn(
+						'flex w-full items-center justify-between rounded-lg px-2.5 py-1.5 text-left text-xs transition-colors',
+						i === selectedCommandIdx
+							? 'bg-primary-50 text-primary-900 dark:bg-primary-950/60 dark:text-primary-100'
+							: 'text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800/60'
+					)}
 				>
 					<div class="flex items-center gap-2">
 						<span class="font-mono font-medium">{cmd.name}</span>
@@ -180,7 +183,7 @@
 		<!-- Attached Files List -->
 		{#if attachments.length > 0}
 			<div class="mb-2 flex flex-wrap gap-1.5 px-1.5 pt-1">
-				{#each attachments as file, idx}
+				{#each attachments as file, idx (file.name + idx)}
 					<div
 						class="flex items-center gap-1.5 rounded-lg border border-neutral-200 bg-neutral-50 px-2 py-1 text-xs text-neutral-700 dark:border-neutral-800 dark:bg-neutral-800 dark:text-neutral-200"
 					>
@@ -235,9 +238,12 @@
 						audioRecording = !audioRecording;
 						if (ontoggleAudio) ontoggleAudio();
 					}}
-					class="h-8 w-8 rounded-lg p-0 {audioRecording
-						? 'text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40'
-						: 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'}"
+					class={cn(
+						'h-8 w-8 rounded-lg p-0',
+						audioRecording
+							? 'text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40'
+							: 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'
+					)}
 					aria-label={audioRecording ? 'Stop voice recording' : 'Voice prompt'}
 					title={audioRecording ? 'Stop voice recording' : 'Voice prompt'}
 				>

@@ -1,9 +1,9 @@
 <script module lang="ts">
-	import { tv, type VariantProps } from '$lib/utils/cn';
+	import { tv, cn, type VariantProps } from '$lib/utils/cn';
 	import type { Snippet } from 'svelte';
 
 	export const drawerVariants = tv({
-		base: 'fixed z-50 overflow-y-auto border border-neutral-200 bg-white p-6 shadow-2xl transition-all duration-300 dark:border-neutral-800 dark:bg-neutral-900',
+		base: 'fixed z-50 overflow-y-auto border border-neutral-200 bg-white p-6 shadow-2xl transition-all duration-300 dark:border-neutral-800 dark:bg-neutral-900 yaxa-surface-elevated motion-reduce:transition-none',
 		variants: {
 			responsive: {
 				true: 'inset-x-0 bottom-0 max-h-[85vh] rounded-t-3xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom md:inset-auto md:left-1/2 md:top-1/2 md:w-full md:max-w-lg md:-translate-x-1/2 md:-translate-y-1/2 md:rounded-2xl md:data-[state=closed]:slide-out-to-bottom-0 md:data-[state=open]:slide-in-from-bottom-0 md:data-[state=closed]:zoom-out-95 md:data-[state=open]:zoom-in-95',
@@ -16,6 +16,18 @@
 		}
 	});
 
+	export interface DrawerSlots {
+		overlay?: string;
+		content?: string;
+		handle?: string;
+		header?: string;
+		title?: string;
+		description?: string;
+		body?: string;
+		footer?: string;
+		close?: string;
+	}
+
 	export type DrawerProps = VariantProps<typeof drawerVariants> & {
 		open?: boolean;
 		title?: string;
@@ -26,6 +38,7 @@
 		children?: Snippet;
 		showHandle?: boolean;
 		class?: string;
+		ui?: DrawerSlots;
 	};
 </script>
 
@@ -43,7 +56,8 @@
 		header,
 		footer,
 		children,
-		class: className = ''
+		class: className = '',
+		ui
 	}: DrawerProps = $props();
 </script>
 
@@ -56,26 +70,41 @@
 
 	<Dialog.Portal>
 		<Dialog.Overlay
-			class="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-neutral-900/60 backdrop-blur-xs duration-300"
+			data-slot="overlay"
+			class={cn(
+				'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-neutral-900/60 backdrop-blur-xs duration-300 motion-reduce:transition-none',
+				ui?.overlay
+			)}
 		/>
-		<Dialog.Content class={drawerVariants({ responsive, class: className })}>
+		<Dialog.Content
+			data-slot="content"
+			class={cn(drawerVariants({ responsive, class: className }), ui?.content)}
+		>
 			{#if showHandle}
-				<div class="mb-4 flex justify-center md:hidden">
+				<div data-slot="handle" class={cn('mb-4 flex justify-center md:hidden', ui?.handle)}>
 					<div class="h-1.5 w-12 rounded-full bg-neutral-300 dark:bg-neutral-700"></div>
 				</div>
 			{/if}
 
 			{#if header}
-				{@render header()}
+				<div data-slot="header" class={ui?.header}>
+					{@render header()}
+				</div>
 			{:else if title || description}
-				<div class="mb-4">
+				<div data-slot="header" class={cn('mb-4', ui?.header)}>
 					{#if title}
-						<Dialog.Title class="text-lg font-bold text-neutral-900 dark:text-white">
+						<Dialog.Title
+							data-slot="title"
+							class={cn('text-lg font-bold text-neutral-900 dark:text-white', ui?.title)}
+						>
 							{title}
 						</Dialog.Title>
 					{/if}
 					{#if description}
-						<Dialog.Description class="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+						<Dialog.Description
+							data-slot="description"
+							class={cn('mt-1 text-sm text-neutral-500 dark:text-neutral-400', ui?.description)}
+						>
 							{description}
 						</Dialog.Description>
 					{/if}
@@ -83,22 +112,26 @@
 			{/if}
 
 			{#if children}
-				<div class="my-2">
+				<div data-slot="body" class={cn('my-2', ui?.body)}>
 					{@render children()}
 				</div>
 			{/if}
 
 			{#if footer}
-				<div class="mt-6 flex items-center justify-end gap-3">
+				<div data-slot="footer" class={cn('mt-6 flex items-center justify-end gap-3', ui?.footer)}>
 					{@render footer()}
 				</div>
 			{/if}
 
 			<Dialog.Close
-				class="absolute top-4 right-4 rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
+				data-slot="close"
+				class={cn(
+					'absolute top-4 right-4 rounded-lg p-1.5 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-neutral-200',
+					ui?.close
+				)}
 				aria-label="Close"
 			>
-				<Icon name="cross" size="xs" />
+				<Icon name="cross" size="sm" />
 			</Dialog.Close>
 		</Dialog.Content>
 	</Dialog.Portal>

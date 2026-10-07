@@ -49,7 +49,8 @@
 	import PromptBar from './PromptBar.svelte';
 	import AiThought from './AiThought.svelte';
 	import AiToolCall from './AiToolCall.svelte';
-	import { useToast } from '$lib/composables/useToast.svelte';
+	import { useToast } from '../../composables/useToast.svelte';
+	import { cn } from '../../utils/cn';
 
 	let {
 		messages = [],
@@ -73,17 +74,16 @@
 	const toast = useToast();
 
 	function scrollToBottom(smooth = true) {
-		if (scrollContainer && autoScroll) {
-			scrollContainer.scrollTo({
-				top: scrollContainer.scrollHeight,
-				behavior: smooth ? 'smooth' : 'auto'
-			});
-		}
+		if (!scrollContainer) return;
+		scrollContainer.scrollTo({
+			top: scrollContainer.scrollHeight,
+			behavior: smooth ? 'smooth' : 'auto'
+		});
 	}
 
 	$effect(() => {
-		if (messages.length > 0) {
-			setTimeout(() => scrollToBottom(true), 50);
+		if (autoScroll && messages.length > 0) {
+			scrollToBottom(true);
 		}
 	});
 
@@ -96,7 +96,10 @@
 </script>
 
 <div
-	class="flex h-full min-h-[500px] w-full flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-md dark:border-neutral-800 dark:bg-neutral-950 {className}"
+	class={cn(
+		'flex h-full min-h-[500px] w-full flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white shadow-md dark:border-neutral-800 dark:bg-neutral-950',
+		className
+	)}
 >
 	<!-- Chat Header Bar -->
 	<div
@@ -117,9 +120,10 @@
 					</div>
 					<div class="flex items-center gap-1.5 text-[11px] text-neutral-500">
 						<span
-							class="h-1.5 w-1.5 rounded-full {loading
-								? 'animate-ping bg-amber-500'
-								: 'bg-emerald-500'}"
+							class={cn(
+								'h-1.5 w-1.5 rounded-full',
+								loading ? 'animate-ping bg-amber-500' : 'bg-emerald-500'
+							)}
 						></span>
 						<span>{loading ? 'Generating response...' : 'Online & Ready'}</span>
 					</div>
@@ -131,7 +135,7 @@
 	<!-- Scrollable Messages Container -->
 	<div
 		bind:this={scrollContainer}
-		class="yaxa-scrollbar flex-1 space-y-6 overflow-y-auto p-4 sm:p-6"
+		class="flex-1 yaxa-scrollbar space-y-6 overflow-y-auto p-4 sm:p-6"
 	>
 		{#if messages.length === 0}
 			<div class="flex h-full min-h-[300px] flex-col items-center justify-center text-center">
@@ -152,7 +156,7 @@
 				{#if messageSlot}
 					{@render messageSlot(msg)}
 				{:else}
-					<div class="flex gap-3.5 {msg.role === 'user' ? 'justify-end' : 'justify-start'}">
+					<div class={cn('flex gap-3.5', msg.role === 'user' ? 'justify-end' : 'justify-start')}>
 						{#if msg.role === 'assistant'}
 							<Avatar
 								src={assistantAvatar}
@@ -163,9 +167,10 @@
 						{/if}
 
 						<div
-							class="flex max-w-[85%] flex-col gap-1 sm:max-w-[75%] {msg.role === 'user'
-								? 'items-end'
-								: 'items-start'}"
+							class={cn(
+								'flex max-w-[85%] flex-col gap-1 sm:max-w-[75%]',
+								msg.role === 'user' ? 'items-end' : 'items-start'
+							)}
 						>
 							<!-- Agent Reasoning / Thoughts -->
 							{#if msg.thought}
@@ -184,7 +189,7 @@
 							<!-- Agent Tool Invocations -->
 							{#if msg.tools && msg.tools.length > 0}
 								<div class="w-full space-y-2">
-									{#each msg.tools as tool}
+									{#each msg.tools as tool, tIdx (tool.name + tIdx)}
 										<AiToolCall
 											name={tool.name}
 											status={tool.status}
@@ -197,10 +202,12 @@
 
 							<!-- Message Bubble -->
 							<div
-								class="relative rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-xs {msg.role ===
-								'user'
-									? 'bg-primary-500 text-white dark:bg-primary-600'
-									: 'border border-neutral-200/80 bg-neutral-50 text-neutral-900 dark:border-neutral-800/80 dark:bg-neutral-900 dark:text-neutral-100'}"
+								class={cn(
+									'relative rounded-2xl px-4 py-3 text-sm leading-relaxed shadow-xs',
+									msg.role === 'user'
+										? 'bg-primary-500 text-white dark:bg-primary-600'
+										: 'border border-neutral-200/80 bg-neutral-50 text-neutral-900 dark:border-neutral-800/80 dark:bg-neutral-900 dark:text-neutral-100'
+								)}
 							>
 								<div class="whitespace-pre-wrap">{msg.content}</div>
 
