@@ -1,4 +1,4 @@
-import { createSitemapHandler } from '$lib/site/sitemap';
+import { createSitemapHandler } from '#lib/site/sitemap.js';
 import { siteConfig } from '../../site.config';
 import { ALL_DOC_ITEMS } from '../docs/_data/docs-nav';
 

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { PageProps } from './$types';
-	import Seo from '$lib/components/seo/Seo.svelte';
+	import Seo from '#lib/components/seo/Seo.svelte';
 
 	let { data }: PageProps = $props();
 

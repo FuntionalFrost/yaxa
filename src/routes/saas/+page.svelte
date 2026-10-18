@@ -1,20 +1,20 @@
 <script lang="ts">
-	import Container from '$lib/components/layout/Container.svelte';
-	import Badge from '$lib/components/elements/Badge.svelte';
-	import Button from '$lib/components/elements/Button.svelte';
-	import Card from '$lib/components/layout/Card.svelte';
-	import Tabs from '$lib/components/navigation/Tabs.svelte';
-	import Seo from '$lib/components/seo/Seo.svelte';
-	import AuthCard from '$lib/components/saas/AuthCard.svelte';
-	import PasskeyUI from '$lib/components/saas/PasskeyUI.svelte';
-	import TwoFactorModal from '$lib/components/saas/TwoFactorModal.svelte';
-	import UserMenu from '$lib/components/saas/UserMenu.svelte';
-	import PricingTable from '$lib/components/saas/PricingTable.svelte';
-	import SubscriptionCard from '$lib/components/saas/SubscriptionCard.svelte';
-	import Gate from '$lib/components/saas/Gate.svelte';
-	import Icon from '$lib/components/elements/Icon.svelte';
-	import { useToast } from '$lib/composables/useToast.svelte';
-	import type { SubscriptionStatus } from '$lib/server/db/types';
+	import Container from '#lib/components/layout/Container.svelte';
+	import Badge from '#lib/components/elements/Badge.svelte';
+	import Button from '#lib/components/elements/Button.svelte';
+	import Card from '#lib/components/layout/Card.svelte';
+	import Tabs from '#lib/components/navigation/Tabs.svelte';
+	import Seo from '#lib/components/seo/Seo.svelte';
+	import AuthCard from '#lib/components/saas/AuthCard.svelte';
+	import PasskeyUI from '#lib/components/saas/PasskeyUI.svelte';
+	import TwoFactorModal from '#lib/components/saas/TwoFactorModal.svelte';
+	import UserMenu from '#lib/components/saas/UserMenu.svelte';
+	import PricingTable from '#lib/components/saas/PricingTable.svelte';
+	import SubscriptionCard from '#lib/components/saas/SubscriptionCard.svelte';
+	import Gate from '#lib/components/saas/Gate.svelte';
+	import Icon from '#lib/components/elements/Icon.svelte';
+	import { useToast } from '#lib/composables/useToast.svelte.js';
+	import type { SubscriptionStatus } from '#lib/server/db/types.js';
 
 	const toast = useToast();
 

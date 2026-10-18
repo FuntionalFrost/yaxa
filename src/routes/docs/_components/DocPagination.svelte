@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import { ALL_DOC_ITEMS } from '../_data/docs-nav';
-	import Icon from '$lib/components/elements/Icon.svelte';
+	import Icon from '#lib/components/elements/Icon.svelte';
 
 	let currentPath = $derived(page.url.pathname);
 	let currentIndex = $derived(ALL_DOC_ITEMS.findIndex((item) => item.href === currentPath));

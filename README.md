@@ -3,12 +3,12 @@
 # Yaxa
 
 **The Intuitive Svelte UI & Solo SaaS Library**  
-_Nuxt UI v4 & Nuxt UI Pro Equivalent for SvelteKit 2.7+ & Svelte 5 with Built-in SEO & SaaS Parity._
+_Nuxt UI v4 & Nuxt UI Pro Equivalent for SvelteKit 2 & 3 & Svelte 5 with Built-in SEO & SaaS Parity._
 
 [![npm version](https://img.shields.io/npm/v/yaxa-svelte.svg?color=CB3837&logo=npm)](https://www.npmjs.com/package/yaxa-svelte)
 [![npm downloads](https://img.shields.io/npm/dm/yaxa-svelte.svg?color=blue)](https://www.npmjs.com/package/yaxa-svelte)
 [![Svelte 5](https://img.shields.io/badge/Svelte-5.0+-FF3E00?style=flat&logo=svelte&logoColor=white)](https://svelte.dev)
-[![SvelteKit](https://img.shields.io/badge/SvelteKit-2.7+-FF3E00?style=flat&logo=svelte&logoColor=white)](https://kit.svelte.dev)
+[![SvelteKit](https://img.shields.io/badge/SvelteKit-2_%26_3-FF3E00?style=flat&logo=svelte&logoColor=white)](https://kit.svelte.dev)
 [![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4.0-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![Bits UI](https://img.shields.io/badge/Bits_UI-v2.0-18181b?style=flat)](https://bits-ui.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](LICENSE)
@@ -21,7 +21,7 @@ _Nuxt UI v4 & Nuxt UI Pro Equivalent for SvelteKit 2.7+ & Svelte 5 with Built-in
 
 ## 🌟 Overview
 
-**Yaxa** brings the full developer experience, visual elegance, and full-stack toolkit of **Nuxt UI** and the **Nuxt SEO + SaaS ecosystem** to **SvelteKit 2.7+** and **Svelte 5**.
+**Yaxa** brings the full developer experience, visual elegance, and full-stack toolkit of **Nuxt UI** and the **Nuxt SEO + SaaS ecosystem** to **SvelteKit 2 & 3** and **Svelte 5**.
 
 - 🎨 **Tailwind CSS v4 Native Tokens**: Styled with `@theme` variables; harmonic radius scale (`--radius-xs` to `--radius-4xl`), chart palette tokens (`--color-chart-1` to `--color-chart-5`), atmospheric utilities (`yaxa-grain` & `yaxa-mesh-glow`), and auto-adaptive scrollbars.
 - 🎛️ **Visual Web Theme Studio**: Interactive runtime palette designer (`/theme` and `<ThemeStudio />`) with live sandbox preview and 1-click token export.
@@ -115,12 +115,12 @@ Import `yaxa-svelte/yaxa.css` and wrap your app in `<YaxaApp>`:
 <script lang="ts">
 	import 'yaxa-svelte/yaxa.css';
 	import { YaxaApp } from 'yaxa-svelte';
-	import { siteConfig } from '../site.config';
+	import { siteConfig } from '../site.config'; // or $lib/site.config
 
-	let { children } = $props();
+	let { data, children } = $props();
 </script>
 
-<YaxaApp config={siteConfig}>
+<YaxaApp config={siteConfig} user={data?.user}>
 	{@render children()}
 </YaxaApp>
 ```
@@ -134,6 +134,23 @@ If your project already imports Tailwind in `src/app.css`, import the standalone
 @plugin '@tailwindcss/typography';
 @import 'yaxa-svelte/theme.css';
 @source '../node_modules/yaxa-svelte/dist/**/*.{js,svelte}';
+```
+
+Then in `src/routes/+layout.svelte`, simply import `../app.css` instead of `yaxa.css`:
+
+```svelte
+<!-- src/routes/+layout.svelte -->
+<script lang="ts">
+	import '../app.css';
+	import { YaxaApp } from 'yaxa-svelte';
+	import { siteConfig } from '../site.config';
+
+	let { data, children } = $props();
+</script>
+
+<YaxaApp config={siteConfig} user={data?.user}>
+	{@render children()}
+</YaxaApp>
 ```
 
 ---
@@ -189,8 +206,7 @@ Dual-mode Drizzle ORM administration and introspection suite with live CRUD tabl
 // Approach A (Zero-File Route Interceptor in src/hooks.server.ts)
 import { sequence } from '@sveltejs/kit/hooks';
 import { createYaxaAdminHook } from 'yaxa-svelte/admin';
-import { db } from '$lib/server/db';
-import * as schema from '$lib/server/db/schema-pg';
+import { db, schemaPg as schema } from 'yaxa-svelte/db'; // or your project's $lib/server/db
 
 export const handle = sequence(createYaxaAdminHook({ db, schema, path: '/admin' }));
 ```
@@ -226,18 +242,20 @@ export const POST = createPolarWebhookHandler();
 
 ## 📦 Subpath Exports Architecture
 
-| Subpath                | Description                                                                                                                               |
-| :--------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
-| `yaxa-svelte`          | Core UI Primitives, SEO Components, `<Gate />`, Theme System & Composables (`useGate`, `useUpload`, `useToast`, `useClipboard`, etc.)     |
-| `yaxa-svelte/admin`    | Drizzle ORM Schema Introspection, `<AdminDashboard />`, `createYaxaAdminHook`, `createDrizzleAdmin`, `<DevSandbox />`, `<RecordDrawer />` |
-| `yaxa-svelte/server`   | Universal Server Hooks, SEO endpoints, Drizzle DB drivers, Cloud Storage handlers, and Email dispatch                                     |
-| `yaxa-svelte/auth`     | Better-Auth client & server integration (`useAuth`, `<AuthCard />`, `<PasskeyUI />`, `<TwoFactorModal />`, `createYaxaAuth`)              |
-| `yaxa-svelte/db`       | Multi-dialect Drizzle ORM clients & schemas for Neon (PostgreSQL) and Turso (SQLite/LibSQL)                                               |
-| `yaxa-svelte/polar`    | Polar.sh billing, customer portal sessions, and webhook synchronization                                                                   |
-| `yaxa-svelte/email`    | Resend transactional email templates with automatic development console fallback                                                          |
-| `yaxa-svelte/storage`  | AWS S3 and Cloudflare R2 presigned upload URL generators                                                                                  |
-| `yaxa-svelte/vite`     | Turnkey Vite plugin (`yaxa()`)                                                                                                            |
-| `yaxa-svelte/yaxa.css` | Tailwind CSS v4 design tokens and base stylesheet                                                                                         |
+| Subpath                 | Description                                                                                                                               |
+| :---------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
+| `yaxa-svelte`           | Core UI Primitives, SEO Components, `<Gate />`, Theme System & Composables (`useGate`, `useUpload`, `useToast`, `useClipboard`, etc.)     |
+| `yaxa-svelte/admin`     | Drizzle ORM Schema Introspection, `<AdminDashboard />`, `createYaxaAdminHook`, `createDrizzleAdmin`, `<DevSandbox />`, `<RecordDrawer />` |
+| `yaxa-svelte/server`    | Universal Server Hooks, SEO endpoints, Drizzle DB drivers, Cloud Storage handlers, and Email dispatch                                     |
+| `yaxa-svelte/auth`      | Better-Auth client & server integration (`useAuth`, `<AuthCard />`, `<PasskeyUI />`, `<TwoFactorModal />`, `createYaxaAuth`)              |
+| `yaxa-svelte/db`        | Multi-dialect Drizzle ORM clients & schemas for Neon (PostgreSQL) and Turso (SQLite/LibSQL)                                               |
+| `yaxa-svelte/polar`     | Polar.sh billing, customer portal sessions, and webhook synchronization                                                                   |
+| `yaxa-svelte/email`     | Resend transactional email templates with automatic development console fallback                                                          |
+| `yaxa-svelte/storage`   | AWS S3 and Cloudflare R2 presigned upload URL generators                                                                                  |
+| `yaxa-svelte/testing`   | Test mocks & utilities (`createMockSiteConfig`, `createMockUser`, `createTestWrapperProps`)                                               |
+| `yaxa-svelte/vite`      | Turnkey Vite plugin (`yaxa()`)                                                                                                            |
+| `yaxa-svelte/yaxa.css`  | Standalone turnkey Tailwind CSS v4 stylesheet with base styling, `@theme`, and scrollbars                                                 |
+| `yaxa-svelte/theme.css` | Pure Tailwind CSS v4 design tokens, `:root` variables, and harmonic radius scale without `@import 'tailwindcss'`                          |
 
 ---
 

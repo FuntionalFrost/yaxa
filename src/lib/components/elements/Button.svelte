@@ -1,5 +1,5 @@
 <script module lang="ts">
-	import { tv, type VariantProps } from '$lib/utils/cn';
+	import { tv, type VariantProps } from '#lib/utils/cn.js';
 	import type { Snippet } from 'svelte';
 	import type { HTMLButtonAttributes, HTMLAnchorAttributes } from 'svelte/elements';
 	import type { IconSource } from './Icon.svelte';

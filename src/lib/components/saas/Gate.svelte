@@ -1,6 +1,6 @@
 <script module lang="ts">
 	import type { Snippet } from 'svelte';
-	import type { AuthUserContext } from '$lib/site/context';
+	import type { AuthUserContext } from '#lib/site/context.js';
 
 	export interface GateProps {
 		/** Required subscription plan tier or array of allowed plan tiers (e.g. 'pro', ['pro', 'enterprise']) */
@@ -37,7 +37,7 @@
 </script>
 
 <script lang="ts">
-	import { useYaxa } from '$lib/site/context';
+	import { useYaxa } from '#lib/site/context.js';
 	import Icon from '../elements/Icon.svelte';
 	import Button from '../elements/Button.svelte';
 

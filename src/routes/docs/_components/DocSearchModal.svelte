@@ -1,9 +1,9 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { ALL_DOC_ITEMS } from '../_data/docs-nav';
-	import Icon from '$lib/components/elements/Icon.svelte';
-	import Kbd from '$lib/components/elements/Kbd.svelte';
-	import Badge from '$lib/components/elements/Badge.svelte';
+	import Icon from '#lib/components/elements/Icon.svelte';
+	import Kbd from '#lib/components/elements/Kbd.svelte';
+	import Badge from '#lib/components/elements/Badge.svelte';
 
 	interface SearchItem {
 		title: string;

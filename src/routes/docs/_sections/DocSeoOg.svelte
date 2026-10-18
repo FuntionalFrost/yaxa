@@ -2,8 +2,8 @@
 	import DocHeader from '../_components/DocHeader.svelte';
 	import DocSandbox from '../_components/DocSandbox.svelte';
 	import DocCodeBlock from '../_components/DocCodeBlock.svelte';
-	import OgImage from '$lib/components/seo/OgImage.svelte';
-	import Icon from '$lib/components/elements/Icon.svelte';
+	import OgImage from '#lib/components/seo/OgImage.svelte';
+	import Icon from '#lib/components/elements/Icon.svelte';
 
 	let ogTitle = $state('Building Faster with SvelteKit & Yaxa');
 	let ogDescription = $state(
@@ -27,7 +27,7 @@
 <OgImage
   title="My Blog Post Title"
   description="A concise summary for Twitter and LinkedIn cards"
-  badge="SvelteKit 2.7"
+  badge="SvelteKit 2 & 3"
   theme="dark"
 />`;
 </script>

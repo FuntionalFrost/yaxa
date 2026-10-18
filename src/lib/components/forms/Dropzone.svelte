@@ -24,7 +24,7 @@
 	import Icon from '../elements/Icon.svelte';
 	import Button from '../elements/Button.svelte';
 	import Progress from '../elements/Progress.svelte';
-	import { useUpload } from '$lib/composables/useUpload.svelte';
+	import { useUpload } from '#lib/composables/useUpload.svelte.js';
 
 	let {
 		id,

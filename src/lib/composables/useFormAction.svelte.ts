@@ -1,5 +1,5 @@
+import type { SubmitFunction } from '$app/forms';
 import { toast } from './useToast.svelte';
-import type { SubmitFunction } from '@sveltejs/kit';
 
 export interface UseFormActionOptions {
 	/** Toast message to show on successful form submission */
@@ -22,7 +22,7 @@ export interface UseFormActionOptions {
  * ```svelte
  * <script>
  *   import { enhance } from '$app/forms';
- *   import { useFormAction } from '$lib';
+ *   import { useFormAction } from '#lib';
  *
  *   const formAction = useFormAction({
  *     successToast: 'Changes saved successfully!',

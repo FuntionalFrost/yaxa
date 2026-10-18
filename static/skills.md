@@ -52,7 +52,7 @@ Elements declare variants inside `<script module>` and resolve them reactively w
 ```svelte
 <!-- Example Pattern -->
 <script module lang="ts">
-  import { tv, type VariantProps } from '$lib/utils/cn';
+  import { tv, type VariantProps } from 'yaxa-svelte';
   export const buttonVariants = tv({
     base: 'inline-flex items-center justify-center font-medium ...',
     variants: {
@@ -133,7 +133,7 @@ Wrap your application in `<YaxaApp>` inside `src/routes/+layout.svelte`. It prov
   let { data, children } = $props();
 </script>
 
-<YaxaApp config={siteConfig} user={data.user}>
+<YaxaApp config={siteConfig} user={data?.user}>
   {@render children()}
 </YaxaApp>
 ```
@@ -145,6 +145,22 @@ Wrap your application in `<YaxaApp>` inside `src/routes/+layout.svelte`. It prov
 @plugin '@tailwindcss/typography';
 @import 'yaxa-svelte/theme.css';
 @source "../node_modules/yaxa-svelte/dist/**/*.{js,svelte}";
+```
+
+Then in `src/routes/+layout.svelte`, import `../app.css` instead of `yaxa.css`:
+```svelte
+<!-- src/routes/+layout.svelte -->
+<script lang="ts">
+  import '../app.css';
+  import { YaxaApp } from 'yaxa-svelte';
+  import { siteConfig } from '../site.config';
+
+  let { data, children } = $props();
+</script>
+
+<YaxaApp config={siteConfig} user={data?.user}>
+  {@render children()}
+</YaxaApp>
 ```
 
 ### Feature & Plan Gating (`<Gate>` & `useGate`)

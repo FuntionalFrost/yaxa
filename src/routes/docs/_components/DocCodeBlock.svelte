@@ -1,5 +1,5 @@
 <script lang="ts">
-	import CodeBlock from '$lib/components/elements/CodeBlock.svelte';
+	import CodeBlock from '#lib/components/elements/CodeBlock.svelte';
 
 	interface Props {
 		code: string;

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import DocHeader from '../_components/DocHeader.svelte';
 	import DocCodeBlock from '../_components/DocCodeBlock.svelte';
-	import Badge from '$lib/components/elements/Badge.svelte';
+	import Badge from '#lib/components/elements/Badge.svelte';
 
 	const viteSnippet = `import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
@@ -37,11 +37,11 @@ export const siteConfig = defineSiteConfig({
   import { YaxaApp } from 'yaxa-svelte';
   import { siteConfig } from '../site.config';
 
-  let { children } = $props();
+  let { data, children } = $props();
 <` +
 		`/script>
 
-<YaxaApp config={siteConfig}>
+<YaxaApp config={siteConfig} user={data?.user}>
   {@render children()}
 </YaxaApp>`;
 

@@ -1,5 +1,5 @@
 <script module lang="ts">
-	import { tv, cn, type VariantProps } from '$lib/utils/cn';
+	import { tv, cn, type VariantProps } from '#lib/utils/cn.js';
 	import type { Snippet } from 'svelte';
 
 	export const drawerVariants = tv({

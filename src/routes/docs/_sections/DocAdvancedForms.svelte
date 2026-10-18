@@ -1,9 +1,9 @@
 <script lang="ts">
 	import DocHeader from '../_components/DocHeader.svelte';
 	import DocSandbox from '../_components/DocSandbox.svelte';
-	import RichTextEditor from '$lib/components/forms/RichTextEditor.svelte';
-	import PhoneInput from '$lib/components/forms/PhoneInput.svelte';
-	import CreditCardInput, { type CardBrand } from '$lib/components/forms/CreditCardInput.svelte';
+	import RichTextEditor from '#lib/components/forms/RichTextEditor.svelte';
+	import PhoneInput from '#lib/components/forms/PhoneInput.svelte';
+	import CreditCardInput, { type CardBrand } from '#lib/components/forms/CreditCardInput.svelte';
 
 	let sampleMarkdown = $state(`### Welcome to Yaxa
 Write formatted text with **bold**, *italic*, lists, and code blocks.

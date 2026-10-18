@@ -1,5 +1,5 @@
 <script module lang="ts">
-	import { tv, type VariantProps } from '$lib/utils/cn';
+	import { tv, type VariantProps } from '#lib/utils/cn.js';
 	import type { Snippet } from 'svelte';
 
 	export const virtualListVariants = tv({
@@ -73,8 +73,8 @@
 </script>
 
 <div
-	class={virtualListVariants({ bordered, class: className })}
-	style="height: {heightStyle};"
+	class="{virtualListVariants({ bordered, class: className })} h-[var(--yaxa-vl-height)]"
+	style="--yaxa-vl-height: {heightStyle};"
 	onscroll={onScroll}
 	role="feed"
 	aria-busy={false}
@@ -91,9 +91,12 @@
 		</div>
 	{:else}
 		<!-- Total virtual space height holder -->
-		<div class="relative w-full" style="height: {totalHeight}px;">
+		<div class="relative h-[var(--yaxa-vl-total)] w-full" style="--yaxa-vl-total: {totalHeight}px;">
 			{#each visibleItems as { data, index, top } (index)}
-				<div class="absolute right-0 left-0 w-full" style="top: {top}px; height: {itemHeight}px;">
+				<div
+					class="yaxa-virtual-row absolute right-0 left-0 h-[var(--yaxa-vl-item-height)] w-full"
+					style="--yaxa-vl-top: {top}px; --yaxa-vl-item-height: {itemHeight}px;"
+				>
 					{#if item}
 						{@render item(data, index)}
 					{:else}
@@ -108,3 +111,12 @@
 		</div>
 	{/if}
 </div>
+
+<style>
+	.yaxa-virtual-row {
+		top: 0;
+		transform: translate3d(0, var(--yaxa-vl-top, 0px), 0);
+		will-change: transform;
+		contain: layout size;
+	}
+</style>

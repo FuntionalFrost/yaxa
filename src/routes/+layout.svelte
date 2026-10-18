@@ -1,17 +1,17 @@
 <script lang="ts">
 	import './layout.css';
 	import { onMount } from 'svelte';
-	import { browser } from '$app/environment';
+	import { browser } from '$app/env';
 	import { goto } from '$app/navigation';
-	import YaxaApp from '$lib/components/layout/YaxaApp.svelte';
-	import Header from '$lib/components/layout/Header.svelte';
-	import Footer from '$lib/components/layout/Footer.svelte';
+	import YaxaApp from '#lib/components/layout/YaxaApp.svelte';
+	import Header from '#lib/components/layout/Header.svelte';
+	import Footer from '#lib/components/layout/Footer.svelte';
 	import CommandPalette, {
 		type CommandItem
-	} from '$lib/components/navigation/CommandPalette.svelte';
+	} from '#lib/components/navigation/CommandPalette.svelte';
 	import { DOC_NAV_GROUPS } from './docs/_data/docs-nav';
 	import { siteConfig } from '../site.config';
-	import { theme } from '$lib/theme/theme.svelte';
+	import { theme } from '#lib/theme/theme.svelte.js';
 
 	let { children } = $props();
 
@@ -39,9 +39,8 @@
 
 <YaxaApp config={siteConfig}>
 	<Header config={siteConfig} onOpenCommand={() => (commandOpen = true)} />
-	<div class="flex-1">
-		{@render children()}
-	</div>
+
+	<div class="flex-1">{@render children()}</div>
 	<Footer config={siteConfig} />
 	<CommandPalette bind:open={commandOpen} items={commandItems} />
 </YaxaApp>

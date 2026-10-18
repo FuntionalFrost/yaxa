@@ -1,5 +1,5 @@
-import { getDb, schemaPg } from '$lib/server/db/index';
-import { createDrizzleAdmin } from '$lib/admin/handler';
+import { getDb, schemaPg } from '#lib/server/db/index.js';
+import { createDrizzleAdmin } from '#lib/admin/handler.js';
 
 const admin = createDrizzleAdmin({
 	db: () => getDb(),

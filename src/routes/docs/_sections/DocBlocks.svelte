@@ -1,21 +1,21 @@
 <script lang="ts">
 	import DocHeader from '../_components/DocHeader.svelte';
 	import DocSandbox from '../_components/DocSandbox.svelte';
-	import MetricCard from '$lib/components/elements/MetricCard.svelte';
-	import EmptyState from '$lib/components/elements/EmptyState.svelte';
-	import Stepper, { type StepItem } from '$lib/components/navigation/Stepper.svelte';
-	import Terminal from '$lib/components/elements/Terminal.svelte';
-	import Timeline, { type TimelineItem } from '$lib/components/elements/Timeline.svelte';
-	import Testimonials, { type TestimonialItem } from '$lib/components/blocks/Testimonials.svelte';
-	import FAQ, { type FAQItem } from '$lib/components/blocks/FAQ.svelte';
-	import FeatureGrid, { type FeatureItem } from '$lib/components/blocks/FeatureGrid.svelte';
-	import Carousel from '$lib/components/elements/Carousel.svelte';
-	import VirtualList from '$lib/components/elements/VirtualList.svelte';
-	import ResizablePanels from '$lib/components/layout/ResizablePanels.svelte';
-	import Button from '$lib/components/elements/Button.svelte';
-	import Badge from '$lib/components/elements/Badge.svelte';
-	import Icon from '$lib/components/elements/Icon.svelte';
-	import ToggleGroup from '$lib/components/forms/ToggleGroup.svelte';
+	import MetricCard from '#lib/components/elements/MetricCard.svelte';
+	import EmptyState from '#lib/components/elements/EmptyState.svelte';
+	import Stepper, { type StepItem } from '#lib/components/navigation/Stepper.svelte';
+	import Terminal from '#lib/components/elements/Terminal.svelte';
+	import Timeline, { type TimelineItem } from '#lib/components/elements/Timeline.svelte';
+	import Testimonials, { type TestimonialItem } from '#lib/components/blocks/Testimonials.svelte';
+	import FAQ, { type FAQItem } from '#lib/components/blocks/FAQ.svelte';
+	import FeatureGrid, { type FeatureItem } from '#lib/components/blocks/FeatureGrid.svelte';
+	import Carousel from '#lib/components/elements/Carousel.svelte';
+	import VirtualList from '#lib/components/elements/VirtualList.svelte';
+	import ResizablePanels from '#lib/components/layout/ResizablePanels.svelte';
+	import Button from '#lib/components/elements/Button.svelte';
+	import Badge from '#lib/components/elements/Badge.svelte';
+	import Icon from '#lib/components/elements/Icon.svelte';
+	import ToggleGroup from '#lib/components/forms/ToggleGroup.svelte';
 
 	let dashboardInterval = $state('30d');
 	let currentStep = $state(1);
@@ -28,7 +28,7 @@
 	];
 
 	const terminalLines = [
-		{ comment: 'Create modern full-stack SvelteKit 2 + Svelte 5 app' },
+		{ comment: 'Create modern full-stack SvelteKit 2 & 3 + Svelte 5 app' },
 		{ command: 'pnpm create yaxa-app my-saas' },
 		{
 			output:
@@ -173,7 +173,7 @@
 		time: `${Math.floor(i / 10) + 1}m ago`
 	}));
 
-	const terminalSnippet = `<Terminal\n  title="zsh / yaxa-scaffold"\n  lines={[\n    { comment: 'Scaffold full-stack SvelteKit 2 + Svelte 5 app' },\n    { command: 'pnpm create yaxa-app my-saas' }\n  ]}\n  copyable={true}\n/>`;
+	const terminalSnippet = `<Terminal\n  title="zsh / yaxa-scaffold"\n  lines={[\n    { comment: 'Scaffold full-stack SvelteKit 2 & 3 + Svelte 5 app' },\n    { command: 'pnpm create yaxa-app my-saas' }\n  ]}\n  copyable={true}\n/>`;
 </script>
 
 <div class="space-y-12">

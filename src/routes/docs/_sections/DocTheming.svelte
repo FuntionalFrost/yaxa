@@ -1,10 +1,10 @@
 <script lang="ts">
 	import DocHeader from '../_components/DocHeader.svelte';
 	import DocSandbox from '../_components/DocSandbox.svelte';
-	import Button from '$lib/components/elements/Button.svelte';
-	import Icon from '$lib/components/elements/Icon.svelte';
-	import ThemeStudio from '$lib/components/theme/ThemeStudio.svelte';
-	import Badge from '$lib/components/elements/Badge.svelte';
+	import Button from '#lib/components/elements/Button.svelte';
+	import Icon from '#lib/components/elements/Icon.svelte';
+	import ThemeStudio from '#lib/components/theme/ThemeStudio.svelte';
+	import Badge from '#lib/components/elements/Badge.svelte';
 
 	const backgroundUtilitySnippet = `<!-- Atmospheric noise texture -->
 <div class="relative overflow-hidden rounded-2xl border border-neutral-200 p-8 dark:border-neutral-800">

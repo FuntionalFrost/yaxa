@@ -110,7 +110,7 @@ export function generateSoftwareSourceCodeSchema(config: SiteConfig) {
 		name: config.name,
 		description: config.description,
 		programmingLanguage: 'Svelte',
-		runtimePlatform: 'SvelteKit 2',
+		runtimePlatform: 'SvelteKit 2 & 3',
 		codeRepository: config.project?.repositoryUrl || config.socials?.github || undefined,
 		license: config.project?.licenseUrl || config.project?.license || 'MIT',
 		author: config.author

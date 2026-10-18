@@ -1,5 +1,5 @@
 <script module lang="ts">
-	import { tv, type VariantProps } from '$lib/utils/cn';
+	import { tv, type VariantProps } from '#lib/utils/cn.js';
 	import type { Snippet } from 'svelte';
 
 	export const resizablePanelsVariants = tv({
@@ -176,10 +176,10 @@
 <div
 	bind:this={containerRef}
 	class="{slots.root()} {className}"
-	style="user-select: {isDragging ? 'none' : 'auto'};"
+	style="--yaxa-panel-size: {currentSize}%; user-select: {isDragging ? 'none' : 'auto'};"
 >
 	<!-- First Panel -->
-	<div class="overflow-auto transition-[flex-basis]" style="flex: 0 0 {currentSize}%;">
+	<div class="shrink-0 basis-[var(--yaxa-panel-size)] overflow-auto transition-[flex-basis]">
 		{#if first}
 			{@render first()}
 		{/if}
@@ -188,7 +188,7 @@
 	<!-- Splitter Handle -->
 	<button
 		type="button"
-		class={slots.handle()}
+		class="{slots.handle()} yaxa-splitter-handle"
 		onmousedown={startDrag}
 		ontouchstart={startDrag}
 		onkeydown={handleKeydown}
@@ -209,3 +209,11 @@
 		{/if}
 	</div>
 </div>
+
+<style>
+	.yaxa-splitter-handle {
+		touch-action: none;
+		-webkit-user-select: none;
+		user-select: none;
+	}
+</style>

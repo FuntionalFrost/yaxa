@@ -11,7 +11,7 @@
 <script lang="ts" generics="T extends Record<string, any> | string | number">
 	import type { Snippet } from 'svelte';
 	import Icon from './Icon.svelte';
-	import { useSortable } from '$lib/composables/useSortable.svelte';
+	import { useSortable } from '#lib/composables/useSortable.svelte.js';
 
 	interface Props extends SortableListProps<T> {
 		children?: Snippet<

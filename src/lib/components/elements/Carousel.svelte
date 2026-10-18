@@ -1,5 +1,5 @@
 <script module lang="ts">
-	import { tv, type VariantProps } from '$lib/utils/cn';
+	import { tv, type VariantProps } from '#lib/utils/cn.js';
 	import type { Snippet } from 'svelte';
 
 	export const carouselVariants = tv({
@@ -127,12 +127,12 @@
 		</div>
 	{:else}
 		<!-- Viewport -->
-		<div class={slots.viewport()}>
+		<div class="{slots.viewport()} yaxa-carousel-viewport">
 			<div
-				class="flex w-full transition-transform duration-500 ease-out"
-				style="transform: translateX(-{currentIndex * 100}%);"
+				class="yaxa-carousel-track flex w-full transition-transform duration-500 ease-out"
+				style="--yaxa-carousel-offset: -{currentIndex * 100}%;"
 			>
-				{#each items as slide, index}
+				{#each items as slide, index (index)}
 					<div
 						class="min-w-full flex-shrink-0"
 						role="group"
@@ -198,3 +198,15 @@
 		{/if}
 	{/if}
 </div>
+
+<style>
+	.yaxa-carousel-viewport {
+		touch-action: pan-y;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	.yaxa-carousel-track {
+		transform: translate3d(var(--yaxa-carousel-offset, 0%), 0, 0);
+		will-change: transform;
+	}
+</style>

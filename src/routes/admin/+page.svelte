@@ -1,5 +1,5 @@
 <script lang="ts">
-	import AdminDashboard from '$lib/admin/components/AdminDashboard.svelte';
+	import AdminDashboard from '#lib/admin/components/AdminDashboard.svelte';
 	import type { PageProps } from './$types';
 
 	let { data }: PageProps = $props();

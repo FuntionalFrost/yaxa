@@ -1,19 +1,19 @@
 <script lang="ts">
-	import Badge from '$lib/components/elements/Badge.svelte';
-	import Card from '$lib/components/layout/Card.svelte';
-	import Button from '$lib/components/elements/Button.svelte';
-	import Tabs from '$lib/components/navigation/Tabs.svelte';
-	import AuthCard from '$lib/components/saas/AuthCard.svelte';
-	import PasskeyUI from '$lib/components/saas/PasskeyUI.svelte';
-	import TwoFactorModal from '$lib/components/saas/TwoFactorModal.svelte';
-	import UserMenu from '$lib/components/saas/UserMenu.svelte';
-	import PricingTable from '$lib/components/saas/PricingTable.svelte';
-	import SubscriptionCard from '$lib/components/saas/SubscriptionCard.svelte';
-	import OrgSwitcher, { type OrgItem } from '$lib/components/saas/OrgSwitcher.svelte';
+	import Badge from '#lib/components/elements/Badge.svelte';
+	import Card from '#lib/components/layout/Card.svelte';
+	import Button from '#lib/components/elements/Button.svelte';
+	import Tabs from '#lib/components/navigation/Tabs.svelte';
+	import AuthCard from '#lib/components/saas/AuthCard.svelte';
+	import PasskeyUI from '#lib/components/saas/PasskeyUI.svelte';
+	import TwoFactorModal from '#lib/components/saas/TwoFactorModal.svelte';
+	import UserMenu from '#lib/components/saas/UserMenu.svelte';
+	import PricingTable from '#lib/components/saas/PricingTable.svelte';
+	import SubscriptionCard from '#lib/components/saas/SubscriptionCard.svelte';
+	import OrgSwitcher, { type OrgItem } from '#lib/components/saas/OrgSwitcher.svelte';
 	import NotificationCenter, {
 		type NotificationItem
-	} from '$lib/components/overlays/NotificationCenter.svelte';
-	import CodeBlock from '$lib/components/elements/CodeBlock.svelte';
+	} from '#lib/components/overlays/NotificationCenter.svelte';
+	import CodeBlock from '#lib/components/elements/CodeBlock.svelte';
 
 	let activeDemo = $state('auth');
 	let show2FAModal = $state(false);

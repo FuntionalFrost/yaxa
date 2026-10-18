@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Popover } from 'bits-ui';
 	import Icon from '../elements/Icon.svelte';
-	import { cn } from '$lib/utils/cn';
+	import { cn } from '#lib/utils/cn.js';
 
 	export interface DatePreset {
 		label: string;

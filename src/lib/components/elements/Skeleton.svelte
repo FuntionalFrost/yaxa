@@ -1,5 +1,5 @@
 <script module lang="ts">
-	import { tv, cn, type VariantProps } from '$lib/utils/cn';
+	import { tv, cn, type VariantProps } from '#lib/utils/cn.js';
 
 	export const skeletonVariants = tv({
 		base: 'relative overflow-hidden bg-neutral-200 select-none motion-reduce:animate-none dark:bg-neutral-800',

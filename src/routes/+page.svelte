@@ -1,16 +1,16 @@
 <script lang="ts">
-	import Container from '$lib/components/layout/Container.svelte';
-	import Button from '$lib/components/elements/Button.svelte';
-	import Badge from '$lib/components/elements/Badge.svelte';
-	import Chip from '$lib/components/elements/Chip.svelte';
-	import Icon from '$lib/components/elements/Icon.svelte';
-	import MetricCard from '$lib/components/elements/MetricCard.svelte';
-	import CodeBlock from '$lib/components/elements/CodeBlock.svelte';
-	import SortableList from '$lib/components/elements/SortableList.svelte';
-	import Input from '$lib/components/forms/Input.svelte';
-	import Switch from '$lib/components/forms/Switch.svelte';
-	import Tabs from '$lib/components/navigation/Tabs.svelte';
-	import { useToast } from '$lib/composables/useToast.svelte';
+	import Container from '#lib/components/layout/Container.svelte';
+	import Button from '#lib/components/elements/Button.svelte';
+	import Badge from '#lib/components/elements/Badge.svelte';
+	import Chip from '#lib/components/elements/Chip.svelte';
+	import Icon from '#lib/components/elements/Icon.svelte';
+	import MetricCard from '#lib/components/elements/MetricCard.svelte';
+	import CodeBlock from '#lib/components/elements/CodeBlock.svelte';
+	import SortableList from '#lib/components/elements/SortableList.svelte';
+	import Input from '#lib/components/forms/Input.svelte';
+	import Switch from '#lib/components/forms/Switch.svelte';
+	import Tabs from '#lib/components/navigation/Tabs.svelte';
+	import { useToast } from '#lib/composables/useToast.svelte.js';
 	import {
 		theme,
 		ACCENT_PALETTES,
@@ -22,7 +22,7 @@
 		type FontFamily,
 		type RadiusPreset,
 		type BaseFontSize
-	} from '$lib/theme/theme.svelte';
+	} from '#lib/theme/theme.svelte.js';
 
 	const toast = useToast();
 	const accentList = Object.values(ACCENT_PALETTES);

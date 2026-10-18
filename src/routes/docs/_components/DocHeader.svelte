@@ -1,9 +1,9 @@
 <script lang="ts">
-	import Badge from '$lib/components/elements/Badge.svelte';
-	import Link from '$lib/components/elements/Link.svelte';
-	import Icon from '$lib/components/elements/Icon.svelte';
-	import { useClipboard } from '$lib/composables/useClipboard.svelte';
-	import { useToast } from '$lib/composables/useToast.svelte';
+	import Badge from '#lib/components/elements/Badge.svelte';
+	import Link from '#lib/components/elements/Link.svelte';
+	import Icon from '#lib/components/elements/Icon.svelte';
+	import { useClipboard } from '#lib/composables/useClipboard.svelte.js';
+	import { useToast } from '#lib/composables/useToast.svelte.js';
 
 	interface Props {
 		title: string;

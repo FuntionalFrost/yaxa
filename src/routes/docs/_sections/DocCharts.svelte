@@ -1,9 +1,9 @@
 <script lang="ts">
 	import DocHeader from '../_components/DocHeader.svelte';
 	import DocSandbox from '../_components/DocSandbox.svelte';
-	import LineChart from '$lib/components/charts/LineChart.svelte';
-	import BarChart from '$lib/components/charts/BarChart.svelte';
-	import DonutChart from '$lib/components/charts/DonutChart.svelte';
+	import LineChart from '#lib/components/charts/LineChart.svelte';
+	import BarChart from '#lib/components/charts/BarChart.svelte';
+	import DonutChart from '#lib/components/charts/DonutChart.svelte';
 
 	const sampleLineData = [
 		{ label: 'Jan', revenue: 1400, costs: 600 },

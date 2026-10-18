@@ -1,9 +1,9 @@
 <script lang="ts">
 	import DocHeader from '../_components/DocHeader.svelte';
 	import DocSandbox from '../_components/DocSandbox.svelte';
-	import Button from '$lib/components/elements/Button.svelte';
-	import Badge from '$lib/components/elements/Badge.svelte';
-	import Icon from '$lib/components/elements/Icon.svelte';
+	import Button from '#lib/components/elements/Button.svelte';
+	import Badge from '#lib/components/elements/Badge.svelte';
+	import Icon from '#lib/components/elements/Icon.svelte';
 
 	let count = $state(0);
 	let doubleCount = $derived(count * 2);

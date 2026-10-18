@@ -1,7 +1,7 @@
 <script lang="ts">
 	import DocHeader from '../_components/DocHeader.svelte';
 	import DocCodeBlock from '../_components/DocCodeBlock.svelte';
-	import Badge from '$lib/components/elements/Badge.svelte';
+	import Badge from '#lib/components/elements/Badge.svelte';
 
 	const hookSnippet = `// src/hooks.server.ts
 import { createYaxaHook } from 'yaxa-svelte';

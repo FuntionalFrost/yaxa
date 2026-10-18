@@ -1,5 +1,5 @@
 <script module lang="ts">
-	import { tv, type VariantProps } from '$lib/utils/cn';
+	import { tv, type VariantProps } from '#lib/utils/cn.js';
 
 	export const progressVariants = tv({
 		base: 'relative w-full overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-800',
@@ -47,6 +47,7 @@
 
 <div
 	class={progressVariants({ size, color, class: className })}
+	style="--yaxa-progress: {percentage ?? 0}%;"
 	role="progressbar"
 	aria-valuenow={value}
 	aria-valuemin={0}
@@ -54,10 +55,16 @@
 >
 	{#if percentage !== undefined}
 		<div
-			class="h-full rounded-full transition-all duration-300 ease-in-out"
-			style="width: {percentage}%"
+			class="yaxa-progress-bar h-full rounded-full transition-[width] duration-300 ease-in-out"
 		></div>
 	{:else}
 		<div class="h-full w-1/3 animate-pulse rounded-full"></div>
 	{/if}
 </div>
+
+<style>
+	.yaxa-progress-bar {
+		width: var(--yaxa-progress, 0%);
+		will-change: width;
+	}
+</style>

@@ -156,7 +156,7 @@
 	import Button from './Button.svelte';
 	import Icon from './Icon.svelte';
 	import Badge from './Badge.svelte';
-	import { useToast } from '$lib/composables/useToast.svelte';
+	import { useToast } from '#lib/composables/useToast.svelte.js';
 
 	let {
 		original = '',

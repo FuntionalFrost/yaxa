@@ -1,6 +1,6 @@
 # Yaxa UI - Architectural & Component Specification
 
-> **A Next-Generation UI & SaaS Architecture Primitive Library for Svelte 5 and SvelteKit 2.7+**
+> **A Next-Generation UI & SaaS Architecture Primitive Library for Svelte 5 and SvelteKit 2 & 3**
 
 ---
 
@@ -20,19 +20,43 @@ Yaxa UI is built exclusively on **Svelte 5 runes**, **Tailwind CSS v4 `@theme` t
 
 ## 2. Design Tokens & Styling (Tailwind CSS v4)
 
-Components map directly to CSS custom properties defined in `@theme`:
+Components map directly to Tailwind CSS v4 `@theme` custom properties and dynamic runtime CSS variables defined in `yaxa-svelte/theme.css`:
 
 ```css
 @theme {
-	--color-primary-50: #eff6ff;
-	--color-primary-500: #3b82f6;
-	--color-primary-600: #2563eb;
-	--color-primary-700: #1d4ed8;
-	/* Semantic color mappings: neutral, success, warning, error, info */
+	/* Dynamic Primary Accent Scale (bridged to runtime CSS variable, defaults to Svelte Flame #ff3e00) */
+	--color-primary-50: var(--yaxa-primary-50, #fff7ed);
+	--color-primary-500: var(--yaxa-primary-500, #ff3e00);
+	--color-primary-600: var(--yaxa-primary-600, #ea3400);
+	--color-primary-700: var(--yaxa-primary-700, #c22b00);
+	--color-primary-950: var(--yaxa-primary-950, #430d02);
+
+	/* Neutral Base Scale (zinc, slate, stone, or neutral) */
+	--color-neutral-50: var(--yaxa-neutral-50, #fafafa);
+	--color-neutral-900: var(--yaxa-neutral-900, #18181b);
+	--color-neutral-950: var(--yaxa-neutral-950, #121212);
+
+	/* Harmonic Radius Multiplier Scale (calculated from single base --yaxa-radius) */
+	--radius-xs: calc(var(--yaxa-radius, 0.5rem) * 0.25);
+	--radius-sm: calc(var(--yaxa-radius, 0.5rem) * 0.5);
+	--radius-md: var(--yaxa-radius, 0.5rem);
+	--radius-lg: calc(var(--yaxa-radius, 0.5rem) * 1.5);
+	--radius-xl: calc(var(--yaxa-radius, 0.5rem) * 2);
+	--radius-2xl: calc(var(--yaxa-radius, 0.5rem) * 2.5);
+	--radius-3xl: calc(var(--yaxa-radius, 0.5rem) * 3);
+	--radius-4xl: calc(var(--yaxa-radius, 0.5rem) * 4);
+	--radius-full: 9999px;
+
+	/* Theme-Aware Chart Palette Series */
+	--color-chart-1: var(--yaxa-chart-1, var(--color-primary-500));
+	--color-chart-2: var(--yaxa-chart-2, #3b82f6);
+	--color-chart-3: var(--yaxa-chart-3, #10b981);
+	--color-chart-4: var(--yaxa-chart-4, #f59e0b);
+	--color-chart-5: var(--yaxa-chart-5, #8b5cf6);
 }
 ```
 
-### Semantic Variants Standard
+### 2.1 Semantic Variants Standard
 
 - **`solid`**: High-emphasis background with contrasting text.
 - **`outline`**: Transparent background with 1px border.
@@ -40,6 +64,14 @@ Components map directly to CSS custom properties defined in `@theme`:
 - **`subtle`**: Very low-opacity tinted background with border.
 - **`ghost`**: Transparent default; shows hover fill on interaction.
 - **`link`**: Underlined text trigger with zero button chrome.
+
+### 2.2 Compound `ui` Prop & Semantic `data-slot`
+
+All composite components (`Card`, `Modal`, `Drawer`, `Tabs`, `Accordion`, `Alert`, `Breadcrumb`, `Tooltip`, `Input`, `Checkbox`, `Switch`, `CommandPalette`) implement:
+
+1. **Typed `ui` Prop**: `ui?: Partial<Record<SlotKey, string>>` for type-safe granular slot class overrides.
+2. **Semantic `data-slot="..."` DOM Attributes**: Enables parent or global CSS targeting (e.g., `class="[&_[data-slot=header]]:border-b"`).
+3. **Elevated Surfaces**: Elevated overlays leverage `.yaxa-surface-elevated` for subtle 1px inner rim lighting and depth in dark mode.
 
 ---
 
@@ -112,7 +144,7 @@ Always key every loop to ensure optimal DOM diffing and transition lifecycle:
 All form elements implement `getFormFieldContext()`:
 
 ```typescript
-import { getFormFieldContext } from '$lib/components/forms/form-context.js';
+import { getFormFieldContext } from 'yaxa-svelte';
 
 const fieldContext = getFormFieldContext();
 

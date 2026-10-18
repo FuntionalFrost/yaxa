@@ -33,7 +33,7 @@
 </script>
 
 <script lang="ts">
-	import { browser } from '$app/environment';
+	import { browser } from '$app/env';
 	import Icon from '../elements/Icon.svelte';
 	import Kbd from '../elements/Kbd.svelte';
 	import { cn } from '../../utils/cn';

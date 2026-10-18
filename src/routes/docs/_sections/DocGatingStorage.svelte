@@ -1,10 +1,10 @@
 <script lang="ts">
-	import Badge from '$lib/components/elements/Badge.svelte';
-	import Card from '$lib/components/layout/Card.svelte';
-	import Icon from '$lib/components/elements/Icon.svelte';
-	import Gate from '$lib/components/saas/Gate.svelte';
-	import CodeBlock from '$lib/components/elements/CodeBlock.svelte';
-	import { useGate } from '$lib/composables/useGate.svelte';
+	import Badge from '#lib/components/elements/Badge.svelte';
+	import Card from '#lib/components/layout/Card.svelte';
+	import Icon from '#lib/components/elements/Icon.svelte';
+	import Gate from '#lib/components/saas/Gate.svelte';
+	import CodeBlock from '#lib/components/elements/CodeBlock.svelte';
+	import { useGate } from '#lib/composables/useGate.svelte.js';
 
 	// Simulated user state for interactive live playground
 	let simPlan = $state<'free' | 'starter' | 'pro' | 'enterprise'>('free');

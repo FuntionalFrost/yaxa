@@ -1,6 +1,6 @@
-# Yaxa — Nuxt UI & Solo SaaS Parity for SvelteKit 2.7+ & Svelte 5
+# Yaxa — Nuxt UI & Solo SaaS Parity for SvelteKit 2 & 3 & Svelte 5
 
-**Yaxa** delivers the full developer experience, component toolkit, and full-stack SaaS engine of **Nuxt UI v4 / Nuxt UI Pro** and the **Nuxt SEO ecosystem** to **SvelteKit 2.7+** and **Svelte 5**, with authentic Svelte flame branding (`#ff3e00` / `#121212`).
+**Yaxa** delivers the full developer experience, component toolkit, and full-stack SaaS engine of **Nuxt UI v4 / Nuxt UI Pro** and the **Nuxt SEO ecosystem** to **SvelteKit 2 & 3** and **Svelte 5**, with authentic Svelte flame branding (`#ff3e00` / `#121212`).
 
 ---
 
@@ -31,7 +31,7 @@
    - Manage all 5 SEO endpoints (`/robots.txt`, `/sitemap.xml`, `/sitemap.xsl`, `/site.webmanifest`, `/api/og`) with **1 line** in `src/hooks.server.ts`:
      ```ts
      import { sequence } from '@sveltejs/kit/hooks';
-     import { createYaxaHook, createYaxaAuth, createYaxaAuthHook } from 'yaxa-svelte/server';
+     import { createYaxaHook } from 'yaxa-svelte/server';
      import { createYaxaAuth, createYaxaAuthHook } from 'yaxa-svelte/auth';
      import { siteConfig } from './site.config';
 
@@ -58,7 +58,7 @@
 
 ---
 
-## 🧩 45+ Svelte 5 Components & Runes Composables
+## 🧩 50+ Svelte 5 Components & Runes Composables
 
 - **Theming & Studio**: `<ThemeStudio>`, `theme`, `ACCENT_PALETTES`, `NEUTRAL_PALETTES`, `RADIUS_PRESETS`, Harmonic Radius Scale, Chart Palette Tokens.
 - **AI Primitives**: `<AiChat>`, `<PromptBar>`, `<AiThought>`, `<AiToolCall>`.
@@ -84,7 +84,7 @@
 ## ✅ Verification Results
 
 - **`pnpm check`**: **0 errors, 0 warnings**
-- **`pnpm test`**: **52 test files passed, 151 unit tests passed**
+- **`pnpm test`**: **59 test files passed, 188 unit tests passed**
 - **`pnpm build`**: **Production build & SSR bundle succeeded**
 - **`pnpm package`**: **Library distribution (`dist/`) generated**
 - **`pnpm format`**: **All files formatted cleanly with Prettier**
