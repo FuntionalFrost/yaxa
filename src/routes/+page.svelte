@@ -135,7 +135,7 @@ export const siteConfig = defineSiteConfig({
 	<Container size="2xl" class="relative text-center">
 		<!-- Release Pill Badge -->
 		<div
-			class="mb-8 inline-flex items-center gap-2 rounded-full border border-primary-500/30 bg-primary-50/50 px-4 py-1.5 text-xs font-semibold text-primary-700 shadow-xs backdrop-blur-md dark:border-primary-400/20 dark:bg-primary-950/40 dark:text-primary-300"
+			class="mb-8 inline-flex max-w-full flex-wrap items-center justify-center gap-2 rounded-full border border-primary-500/30 bg-primary-50/50 px-4 py-1.5 text-center text-xs font-semibold text-primary-700 shadow-xs backdrop-blur-md sm:flex-nowrap dark:border-primary-400/20 dark:bg-primary-950/40 dark:text-primary-300"
 		>
 			<span class="flex h-2 w-2 animate-pulse rounded-full bg-primary-500"></span>
 			<span>Svelte 5 Runes · Bits UI Primitives · Tailwind Variants · Tailwind CSS v4</span>
@@ -400,7 +400,7 @@ export const siteConfig = defineSiteConfig({
 
 				<!-- Controls Footer Actions -->
 				<div
-					class="flex items-center justify-between border-t border-neutral-200 pt-4 dark:border-neutral-800"
+					class="flex flex-wrap items-center justify-between gap-2.5 border-t border-neutral-200 pt-4 dark:border-neutral-800"
 				>
 					<div class="flex items-center gap-2">
 						<Button

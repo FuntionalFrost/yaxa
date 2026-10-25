@@ -153,15 +153,15 @@
 		{#if navMode === 'topbar'}
 			<div class="mt-3 border-t border-zinc-200/80 pt-3 dark:border-zinc-800/80">
 				<!-- Category Dropdown Links -->
-				<div class="flex flex-wrap items-center gap-2">
+				<div class="flex gap-2 overflow-x-auto pb-1 sm:flex-wrap">
 					{#each DOC_NAV_GROUPS as group (group.category)}
 						{@const isGroupActive = group.items.some((i) => i.href === currentPath)}
 						{@const isOpen = openCategory === group.category}
-						<div class="relative">
+						<div class="relative shrink-0">
 							<button
 								type="button"
 								onclick={() => toggleCategory(group.category)}
-								class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold transition-all {isGroupActive
+								class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition-all {isGroupActive
 									? 'bg-primary-600 text-white shadow-xs dark:bg-primary-500'
 									: 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800/80 dark:text-zinc-300 dark:hover:bg-zinc-800'}"
 							>
@@ -175,7 +175,7 @@
 							<!-- Dropdown Menu -->
 							{#if isOpen}
 								<div
-									class="absolute top-full left-0 z-40 mt-1.5 w-64 rounded-xl border border-zinc-200 bg-white p-2 shadow-lg backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900"
+									class="absolute top-full left-0 z-40 mt-1.5 w-64 max-w-[calc(100vw-2rem)] rounded-xl border border-zinc-200 bg-white p-2 shadow-lg backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900"
 								>
 									<div class="space-y-1">
 										{#each group.items as item (item.href)}

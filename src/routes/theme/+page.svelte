@@ -3,7 +3,7 @@
 	import Container from '#lib/components/layout/Container.svelte';
 </script>
 
-<main class="py-8">
+<main class="py-4 sm:py-8">
 	<Container size="2xl">
 		<ThemeStudio />
 	</Container>

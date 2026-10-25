@@ -80,8 +80,22 @@
 			</div>
 
 			<!-- Right Section: Search, Theme Toggle, Actions, Socials -->
-			<div class="flex items-center gap-2">
+			<div class="flex items-center gap-1.5 sm:gap-2">
 				{#if onOpenCommand}
+					<!-- Mobile Search Button -->
+					<Button
+						variant="ghost"
+						color="neutral"
+						square
+						size="sm"
+						class="sm:hidden"
+						onclick={onOpenCommand}
+						aria-label="Search documentation"
+					>
+						<Icon name="search" size="sm" />
+					</Button>
+
+					<!-- Desktop Search Pill -->
 					<button
 						onclick={onOpenCommand}
 						type="button"
@@ -110,7 +124,7 @@
 					{/if}
 				</Button>
 
-				<!-- GitHub Link -->
+				<!-- GitHub Link (Desktop) -->
 				{#if currentConfig.socials?.github}
 					<Button
 						href={currentConfig.socials.github}
@@ -118,13 +132,14 @@
 						color="neutral"
 						square
 						size="sm"
+						class="hidden sm:inline-flex"
 						aria-label="GitHub Repository"
 					>
 						<Icon name="github" size="sm" />
 					</Button>
 				{/if}
 
-				<!-- npm Link -->
+				<!-- npm Link (Desktop) -->
 				{#if currentConfig.socials?.npm}
 					<Button
 						href={currentConfig.socials.npm}
@@ -132,6 +147,7 @@
 						color="neutral"
 						square
 						size="sm"
+						class="hidden sm:inline-flex"
 						aria-label="npm Package"
 					>
 						<Icon name="npm" size="sm" />
@@ -173,17 +189,61 @@
 		<!-- Mobile Navigation Dropdown -->
 		{#if mobileMenuOpen}
 			<div class="border-t border-neutral-200 py-4 md:hidden dark:border-neutral-800">
-				<div class="flex flex-col space-y-2">
+				<div class="flex flex-col space-y-1">
 					{#each resolvedLinks as item (item.href)}
 						<a
 							href={item.href}
 							onclick={() => (mobileMenuOpen = false)}
-							class="rounded-lg px-3 py-2 text-base font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-800"
+							class="flex items-center justify-between rounded-lg px-3 py-2 text-base font-medium text-neutral-700 hover:bg-neutral-100 dark:text-neutral-200 dark:hover:bg-neutral-800"
 						>
-							{item.label}
+							<span class="flex items-center gap-2">
+								{#if item.icon}
+									<Icon name={item.icon} size="xs" />
+								{/if}
+								{item.label}
+							</span>
+							{#if item.badge}
+								<span
+									class="rounded bg-primary-100 px-1.5 py-0.5 text-xs font-semibold text-primary-700 dark:bg-primary-950 dark:text-primary-300"
+								>
+									{item.badge}
+								</span>
+							{/if}
 						</a>
 					{/each}
 				</div>
+
+				<!-- Mobile Menu Socials -->
+				{#if currentConfig.socials?.github || currentConfig.socials?.npm}
+					<div
+						class="mt-4 flex items-center gap-2 border-t border-neutral-200 pt-4 dark:border-neutral-800"
+					>
+						{#if currentConfig.socials?.github}
+							<Button
+								href={currentConfig.socials.github}
+								variant="outline"
+								size="sm"
+								class="flex-1 justify-center"
+								aria-label="GitHub Repository"
+							>
+								<Icon name="github" size="xs" class="mr-1.5" />
+								GitHub
+							</Button>
+						{/if}
+						{#if currentConfig.socials?.npm}
+							<Button
+								href={currentConfig.socials.npm}
+								variant="outline"
+								size="sm"
+								class="flex-1 justify-center"
+								aria-label="npm Package"
+							>
+								<Icon name="npm" size="xs" class="mr-1.5" />
+								npm
+							</Button>
+						{/if}
+					</div>
+				{/if}
 			</div>
 		{/if}
 	</Container>

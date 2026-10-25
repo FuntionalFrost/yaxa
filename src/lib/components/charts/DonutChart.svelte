@@ -83,7 +83,7 @@
 			/>
 
 			<!-- Segments -->
-			{#each segments as seg, idx}
+			{#each segments as seg, idx (seg.item.label)}
 				<circle
 					role="graphics-symbol"
 					aria-label={seg.item.label}
@@ -131,9 +131,9 @@
 	<!-- Legend -->
 	{#if showLegend && data.length > 0}
 		<div
-			class="mt-4 flex flex-wrap justify-center gap-x-4 gap-y-2 text-xs text-neutral-600 dark:text-neutral-300"
+			class="mt-4 flex flex-wrap justify-center gap-x-3 gap-y-1.5 text-[11px] text-neutral-600 sm:gap-x-4 sm:gap-y-2 sm:text-xs dark:text-neutral-300"
 		>
-			{#each segments as seg, idx}
+			{#each segments as seg, idx (seg.item.label)}
 				<button
 					type="button"
 					onmouseenter={() => (hoveredIdx = idx)}

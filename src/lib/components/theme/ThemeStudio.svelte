@@ -91,20 +91,23 @@
 	{#if showHeader}
 		<!-- Top Bar -->
 		<div
-			class="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-neutral-200 bg-white p-6 shadow-sm dark:border-neutral-800 dark:bg-neutral-900"
+			class="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm sm:p-6 dark:border-neutral-800 dark:bg-neutral-900"
 		>
-			<div>
-				<h1 class="text-xl font-bold text-neutral-900 dark:text-white">Visual Web Theme Studio</h1>
+			<div class="min-w-0 flex-1">
+				<h1 class="text-lg font-bold text-neutral-900 sm:text-xl dark:text-white">
+					Visual Web Theme Studio
+				</h1>
 				<p class="mt-1 text-xs text-neutral-500">
 					Visually customize palettes, harmonic radii, fonts, and scrollbars with instant live
 					preview and zero FOUC.
 				</p>
 			</div>
 
-			<div class="flex items-center gap-2.5">
+			<div class="flex w-full flex-wrap items-center gap-2 sm:w-auto">
 				<Button
 					variant="outline"
 					size="sm"
+					class="flex-1 sm:flex-initial"
 					onclick={() => {
 						const chosen = theme.randomize();
 						toast.info(
@@ -117,22 +120,33 @@
 					Randomize
 				</Button>
 
-				<Button variant="outline" size="sm" onclick={() => theme.reset()}>
+				<Button
+					variant="outline"
+					size="sm"
+					class="flex-1 sm:flex-initial"
+					onclick={() => theme.reset()}
+				>
 					<Icon name="rotate-ccw" size="xs" class="mr-1.5" />
 					Reset
 				</Button>
 
-				<Button variant="solid" size="sm" onclick={() => (exportModalOpen = true)}>
+				<Button
+					variant="solid"
+					size="sm"
+					class="w-full sm:w-auto"
+					onclick={() => (exportModalOpen = true)}
+				>
 					<Icon name="download" size="xs" class="mr-1.5" />
 					Export Theme Tokens
 				</Button>
 			</div>
 		</div>
 	{:else}
-		<div class="flex items-center justify-end gap-2.5">
+		<div class="flex w-full flex-wrap items-center justify-end gap-2 sm:w-auto">
 			<Button
 				variant="outline"
 				size="sm"
+				class="flex-1 sm:flex-initial"
 				onclick={() => {
 					const chosen = theme.randomize();
 					toast.info(
@@ -145,12 +159,22 @@
 				Randomize
 			</Button>
 
-			<Button variant="outline" size="sm" onclick={() => theme.reset()}>
+			<Button
+				variant="outline"
+				size="sm"
+				class="flex-1 sm:flex-initial"
+				onclick={() => theme.reset()}
+			>
 				<Icon name="rotate-ccw" size="xs" class="mr-1.5" />
 				Reset
 			</Button>
 
-			<Button variant="solid" size="sm" onclick={() => (exportModalOpen = true)}>
+			<Button
+				variant="solid"
+				size="sm"
+				class="w-full sm:w-auto"
+				onclick={() => (exportModalOpen = true)}
+			>
 				<Icon name="download" size="xs" class="mr-1.5" />
 				Export Theme Tokens
 			</Button>
@@ -167,12 +191,12 @@
 					Color Mode
 				</div>
 				<div class="grid grid-cols-3 gap-1.5">
-					{#each ['light', 'dark', 'system'] as const as mode}
+					{#each ['light', 'dark', 'system'] as const as mode (mode)}
 						<Button
 							variant={theme.mode === mode ? 'solid' : 'outline'}
 							size="xs"
 							onclick={() => theme.setMode(mode)}
-							class="w-full justify-center px-1.5 py-1 text-[11px] capitalize"
+							class="min-h-9 w-full justify-center px-1.5 py-1 text-[11px] capitalize"
 						>
 							<Icon
 								name={mode === 'light' ? 'sun' : mode === 'dark' ? 'moon' : 'laptop'}
@@ -199,7 +223,7 @@
 					</span>
 				</div>
 				<div class="grid grid-cols-4 gap-1.5">
-					{#each Object.entries(ACCENT_PALETTES) as [key, pal]}
+					{#each Object.entries(ACCENT_PALETTES) as [key, pal] (key)}
 						<button
 							type="button"
 							onclick={() => theme.setAccent(key as AccentName)}
@@ -234,7 +258,7 @@
 					</span>
 				</div>
 				<div class="grid grid-cols-2 gap-2">
-					{#each Object.entries(NEUTRAL_PALETTES) as [key, pal]}
+					{#each Object.entries(NEUTRAL_PALETTES) as [key, pal] (key)}
 						{@const active = theme.neutral === key}
 						<button
 							type="button"
@@ -284,12 +308,12 @@
 					<span class="text-xs font-semibold text-primary-500 capitalize">{theme.radius}</span>
 				</div>
 				<div class="grid grid-cols-5 gap-1">
-					{#each Object.entries(RADIUS_PRESETS) as [key, r]}
+					{#each Object.entries(RADIUS_PRESETS) as [key, r] (key)}
 						{@const active = theme.radius === key}
 						<button
 							type="button"
 							onclick={() => theme.setRadius(key as RadiusPreset)}
-							class="border px-1 py-1.5 text-center text-[10px] font-semibold transition-all {active
+							class="min-h-9 min-w-0 border px-1 py-1.5 text-center text-[10px] font-semibold transition-all sm:text-xs {active
 								? 'border-primary-500 bg-primary-500 font-bold text-white shadow-xs'
 								: 'border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'}"
 							style="border-radius: {r.value} !important;"
@@ -306,12 +330,12 @@
 					Typography & Sizing
 				</div>
 				<div class="grid grid-cols-3 gap-1">
-					{#each Object.entries(FONT_PRESETS) as [key, font]}
+					{#each Object.entries(FONT_PRESETS) as [key, font] (key)}
 						{@const active = theme.fontFamily === key}
 						<button
 							type="button"
 							onclick={() => theme.setFontFamily(key as FontFamily)}
-							class="rounded-md border px-1 py-1.5 text-center text-[11px] font-semibold capitalize transition-all {active
+							class="min-h-9 rounded-md border px-1 py-1.5 text-center text-[11px] font-semibold capitalize transition-all {active
 								? 'border-primary-500 bg-primary-500 text-white shadow-xs'
 								: 'border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-100 dark:border-neutral-800 dark:bg-neutral-800 dark:text-neutral-300 dark:hover:bg-neutral-700'}"
 							style="font-family: {font.value} !important;"
@@ -326,12 +350,12 @@
 						Density / Size Scale
 					</div>
 					<div class="grid grid-cols-3 gap-1">
-						{#each Object.entries(FONT_SIZE_PRESETS) as [key, sz]}
+						{#each Object.entries(FONT_SIZE_PRESETS) as [key, sz] (key)}
 							<Button
 								variant={theme.fontSize === key ? 'solid' : 'outline'}
 								size="xs"
 								onclick={() => theme.setFontSize(key as BaseFontSize)}
-								class="w-full justify-center px-1 py-1 text-[11px]"
+								class="min-h-8.5 w-full min-w-0 justify-center px-0.5 py-1 text-[10px] sm:px-1 sm:text-[11px]"
 							>
 								<span class="truncate">{sz.name}</span>
 							</Button>
@@ -342,14 +366,17 @@
 
 			<!-- Scrollbar Auto-Alignment -->
 			<Card padding="sm" class="space-y-2">
-				<div class="flex items-center justify-between">
-					<div>
+				<div class="flex items-center justify-between gap-3">
+					<div class="min-w-0 flex-1">
 						<div class="text-xs font-bold text-neutral-900 dark:text-white">Accent Scrollbars</div>
-						<div class="text-[11px] text-neutral-500">Sync scrollbar thumb to active accent</div>
+						<div class="truncate text-[11px] text-neutral-500 sm:whitespace-normal">
+							Sync scrollbar thumb to active accent
+						</div>
 					</div>
 					<Button
 						variant={theme.accentScrollbar ? 'solid' : 'outline'}
 						size="xs"
+						class="shrink-0"
 						onclick={() => theme.setAccentScrollbar(!theme.accentScrollbar)}
 					>
 						{theme.accentScrollbar ? 'Enabled' : 'Disabled'}
@@ -361,10 +388,10 @@
 		<!-- Right Live Sandbox Canvas (7 cols on xl, 8 cols on 2xl) -->
 		<div class="space-y-6 xl:col-span-7 2xl:col-span-8">
 			<!-- Elements Preview Card -->
-			<Card>
+			<Card ui={{ header: 'p-4 sm:p-6', body: 'p-4 sm:p-6 space-y-6' }}>
 				{#snippet header()}
 					<div class="flex items-center justify-between">
-						<span class="font-semibold text-neutral-900 dark:text-white">
+						<span class="text-sm font-semibold text-neutral-900 sm:text-base dark:text-white">
 							Interactive Component Sandbox
 						</span>
 						<Badge variant="soft" color="primary">Live Preview</Badge>

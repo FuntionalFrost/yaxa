@@ -79,7 +79,7 @@
 		bind:this={listElement}
 		data-slot="list"
 		class={cn(
-			'relative flex',
+			'relative scrollbar-none flex max-w-full overflow-x-auto',
 			variant === 'segmented' &&
 				'rounded-xl border border-neutral-200/60 bg-neutral-100 p-1 dark:border-neutral-800/60 dark:bg-neutral-900',
 			variant === 'underline' && 'gap-6 border-b border-neutral-200 dark:border-neutral-800',
@@ -111,7 +111,7 @@
 				disabled={tab.disabled}
 				onclick={() => (value = tab.value)}
 				class={cn(
-					'relative z-10 inline-flex items-center justify-center gap-2 text-sm font-medium transition-all duration-150 select-none focus-visible:ring-2 focus-visible:ring-[var(--yaxa-ring)] focus-visible:outline-none motion-reduce:transition-none',
+					'relative z-10 inline-flex shrink-0 items-center justify-center gap-2 text-sm font-medium whitespace-nowrap transition-all duration-150 select-none focus-visible:ring-2 focus-visible:ring-(--yaxa-ring) focus-visible:outline-none motion-reduce:transition-none',
 					tab.disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer',
 					variant === 'segmented' && [
 						'rounded-lg px-3 py-1.5',
