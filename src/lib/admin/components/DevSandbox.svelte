@@ -70,7 +70,7 @@
 	<!-- 1. Email Sandbox (Resend) -->
 	<Card class="space-y-5 border-neutral-200 p-6 shadow-xs dark:border-neutral-800">
 		<div
-			class="flex items-center justify-between border-b border-neutral-200 pb-3 dark:border-neutral-800"
+			class="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200 pb-3 dark:border-neutral-800"
 		>
 			<div class="flex items-center gap-2.5">
 				<div
@@ -148,7 +148,7 @@
 	<!-- 2. S3 / Cloudflare R2 Upload Sandbox -->
 	<Card class="space-y-5 border-neutral-200 p-6 shadow-xs dark:border-neutral-800">
 		<div
-			class="flex items-center justify-between border-b border-neutral-200 pb-3 dark:border-neutral-800"
+			class="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200 pb-3 dark:border-neutral-800"
 		>
 			<div class="flex items-center gap-2.5">
 				<div
@@ -244,7 +244,7 @@
 	<!-- 3. Auth & RBAC State Inspection -->
 	<Card class="space-y-4 border-neutral-200 p-6 shadow-xs lg:col-span-2 dark:border-neutral-800">
 		<div
-			class="flex items-center justify-between border-b border-neutral-200 pb-3 dark:border-neutral-800"
+			class="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200 pb-3 dark:border-neutral-800"
 		>
 			<div class="flex items-center gap-2.5">
 				<div
@@ -267,7 +267,7 @@
 		<div class="grid grid-cols-1 gap-4 text-xs sm:grid-cols-3">
 			<div class="space-y-1">
 				<span class="font-medium text-neutral-500">User Email</span>
-				<p class="font-mono font-semibold text-neutral-900 dark:text-neutral-100">
+				<p class="truncate font-mono font-semibold text-neutral-900 dark:text-neutral-100">
 					{user?.email || 'N/A'}
 				</p>
 			</div>

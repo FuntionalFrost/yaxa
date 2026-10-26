@@ -328,7 +328,7 @@
 	{:else}
 		<!-- Split Side-by-Side View -->
 		<div
-			class="grid grid-cols-2 divide-x divide-neutral-200 overflow-x-auto p-2 font-mono text-xs leading-relaxed dark:divide-neutral-800 {isAdaptive
+			class="grid grid-cols-1 divide-y divide-neutral-200 overflow-x-auto p-2 font-mono text-xs leading-relaxed md:grid-cols-2 md:divide-x md:divide-y-0 dark:divide-neutral-800 {isAdaptive
 				? 'text-neutral-800 dark:text-neutral-200'
 				: 'text-neutral-200'}"
 		>

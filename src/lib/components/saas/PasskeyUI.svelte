@@ -165,8 +165,8 @@
 				</div>
 			{:else}
 				{#each passkeys as key (key.id)}
-					<div class="flex items-center justify-between p-3.5 px-4">
-						<div class="flex items-center gap-3">
+					<div class="flex items-center justify-between gap-2 p-3.5 px-4">
+						<div class="flex min-w-0 items-center gap-3">
 							<div
 								class="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-100/60 text-primary-700 dark:bg-primary-950/60 dark:text-primary-300"
 							>

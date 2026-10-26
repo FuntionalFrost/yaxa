@@ -106,7 +106,7 @@
 			</p>
 		</div>
 
-		<div class="flex items-center gap-2">
+		<div class="flex flex-wrap items-center gap-2">
 			{#if onupgrade}
 				<Button variant="outline" size="sm" onclick={onupgrade}>Change Plan</Button>
 			{/if}

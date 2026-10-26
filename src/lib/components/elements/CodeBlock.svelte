@@ -282,19 +282,19 @@
 	<!-- Header Bar -->
 	{#if filename || language}
 		<div
-			class="flex items-center justify-between border-b px-4 py-2 font-mono text-xs {isAdaptive
+			class="flex items-center justify-between gap-2 border-b px-4 py-2 font-mono text-xs {isAdaptive
 				? 'border-neutral-200 bg-neutral-100/80 text-neutral-600 dark:border-neutral-800 dark:bg-neutral-900/80 dark:text-neutral-400'
 				: 'border-neutral-800 bg-neutral-900/80 text-neutral-400'}"
 		>
-			<div class="flex items-center gap-2">
+			<div class="flex min-w-0 items-center gap-2">
 				{#if filename}
 					<span
-						class="flex items-center gap-1.5 font-medium {isAdaptive
+						class="flex min-w-0 items-center gap-1.5 truncate font-medium {isAdaptive
 							? 'text-neutral-800 dark:text-neutral-200'
 							: 'text-neutral-200'}"
 					>
-						<span class="h-2 w-2 rounded-full bg-emerald-500"></span>
-						{filename}
+						<span class="h-2 w-2 shrink-0 rounded-full bg-emerald-500"></span>
+						<span class="truncate">{filename}</span>
 					</span>
 				{:else}
 					<span
@@ -307,7 +307,7 @@
 				{/if}
 			</div>
 
-			<div class="flex items-center gap-1.5">
+			<div class="flex shrink-0 items-center gap-2">
 				{#if filename && language}
 					<span
 						class="rounded px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase {isAdaptive

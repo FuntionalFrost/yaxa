@@ -101,7 +101,7 @@
 	<!-- Interactive Svelte 5 Runes Sandbox -->
 	<DocSandbox title="Interactive Svelte 5 Runes Demo" code={svelte5Snippet}>
 		<div class="flex flex-col items-center gap-4 text-center">
-			<div class="flex items-center gap-3">
+			<div class="flex flex-wrap items-center justify-center gap-2 sm:gap-3">
 				<Button
 					variant="outline"
 					size="sm"
@@ -117,7 +117,7 @@
 				<Button variant="ghost" size="sm" onclick={() => (count = 0)}>Reset</Button>
 			</div>
 
-			<div class="flex items-center gap-3 font-mono text-xs">
+			<div class="flex flex-wrap items-center justify-center gap-2 font-mono text-xs sm:gap-3">
 				<span
 					class="rounded-md bg-zinc-100 px-2.5 py-1 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
 				>

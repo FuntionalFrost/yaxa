@@ -115,7 +115,7 @@
 				<div class="space-y-16">
 					<!-- Step 1: Authentication -->
 					<div
-						class="space-y-8 rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs sm:p-8 dark:border-zinc-800 dark:bg-zinc-900/40"
+						class="space-y-8 rounded-2xl border border-zinc-200 bg-white p-4 shadow-xs sm:p-8 dark:border-zinc-800 dark:bg-zinc-900/40"
 					>
 						<div
 							class="flex flex-col items-center justify-between gap-2 text-center sm:flex-row sm:text-left"
@@ -147,7 +147,7 @@
 
 					<!-- Step 2: Polar Pricing & Checkout -->
 					<div
-						class="space-y-8 rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs sm:p-8 dark:border-zinc-800 dark:bg-zinc-900/40"
+						class="space-y-8 rounded-2xl border border-zinc-200 bg-white p-4 shadow-xs sm:p-8 dark:border-zinc-800 dark:bg-zinc-900/40"
 					>
 						<div
 							class="flex flex-col items-center justify-between gap-2 text-center sm:flex-row sm:text-left"
@@ -178,7 +178,7 @@
 
 					<!-- Step 3: Billing & Subscription Management -->
 					<div
-						class="space-y-8 rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs sm:p-8 dark:border-zinc-800 dark:bg-zinc-900/40"
+						class="space-y-8 rounded-2xl border border-zinc-200 bg-white p-4 shadow-xs sm:p-8 dark:border-zinc-800 dark:bg-zinc-900/40"
 					>
 						<div
 							class="flex flex-col items-center justify-between gap-2 text-center sm:flex-row sm:text-left"
@@ -204,7 +204,7 @@
 								<span class="font-semibold text-zinc-700 dark:text-zinc-300"
 									>Simulate Plan State:</span
 								>
-								<div class="flex items-center gap-2">
+								<div class="flex flex-wrap items-center gap-2">
 									<Button
 										size="xs"
 										variant={mockSubscriptionStatus === 'active' ? 'solid' : 'outline'}
@@ -256,7 +256,7 @@
 
 					<!-- Step 4: Declarative Feature Gating -->
 					<div
-						class="space-y-8 rounded-2xl border border-zinc-200 bg-white p-6 shadow-xs sm:p-8 dark:border-zinc-800 dark:bg-zinc-900/40"
+						class="space-y-8 rounded-2xl border border-zinc-200 bg-white p-4 shadow-xs sm:p-8 dark:border-zinc-800 dark:bg-zinc-900/40"
 					>
 						<div
 							class="flex flex-col items-center justify-between gap-2 text-center sm:flex-row sm:text-left"
@@ -281,7 +281,7 @@
 							>
 								<span class="font-semibold text-zinc-700 dark:text-zinc-300">Switch User Plan:</span
 								>
-								<div class="flex items-center gap-2">
+								<div class="flex flex-wrap items-center gap-2">
 									{#each ['Free', 'Starter', 'Pro', 'Enterprise'] as plan}
 										<Button
 											size="xs"
@@ -312,7 +312,7 @@
 								<div
 									class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
 								>
-									<div class="flex items-center justify-between">
+									<div class="flex flex-wrap items-center justify-between gap-2">
 										<div>
 											<h4 class="text-base font-bold text-zinc-900 dark:text-zinc-100">
 												Advanced Analytics & Automated Reports
@@ -321,7 +321,7 @@
 												Only accessible to Pro and Enterprise customers.
 											</p>
 										</div>
-										<Badge color="success" size="sm">Active (Unlocked)</Badge>
+										<Badge color="success" size="sm" class="shrink-0">Active (Unlocked)</Badge>
 									</div>
 								</div>
 							</Gate>
@@ -375,7 +375,7 @@
 							<div
 								class="space-y-3 rounded-xl border border-zinc-200 bg-white p-5 shadow-xs dark:border-zinc-800 dark:bg-zinc-900/60"
 							>
-								<div class="flex items-center justify-between">
+								<div class="flex flex-wrap items-center justify-between gap-2">
 									<div class="space-y-0.5">
 										<h4 class="text-sm font-bold text-zinc-900 dark:text-zinc-100">
 											Two-Factor Authentication
@@ -384,7 +384,12 @@
 											Protect account with TOTP authenticator app verification.
 										</p>
 									</div>
-									<Button size="sm" color="primary" onclick={() => (show2faModal = true)}>
+									<Button
+										size="sm"
+										color="primary"
+										class="shrink-0"
+										onclick={() => (show2faModal = true)}
+									>
 										Setup 2FA
 									</Button>
 								</div>
@@ -441,7 +446,7 @@
 							<span class="font-semibold text-zinc-700 dark:text-zinc-300"
 								>Simulate Plan State:</span
 							>
-							<div class="flex items-center gap-2">
+							<div class="flex flex-wrap items-center gap-2">
 								<Button
 									size="xs"
 									variant={mockSubscriptionStatus === 'active' ? 'solid' : 'outline'}
@@ -508,7 +513,7 @@
 							class="flex flex-wrap items-center justify-between gap-3 bg-zinc-100/70 p-4 text-xs dark:bg-zinc-900/50"
 						>
 							<span class="font-semibold text-zinc-700 dark:text-zinc-300">Switch User Plan:</span>
-							<div class="flex items-center gap-2">
+							<div class="flex flex-wrap items-center gap-2">
 								{#each ['Free', 'Starter', 'Pro', 'Enterprise'] as plan}
 									<Button
 										size="xs"
@@ -539,7 +544,7 @@
 							<div
 								class="rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
 							>
-								<div class="flex items-center justify-between">
+								<div class="flex flex-wrap items-center justify-between gap-2">
 									<div>
 										<h4 class="text-base font-bold text-zinc-900 dark:text-zinc-100">
 											Advanced Analytics & Automated Reports
@@ -548,7 +553,7 @@
 											Only accessible to Pro and Enterprise customers.
 										</p>
 									</div>
-									<Badge color="success" size="sm">Active (Unlocked)</Badge>
+									<Badge color="success" size="sm" class="shrink-0">Active (Unlocked)</Badge>
 								</div>
 							</div>
 						</Gate>

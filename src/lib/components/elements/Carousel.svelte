@@ -7,11 +7,12 @@
 			root: 'relative w-full overflow-hidden rounded-2xl border border-neutral-200 bg-white dark:border-neutral-800 dark:bg-neutral-900',
 			viewport: 'relative flex w-full overflow-hidden',
 			slide: 'min-w-full transition-transform duration-500 ease-out',
-			controls: 'absolute inset-0 flex items-center justify-between pointer-events-none p-4',
+			controls: 'absolute inset-0 flex items-center justify-between pointer-events-none p-2 sm:p-4',
 			arrowBtn:
-				'pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-white/80 shadow-md backdrop-blur-xs transition hover:bg-white hover:scale-105 active:scale-95 dark:bg-neutral-900/80 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-100',
+				'pointer-events-auto inline-flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-full bg-white/80 shadow-md backdrop-blur-xs transition hover:bg-white hover:scale-105 active:scale-95 dark:bg-neutral-900/80 dark:hover:bg-neutral-800 text-neutral-800 dark:text-neutral-100',
 			dots: 'absolute bottom-4 left-0 right-0 flex items-center justify-center gap-2 pointer-events-none',
-			dotBtn: 'pointer-events-auto h-2 rounded-full transition-all duration-300'
+			dotBtn:
+				'pointer-events-auto relative h-2 rounded-full transition-all duration-300 after:absolute after:-inset-2 after:content-[""]'
 		}
 	});
 

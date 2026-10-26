@@ -169,7 +169,7 @@
 
 {#if open}
 	<div
-		class="fixed inset-0 z-50 flex items-start justify-center p-4 pt-16 sm:p-6 sm:pt-24"
+		class="fixed inset-0 z-50 flex items-start justify-center p-4 pt-8 sm:p-6 sm:pt-24"
 		role="dialog"
 		aria-modal="true"
 		aria-label="Documentation search dialog"
@@ -213,7 +213,7 @@
 			</div>
 
 			<!-- Search Results List -->
-			<div class="max-h-80 overflow-y-auto p-2">
+			<div class="max-h-[50vh] overflow-y-auto p-2 sm:max-h-80">
 				{#if filteredResults.length === 0}
 					<div class="p-8 text-center text-sm text-neutral-500 dark:text-neutral-400">
 						No results found for "<span class="font-semibold text-neutral-800 dark:text-neutral-200"
@@ -232,11 +232,11 @@
 									: 'text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800/60'}"
 							>
 								<div class="min-w-0 pr-3">
-									<div class="flex items-center gap-2">
-										<span class="font-semibold text-neutral-900 dark:text-neutral-100"
+									<div class="flex min-w-0 items-center gap-2">
+										<span class="truncate font-semibold text-neutral-900 dark:text-neutral-100"
 											>{item.title}</span
 										>
-										<span class="text-[10px] text-neutral-400 dark:text-neutral-500"
+										<span class="shrink-0 text-[10px] text-neutral-400 dark:text-neutral-500"
 											>{item.category}</span
 										>
 									</div>
@@ -257,7 +257,7 @@
 
 			<!-- Keyboard Navigation Footer -->
 			<div
-				class="flex items-center justify-between border-t border-neutral-200 bg-neutral-50/70 px-4 py-2 text-[11px] text-neutral-500 dark:border-neutral-800 dark:bg-neutral-950/50 dark:text-neutral-400"
+				class="hidden border-t border-neutral-200 bg-neutral-50/70 px-4 py-2 text-[11px] text-neutral-500 sm:flex sm:items-center sm:justify-between dark:border-neutral-800 dark:bg-neutral-950/50 dark:text-neutral-400"
 			>
 				<div class="flex items-center gap-3">
 					<span class="flex items-center gap-1">

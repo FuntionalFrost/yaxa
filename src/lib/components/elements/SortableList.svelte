@@ -118,7 +118,7 @@
 
 			<!-- Reorder Arrow Buttons for Keyboard / Touch Users -->
 			<div
-				class="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100 sm:flex"
+				class="flex items-center gap-1 opacity-100 transition-opacity focus-within:opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
 			>
 				<button
 					type="button"
@@ -127,7 +127,7 @@
 						sortable.moveUp(index);
 						items = sortable.items;
 					}}
-					class="rounded p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 disabled:opacity-30 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
+					class="rounded p-2 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 disabled:opacity-30 sm:p-1 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
 					aria-label="Move item up"
 				>
 					<Icon name="chevron-up" class="h-3.5 w-3.5" />
@@ -139,7 +139,7 @@
 						sortable.moveDown(index);
 						items = sortable.items;
 					}}
-					class="rounded p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 disabled:opacity-30 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
+					class="rounded p-2 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 disabled:opacity-30 sm:p-1 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
 					aria-label="Move item down"
 				>
 					<Icon name="chevron-down" class="h-3.5 w-3.5" />

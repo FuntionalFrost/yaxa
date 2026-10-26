@@ -100,7 +100,7 @@
 				</div>
 
 				<!-- Step Label -->
-				<div class="hidden sm:block">
+				<div class={orientation === 'vertical' ? 'block' : 'hidden sm:block'}>
 					<div
 						class="text-xs font-semibold {status === 'active'
 							? 'text-primary-700 dark:text-primary-400'
@@ -122,7 +122,7 @@
 			{#if !isLast}
 				{#if orientation === 'horizontal'}
 					<div
-						class="mx-3 h-0.5 flex-1 transition-colors duration-200 {index < currentStep
+						class="mx-1.5 h-0.5 flex-1 transition-colors duration-200 sm:mx-3 {index < currentStep
 							? 'bg-primary-600 dark:bg-primary-500'
 							: 'bg-neutral-200 dark:bg-neutral-800'}"
 					></div>

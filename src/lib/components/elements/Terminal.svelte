@@ -47,19 +47,19 @@
 		class="flex items-center justify-between border-b border-neutral-800/80 bg-neutral-900/80 px-4 py-2.5"
 	>
 		<!-- Window Control Dots -->
-		<div class="flex items-center gap-1.5" aria-hidden="true">
+		<div class="flex shrink-0 items-center gap-1.5" aria-hidden="true">
 			<span class="h-3 w-3 rounded-full bg-rose-500/80"></span>
 			<span class="h-3 w-3 rounded-full bg-amber-500/80"></span>
 			<span class="h-3 w-3 rounded-full bg-emerald-500/80"></span>
 		</div>
 
 		<!-- Title -->
-		<div class="text-[11px] font-medium text-neutral-400">
+		<div class="min-w-0 truncate px-2 text-[11px] font-medium text-neutral-400">
 			{title}
 		</div>
 
 		<!-- Copy Button -->
-		<div>
+		<div class="shrink-0">
 			{#if copyable && fullCommandText}
 				<button
 					type="button"

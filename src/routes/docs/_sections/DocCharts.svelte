@@ -56,7 +56,7 @@
   yAxisFormat={(v) => '$' + v}
 />`}
 		>
-			<div class="rounded-xl border border-neutral-200 p-4 dark:border-neutral-800">
+			<div class="w-full min-w-0 rounded-xl border border-neutral-200 p-4 dark:border-neutral-800">
 				<LineChart
 					data={sampleLineData}
 					series={[
@@ -87,7 +87,7 @@
   height={240}
 />`}
 		>
-			<div class="rounded-xl border border-neutral-200 p-4 dark:border-neutral-800">
+			<div class="w-full min-w-0 rounded-xl border border-neutral-200 p-4 dark:border-neutral-800">
 				<BarChart
 					data={sampleBarData}
 					series={[
@@ -116,7 +116,7 @@
   centerValue="$14.5k"
 />`}
 		>
-			<div class="flex justify-center p-4">
+			<div class="flex w-full min-w-0 justify-center p-4">
 				<DonutChart
 					data={sampleDonutData}
 					size={200}

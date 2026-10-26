@@ -193,7 +193,7 @@
 				showArrows={true}
 			>
 				{#snippet item(slide)}
-					<div class="flex flex-col items-center justify-center p-8 text-center sm:p-12">
+					<div class="flex flex-col items-center justify-center px-10 py-6 text-center sm:p-12">
 						<div class="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl {slide.color}">
 							<Icon name={slide.icon} size="lg" />
 						</div>
@@ -210,7 +210,7 @@
 	<!-- High-Performance VirtualList -->
 	<DocSandbox title="High-Performance DOM Windowing (<VirtualList />)">
 		<div class="w-full">
-			<div class="mb-3 flex items-center justify-between">
+			<div class="mb-3 flex flex-wrap items-center justify-between gap-2">
 				<div class="text-xs font-semibold tracking-wider text-neutral-500 uppercase">
 					500 Virtualized Audit Records (Zero DOM Lag)
 				</div>
@@ -221,12 +221,14 @@
 					<div
 						class="flex h-full items-center justify-between border-b border-neutral-100 px-4 text-xs dark:border-neutral-800/60"
 					>
-						<div class="flex items-center gap-3">
+						<div class="flex min-w-0 flex-1 items-center gap-3">
 							<span class="font-mono text-neutral-400">#{index + 1}</span>
-							<span class="font-medium text-neutral-900 dark:text-neutral-200">{log.name}</span>
+							<span class="truncate font-medium text-neutral-900 dark:text-neutral-200"
+								>{log.name}</span
+							>
 						</div>
-						<div class="flex items-center gap-4">
-							<span class="font-mono text-neutral-400">{log.latency}</span>
+						<div class="flex shrink-0 items-center gap-2 sm:gap-4">
+							<span class="hidden font-mono text-neutral-400 sm:inline">{log.latency}</span>
 							<Badge
 								color={log.status === 'Delivered'
 									? 'success'
@@ -237,7 +239,7 @@
 							>
 								{log.status}
 							</Badge>
-							<span class="text-neutral-400">{log.time}</span>
+							<span class="hidden text-neutral-400 sm:inline">{log.time}</span>
 						</div>
 					</div>
 				{/snippet}
@@ -247,11 +249,11 @@
 
 	<!-- Resizable Split Panes -->
 	<DocSandbox title="Draggable Split-Panes (<ResizablePanels />)">
-		<div class="h-64 w-full">
+		<div class="h-auto min-h-64 w-full sm:h-64">
 			<ResizablePanels direction="horizontal" defaultSize={50} minSize={20} maxSize={80}>
 				{#snippet first()}
 					<div
-						class="flex h-full flex-col justify-center bg-neutral-50/50 p-6 dark:bg-neutral-900/50"
+						class="flex h-full flex-col justify-center bg-neutral-50/50 p-3 sm:p-6 dark:bg-neutral-900/50"
 					>
 						<div class="flex items-center gap-2 text-sm font-bold text-neutral-900 dark:text-white">
 							<Icon name="code-bracket" size="sm" class="text-primary-500" />
@@ -265,7 +267,7 @@
 				{/snippet}
 				{#snippet second()}
 					<div
-						class="flex h-full flex-col justify-center bg-neutral-100/30 p-6 dark:bg-neutral-950/30"
+						class="flex h-full flex-col justify-center bg-neutral-100/30 p-3 sm:p-6 dark:bg-neutral-950/30"
 					>
 						<div class="flex items-center gap-2 text-sm font-bold text-neutral-900 dark:text-white">
 							<Icon name="eye" size="sm" class="text-emerald-500" />
@@ -282,7 +284,7 @@
 
 	<!-- SaaS Metrics Dashboard Header -->
 	<DocSandbox title="SaaS KPI Metrics Grid (<MetricCard />)">
-		<div class="space-y-6">
+		<div class="w-full space-y-6">
 			<div class="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
 				<div>
 					<h2 class="text-xl font-bold tracking-tight text-neutral-900 dark:text-white">

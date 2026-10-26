@@ -106,7 +106,7 @@
 <div
 	role="group"
 	class={cn(
-		'inline-flex items-center select-none',
+		'inline-flex max-w-full flex-wrap items-center select-none',
 		block ? 'flex w-full' : '',
 		sizeClasses.container,
 		containerVariantClasses,

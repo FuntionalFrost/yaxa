@@ -52,7 +52,7 @@
 		<div class="grid grid-cols-1 gap-8 md:grid-cols-4 lg:grid-cols-5">
 			<!-- Brand Info -->
 			<div class="space-y-4 md:col-span-2 lg:col-span-2">
-				<div class="flex items-center gap-3">
+				<div class="flex flex-wrap items-center gap-3">
 					<a href="/" class="inline-flex items-center gap-2.5 font-bold tracking-tight">
 						<Logo size="sm" showText text={currentConfig.name} />
 					</a>
@@ -68,7 +68,9 @@
 					{currentConfig.description}
 				</p>
 				{#if currentConfig.email}
-					<div class="flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400">
+					<div
+						class="flex flex-wrap items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400"
+					>
 						<span>Contact:</span>
 						<a
 							href="mailto:{currentConfig.email}"
@@ -79,7 +81,7 @@
 						<button
 							type="button"
 							onclick={() => copyEmail(currentConfig.email!)}
-							class="inline-flex items-center justify-center rounded p-1 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
+							class="inline-flex items-center justify-center rounded p-1.5 text-neutral-400 transition-colors hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
 							aria-label="Copy email address"
 							title={copiedEmail ? 'Copied to clipboard!' : 'Copy email address'}
 						>
@@ -188,7 +190,7 @@
 							href={currentConfig.socials?.github || currentConfig.project?.repositoryUrl}
 							target="_blank"
 							rel="noopener noreferrer"
-							class="text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
+							class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-white"
 							aria-label="GitHub"
 						>
 							<Icon name="github" size="sm" />
@@ -199,7 +201,7 @@
 							href={currentConfig.socials.npm}
 							target="_blank"
 							rel="noopener noreferrer"
-							class="text-neutral-500 hover:text-red-500 dark:hover:text-red-400"
+							class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-red-500 dark:hover:bg-neutral-800 dark:hover:text-red-400"
 							aria-label="npm"
 						>
 							<Icon name="npm" size="sm" />
@@ -210,7 +212,7 @@
 							href={currentConfig.socials.twitter}
 							target="_blank"
 							rel="noopener noreferrer"
-							class="text-neutral-500 hover:text-neutral-900 dark:hover:text-white"
+							class="inline-flex h-8 w-8 items-center justify-center rounded-lg text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900 dark:hover:bg-neutral-800 dark:hover:text-white"
 							aria-label="Twitter"
 						>
 							<Icon name="twitter" size="sm" />

@@ -122,10 +122,12 @@
 		<!-- X-Axis Labels -->
 		<g class="fill-neutral-400 text-[10px] select-none dark:fill-neutral-500">
 			{#each data as d, i}
-				{@const x = padding.left + i * groupWidth + groupWidth / 2}
-				<text {x} y={height - 8} text-anchor="middle">
-					{xAxisFormat(d.label)}
-				</text>
+				{#if data.length <= 8 || i % Math.ceil(data.length / 6) === 0 || i === data.length - 1}
+					{@const x = padding.left + i * groupWidth + groupWidth / 2}
+					<text {x} y={height - 8} text-anchor="middle">
+						{xAxisFormat(d.label)}
+					</text>
+				{/if}
 			{/each}
 		</g>
 
@@ -137,11 +139,14 @@
 			{@const barWidth = isStacked ? availableWidth : availableWidth / (series.length || 1)}
 			{@const startOffset = (groupWidth - availableWidth) / 2}
 
+			<!-- svelte-ignore a11y_click_events_have_key_events -->
+			<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 			<g
 				role="group"
 				aria-label={d.label}
 				onmouseenter={() => (hoveredIdx = dIdx)}
 				onmouseleave={() => (hoveredIdx = null)}
+				onclick={() => (hoveredIdx = hoveredIdx === dIdx ? null : dIdx)}
 				class="cursor-pointer"
 			>
 				<!-- Group Hover Background highlight -->
@@ -207,8 +212,8 @@
 		{@const activeX = padding.left + hoveredIdx * groupWidth + groupWidth / 2}
 		<div
 			class="pointer-events-none absolute top-2 rounded-xl border border-neutral-200 bg-white/95 px-3 py-2 text-xs shadow-lg backdrop-blur-xs transition-all dark:border-neutral-800 dark:bg-neutral-900/95"
-			style="left: clamp(10px, {(activeX / width) *
-				100}%, calc(100% - 140px)); transform: translateX(-50%);"
+			style="left: clamp(70px, {(activeX / width) *
+				100}%, calc(100% - 70px)); transform: translateX(-50%);"
 		>
 			<div class="mb-1 font-semibold text-neutral-800 dark:text-neutral-200">
 				{xAxisFormat(activeItem.label)}

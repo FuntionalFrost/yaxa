@@ -145,7 +145,7 @@ import { createPresignedUploadUrl } from 'yaxa-svelte/storage';
 	</div>
 
 	<!-- Interactive SaaS Live Preview -->
-	<Card class="space-y-6 border-zinc-200 p-6 shadow-md sm:p-8 dark:border-zinc-800">
+	<Card class="space-y-6 border-zinc-200 p-4 shadow-md sm:p-8 dark:border-zinc-800">
 		<div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
 			<div>
 				<h3 class="text-lg font-bold text-zinc-900 dark:text-zinc-100">
@@ -161,7 +161,7 @@ import { createPresignedUploadUrl } from 'yaxa-svelte/storage';
 		</div>
 
 		<div
-			class="flex min-h-105 items-center justify-center rounded-xl border border-dashed border-zinc-200 bg-zinc-50/50 p-6 dark:border-zinc-800 dark:bg-zinc-950/40"
+			class="flex min-h-105 items-center justify-center rounded-xl border border-dashed border-zinc-200 bg-zinc-50/50 p-3 sm:p-6 dark:border-zinc-800 dark:bg-zinc-950/40"
 		>
 			{#if activeDemo === 'auth'}
 				<div class="w-full max-w-md">
@@ -172,7 +172,7 @@ import { createPresignedUploadUrl } from 'yaxa-svelte/storage';
 					<PasskeyUI mode="card" />
 				</div>
 			{:else if activeDemo === 'two-factor'}
-				<div class="flex flex-col items-center justify-center gap-4 p-8 text-center">
+				<div class="flex flex-col items-center justify-center gap-4 p-2 text-center sm:p-8">
 					<div class="text-xs text-neutral-500 dark:text-neutral-400">
 						3-step Turnkey TOTP Two-Factor Enrollment Modal paired with InputOTP
 					</div>
@@ -182,7 +182,7 @@ import { createPresignedUploadUrl } from 'yaxa-svelte/storage';
 					<TwoFactorModal bind:open={show2FAModal} />
 				</div>
 			{:else if activeDemo === 'org-switcher'}
-				<div class="flex flex-col items-center justify-center gap-4 p-8 text-center">
+				<div class="flex flex-col items-center justify-center gap-4 p-2 text-center sm:p-8">
 					<div class="text-xs text-neutral-500 dark:text-neutral-400">
 						Switch between personal and multi-tenant workspaces
 					</div>
@@ -193,7 +193,7 @@ import { createPresignedUploadUrl } from 'yaxa-svelte/storage';
 					/>
 				</div>
 			{:else if activeDemo === 'notifications'}
-				<div class="flex flex-col items-center justify-center gap-4 p-8 text-center">
+				<div class="flex flex-col items-center justify-center gap-4 p-2 text-center sm:p-8">
 					<div class="text-xs text-neutral-500 dark:text-neutral-400">
 						Real-time notification drawer with unread counter chip
 					</div>
@@ -212,7 +212,7 @@ import { createPresignedUploadUrl } from 'yaxa-svelte/storage';
 					<SubscriptionCard tierName="Pro Solo Plan" amount={29} status="active" interval="month" />
 				</div>
 			{:else if activeDemo === 'user-menu'}
-				<div class="flex justify-center p-8">
+				<div class="flex justify-center p-2 sm:p-8">
 					<UserMenu
 						user={{
 							name: 'Yaxa Creator',

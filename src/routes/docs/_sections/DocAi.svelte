@@ -131,7 +131,7 @@
   onsubmit={(text, files) => console.log(text, files)}
 />`}
 		>
-			<div class="max-w-2xl py-2">
+			<div class="w-full max-w-2xl min-w-0 py-2">
 				<PromptBar
 					bind:value={samplePrompt}
 					placeholder="Type / for commands or ask anything..."
@@ -159,7 +159,7 @@
   result={{ url: 'https://cdn.example.com/report.pdf' }}
 />`}
 		>
-			<div class="max-w-xl space-y-4 py-2">
+			<div class="w-full max-w-xl min-w-0 space-y-4 py-2">
 				<AiThought
 					duration={2.4}
 					open={true}

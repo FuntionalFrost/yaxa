@@ -13,12 +13,14 @@
 			direction: {
 				horizontal: {
 					root: 'flex-row',
-					handle: 'w-2 cursor-col-resize select-none',
+					handle:
+						'relative w-2 cursor-col-resize select-none after:absolute after:inset-y-0 after:-inset-x-2 after:content-[""]',
 					grip: 'h-6 w-1'
 				},
 				vertical: {
 					root: 'flex-col',
-					handle: 'h-2 cursor-row-resize select-none',
+					handle:
+						'relative h-2 cursor-row-resize select-none after:absolute after:inset-x-0 after:-inset-y-2 after:content-[""]',
 					grip: 'h-1 w-6'
 				}
 			}

@@ -305,9 +305,9 @@
 	<!-- Optional Header Toolbar -->
 	{#if showSearch || showExport || showColumnToggle || toolbar}
 		<div class="flex flex-wrap items-center justify-between gap-3">
-			<div class="flex items-center gap-2">
+			<div class="flex flex-1 flex-wrap items-center gap-2 sm:flex-initial">
 				{#if showSearch}
-					<div class="relative w-64">
+					<div class="relative w-full sm:w-64">
 						<Icon
 							name="search"
 							size="xs"
@@ -383,7 +383,7 @@
 	<!-- Bulk Actions Bar -->
 	{#if selectable && selected.length > 0 && bulkActions}
 		<div
-			class="flex items-center justify-between rounded-xl border border-primary-500/30 bg-primary-50/50 px-4 py-2.5 dark:bg-primary-950/30"
+			class="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-primary-500/30 bg-primary-50/50 px-4 py-2.5 dark:bg-primary-950/30"
 		>
 			<span class="text-xs font-semibold text-primary-900 dark:text-primary-200">
 				{selected.length} row{selected.length > 1 ? 's' : ''} selected
@@ -451,7 +451,7 @@
 									{#if column.resizable}
 										<button
 											type="button"
-											class="absolute top-0 right-0 h-full w-1.5 cursor-col-resize opacity-0 transition-opacity group-hover/th:opacity-100 hover:bg-primary-500"
+											class="absolute top-0 -right-1 h-full w-3 cursor-col-resize touch-none opacity-0 transition-opacity group-hover/th:opacity-100 hover:bg-primary-500"
 											onmousedown={(e) => startColumnResize(colKey, e)}
 											ontouchstart={(e) => startColumnResize(colKey, e)}
 											aria-label={`Resize column ${column.label}`}
@@ -537,7 +537,7 @@
 			<div
 				class="flex flex-wrap items-center justify-between gap-3 border-t border-neutral-200/80 bg-neutral-50/50 px-4 py-3 text-xs text-neutral-500 dark:border-neutral-800/80 dark:bg-neutral-900/40 dark:text-neutral-400"
 			>
-				<div class="flex items-center gap-2">
+				<div class="flex flex-wrap items-center gap-2">
 					<span>Rows per page:</span>
 					<select
 						value={pageSize}

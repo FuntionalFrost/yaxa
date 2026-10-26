@@ -156,11 +156,11 @@
 							: 'text-neutral-700 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800/60'
 					)}
 				>
-					<div class="flex items-center gap-2">
-						<span class="font-mono font-medium">{cmd.name}</span>
-						<span class="text-neutral-500">{cmd.description}</span>
+					<div class="flex min-w-0 items-center gap-2">
+						<span class="shrink-0 font-mono font-medium">{cmd.name}</span>
+						<span class="truncate text-neutral-500">{cmd.description}</span>
 					</div>
-					<Icon name="corner-down-left" size="xs" class="text-neutral-400" />
+					<Icon name="corner-down-left" size="xs" class="shrink-0 text-neutral-400" />
 				</button>
 			{/each}
 		</div>
@@ -192,7 +192,7 @@
 						<button
 							type="button"
 							onclick={() => removeAttachment(idx)}
-							class="text-neutral-400 hover:text-rose-500"
+							class="rounded p-1 text-neutral-400 hover:text-rose-500"
 							aria-label="Remove attachment"
 						>
 							<Icon name="x" size="xs" />

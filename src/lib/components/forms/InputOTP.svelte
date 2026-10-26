@@ -129,10 +129,10 @@
 			case 'sm':
 				return 'w-8 h-9 text-base';
 			case 'lg':
-				return 'w-14 h-16 text-2xl';
+				return 'w-10 h-12 text-lg sm:w-14 sm:h-16 sm:text-2xl';
 			case 'md':
 			default:
-				return 'w-11 h-12 text-xl';
+				return 'w-9 h-10 text-base sm:w-11 sm:h-12 sm:text-xl';
 		}
 	});
 
@@ -143,10 +143,14 @@
 	});
 </script>
 
-<div class={cn('flex items-center gap-2 select-none', className)}>
+<div
+	class={cn('flex max-w-full items-center justify-center gap-1 select-none sm:gap-2', className)}
+>
 	{#each Array.from({ length }, (_, i) => i) as index}
 		{#if separator && index === separatorIndex}
-			<span class="px-1 font-bold text-neutral-400 select-none dark:text-neutral-600"> − </span>
+			<span class="px-0.5 font-bold text-neutral-400 select-none sm:px-1 dark:text-neutral-600">
+				−
+			</span>
 		{/if}
 
 		<input

@@ -117,7 +117,7 @@
 		{ key: 'category', label: 'Category', sortable: true, width: 130, resizable: true },
 		{ key: 'lines', label: 'Lines of Code', sortable: true, width: 130, resizable: true },
 		{ key: 'author', label: 'Contributor', width: 130, resizable: true },
-		{ key: 'status', label: 'Release Status', pinned: 'right', width: 140 }
+		{ key: 'status', label: 'Release Status', width: 140 }
 	];
 
 	const dropdownItems: MenuItem[] = [

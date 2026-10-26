@@ -35,7 +35,7 @@
 </script>
 
 <div class="mb-8 border-b border-zinc-200 pb-6 dark:border-zinc-800">
-	<div class="mb-3 flex items-center justify-between gap-4">
+	<div class="mb-3 flex flex-wrap items-center justify-between gap-2">
 		<div class="flex items-center gap-2">
 			{#if category}
 				<span
@@ -72,21 +72,21 @@
 			<button
 				type="button"
 				onclick={handleCopy}
-				class="group flex max-w-full items-center gap-2.5 rounded-lg border border-zinc-200 bg-zinc-950 px-3.5 py-2 font-mono text-xs text-zinc-100 shadow-xs transition-all hover:border-zinc-700 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-700"
+				class="group flex max-w-full min-w-0 items-center gap-2.5 overflow-hidden rounded-lg border border-zinc-200 bg-zinc-950 px-3.5 py-2 font-mono text-xs text-zinc-100 shadow-xs transition-all hover:border-zinc-700 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-700"
 				title="Click to copy import statement"
 			>
 				{#if importStatement.startsWith('import')}
-					<span class="font-semibold text-primary-400 select-none">import</span>
-					<span class="truncate text-zinc-200"
+					<span class="shrink-0 font-semibold text-primary-400 select-none">import</span>
+					<span class="min-w-0 flex-1 truncate text-zinc-200"
 						>{importStatement.replace(/^import\s+/, '').replace(/\s+from\s+.*$/, '')}</span
 					>
-					<span class="font-semibold text-primary-400 select-none">from</span>
-					<span class="text-emerald-400"
+					<span class="shrink-0 font-semibold text-primary-400 select-none">from</span>
+					<span class="shrink-0 text-emerald-400"
 						>{importStatement.match(/from\s+('.*?'|".*?")/)?.[1] || "'yaxa-svelte'"}</span
 					>
 				{:else}
-					<span class="text-primary-400 select-none">$</span>
-					<span class="truncate font-semibold text-zinc-100">{importStatement}</span>
+					<span class="shrink-0 text-primary-400 select-none">$</span>
+					<span class="min-w-0 flex-1 truncate font-semibold text-zinc-100">{importStatement}</span>
 				{/if}
 				<span class="ml-1.5 shrink-0 text-zinc-400 transition-colors group-hover:text-white">
 					{#if clipboard.copied}

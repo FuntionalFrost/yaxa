@@ -45,11 +45,11 @@
 
 {#if impersonatedUser}
 	<div
-		class="sticky top-0 z-50 flex items-center justify-between border-b border-amber-300 bg-amber-500/90 px-4 py-2 text-xs font-medium text-amber-950 shadow-xs backdrop-blur-md dark:border-amber-600/50 dark:bg-amber-600/90 dark:text-amber-50 {className}"
+		class="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-2 border-b border-amber-300 bg-amber-500/90 px-4 py-2 text-xs font-medium text-amber-950 shadow-xs backdrop-blur-md dark:border-amber-600/50 dark:bg-amber-600/90 dark:text-amber-50 {className}"
 	>
-		<div class="flex items-center gap-2">
+		<div class="flex min-w-0 flex-1 items-center gap-2">
 			<Icon name="alert" class="h-4 w-4 shrink-0 text-amber-950 dark:text-amber-100" />
-			<span>
+			<span class="truncate">
 				You are currently impersonating <strong
 					>{impersonatedUser.name || impersonatedUser.email || impersonatedUser.id}</strong
 				>.
@@ -62,7 +62,7 @@
 			color="neutral"
 			loading={isStopping}
 			onclick={handleStop}
-			class="gap-1 border-none bg-amber-950 text-white hover:bg-amber-900 dark:bg-amber-100 dark:text-amber-950 dark:hover:bg-white"
+			class="shrink-0 gap-1 border-none bg-amber-950 text-white hover:bg-amber-900 dark:bg-amber-100 dark:text-amber-950 dark:hover:bg-white"
 		>
 			<Icon name="cross" class="h-3 w-3" />
 			<span>Exit Impersonation</span>

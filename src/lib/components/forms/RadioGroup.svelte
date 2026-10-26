@@ -28,7 +28,9 @@
 </script>
 
 <div
-	class="flex {orientation === 'horizontal' ? 'flex-row gap-4' : 'flex-col gap-2'} {className}"
+	class="flex {orientation === 'horizontal'
+		? 'flex-row flex-wrap gap-4'
+		: 'flex-col gap-2'} {className}"
 	role="radiogroup"
 >
 	{#each options as opt}

@@ -219,7 +219,8 @@
 
 	<Popover.Portal>
 		<Popover.Content
-			class="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 z-50 w-72 rounded-xl border border-neutral-200 bg-white p-3 shadow-xl duration-150 outline-none dark:border-neutral-800 dark:bg-neutral-900"
+			collisionPadding={8}
+			class="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 z-50 w-72 max-w-[calc(100vw-1rem)] rounded-xl border border-neutral-200 bg-white p-3 shadow-xl duration-150 outline-none dark:border-neutral-800 dark:bg-neutral-900"
 			sideOffset={6}
 		>
 			<!-- Presets Bar -->

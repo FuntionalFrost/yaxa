@@ -66,16 +66,16 @@
 
 <Slideover bind:open title={`Inspect Record: ${tableName}`} class="w-full max-w-xl">
 	{#if record}
-		<div class="flex flex-col gap-5 p-6">
+		<div class="flex flex-col gap-5">
 			<!-- Header Summary -->
 			<div
-				class="flex items-center justify-between rounded-lg border border-neutral-200 bg-neutral-50 p-3.5 dark:border-neutral-800 dark:bg-neutral-900"
+				class="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-neutral-200 bg-neutral-50 p-3.5 dark:border-neutral-800 dark:bg-neutral-900"
 			>
-				<div class="space-y-0.5">
+				<div class="min-w-0 space-y-0.5">
 					<span class="text-xs font-semibold tracking-wider text-neutral-500 uppercase"
 						>Primary Key</span
 					>
-					<div class="font-mono text-sm font-bold text-neutral-900 dark:text-neutral-100">
+					<div class="truncate font-mono text-sm font-bold text-neutral-900 dark:text-neutral-100">
 						{primaryKey}: {record[primaryKey]}
 					</div>
 				</div>
@@ -192,7 +192,7 @@
 
 			<!-- Action Footer -->
 			<div
-				class="flex items-center justify-between border-t border-neutral-200 pt-4 dark:border-neutral-800"
+				class="flex flex-wrap items-center justify-between gap-2 border-t border-neutral-200 pt-4 dark:border-neutral-800"
 			>
 				<Button
 					variant="outline"

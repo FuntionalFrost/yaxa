@@ -66,7 +66,7 @@
 	});
 </script>
 
-<nav aria-label="Pagination" class="flex items-center gap-1 {className}">
+<nav aria-label="Pagination" class="flex flex-wrap items-center justify-center gap-1 {className}">
 	<!-- Previous -->
 	<Button
 		variant="outline"

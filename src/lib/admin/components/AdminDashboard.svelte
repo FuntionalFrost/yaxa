@@ -167,7 +167,7 @@
 >
 	<!-- Top Navigation Bar -->
 	<header
-		class="sticky top-0 z-30 flex h-14 items-center justify-between border-b border-neutral-200 bg-white/80 px-6 backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-900/80"
+		class="sticky top-0 z-30 flex min-h-14 flex-wrap items-center justify-between gap-2 border-b border-neutral-200 bg-white/80 px-4 py-2 backdrop-blur-md sm:h-14 sm:flex-nowrap sm:px-6 sm:py-0 dark:border-neutral-800 dark:bg-neutral-900/80"
 	>
 		<div class="flex items-center gap-3">
 			<div
@@ -177,7 +177,9 @@
 			</div>
 			<div class="flex items-center gap-2">
 				<h1 class="text-sm font-bold text-neutral-900 dark:text-neutral-100">{title}</h1>
-				<Badge color="primary" variant="subtle" size="xs">Drizzle Introspect</Badge>
+				<Badge color="primary" variant="subtle" size="xs" class="hidden sm:inline-flex"
+					>Drizzle Introspect</Badge
+				>
 			</div>
 		</div>
 
@@ -224,7 +226,7 @@
 	</header>
 
 	<!-- Main Workspace -->
-	<main class="mx-auto max-w-7xl p-6">
+	<main class="mx-auto max-w-7xl p-4 sm:p-6">
 		{#if activeTab === 'sandbox'}
 			<div class="space-y-6">
 				<div class="space-y-1">
@@ -281,8 +283,8 @@
 							<Badge size="xs" variant="subtle" color="neutral">{data.total} rows</Badge>
 						</div>
 
-						<div class="flex items-center gap-2">
-							<form onsubmit={handleSearch} class="relative">
+						<div class="flex w-full items-center gap-2 sm:w-auto">
+							<form onsubmit={handleSearch} class="relative flex-1 sm:flex-initial">
 								<input
 									id="admin-search-input"
 									name="adminSearch"
@@ -290,7 +292,7 @@
 									placeholder="Search records..."
 									aria-label="Search records"
 									bind:value={searchQuery}
-									class="w-48 rounded-lg border border-neutral-300 bg-white py-1.5 pr-3 pl-8 text-xs text-neutral-900 placeholder-neutral-400 transition-all focus:w-60 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:outline-none dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100"
+									class="w-full rounded-lg border border-neutral-300 bg-white py-1.5 pr-3 pl-8 text-xs text-neutral-900 placeholder-neutral-400 transition-all focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:outline-none sm:w-48 sm:focus:w-60 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100"
 								/>
 								<div
 									class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-2.5 text-neutral-400"
@@ -303,7 +305,7 @@
 								variant="solid"
 								color="primary"
 								size="sm"
-								class="gap-1 text-xs"
+								class="shrink-0 gap-1 text-xs"
 								onclick={() => (isCreateModalOpen = true)}
 							>
 								<Icon name="sparkles" class="h-3.5 w-3.5" />
@@ -379,7 +381,7 @@
 						<!-- Pagination Footer -->
 						{#if data.total > data.pageSize}
 							<div
-								class="flex items-center justify-between border-t border-neutral-200 px-4 py-3 dark:border-neutral-800"
+								class="flex flex-wrap items-center justify-between gap-3 border-t border-neutral-200 px-4 py-3 dark:border-neutral-800"
 							>
 								<span class="text-xs text-neutral-500">
 									Showing {(data.page - 1) * data.pageSize + 1} to {Math.min(

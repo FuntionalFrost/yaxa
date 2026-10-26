@@ -71,14 +71,15 @@
 	<Container size="2xl">
 		<div class="flex flex-wrap items-center justify-between gap-3 text-xs">
 			<!-- Breadcrumb trail -->
-			<div class="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
+			<div class="flex min-w-0 items-center gap-2 text-zinc-500 dark:text-zinc-400">
 				<a href="/" class="font-medium hover:text-primary-600 dark:hover:text-primary-400">Home</a>
 				<span>/</span>
 				<a href="/docs/intro" class="font-medium hover:text-primary-600 dark:hover:text-primary-400"
 					>Docs</a
 				>
 				<span>/</span>
-				<span class="font-semibold text-zinc-900 dark:text-white">{currentItem.label}</span>
+				<span class="truncate font-semibold text-zinc-900 dark:text-white">{currentItem.label}</span
+				>
 				<Badge size="xs" variant="subtle" color="primary" class="ml-1 hidden sm:inline-flex">
 					{currentItem.category}
 				</Badge>
@@ -153,7 +154,7 @@
 		{#if navMode === 'topbar'}
 			<div class="mt-3 border-t border-zinc-200/80 pt-3 dark:border-zinc-800/80">
 				<!-- Category Dropdown Links -->
-				<div class="flex gap-2 overflow-x-auto pb-1 sm:flex-wrap">
+				<div class="flex gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible">
 					{#each DOC_NAV_GROUPS as group (group.category)}
 						{@const isGroupActive = group.items.some((i) => i.href === currentPath)}
 						{@const isOpen = openCategory === group.category}
@@ -175,7 +176,7 @@
 							<!-- Dropdown Menu -->
 							{#if isOpen}
 								<div
-									class="absolute top-full left-0 z-40 mt-1.5 w-64 max-w-[calc(100vw-2rem)] rounded-xl border border-zinc-200 bg-white p-2 shadow-lg backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-900"
+									class="absolute top-full left-0 z-40 mt-1.5 hidden w-64 max-w-[calc(100vw-2rem)] rounded-xl border border-zinc-200 bg-white p-2 shadow-lg backdrop-blur-md sm:block dark:border-zinc-800 dark:bg-zinc-900"
 								>
 									<div class="space-y-1">
 										{#each group.items as item (item.href)}
@@ -201,6 +202,35 @@
 						</div>
 					{/each}
 				</div>
+
+				{#if openCategory}
+					{@const activeGroup = DOC_NAV_GROUPS.find((g) => g.category === openCategory)}
+					{#if activeGroup}
+						<div
+							class="mt-2 rounded-xl border border-zinc-200 bg-white p-1.5 shadow-lg sm:hidden dark:border-zinc-800 dark:bg-zinc-900"
+						>
+							{#each activeGroup.items as item (item.href)}
+								{@const active = currentPath === item.href}
+								<a
+									href={item.href}
+									onclick={() => (openCategory = null)}
+									class="flex items-center justify-between rounded-lg px-3 py-2 text-xs transition-colors {active
+										? 'bg-primary-50 font-semibold text-primary-600 dark:bg-primary-950/60 dark:text-primary-400'
+										: 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800/60 dark:hover:text-zinc-100'}"
+								>
+									<span>{item.label}</span>
+									{#if item.badge}
+										<span
+											class="rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400"
+										>
+											{item.badge}
+										</span>
+									{/if}
+								</a>
+							{/each}
+						</div>
+					{/if}
+				{/if}
 			</div>
 		{/if}
 

@@ -47,7 +47,7 @@
 	<!-- Header Bar with Title, Description, Counter Badge & Live Search -->
 	<div class="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
 		<div>
-			<div class="flex items-center gap-2.5">
+			<div class="flex flex-wrap items-center gap-2.5">
 				<div
 					class="flex h-7 w-7 items-center justify-center rounded-lg bg-linear-to-br from-primary-500 to-amber-500 text-white shadow-xs"
 				>
@@ -60,7 +60,7 @@
 					{title}
 				</h3>
 				<span
-					class="inline-flex items-center rounded-full border border-primary-200/80 bg-primary-50 px-2.5 py-0.5 text-xs font-bold text-primary-700 dark:border-primary-800/80 dark:bg-primary-950/60 dark:text-primary-300"
+					class="inline-flex shrink-0 items-center rounded-full border border-primary-200/80 bg-primary-50 px-2.5 py-0.5 text-xs font-bold whitespace-nowrap text-primary-700 dark:border-primary-800/80 dark:bg-primary-950/60 dark:text-primary-300"
 				>
 					{items.length} Props
 				</span>
@@ -106,7 +106,7 @@
 		class="overflow-hidden rounded-2xl border border-neutral-200/90 bg-white/95 shadow-sm backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-900/80"
 	>
 		<div class="overflow-x-auto">
-			<table class="w-full text-left text-xs">
+			<table class="w-full min-w-[640px] text-left text-xs">
 				<thead>
 					<tr
 						class="border-b border-neutral-200/90 bg-linear-to-r from-neutral-50 via-neutral-100/50 to-neutral-50 text-[11px] font-bold tracking-wider text-neutral-600 uppercase dark:border-neutral-800 dark:from-neutral-900 dark:via-neutral-900/70 dark:to-neutral-900 dark:text-neutral-400"

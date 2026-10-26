@@ -55,12 +55,12 @@
 	<div
 		class="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-200 bg-zinc-50/70 px-4 py-2.5 dark:border-zinc-800 dark:bg-zinc-900/90"
 	>
-		<div>
+		<div class="flex min-w-0 flex-wrap items-baseline gap-x-2 gap-y-0.5">
 			<h3 id={headingId} class="text-xs font-semibold text-zinc-800 dark:text-zinc-200">
 				{title}
 			</h3>
 			{#if description}
-				<span class="ml-2 text-xs text-zinc-500 dark:text-zinc-400">{description}</span>
+				<span class="text-xs text-zinc-500 dark:text-zinc-400">{description}</span>
 			{/if}
 		</div>
 		{#if code}
@@ -119,7 +119,9 @@
 	</div>
 
 	{#if activeTab === 'preview'}
-		<div class="flex min-h-[120px] items-center justify-center p-6 sm:p-8">
+		<div
+			class="flex min-h-[120px] w-full min-w-0 items-center justify-center overflow-x-auto p-4 sm:p-8"
+		>
 			{@render children()}
 		</div>
 		{#if controls}

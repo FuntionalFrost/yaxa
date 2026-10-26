@@ -209,7 +209,7 @@
 										: 'border border-neutral-200/80 bg-neutral-50 text-neutral-900 dark:border-neutral-800/80 dark:bg-neutral-900 dark:text-neutral-100'
 								)}
 							>
-								<div class="whitespace-pre-wrap">{msg.content}</div>
+								<div class="break-words whitespace-pre-wrap">{msg.content}</div>
 
 								{#if msg.isStreaming}
 									<span class="inline-block h-4 w-1.5 animate-pulse bg-current"></span>
@@ -221,7 +221,7 @@
 								<button
 									type="button"
 									onclick={() => copyMessage(msg.content)}
-									class="hover:text-neutral-700 dark:hover:text-neutral-200"
+									class="rounded-md p-1.5 hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
 									title="Copy message"
 								>
 									<Icon name="copy" size="xs" />
@@ -231,7 +231,7 @@
 									<button
 										type="button"
 										onclick={() => onretry(msg)}
-										class="hover:text-neutral-700 dark:hover:text-neutral-200"
+										class="rounded-md p-1.5 hover:bg-neutral-100 hover:text-neutral-700 dark:hover:bg-neutral-800 dark:hover:text-neutral-200"
 										title="Regenerate response"
 									>
 										<Icon name="rotate-cw" size="xs" />

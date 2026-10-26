@@ -45,7 +45,7 @@ Write formatted text with **bold**, *italic*, lists, and code blocks.
   minHeight={200}
 />`}
 		>
-			<div class="max-w-2xl py-2">
+			<div class="w-full max-w-2xl min-w-0 py-2">
 				<RichTextEditor bind:value={sampleMarkdown} minHeight={180} />
 			</div>
 		</DocSandbox>
@@ -66,7 +66,7 @@ Write formatted text with **bold**, *italic*, lists, and code blocks.
   bind:countryCode={country}
 />`}
 		>
-			<div class="max-w-md py-2">
+			<div class="w-full max-w-md min-w-0 py-2">
 				<PhoneInput bind:value={phoneNumber} bind:countryCode={phoneCountry} />
 				<div class="mt-2 text-xs text-neutral-500">
 					Current: {phoneCountry} ({phoneNumber})
@@ -89,7 +89,7 @@ Write formatted text with **bold**, *italic*, lists, and code blocks.
   bind:cardBrand={brand}
 />`}
 		>
-			<div class="max-w-md py-2">
+			<div class="w-full max-w-md min-w-0 py-2">
 				<CreditCardInput
 					bind:cardNumber
 					bind:expiry={cardExpiry}

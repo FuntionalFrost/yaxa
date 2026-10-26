@@ -69,7 +69,7 @@
 >
 	<!-- Formatting Toolbar -->
 	<div
-		class="flex flex-wrap items-center justify-between border-b border-neutral-200/80 bg-neutral-50/70 p-1.5 dark:border-neutral-800/80 dark:bg-neutral-900/60"
+		class="flex flex-wrap items-center justify-between gap-1.5 border-b border-neutral-200/80 bg-neutral-50/70 p-1.5 dark:border-neutral-800/80 dark:bg-neutral-900/60"
 	>
 		<div class="flex flex-wrap items-center gap-0.5">
 			<!-- Bold -->

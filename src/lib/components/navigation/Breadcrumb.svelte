@@ -35,7 +35,7 @@
 	<ol
 		data-slot="list"
 		class={cn(
-			'inline-flex items-center space-x-1.5 text-sm text-neutral-500 md:space-x-2 dark:text-neutral-400',
+			'flex flex-wrap items-center space-x-1.5 gap-y-1 text-sm text-neutral-500 md:space-x-2 dark:text-neutral-400',
 			ui?.list
 		)}
 	>

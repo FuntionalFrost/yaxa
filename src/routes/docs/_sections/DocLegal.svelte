@@ -61,7 +61,7 @@ export const siteConfig = defineSiteConfig({
 	<!-- Interactive Preview Sandbox -->
 	<DocSandbox title="Interactive Legal Document Preview">
 		<div class="w-full space-y-6">
-			<div class="flex items-center gap-2">
+			<div class="flex flex-wrap items-center gap-2">
 				<button
 					type="button"
 					class="rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors {activeDocType ===
@@ -107,7 +107,11 @@ export const siteConfig = defineSiteConfig({
 			<div
 				class="max-h-[460px] overflow-y-auto rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-950"
 			>
-				<LegalDocument type={activeDocType as any} lastUpdated="September 2026" />
+				<LegalDocument
+					type={activeDocType as any}
+					lastUpdated="September 2026"
+					class="!px-2 !py-4 sm:!px-4 sm:!py-6"
+				/>
 			</div>
 		</div>
 	</DocSandbox>

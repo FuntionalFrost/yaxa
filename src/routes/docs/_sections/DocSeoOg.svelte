@@ -122,7 +122,7 @@
 
 			<!-- Live SVG Preview -->
 			<div class="space-y-2">
-				<div class="flex items-center justify-between text-xs text-zinc-500">
+				<div class="flex flex-wrap items-center justify-between gap-2 text-xs text-zinc-500">
 					<span>Rendered 1200 × 630 Card</span>
 					<a
 						href={liveUrl}

@@ -152,10 +152,9 @@
 		});
 	});
 
-	function handleMouseMove(e: MouseEvent) {
-		const svg = e.currentTarget as SVGSVGElement;
+	function updateClosestFromClientX(svg: SVGSVGElement, rawClientX: number) {
 		const rect = svg.getBoundingClientRect();
-		const clientX = e.clientX - rect.left;
+		const clientX = rawClientX - rect.left;
 		const svgX = (clientX / rect.width) * width;
 
 		if (data.length <= 1) {
@@ -176,6 +175,15 @@
 		hoveredIdx = closestIdx;
 	}
 
+	function handleMouseMove(e: MouseEvent) {
+		updateClosestFromClientX(e.currentTarget as SVGSVGElement, e.clientX);
+	}
+
+	function handleTouch(e: TouchEvent) {
+		if (!e.touches[0]) return;
+		updateClosestFromClientX(e.currentTarget as SVGSVGElement, e.touches[0].clientX);
+	}
+
 	function handleMouseLeave() {
 		hoveredIdx = null;
 	}
@@ -188,6 +196,8 @@
 		class="h-auto w-full overflow-visible"
 		onmousemove={handleMouseMove}
 		onmouseleave={handleMouseLeave}
+		ontouchstart={handleTouch}
+		ontouchmove={handleTouch}
 		role="img"
 		aria-label="Interactive Line Chart"
 	>
@@ -225,10 +235,12 @@
 		<!-- X-Axis Labels -->
 		<g class="fill-neutral-400 text-[10px] select-none dark:fill-neutral-500">
 			{#each data as d, i}
-				{@const x = getX(i)}
-				<text {x} y={height - 8} text-anchor="middle">
-					{xAxisFormat(d.label)}
-				</text>
+				{#if data.length <= 8 || i % Math.ceil(data.length / 6) === 0 || i === data.length - 1}
+					{@const x = getX(i)}
+					<text {x} y={height - 8} text-anchor="middle">
+						{xAxisFormat(d.label)}
+					</text>
+				{/if}
 			{/each}
 		</g>
 
@@ -295,8 +307,8 @@
 		{@const activeItem = data[hoveredIdx]}
 		<div
 			class="pointer-events-none absolute top-2 rounded-xl border border-neutral-200 bg-white/95 px-3 py-2 text-xs shadow-lg backdrop-blur-xs transition-all dark:border-neutral-800 dark:bg-neutral-900/95"
-			style="left: clamp(10px, {(getX(hoveredIdx) / width) *
-				100}%, calc(100% - 140px)); transform: translateX(-50%);"
+			style="left: clamp(70px, {(getX(hoveredIdx) / width) *
+				100}%, calc(100% - 70px)); transform: translateX(-50%);"
 		>
 			<div class="mb-1 font-semibold text-neutral-800 dark:text-neutral-200">
 				{xAxisFormat(activeItem.label)}

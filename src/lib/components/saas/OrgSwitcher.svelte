@@ -91,8 +91,9 @@
 		<Popover.Portal>
 			<Popover.Content
 				sideOffset={6}
+				collisionPadding={8}
 				align="start"
-				class="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 z-50 w-64 overflow-hidden rounded-xl border border-neutral-200 bg-white p-1.5 shadow-xl dark:border-neutral-800 dark:bg-neutral-900"
+				class="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 z-50 w-64 max-w-[calc(100vw-1rem)] overflow-hidden rounded-xl border border-neutral-200 bg-white p-1.5 shadow-xl dark:border-neutral-800 dark:bg-neutral-900"
 			>
 				<div
 					class="px-2 py-1.5 text-[10px] font-semibold tracking-wider text-neutral-400 uppercase"

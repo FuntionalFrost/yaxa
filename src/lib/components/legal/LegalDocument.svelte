@@ -334,21 +334,21 @@
 		</p>
 
 		<div
-			class="mt-6 flex flex-wrap items-center gap-6 text-sm text-neutral-500 dark:text-neutral-400"
+			class="mt-6 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-neutral-500 dark:text-neutral-400"
 		>
 			<span class="inline-flex items-center gap-1.5">
 				<Icon name="info" size="xs" />
 				Last Updated:
 				<strong class="font-medium text-neutral-700 dark:text-neutral-200">{lastUpdated}</strong>
 			</span>
-			<span>•</span>
+			<span class="hidden sm:inline">•</span>
 			<span
 				>Entity:
 				<strong class="font-medium text-neutral-700 dark:text-neutral-200">{entityName}</strong
 				></span
 			>
 			{#if contactEmail}
-				<span>•</span>
+				<span class="hidden sm:inline">•</span>
 				<div class="inline-flex items-center gap-1.5">
 					<a
 						href="mailto:{contactEmail}"
@@ -406,11 +406,11 @@
 					id={sec.id}
 					class="scroll-mt-24 space-y-4 border-b border-neutral-100 pb-10 last:border-0 dark:border-neutral-900"
 				>
-					<h2 class="text-xl font-bold tracking-tight text-neutral-900 dark:text-white">
+					<h2 class="text-xl font-bold tracking-tight break-words text-neutral-900 dark:text-white">
 						{sec.title}
 					</h2>
 					<div
-						class="prose max-w-none text-neutral-600 prose-neutral dark:text-neutral-300 dark:prose-invert"
+						class="prose max-w-none break-words text-neutral-600 prose-neutral dark:text-neutral-300 dark:prose-invert"
 					>
 						{@html formatLegalHtml(sec.content || '')}
 					</div>

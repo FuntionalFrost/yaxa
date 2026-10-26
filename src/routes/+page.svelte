@@ -238,7 +238,7 @@ export const siteConfig = defineSiteConfig({
 		<div class="grid grid-cols-1 items-start gap-8 lg:grid-cols-12">
 			<!-- Theme Controls Panel -->
 			<div
-				class="space-y-6 rounded-2xl border border-neutral-200/90 bg-white p-6 shadow-sm lg:col-span-6 dark:border-neutral-800 dark:bg-neutral-900/90"
+				class="space-y-6 rounded-2xl border border-neutral-200/90 bg-white p-4 shadow-sm sm:p-6 lg:col-span-6 dark:border-neutral-800 dark:bg-neutral-900/90"
 			>
 				<!-- 1. Primary Accent Palette -->
 				<div>
@@ -432,7 +432,7 @@ export const siteConfig = defineSiteConfig({
 			<!-- Live Interactive Component Sandbox reacting to Studio -->
 			<div class="space-y-6 lg:col-span-6">
 				<div
-					class="space-y-6 rounded-2xl border border-neutral-200/90 bg-white p-6 shadow-sm dark:border-neutral-800 dark:bg-neutral-900/90"
+					class="space-y-6 rounded-2xl border border-neutral-200/90 bg-white p-4 shadow-sm sm:p-6 dark:border-neutral-800 dark:bg-neutral-900/90"
 				>
 					<div
 						class="flex items-center justify-between border-b border-neutral-200 pb-3 dark:border-neutral-800"
@@ -459,7 +459,7 @@ export const siteConfig = defineSiteConfig({
 								<Button variant="ghost">Ghost</Button>
 							</div>
 
-							<div class="flex items-center gap-3">
+							<div class="flex flex-wrap items-center gap-2.5">
 								<Chip color="primary" pulse>Live Deploy</Chip>
 								<Chip color="success" pulse>Connected</Chip>
 								<Chip color="warning">Pending</Chip>
@@ -683,7 +683,7 @@ export const siteConfig = defineSiteConfig({
 					Explore Yaxa by Category
 				</h2>
 			</div>
-			<div class="flex items-center gap-3">
+			<div class="flex flex-wrap items-center gap-3">
 				<Button href="/saas" color="neutral" variant="outline" size="sm">SaaS Demo ↗</Button>
 				<Button href="/docs/intro" color="primary" variant="solid" size="sm">
 					View Documentation ↗
@@ -849,7 +849,7 @@ export const siteConfig = defineSiteConfig({
 <section class="py-20">
 	<Container size="lg">
 		<div
-			class="relative overflow-hidden rounded-3xl border border-primary-500/30 bg-linear-to-br from-primary-900/40 via-neutral-900/90 to-neutral-950 p-8 text-center shadow-2xl backdrop-blur-md sm:p-12"
+			class="relative overflow-hidden rounded-3xl border border-primary-500/30 bg-linear-to-br from-primary-900/40 via-neutral-900/90 to-neutral-950 p-6 text-center shadow-2xl backdrop-blur-md sm:p-12"
 		>
 			<div class="pointer-events-none absolute inset-0 yaxa-grain opacity-20"></div>
 			<div

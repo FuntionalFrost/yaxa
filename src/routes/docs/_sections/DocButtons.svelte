@@ -238,7 +238,7 @@ export const Metric: React.FC<MetricProps> = ({ label, initialValue = 0 }) => {
 					{/each}
 				</div>
 
-				<div class="flex items-center gap-1.5">
+				<div class="flex flex-wrap items-center gap-1.5">
 					<span class="mr-1 font-semibold text-neutral-500">Size:</span>
 					{#each ['xs', 'sm', 'md', 'lg', 'xl'] as const as s}
 						<button
@@ -286,7 +286,7 @@ export const Metric: React.FC<MetricProps> = ({ label, initialValue = 0 }) => {
 				<Button size="xl" color="primary">Extra Large</Button>
 			</div>
 
-			<div class="flex items-center gap-4">
+			<div class="flex flex-wrap items-center justify-center gap-4">
 				<Button {loading} color="primary" onclick={triggerLoading}>
 					<Icon name="bolt" class="mr-1.5 h-4 w-4" />
 					{loading ? 'Submitting...' : 'Click to Load'}
@@ -506,7 +506,7 @@ export const Metric: React.FC<MetricProps> = ({ label, initialValue = 0 }) => {
 
 	<!-- Zero-WASM CodeBlock Component (Multi-Language) -->
 	<DocSandbox title="Zero-WASM Syntax-Highlighted <CodeBlock /> (Multi-Language)">
-		<div class="w-full max-w-xl space-y-4">
+		<div class="w-full max-w-xl min-w-0 space-y-4">
 			<!-- Svelte 5 Snippet -->
 			<CodeBlock
 				code={sampleSvelteSnippet}
@@ -544,7 +544,7 @@ export const Metric: React.FC<MetricProps> = ({ label, initialValue = 0 }) => {
 
 	<!-- Interactive Code Diff & Changelog Sandbox -->
 	<DocSandbox title="Interactive Code Diff & Changelog (<CodeDiff />)">
-		<div class="w-full max-w-2xl">
+		<div class="w-full max-w-2xl min-w-0">
 			<CodeDiff
 				original={diffBeforeSnippet}
 				modified={diffAfterSnippet}

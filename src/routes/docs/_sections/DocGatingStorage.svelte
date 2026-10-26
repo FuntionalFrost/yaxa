@@ -114,7 +114,7 @@ export const POST = createS3UploadHandler({
 	</div>
 
 	<!-- Interactive Live Gating Demo -->
-	<Card class="space-y-6 border-neutral-200 p-6 shadow-xs dark:border-neutral-800">
+	<Card class="space-y-6 border-neutral-200 p-4 shadow-xs sm:p-6 dark:border-neutral-800">
 		<div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
 			<div>
 				<h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">
@@ -128,7 +128,7 @@ export const POST = createS3UploadHandler({
 			<!-- Simulator Controls -->
 			<div class="flex flex-wrap items-center gap-2">
 				<span class="text-xs font-semibold text-neutral-500">Simulate Plan:</span>
-				<div class="flex rounded-lg bg-neutral-100 p-0.5 dark:bg-neutral-800">
+				<div class="flex flex-wrap rounded-lg bg-neutral-100 p-0.5 dark:bg-neutral-800">
 					{#each ['free', 'starter', 'pro', 'enterprise'] as plan}
 						<button
 							type="button"
@@ -161,7 +161,7 @@ export const POST = createS3UploadHandler({
 
 		<!-- Gated Component Container -->
 		<div
-			class="space-y-6 rounded-xl border border-dashed border-neutral-200 bg-neutral-50/50 p-6 dark:border-neutral-800 dark:bg-neutral-950/40"
+			class="space-y-6 rounded-xl border border-dashed border-neutral-200 bg-neutral-50/50 p-4 sm:p-6 dark:border-neutral-800 dark:bg-neutral-950/40"
 		>
 			<Gate
 				requiredPlan="pro"
@@ -172,9 +172,9 @@ export const POST = createS3UploadHandler({
 				upgradeMessage="Exporting automated daily reports requires an active Pro or Enterprise plan."
 			>
 				<div
-					class="space-y-4 rounded-xl border border-neutral-200 bg-white p-6 shadow-xs dark:border-neutral-800 dark:bg-neutral-900"
+					class="space-y-4 rounded-xl border border-neutral-200 bg-white p-4 shadow-xs sm:p-6 dark:border-neutral-800 dark:bg-neutral-900"
 				>
-					<div class="flex items-center justify-between">
+					<div class="flex flex-wrap items-center justify-between gap-2">
 						<div class="flex items-center gap-2.5">
 							<div
 								class="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-100 text-emerald-600 dark:bg-emerald-950/60 dark:text-emerald-400"
@@ -194,7 +194,7 @@ export const POST = createS3UploadHandler({
 					</div>
 
 					<div
-						class="grid grid-cols-3 gap-4 border-t border-neutral-100 pt-4 dark:border-neutral-800"
+						class="grid grid-cols-1 gap-3 border-t border-neutral-100 pt-4 sm:grid-cols-3 sm:gap-4 dark:border-neutral-800"
 					>
 						<div>
 							<span class="text-2xs font-semibold text-neutral-400 uppercase">Monthly MRR</span>

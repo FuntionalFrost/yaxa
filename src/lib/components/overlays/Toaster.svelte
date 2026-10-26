@@ -29,18 +29,18 @@
 	let positionClasses = $derived.by(() => {
 		switch (position) {
 			case 'top-left':
-				return 'top-4 left-4 items-start';
+				return 'top-4 inset-x-4 sm:right-auto sm:left-4 items-center sm:items-start';
 			case 'top-center':
-				return 'top-4 left-1/2 -translate-x-1/2 items-center';
+				return 'top-4 inset-x-4 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 items-center';
 			case 'bottom-right':
-				return 'bottom-4 right-4 items-end';
+				return 'bottom-4 inset-x-4 sm:left-auto sm:right-4 items-center sm:items-end';
 			case 'bottom-left':
-				return 'bottom-4 left-4 items-start';
+				return 'bottom-4 inset-x-4 sm:right-auto sm:left-4 items-center sm:items-start';
 			case 'bottom-center':
-				return 'bottom-4 left-1/2 -translate-x-1/2 items-center';
+				return 'bottom-4 inset-x-4 sm:inset-x-auto sm:left-1/2 sm:-translate-x-1/2 items-center';
 			case 'top-right':
 			default:
-				return 'top-4 right-4 items-end';
+				return 'top-4 inset-x-4 sm:left-auto sm:right-4 items-center sm:items-end';
 		}
 	});
 
@@ -55,7 +55,7 @@
 
 {#if visibleToasts.length > 0}
 	<div
-		class="yaxa-toaster pointer-events-none fixed z-[9999] flex w-full max-w-md flex-col gap-2.5 p-4 sm:p-0 {positionClasses} {className}"
+		class="yaxa-toaster pointer-events-none fixed z-[9999] flex max-w-md flex-col gap-2.5 sm:w-full {positionClasses} {className}"
 		aria-label="Notifications"
 		data-rich-colors={restProps.richColors ?? true}
 		data-expand={restProps.expand ?? false}

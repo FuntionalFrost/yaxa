@@ -472,7 +472,7 @@
 		<!-- Mode Switchers & Navigation Links -->
 		<div class="flex flex-col items-center gap-2 pt-2 text-xs text-zinc-500 dark:text-zinc-400">
 			{#if currentMode === 'signin'}
-				<div class="flex w-full items-center justify-between">
+				<div class="flex w-full flex-wrap items-center justify-between gap-2">
 					{#if showForgotPassword}
 						<button
 							type="button"
