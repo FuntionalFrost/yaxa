@@ -47,8 +47,7 @@ export const siteConfig = defineSiteConfig({
 
 	const appCssSnippet = `@import 'tailwindcss';
 @plugin '@tailwindcss/typography';
-@import 'yaxa-svelte/theme.css';
-@source "../node_modules/yaxa-svelte/dist/**/*.{js,svelte}";`;
+@import 'yaxa-svelte/theme.css';`;
 
 	const hooksSnippet = `import { createYaxaHook } from 'yaxa-svelte';
 import { siteConfig } from './site.config';
@@ -186,7 +185,14 @@ pnpm add -D tailwindcss @tailwindcss/vite @tailwindcss/typography"
 			Tailwind in
 			<code class="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-xs dark:bg-zinc-800"
 				>src/app.css</code
-			>, import the standalone theme tokens and tell Tailwind to scan Yaxa:
+			>, import the standalone theme tokens (Tailwind v4 automatically scans Yaxa's components via
+			<code class="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-xs dark:bg-zinc-800"
+				>@source</code
+			>
+			embedded in
+			<code class="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-xs dark:bg-zinc-800"
+				>theme.css</code
+			>):
 		</p>
 		<DocCodeBlock code={appCssSnippet} filename="src/app.css" language="css" />
 	</div>

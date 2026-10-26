@@ -126,14 +126,13 @@ Import `yaxa-svelte/yaxa.css` and wrap your app in `<YaxaApp>`:
 ```
 
 **Option B: Optimized Tailwind CSS v4 Pipeline** (Maximum build performance & deduplication)
-If your project already imports Tailwind in `src/app.css`, import the standalone theme tokens and tell Tailwind to scan Yaxa:
+If your project already imports Tailwind in `src/app.css`, simply import the standalone theme tokens (Tailwind v4 automatically scans Yaxa's components via `@source` embedded in `theme.css`):
 
 ```css
 /* src/app.css */
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 @import 'yaxa-svelte/theme.css';
-@source '../node_modules/yaxa-svelte/dist/**/*.{js,svelte}';
 ```
 
 Then in `src/routes/+layout.svelte`, simply import `../app.css` instead of `yaxa.css`:

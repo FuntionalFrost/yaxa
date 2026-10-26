@@ -30,7 +30,7 @@ Always import from the specific subpath corresponding to the layer:
 | :--- | :--- |
 | `yaxa-svelte` | **Core UI Primitives, Layouts, AI Primitives, Charts & Composables**: `Button`, `Input`, `Modal`, `Drawer`, `Toast`, `Toaster`, `DataTable`, `VirtualList`, `ResizablePanels`, `Carousel`, `DashboardShell`, `Combobox`, `MultiSelect`, `NumberInput`, `Stepper`, `Timeline`, `Tree`, `Terminal`, `OrgSwitcher`, `NotificationCenter`, `Testimonials`, `FAQ`, `FeatureGrid`, `Gate`, `YaxaApp`, `<ThemeStudio>`, `<AiChat>`, `<PromptBar>`, `<AiThought>`, `<AiToolCall>`, `<LineChart>`, `<BarChart>`, `<DonutChart>`, `<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`, `useIdle`, `useGate`, `useUpload`, `useToast`, `toast`, `definePageSeo`, `defineSiteConfig`, `cn`, `tv`. |
 | `yaxa-svelte/yaxa.css` | **Turnkey Tailwind CSS v4 Stylesheet**: Full standalone stylesheet importing `@import 'tailwindcss'`, `@plugin '@tailwindcss/typography'`, theme variables (`@theme`), harmonic radius multiplier scale, and adaptive scrollbars. |
-| `yaxa-svelte/theme.css` | **Standalone Tailwind CSS v4 Design Tokens**: Pure `@theme` variables, `:root` CSS variables, dark mode variants, and harmonic radius scale without `@import 'tailwindcss'`. Ideal for custom Tailwind pipelines using `@source`. |
+| `yaxa-svelte/theme.css` | **Standalone Tailwind CSS v4 Design Tokens**: Pure `@theme` variables, `:root` CSS variables, dark mode variants, and harmonic radius scale without `@import 'tailwindcss'`. Ideal for custom Tailwind pipelines (automatically scans component templates via embedded `@source`). |
 | `yaxa-svelte/server` | **Server Hooks & SEO Endpoints**: `createYaxaHook` (handles `/robots.txt`, `/sitemap.xml`, `/site.webmanifest`, `/api/og`), `createYaxaAuthHook` (multi-tenant session resolution on `event.locals.orgId`). |
 | `yaxa-svelte/auth` | **Better-Auth Integration**: `<AuthCard>`, `<PasskeyUI>`, `<TwoFactorModal>`, `useAuth`, `createYaxaAuth` (pre-wired for Drizzle & Multi-Tenant Organizations). |
 | `yaxa-svelte/admin` | **Drizzle ORM Admin Suite**: `createYaxaAdminHook`, `<AdminDashboard>`, `<DevSandbox>`, `<RecordDrawer>`. |
@@ -144,7 +144,6 @@ Wrap your application in `<YaxaApp>` inside `src/routes/+layout.svelte`. It prov
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 @import 'yaxa-svelte/theme.css';
-@source "../node_modules/yaxa-svelte/dist/**/*.{js,svelte}";
 ```
 
 Then in `src/routes/+layout.svelte`, import `../app.css` instead of `yaxa.css`:

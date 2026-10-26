@@ -76,5 +76,4 @@ export default defineConfig({
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 @import 'yaxa-svelte/theme.css';
-@source "../node_modules/yaxa-svelte/dist/**/*.{js,svelte}";
 ```
