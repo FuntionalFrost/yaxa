@@ -64,4 +64,24 @@ describe('CodeDiff Component & Diff Algorithm', () => {
 
 		cleanup();
 	});
+
+	it('should highlight modern Python 3.13 and macro tokens in diff view', () => {
+		const original = `def check(val: object):\n  return False`;
+		const modified = `@deprecated\ndef check(val: object) -> TypeIs[str]:\n  return True`;
+
+		const { target, cleanup } = renderComponent(CodeDiff, {
+			original,
+			modified,
+			filename: 'validator.py',
+			language: 'python',
+			viewMode: 'unified'
+		});
+
+		expect(target.textContent).toContain('@deprecated');
+		expect(target.textContent).toContain('TypeIs');
+		expect(target.textContent).toContain('+3');
+		expect(target.textContent).toContain('-2');
+
+		cleanup();
+	});
 });

@@ -318,6 +318,8 @@
 										>{token.text}</span
 									>{:else if token.type === 'macro'}<span
 										class="font-semibold text-indigo-600 dark:text-indigo-400">{token.text}</span
+									>{:else if token.type === 'decorator'}<span
+										class="text-purple-600 dark:text-purple-400">{token.text}</span
 									>{:else if token.type === 'number'}<span
 										class="text-purple-600 dark:text-purple-400">{token.text}</span
 									>{:else if token.type === 'punctuation'}<span
@@ -378,6 +380,12 @@
 									<span class="text-amber-600 dark:text-amber-300">{token.text}</span>
 								{:else if token.type === 'function'}
 									<span class="text-sky-600 dark:text-sky-400">{token.text}</span>
+								{:else if token.type === 'macro'}
+									<span class="font-semibold text-indigo-600 dark:text-indigo-400"
+										>{token.text}</span
+									>
+								{:else if token.type === 'decorator'}
+									<span class="text-purple-600 dark:text-purple-400">{token.text}</span>
 								{:else if token.type === 'number'}
 									<span class="text-purple-600 dark:text-purple-400">{token.text}</span>
 								{:else if token.type === 'punctuation'}
@@ -437,6 +445,12 @@
 									<span class="text-amber-600 dark:text-amber-300">{token.text}</span>
 								{:else if token.type === 'function'}
 									<span class="text-sky-600 dark:text-sky-400">{token.text}</span>
+								{:else if token.type === 'macro'}
+									<span class="font-semibold text-indigo-600 dark:text-indigo-400"
+										>{token.text}</span
+									>
+								{:else if token.type === 'decorator'}
+									<span class="text-purple-600 dark:text-purple-400">{token.text}</span>
 								{:else if token.type === 'number'}
 									<span class="text-purple-600 dark:text-purple-400">{token.text}</span>
 								{:else if token.type === 'punctuation'}

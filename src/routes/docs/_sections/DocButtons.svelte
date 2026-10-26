@@ -137,6 +137,22 @@ export const Metric: React.FC<MetricProps> = ({ label, initialValue = 0 }) => {
   );
 };`;
 
+	const samplePythonSnippet = `"""
+Zero-WASM Python 3.13+ syntax sample.
+Demonstrates PEP 695 type parameters, PEP 742 TypeIs narrowing, and match/case.
+"""
+from typing import TypeIs
+
+type Point[T = int] = tuple[T, T]
+
+@deprecated
+def is_str(val: object) -> TypeIs[str]:
+    match val:
+        case str():
+            return True
+        case _:
+            return False`;
+
 	const buttonSnippet = `<Button variant="solid" color="primary">Solid</Button>
 <Button variant="outline">Outline</Button>
 <Button variant="soft">Soft</Button>
@@ -201,7 +217,7 @@ export const Metric: React.FC<MetricProps> = ({ label, initialValue = 0 }) => {
 <div class="space-y-8">
 	<!-- Live Interactive Button Playground -->
 	<DocSandbox title="Interactive Button Playground" code={dynamicButtonSnippet}>
-		<div class="flex min-h-[80px] items-center justify-center">
+		<div class="flex min-h-20 items-center justify-center">
 			<Button variant={pgVariant} color={pgColor} size={pgSize} disabled={pgDisabled}>
 				Interactive Button
 			</Button>
@@ -537,6 +553,14 @@ export const Metric: React.FC<MetricProps> = ({ label, initialValue = 0 }) => {
 				code={sampleTsxSnippet}
 				language="tsx"
 				filename="Metric.tsx"
+				showLineNumbers={true}
+			/>
+
+			<!-- Python 3.13+ Snippet -->
+			<CodeBlock
+				code={samplePythonSnippet}
+				language="python"
+				filename="validator.py"
 				showLineNumbers={true}
 			/>
 		</div>

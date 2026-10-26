@@ -243,10 +243,22 @@ Features:
 
 ### 7.1 `<CodeBlock>`
 
-Zero-dependency syntax highlighter supporting Svelte, TypeScript, JavaScript, CSS, HTML, JSON, Bash, Python, Rust, Go, SQL, GraphQL, Vue, JSX/TSX, and LaTeX.
+Zero-dependency, zero-WASM syntax highlighter with multi-line state preservation supporting:
 
-- Automatic copy-to-clipboard button.
-- Optional line numbers and filename header.
+- **Python (2.7, 3.0 up to 3.13+)**: PEP 695 type parameter syntax (`type Point[T] = ...`), PEP 696 type defaults, PEP 742 `TypeIs` / `TypeGuard` narrowing, `Self`, decorators (`@\w+`), docstrings (`"""..."""`, `'''...'''`), walrus (`:=`), return arrows (`->`), pattern matching (`match`/`case`), built-in types, and numeric separators (`1_000_000`).
+- **Svelte 5**: Native runes (`$state`, `$state.raw`, `$derived`, `$derived.by`, `$effect`, `$props`, `$bindable`, `$inspect`, `$host`), control-flow blocks (`{#if}`, `{:else if}`, `{:else}`, `{#each}`, `{#await}`, `{#snippet}`, `{@render}`, `{@const}`, `{@html}`), and `<!-- -->` comments.
+- **Modern JavaScript & TypeScript**: Full support for ES2026 (ES17) proposals and TypeScript 6, including `using`/`await using`, `defer` imports, auto-accessors (`accessor`), `override`, `declare`, `asserts`, `is`, utility types (`Record`, `Partial`, `Pick`, `Omit`, `Awaited`, etc.), BigInts (`n`), and numeric separators.
+- **Tailwind CSS v4 & CSS**: Directives (`@theme`, `@utility`, `@custom-variant`, `@source`, `@plugin`, `@apply`, `@keyframes`, etc.), custom properties (`--color-*`), hex colors, and property declarations.
+- **Bash / Shell**: Variables (`$VAR`, `${VAR}`), flags (`-f`, `--output`), and utilities (`curl`, `docker`, `pnpm`, etc.).
+- **JSON**: Differentiates object keys from string values.
+- **Markdown & GFM**: Headings, blockquotes, task lists (`- [x]`), fenced code blocks, and horizontal rules.
+- **Rust, Go, SQL, GraphQL, Vue, JSX/TSX, and LaTeX Math**.
+
+Features:
+
+- Multi-line state preservation across line breaks for docstrings, template literals, and block comments.
+- Automatic copy-to-clipboard button with toast feedback.
+- Optional line numbers, line highlighting (`highlightLines={[2, 3]}`), wrap toggle, and filename header.
 
 ### 7.2 `<CodeDiff>`
 

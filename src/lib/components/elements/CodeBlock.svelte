@@ -32,7 +32,7 @@
 			| 'decorator';
 	}
 
-	// Zero-WASM Multi-Language Pure JavaScript Tokenizer with Svelte 5 Rune Recognition
+	// Zero-WASM Multi-Language Pure JavaScript Tokenizer with Svelte 5 Rune Recognition & Multi-Line State
 	export function tokenizeCode(code: string, language: string = 'typescript'): Token[][] {
 		const lines = code.split('\n');
 		const lang = language.toLowerCase();
@@ -41,41 +41,144 @@
 		const isLatex = ['latex', 'tex', 'math'].includes(lang);
 		const isVue = lang === 'vue';
 		const isJsx = ['tsx', 'jsx', 'react'].includes(lang);
+		const isTs = ['typescript', 'ts', 'tsx'].includes(lang);
+		const isJs = ['javascript', 'js', 'jsx', 'mjs', 'cjs'].includes(lang);
 		const isSvelte = ['svelte', 'svelte5', 'sv'].includes(lang);
 		const isHtml = ['html', 'xml', 'svg'].includes(lang);
 		const isPython = ['python', 'py'].includes(lang);
 		const isSql = lang === 'sql';
 		const isBash = ['bash', 'sh', 'zsh', 'shell'].includes(lang);
+		const isJson = ['json', 'jsonc', 'json5'].includes(lang);
+		const isCss = ['css', 'scss', 'postcss', 'tailwind', 'tailwindcss'].includes(lang);
+
+		let multilineState:
+			| null
+			| { type: 'comment'; delimiter: '/*' | '<!--' }
+			| { type: 'string'; delimiter: '"""' | "'''" | '`' } = null;
 
 		return lines.map((line) => {
-			if (!line) return [{ text: '', type: 'plain' }];
+			if (!line) {
+				if (multilineState !== null) {
+					return [{ text: '', type: multilineState.type }];
+				}
+				return [{ text: '', type: 'plain' }];
+			}
 
-			// Special full-line rule: Markdown Headings (# Header)
-			if (isMarkdown) {
-				const headingMatch = line.match(/^(#{1,6}\s+)(.*)$/);
+			const tokens: Token[] = [];
+			let remaining = line;
+
+			// Handle multi-line comment or string continuation from previous line
+			if (multilineState !== null) {
+				if (multilineState.type === 'comment') {
+					const closeDelim = multilineState.delimiter === '/*' ? '*/' : '-->';
+					const closeIdx = remaining.indexOf(closeDelim);
+					if (closeIdx !== -1) {
+						const endIdx = closeIdx + closeDelim.length;
+						tokens.push({ text: remaining.slice(0, endIdx), type: 'comment' });
+						remaining = remaining.slice(endIdx);
+						multilineState = null;
+					} else {
+						tokens.push({ text: remaining, type: 'comment' });
+						return tokens;
+					}
+				} else if (multilineState.type === 'string') {
+					const delim = multilineState.delimiter;
+					if (delim === '`') {
+						const closeMatch = remaining.match(/^(?:[^`\\]|\\.)*?`/);
+						if (closeMatch) {
+							tokens.push({ text: closeMatch[0], type: 'string' });
+							remaining = remaining.slice(closeMatch[0].length);
+							multilineState = null;
+						} else {
+							tokens.push({ text: remaining, type: 'string' });
+							return tokens;
+						}
+					} else {
+						// Python triple quotes """ or '''
+						const closeIdx = remaining.indexOf(delim);
+						if (closeIdx !== -1) {
+							const endIdx = closeIdx + delim.length;
+							tokens.push({ text: remaining.slice(0, endIdx), type: 'string' });
+							remaining = remaining.slice(endIdx);
+							multilineState = null;
+						} else {
+							tokens.push({ text: remaining, type: 'string' });
+							return tokens;
+						}
+					}
+				}
+			}
+
+			// Special full-line Markdown rules
+			if (isMarkdown && remaining === line) {
+				// Fenced code blocks (```lang or ~~~lang)
+				const fenceMatch = remaining.match(/^(\s*(?:`{3,}|~{3,})[\w-]*\s*)$/);
+				if (fenceMatch) {
+					return [{ text: fenceMatch[1], type: 'macro' }];
+				}
+				// Frontmatter & Horizontal rule (--- or ***)
+				const hrMatch = remaining.match(/^(\s*(?:---|___|\*\*\*)\s*)$/);
+				if (hrMatch) {
+					return [{ text: hrMatch[1], type: 'punctuation' }];
+				}
+				// Markdown Headings (# Header)
+				const headingMatch = remaining.match(/^(#{1,6}\s+)(.*)$/);
 				if (headingMatch) {
 					return [
 						{ text: headingMatch[1], type: 'punctuation' },
 						{ text: headingMatch[2], type: 'heading' }
 					];
 				}
-				const blockquoteMatch = line.match(/^(\s*>\s+)(.*)$/);
+				// Blockquotes (> Quote)
+				const blockquoteMatch = remaining.match(/^(\s*>\s+)(.*)$/);
 				if (blockquoteMatch) {
 					return [
 						{ text: blockquoteMatch[1], type: 'punctuation' },
 						{ text: blockquoteMatch[2], type: 'italic' }
 					];
 				}
+				// Lists & Task checkboxes (- [x] Item, * Item, 1. Item)
+				const listMatch = remaining.match(/^(\s*(?:[-*+]|\d+\.)(?:\s+\[[ xX]\])?\s+)(.*)$/);
+				if (listMatch) {
+					return [
+						{ text: listMatch[1], type: 'punctuation' },
+						{ text: listMatch[2], type: 'plain' }
+					];
+				}
 			}
-
-			const tokens: Token[] = [];
-			let remaining = line;
 
 			while (remaining.length > 0) {
 				// 1. Comments
+				if (!isLatex && remaining.startsWith('/*')) {
+					const closeIdx = remaining.indexOf('*/', 2);
+					if (closeIdx !== -1) {
+						const endIdx = closeIdx + 2;
+						tokens.push({ text: remaining.slice(0, endIdx), type: 'comment' });
+						remaining = remaining.slice(endIdx);
+						continue;
+					} else {
+						tokens.push({ text: remaining, type: 'comment' });
+						multilineState = { type: 'comment', delimiter: '/*' };
+						break;
+					}
+				}
+
+				if ((isMarkdown || isHtml || isSvelte || isVue) && remaining.startsWith('<!--')) {
+					const closeIdx = remaining.indexOf('-->', 4);
+					if (closeIdx !== -1) {
+						const endIdx = closeIdx + 3;
+						tokens.push({ text: remaining.slice(0, endIdx), type: 'comment' });
+						remaining = remaining.slice(endIdx);
+						continue;
+					} else {
+						tokens.push({ text: remaining, type: 'comment' });
+						multilineState = { type: 'comment', delimiter: '<!--' };
+						break;
+					}
+				}
+
 				if (
-					(!isLatex && (remaining.startsWith('//') || remaining.startsWith('/*'))) ||
-					((isMarkdown || isHtml || isSvelte || isVue) && remaining.startsWith('<!--')) ||
+					(!isLatex && remaining.startsWith('//')) ||
 					((isPython || isBash || lang === 'env' || lang === 'yaml' || lang === 'yml') &&
 						remaining.startsWith('#')) ||
 					(isLatex && remaining.startsWith('%')) ||
@@ -85,7 +188,86 @@
 					break;
 				}
 
-				// 2. LaTeX Math Macros and Math Blocks
+				// 2. Python Triple-Quoted Strings (Docstrings)
+				if (isPython && (remaining.startsWith('"""') || remaining.startsWith("'''"))) {
+					const delim = remaining.startsWith('"""') ? '"""' : "'''";
+					const closeIdx = remaining.indexOf(delim, 3);
+					if (closeIdx !== -1) {
+						const endIdx = closeIdx + 3;
+						tokens.push({ text: remaining.slice(0, endIdx), type: 'string' });
+						remaining = remaining.slice(endIdx);
+						continue;
+					} else {
+						tokens.push({ text: remaining, type: 'string' });
+						multilineState = { type: 'string', delimiter: delim };
+						break;
+					}
+				}
+
+				// 3. Multi-line Template Literals (Backticks) for JS / TS / Svelte / Vue
+				if ((isJs || isTs || isSvelte || isVue) && remaining.startsWith('`')) {
+					const fullBacktickMatch = remaining.match(/^(`(?:[^`\\]|\\.)*`)/);
+					if (fullBacktickMatch) {
+						tokens.push({ text: fullBacktickMatch[0], type: 'string' });
+						remaining = remaining.slice(fullBacktickMatch[0].length);
+						continue;
+					} else {
+						tokens.push({ text: remaining, type: 'string' });
+						multilineState = { type: 'string', delimiter: '`' };
+						break;
+					}
+				}
+
+				// 4. JSON Object Keys ("key":)
+				if (isJson) {
+					const jsonKeyMatch = remaining.match(/^("(?:[^"\\]|\\.)*")(?=\s*:)/);
+					if (jsonKeyMatch) {
+						tokens.push({ text: jsonKeyMatch[1], type: 'attr' });
+						remaining = remaining.slice(jsonKeyMatch[1].length);
+						continue;
+					}
+				}
+
+				// 5. CSS & Tailwind CSS v4 At-Rules, Variables & Colors
+				if (isCss) {
+					// Tailwind v4 & CSS At-rules (@theme, @utility, @source, @plugin, @import, @custom-variant, etc.)
+					const atRuleMatch = remaining.match(
+						/^(@(?:theme|utility|custom-variant|source|plugin|import|apply|keyframes|media|supports|container|layer|font-face|page|starting-style))\b/
+					);
+					if (atRuleMatch) {
+						tokens.push({ text: atRuleMatch[0], type: 'directive' });
+						remaining = remaining.slice(atRuleMatch[0].length);
+						continue;
+					}
+
+					// CSS Custom Properties / Design Tokens (--color-primary-500, etc.)
+					const cssVarMatch = remaining.match(/^(--[\w-]+)/);
+					if (cssVarMatch) {
+						tokens.push({ text: cssVarMatch[0], type: 'macro' });
+						remaining = remaining.slice(cssVarMatch[0].length);
+						continue;
+					}
+
+					// Hex Color Literals (#ff3e00, #18181b, etc.)
+					const hexColorMatch = remaining.match(
+						/^#(?:[0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{4}|[0-9a-fA-F]{3})\b/
+					);
+					if (hexColorMatch) {
+						tokens.push({ text: hexColorMatch[0], type: 'number' });
+						remaining = remaining.slice(hexColorMatch[0].length);
+						continue;
+					}
+
+					// CSS Properties before colon (e.g. display:, background-color:)
+					const cssPropMatch = remaining.match(/^([\w-]+)(?=\s*:)/);
+					if (cssPropMatch && !cssPropMatch[0].startsWith('-')) {
+						tokens.push({ text: cssPropMatch[0], type: 'keyword' });
+						remaining = remaining.slice(cssPropMatch[0].length);
+						continue;
+					}
+				}
+
+				// 6. LaTeX Math Macros and Math Blocks
 				if (isLatex) {
 					const macroMatch = remaining.match(/^(\\[a-zA-Z]+|\\\[|\\\]|\\\(|\\\))/);
 					if (macroMatch) {
@@ -101,7 +283,7 @@
 					}
 				}
 
-				// 3. Markdown Formatting (Bold, Italic, Code, Links)
+				// 7. Markdown Formatting (Bold, Italic, Code, Links)
 				if (isMarkdown) {
 					const codeMatch = remaining.match(/^(`[^`]+`)/);
 					if (codeMatch) {
@@ -124,17 +306,7 @@
 					}
 				}
 
-				// 4. Strings
-				const strMatch = remaining.match(
-					/^("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)/
-				);
-				if (strMatch) {
-					tokens.push({ text: strMatch[0], type: 'string' });
-					remaining = remaining.slice(strMatch[0].length);
-					continue;
-				}
-
-				// 5. Python Decorators (@decorator)
+				// 8. Python Decorators (@decorator)
 				if (isPython) {
 					const decMatch = remaining.match(/^(@\w+)/);
 					if (decMatch) {
@@ -144,7 +316,70 @@
 					}
 				}
 
-				// 6. Vue / Svelte / JSX Directives & Tags
+				// 9. Python Built-in Types & Modern Typing Constructs (Python 3.0 to 3.13+)
+				if (isPython) {
+					const pyTypeMatch = remaining.match(
+						/^(str|int|float|bool|dict|list|tuple|set|bytes|Any|Optional|Union|Callable|Literal|TypeIs|TypeGuard|Self)\b/
+					);
+					if (pyTypeMatch) {
+						tokens.push({ text: pyTypeMatch[0], type: 'macro' });
+						remaining = remaining.slice(pyTypeMatch[0].length);
+						continue;
+					}
+				}
+
+				// 10. TypeScript / JavaScript Primitive Types & Type Operators (TS 5.x / TS 6 & ES2026)
+				if (isTs || isJs) {
+					const tsTypeMatch = remaining.match(
+						/^(string|number|boolean|unknown|never|any|void|readonly|satisfies|keyof|infer|Promise|Record|Array|Partial|Omit|Pick|Awaited|ReturnType|Parameters|ConstructorParameters|InstanceType|Extract|Exclude|NonNullable|Uppercase|Lowercase|Capitalize|Uncapitalize|Disposable|AsyncDisposable|BigInt|Symbol)\b/
+					);
+					if (tsTypeMatch) {
+						tokens.push({ text: tsTypeMatch[0], type: 'macro' });
+						remaining = remaining.slice(tsTypeMatch[0].length);
+						continue;
+					}
+				}
+
+				// 11. Bash / Shell Variables & CLI Flags
+				if (isBash) {
+					const bashVarMatch = remaining.match(/^(\$\{?[\w#?@*!$-]+\}?)/);
+					if (bashVarMatch) {
+						tokens.push({ text: bashVarMatch[0], type: 'macro' });
+						remaining = remaining.slice(bashVarMatch[0].length);
+						continue;
+					}
+					const bashFlagMatch = remaining.match(/^(--?[\w-]+)/);
+					if (bashFlagMatch) {
+						tokens.push({ text: bashFlagMatch[0], type: 'attr' });
+						remaining = remaining.slice(bashFlagMatch[0].length);
+						continue;
+					}
+				}
+
+				// 12. Svelte 5 Native Runes & Template Logic Blocks
+				if (isSvelte) {
+					// Svelte 5 Runes ($state, $derived, $props, $effect, etc.)
+					const svelteRuneMatch = remaining.match(
+						/^(\$(?:state(?:\.raw|\.snapshot)?|derived(?:\.by)?|effect(?:\.pre|\.root)?|props|bindable|inspect(?:\.trace)?|host))\b/
+					);
+					if (svelteRuneMatch) {
+						tokens.push({ text: svelteRuneMatch[0], type: 'rune' });
+						remaining = remaining.slice(svelteRuneMatch[0].length);
+						continue;
+					}
+
+					// Svelte Control Flow & Snippets ({#if}, {#each}, {#snippet}, {@render}, {@html}, etc.)
+					const svelteBlockMatch = remaining.match(
+						/^(\{(?:#(?:if|each|await|snippet|key)|:(?:else\s+if|else|then|catch)|\/(?:if|each|await|snippet|key)|@(?:render|html|const|debug)))\b/
+					);
+					if (svelteBlockMatch) {
+						tokens.push({ text: svelteBlockMatch[0], type: 'directive' });
+						remaining = remaining.slice(svelteBlockMatch[0].length);
+						continue;
+					}
+				}
+
+				// 13. HTML / Vue / Svelte / JSX Tags & Attributes
 				if (isVue || isSvelte || isHtml || isJsx) {
 					const tagMatch = remaining.match(/^(<\/?[\w.:-]+|\/>|>)/);
 					if (tagMatch) {
@@ -170,19 +405,19 @@
 					}
 				}
 
-				// 7. Svelte 5 Native Runes ($state, $state.raw, $derived, $derived.by, $effect, $props, $bindable, etc.)
-				const svelteRuneMatch = remaining.match(
-					/^(\$(?:state(?:\.raw|\.snapshot)?|derived(?:\.by)?|effect(?:\.pre|\.root)?|props|bindable|inspect(?:\.trace)?|host))\b/
+				// 14. Standard Strings (Single & Double Quoted)
+				const strMatch = remaining.match(
+					/^("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*'|`(?:[^`\\]|\\.)*`)/
 				);
-				if (svelteRuneMatch) {
-					tokens.push({ text: svelteRuneMatch[0], type: 'rune' });
-					remaining = remaining.slice(svelteRuneMatch[0].length);
+				if (strMatch) {
+					tokens.push({ text: strMatch[0], type: 'string' });
+					remaining = remaining.slice(strMatch[0].length);
 					continue;
 				}
 
-				// 8. Keywords Across Languages
+				// 15. Keywords Across Languages (including ES2026 and TS6)
 				const kwMatch = remaining.match(
-					/^(import|export|from|default|const|let|var|function|return|async|await|class|interface|type|extends|implements|new|this|typeof|instanceof|if|else|switch|case|break|for|while|try|catch|finally|throw|as|in|of|true|false|null|undefined|fn|mut|struct|enum|impl|trait|pub|use|mod|crate|where|loop|unsafe|package|func|defer|go|chan|select|iota|def|self|yield|lambda|elif|except|with|None|True|False|pass|query|mutation|subscription|schema|scalar|fragment|directive|SELECT|INSERT|UPDATE|DELETE|FROM|WHERE|JOIN|GROUP|ORDER|BY|LIMIT|pnpm|npm|npx|bun|yarn|git|docker)\b/i
+					/^(import|export|from|default|const|let|var|function|return|async|await|class|interface|type|extends|implements|new|this|typeof|instanceof|if|else|switch|case|break|for|while|try|catch|finally|throw|as|in|of|true|false|null|undefined|fn|mut|struct|enum|impl|trait|pub|use|mod|crate|where|loop|unsafe|package|func|defer|go|chan|select|iota|def|self|yield|lambda|elif|except|with|None|True|False|pass|assert|raise|match|when|using|accessor|override|declare|namespace|asserts|is|del|global|nonlocal|query|mutation|subscription|schema|scalar|fragment|directive|SELECT|INSERT|UPDATE|DELETE|FROM|WHERE|JOIN|GROUP|ORDER|BY|LIMIT|pnpm|npm|npx|bun|yarn|git|docker|curl|wget|mkdir|echo|cat|rm|cp|mv|chmod|chown|sudo|cd|ls|pwd|grep|sed|awk)\b/i
 				);
 				if (kwMatch) {
 					tokens.push({ text: kwMatch[0], type: 'keyword' });
@@ -190,7 +425,7 @@
 					continue;
 				}
 
-				// 9. React Hooks / Generic Macro tokens
+				// 16. React Hooks / Generic Macro tokens
 				const macroMatch = remaining.match(/^(use[A-Z]\w+)\b/);
 				if (macroMatch) {
 					tokens.push({ text: macroMatch[0], type: 'macro' });
@@ -198,7 +433,7 @@
 					continue;
 				}
 
-				// 10. Function invocations (funcName())
+				// 17. Function Invocations (funcName())
 				const fnMatch = remaining.match(/^(\$?\w+)(?=\s*\()/);
 				if (fnMatch) {
 					tokens.push({ text: fnMatch[0], type: 'function' });
@@ -206,15 +441,17 @@
 					continue;
 				}
 
-				// 11. Numbers
-				const numMatch = remaining.match(/^\b(\d+(?:\.\d+)?(?:px|rem|em|%|vh|vw|s|ms)?)\b/);
+				// 18. Numbers (integers, floats, scientific, BigInt, hex, binary, octal & CSS units)
+				const numMatch = remaining.match(
+					/^(?:0[xX][0-9a-fA-F_]+n?|0[bB][01_]+n?|0[oO][0-7_]+n?|\b\d[\d_]*(?:\.[\d_]+)?(?:[eE][+-]?[\d_]+)?n?(?:px|rem|em|%|vh|vw|dvh|dvw|s|ms)?)\b/
+				);
 				if (numMatch) {
 					tokens.push({ text: numMatch[0], type: 'number' });
 					remaining = remaining.slice(numMatch[0].length);
 					continue;
 				}
 
-				// 12. Punctuation & Math Operators
+				// 19. Punctuation & Math Operators
 				const punctMatch = remaining.match(/^([{}()[\].,;:?!=<>+\-*/%&|^~_^\\]+)/);
 				if (punctMatch) {
 					tokens.push({ text: punctMatch[0], type: 'punctuation' });
@@ -222,7 +459,7 @@
 					continue;
 				}
 
-				// 13. Plain text / whitespace
+				// 20. Plain text / whitespace
 				const plainMatch = remaining.match(/^([\w$]+|\s+)/);
 				if (plainMatch) {
 					tokens.push({ text: plainMatch[0], type: 'plain' });
@@ -354,7 +591,7 @@
 			? 'text-neutral-800 dark:text-neutral-200'
 			: 'text-neutral-200'} {wrap ? 'whitespace-pre-wrap' : 'whitespace-pre'}"><code
 			class="language-{language}"
-			>{#each tokenizedLines as lineTokens, lineIdx}{@const lineNum =
+			>{#each tokenizedLines as lineTokens, lineIdx (lineIdx)}{@const lineNum =
 					lineIdx + 1}{@const isHighlighted = highlightLines.includes(lineNum)}<div
 					class="table-row {isHighlighted
 						? '-mx-4 block border-l-2 border-primary-500 bg-primary-500/10 px-4'
@@ -363,7 +600,7 @@
 								? 'text-neutral-400 dark:text-neutral-600'
 								: 'text-neutral-600 dark:text-neutral-500'}">{lineNum}</span
 						>{/if}<span class="table-cell"
-						>{#each lineTokens as token}{#if token.type === 'rune'}<span
+						>{#each lineTokens as token, tokenIdx (tokenIdx)}{#if token.type === 'rune'}<span
 									class="font-bold text-amber-500 dark:text-amber-400">{token.text}</span
 								>{:else if token.type === 'keyword'}<span class="font-semibold text-primary-500"
 									>{token.text}</span
