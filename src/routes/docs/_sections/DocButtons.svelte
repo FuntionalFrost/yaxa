@@ -153,6 +153,48 @@ def is_str(val: object) -> TypeIs[str]:
         case _:
             return False`;
 
+	const sampleYamlSnippet = `name: yaxa-saas-stack
+version: 2.1.0
+enabled: true
+
+# Database configuration
+database:
+  driver: neon
+  ssl: true
+  pool:
+    max_connections: 20
+    timeout: 30s
+
+# Service anchors & environments
+production: &prod_env
+  domain: "yaxa.dev"
+  replicas: 3
+staging:
+  <<: *prod_env
+  domain: "staging.yaxa.dev"`;
+
+	const sampleTomlSnippet = `[package]
+name = "yaxa-engine"
+version = "2.1.0"
+edition = "2024"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+tokio = { version = "1.40", features = ["full"] }
+
+[server]
+host = "0.0.0.0"
+port = 8080
+workers = 4
+debug = false
+timeout = 1979-05-27T07:32:00Z
+
+# Multi-line documentation
+description = """
+High-performance zero-WASM
+syntax highlighting engine.
+"""`;
+
 	const buttonSnippet = `<Button variant="solid" color="primary">Solid</Button>
 <Button variant="outline">Outline</Button>
 <Button variant="soft">Soft</Button>
@@ -561,6 +603,22 @@ def is_str(val: object) -> TypeIs[str]:
 				code={samplePythonSnippet}
 				language="python"
 				filename="validator.py"
+				showLineNumbers={true}
+			/>
+
+			<!-- YAML Configuration Snippet -->
+			<CodeBlock
+				code={sampleYamlSnippet}
+				language="yaml"
+				filename="docker-compose.yml"
+				showLineNumbers={true}
+			/>
+
+			<!-- TOML Configuration Snippet -->
+			<CodeBlock
+				code={sampleTomlSnippet}
+				language="toml"
+				filename="Cargo.toml"
 				showLineNumbers={true}
 			/>
 		</div>

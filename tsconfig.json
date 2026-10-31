@@ -10,8 +10,6 @@
 		"src/**/*.js",
 		"src/**/*.ts",
 		"src/**/*.svelte",
-		"e2e/**/*.ts",
-		"playwright.config.ts",
 		"vite.config.ts",
 		".svelte-kit/ambient.d.ts",
 		".svelte-kit/non-ambient.d.ts",

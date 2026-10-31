@@ -46,10 +46,15 @@
 		const isSvelte = ['svelte', 'svelte5', 'sv'].includes(lang);
 		const isHtml = ['html', 'xml', 'svg'].includes(lang);
 		const isPython = ['python', 'py'].includes(lang);
-		const isSql = lang === 'sql';
+		const isRust = ['rust', 'rs'].includes(lang);
+		const isGo = ['go', 'golang'].includes(lang);
+		const isSql = ['sql', 'pgsql', 'postgres', 'postgresql', 'mysql', 'sqlite'].includes(lang);
+		const isGraphQL = ['graphql', 'gql'].includes(lang);
 		const isBash = ['bash', 'sh', 'zsh', 'shell'].includes(lang);
 		const isJson = ['json', 'jsonc', 'json5'].includes(lang);
 		const isCss = ['css', 'scss', 'postcss', 'tailwind', 'tailwindcss'].includes(lang);
+		const isYaml = ['yaml', 'yml'].includes(lang);
+		const isToml = ['toml', 'cargo'].includes(lang);
 
 		let multilineState:
 			| null
@@ -179,7 +184,7 @@
 
 				if (
 					(!isLatex && remaining.startsWith('//')) ||
-					((isPython || isBash || lang === 'env' || lang === 'yaml' || lang === 'yml') &&
+					((isPython || isBash || lang === 'env' || isYaml || isToml || isGraphQL) &&
 						remaining.startsWith('#')) ||
 					(isLatex && remaining.startsWith('%')) ||
 					(isSql && remaining.startsWith('--'))
@@ -188,8 +193,8 @@
 					break;
 				}
 
-				// 2. Python Triple-Quoted Strings (Docstrings)
-				if (isPython && (remaining.startsWith('"""') || remaining.startsWith("'''"))) {
+				// 2. Python & TOML Triple-Quoted Strings (Docstrings / Multiline)
+				if ((isPython || isToml) && (remaining.startsWith('"""') || remaining.startsWith("'''"))) {
 					const delim = remaining.startsWith('"""') ? '"""' : "'''";
 					const closeIdx = remaining.indexOf(delim, 3);
 					if (closeIdx !== -1) {
@@ -224,6 +229,110 @@
 					if (jsonKeyMatch) {
 						tokens.push({ text: jsonKeyMatch[1], type: 'attr' });
 						remaining = remaining.slice(jsonKeyMatch[1].length);
+						continue;
+					}
+				}
+
+				// 4b. YAML Key-Value Pairs, Anchors, Aliases & Directives
+				if (isYaml) {
+					// Anchors & Aliases (&anchor, *alias)
+					const anchorMatch = remaining.match(/^([&*][\w.-]+)/);
+					if (anchorMatch) {
+						tokens.push({ text: anchorMatch[0], type: 'macro' });
+						remaining = remaining.slice(anchorMatch[0].length);
+						continue;
+					}
+
+					// Tags (!!str, !!int, !!map, !custom)
+					const yamlTagMatch = remaining.match(/^(!{1,2}[\w.-]+)/);
+					if (yamlTagMatch) {
+						tokens.push({ text: yamlTagMatch[0], type: 'directive' });
+						remaining = remaining.slice(yamlTagMatch[0].length);
+						continue;
+					}
+
+					// Document start/end markers (--- or ...)
+					if (remaining === line) {
+						const docMarkerMatch = remaining.match(/^(\s*(?:---|(?:\.\.\.))\s*)$/);
+						if (docMarkerMatch) {
+							tokens.push({ text: docMarkerMatch[1], type: 'punctuation' });
+							remaining = remaining.slice(docMarkerMatch[1].length);
+							continue;
+						}
+					}
+
+					// Quoted keys before ':'
+					const yamlQuotedKeyMatch = remaining.match(
+						/^("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')(?=\s*:(?:\s|$))/
+					);
+					if (yamlQuotedKeyMatch) {
+						tokens.push({ text: yamlQuotedKeyMatch[1], type: 'attr' });
+						remaining = remaining.slice(yamlQuotedKeyMatch[1].length);
+						continue;
+					}
+
+					// Bare keys before ':'
+					const yamlKeyMatch = remaining.match(/^([\w.-]+)(?=\s*:(?:\s|$))/);
+					if (yamlKeyMatch) {
+						tokens.push({ text: yamlKeyMatch[0], type: 'attr' });
+						remaining = remaining.slice(yamlKeyMatch[0].length);
+						continue;
+					}
+
+					// YAML booleans, nulls & block scalar indicators
+					const yamlKwMatch = remaining.match(/^(true|false|yes|no|on|off|null|~|[|>][+-]?)\b/i);
+					if (yamlKwMatch) {
+						tokens.push({ text: yamlKwMatch[0], type: 'keyword' });
+						remaining = remaining.slice(yamlKwMatch[0].length);
+						continue;
+					}
+				}
+
+				// 4c. TOML Table Headers & Key-Value Pairs
+				if (isToml) {
+					// Table headers ([table] or [[array_of_tables]])
+					const tomlTableMatch = remaining.match(/^(\[\[?[\w.:"-]+\]\]?)/);
+					if (tomlTableMatch) {
+						tokens.push({ text: tomlTableMatch[0], type: 'directive' });
+						remaining = remaining.slice(tomlTableMatch[0].length);
+						continue;
+					}
+
+					// Quoted keys before '='
+					const tomlQuotedKeyMatch = remaining.match(
+						/^("(?:[^"\\]|\\.)*"|'(?:[^'\\]|\\.)*')(?=\s*=)/
+					);
+					if (tomlQuotedKeyMatch) {
+						tokens.push({ text: tomlQuotedKeyMatch[1], type: 'attr' });
+						remaining = remaining.slice(tomlQuotedKeyMatch[1].length);
+						continue;
+					}
+
+					// Bare or dotted keys before '='
+					const tomlKeyMatch = remaining.match(/^([\w.-]+)(?=\s*=)/);
+					if (tomlKeyMatch) {
+						tokens.push({ text: tomlKeyMatch[0], type: 'attr' });
+						remaining = remaining.slice(tomlKeyMatch[0].length);
+						continue;
+					}
+
+					// Special TOML float constants (+inf, -inf, nan)
+					const tomlFloatMatch = remaining.match(/^([+-]?(?:inf|nan))\b/i);
+					if (tomlFloatMatch) {
+						tokens.push({ text: tomlFloatMatch[0], type: 'number' });
+						remaining = remaining.slice(tomlFloatMatch[0].length);
+						continue;
+					}
+				}
+
+				// 4d. ISO Dates / Timestamps for YAML & TOML
+				if (isYaml || isToml) {
+					const dateMatch = remaining.match(
+						/^(\d{4}-\d{2}-\d{2}(?:[Tt\s]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:[Zz]|[+-]\d{2}:\d{2})?)?|\d{2}:\d{2}:\d{2}(?:\.\d+)?)\b/
+					);
+					if (dateMatch) {
+						tokens.push({ text: dateMatch[0], type: 'number' });
+						remaining = remaining.slice(dateMatch[0].length);
 						continue;
 					}
 				}
@@ -336,6 +445,126 @@
 					if (tsTypeMatch) {
 						tokens.push({ text: tsTypeMatch[0], type: 'macro' });
 						remaining = remaining.slice(tsTypeMatch[0].length);
+						continue;
+					}
+				}
+
+				// 10b. Rust Attributes, Macro Invocations, Lifetimes & Standard Types
+				if (isRust) {
+					// Rust Attributes (#[derive(Debug, Clone)], #![no_std])
+					const rustAttrMatch = remaining.match(/^#(!?\[[\w:,()=\s"-]+\])/);
+					if (rustAttrMatch) {
+						tokens.push({ text: rustAttrMatch[0], type: 'decorator' });
+						remaining = remaining.slice(rustAttrMatch[0].length);
+						continue;
+					}
+
+					// Rust Macro Invocations (println!, vec!, format!, panic!, etc.)
+					const rustMacroMatch = remaining.match(
+						/^(println|eprintln|print|eprint|format|vec|panic|assert|assert_eq|assert_ne|todo|unimplemented|unreachable|write|writeln|cfg|include|env|concat)!/
+					);
+					if (rustMacroMatch) {
+						tokens.push({ text: rustMacroMatch[0], type: 'macro' });
+						remaining = remaining.slice(rustMacroMatch[0].length);
+						continue;
+					}
+
+					// Rust Lifetimes ('a, 'static)
+					const lifetimeMatch = remaining.match(/^'(?:static|[a-z_]\w*)(?!')\b/);
+					if (lifetimeMatch) {
+						tokens.push({ text: lifetimeMatch[0], type: 'macro' });
+						remaining = remaining.slice(lifetimeMatch[0].length);
+						continue;
+					}
+
+					// Rust Primitive & Standard Types
+					const rustTypeMatch = remaining.match(
+						/^(i8|i16|i32|i64|i128|isize|u8|u16|u32|u64|u128|usize|f32|f64|bool|char|str|String|Option|Result|Vec|Box|Rc|Arc|Cell|RefCell|Mutex|RwLock|HashMap|HashSet|BTreeMap|BTreeSet|Self|None|Some|Ok|Err)\b/
+					);
+					if (rustTypeMatch) {
+						tokens.push({ text: rustTypeMatch[0], type: 'macro' });
+						remaining = remaining.slice(rustTypeMatch[0].length);
+						continue;
+					}
+				}
+
+				// 10c. Go Primitive Types & Built-ins
+				if (isGo) {
+					const goTypeMatch = remaining.match(
+						/^(string|int|int8|int16|int32|int64|uint|uint8|uint16|uint32|uint64|uintptr|byte|rune|float32|float64|complex64|complex128|error|any|bool)\b/
+					);
+					if (goTypeMatch) {
+						tokens.push({ text: goTypeMatch[0], type: 'macro' });
+						remaining = remaining.slice(goTypeMatch[0].length);
+						continue;
+					}
+
+					const goBuiltinMatch = remaining.match(
+						/^(make|len|cap|new|append|copy|close|delete|panic|recover|print|println|complex|real|imag)\b(?=\s*\()/
+					);
+					if (goBuiltinMatch) {
+						tokens.push({ text: goBuiltinMatch[0], type: 'function' });
+						remaining = remaining.slice(goBuiltinMatch[0].length);
+						continue;
+					}
+				}
+
+				// 10d. SQL Data Types & Clauses
+				if (isSql) {
+					// SQL Standard Data Types
+					const sqlTypeMatch = remaining.match(
+						/^(INTEGER|INT|BIGINT|SMALLINT|TINYINT|SERIAL|BIGSERIAL|VARCHAR|TEXT|CHAR|CHARACTER|BOOLEAN|BOOL|DATE|TIME|TIMESTAMP|TIMESTAMPTZ|NUMERIC|DECIMAL|FLOAT|REAL|DOUBLE\s+PRECISION|DOUBLE|JSON|JSONB|UUID|BLOB|BYTEA|ARRAY|INTERVAL)\b/i
+					);
+					if (sqlTypeMatch) {
+						tokens.push({ text: sqlTypeMatch[0], type: 'macro' });
+						remaining = remaining.slice(sqlTypeMatch[0].length);
+						continue;
+					}
+
+					// Comprehensive SQL Clauses & Keywords
+					const sqlKwMatch = remaining.match(
+						/^(CREATE|ALTER|DROP|TRUNCATE|TABLE|DATABASE|SCHEMA|VIEW|INDEX|TRIGGER|FUNCTION|PROCEDURE|PRIMARY|FOREIGN|KEY|REFERENCES|CONSTRAINT|CHECK|DEFAULT|UNIQUE|NOT|NULL|CASCADE|RESTRICT|SELECT|DISTINCT|FROM|WHERE|AND|OR|IN|BETWEEN|LIKE|ILIKE|IS|EXISTS|HAVING|GROUP|ORDER|BY|ASC|DESC|LIMIT|OFFSET|FETCH|FIRST|NEXT|ROWS|ONLY|JOIN|INNER|LEFT|RIGHT|FULL|OUTER|CROSS|ON|USING|INSERT|INTO|VALUES|UPDATE|SET|DELETE|RETURNING|UNION|INTERSECT|EXCEPT|ALL|CASE|WHEN|THEN|ELSE|END|AS|BEGIN|COMMIT|ROLLBACK|TRANSACTION|SAVEPOINT|GRANT|REVOKE|WITH|RECURSIVE|OVER|PARTITION)\b/i
+					);
+					if (sqlKwMatch) {
+						tokens.push({ text: sqlKwMatch[0], type: 'keyword' });
+						remaining = remaining.slice(sqlKwMatch[0].length);
+						continue;
+					}
+				}
+
+				// 10e. GraphQL Variables, Directives & Scalars
+				if (isGraphQL) {
+					// GraphQL Variables ($id, $input)
+					const gqlVarMatch = remaining.match(/^(\$[\w]+)\b/);
+					if (gqlVarMatch) {
+						tokens.push({ text: gqlVarMatch[0], type: 'macro' });
+						remaining = remaining.slice(gqlVarMatch[0].length);
+						continue;
+					}
+
+					// Directives (@include, @skip, @deprecated, @specifiedBy)
+					const gqlDirMatch = remaining.match(/^(@(?:include|skip|deprecated|specifiedBy))\b/);
+					if (gqlDirMatch) {
+						tokens.push({ text: gqlDirMatch[0], type: 'decorator' });
+						remaining = remaining.slice(gqlDirMatch[0].length);
+						continue;
+					}
+
+					// Core Scalars
+					const gqlScalarMatch = remaining.match(/^(String|Int|Float|Boolean|ID)\b/);
+					if (gqlScalarMatch) {
+						tokens.push({ text: gqlScalarMatch[0], type: 'macro' });
+						remaining = remaining.slice(gqlScalarMatch[0].length);
+						continue;
+					}
+
+					// GraphQL Keywords
+					const gqlKwMatch = remaining.match(
+						/^(query|mutation|subscription|fragment|on|type|input|interface|union|enum|scalar|schema|directive|extend)\b/
+					);
+					if (gqlKwMatch) {
+						tokens.push({ text: gqlKwMatch[0], type: 'keyword' });
+						remaining = remaining.slice(gqlKwMatch[0].length);
 						continue;
 					}
 				}

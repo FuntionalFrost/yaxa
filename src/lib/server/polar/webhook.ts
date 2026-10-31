@@ -1,5 +1,5 @@
 import type { RequestEvent } from '@sveltejs/kit';
-import { validateEvent } from '@polar-sh/sdk/webhooks';
+import { webhooks } from '@polar-sh/sdk/2026-10';
 import { eq } from 'drizzle-orm';
 import { getDb, schemaPg, schemaSqlite, type AnyDb } from '../db';
 
@@ -56,7 +56,7 @@ export function createPolarWebhookHandler(options: PolarWebhookOptions = {}) {
 					headersObj['webhook-signature'] = headersObj['polar-signature'];
 				}
 
-				payload = validateEvent(rawBody, headersObj, secret);
+				payload = await webhooks.validateEvent(rawBody, headersObj, secret);
 			} catch {
 				return new Response('Invalid or missing webhook signature', { status: 401 });
 			}
@@ -77,20 +77,22 @@ export function createPolarWebhookHandler(options: PolarWebhookOptions = {}) {
 
 			switch (eventType) {
 				case 'subscription.created': {
-					if (data && data.id && data.userId) {
+					const userId = data?.userId || data?.user_id || data?.customer_id;
+					if (data && data.id && userId) {
+						const periodEnd = data.currentPeriodEnd || data.current_period_end;
 						await (db as any)
 							.insert(subTable)
 							.values({
 								id: data.id,
-								userId: data.userId,
+								userId,
 								polarId: data.id,
 								status: data.status || 'active',
-								priceId: data.priceId || null,
-								productId: data.productId || null,
+								priceId: data.priceId || data.price_id || null,
+								productId: data.productId || data.product_id || null,
 								tier: data.product?.name?.toLowerCase() || 'pro',
-								interval: data.recurringInterval || 'month',
-								currentPeriodEnd: data.currentPeriodEnd ? new Date(data.currentPeriodEnd) : null,
-								cancelAtPeriodEnd: data.cancelAtPeriodEnd || false,
+								interval: data.recurringInterval || data.recurring_interval || 'month',
+								currentPeriodEnd: periodEnd ? new Date(periodEnd) : null,
+								cancelAtPeriodEnd: data.cancelAtPeriodEnd ?? data.cancel_at_period_end ?? false,
 								createdAt: new Date(),
 								updatedAt: new Date()
 							})
@@ -108,12 +110,13 @@ export function createPolarWebhookHandler(options: PolarWebhookOptions = {}) {
 
 				case 'subscription.updated': {
 					if (data && data.id) {
+						const periodEnd = data.currentPeriodEnd || data.current_period_end;
 						await (db as any)
 							.update(subTable)
 							.set({
 								status: data.status,
-								currentPeriodEnd: data.currentPeriodEnd ? new Date(data.currentPeriodEnd) : null,
-								cancelAtPeriodEnd: data.cancelAtPeriodEnd || false,
+								currentPeriodEnd: periodEnd ? new Date(periodEnd) : null,
+								cancelAtPeriodEnd: data.cancelAtPeriodEnd ?? data.cancel_at_period_end ?? false,
 								updatedAt: new Date()
 							})
 							.where(eq((subTable as any).polarId, data.id));

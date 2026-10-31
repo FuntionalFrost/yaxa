@@ -49,12 +49,18 @@
 7. **Multi-Dialect Database Factory (`getDb`)**:
    - Seamlessly switch between **Neon (PostgreSQL)** and **Turso (LibSQL/SQLite)** with Drizzle ORM via `DATABASE_DRIVER="neon" | "turso"`.
 
-8. **Polar.sh Automated Billing & Webhook Synchronization**:
-   - `createPolarCheckout` for instant hosted checkouts.
-   - `createPolarWebhookHandler` automatically syncs subscriptions, orders, and customer status directly into the Drizzle database.
+8. **Polar.sh Automated Billing & Webhook Synchronization (`@polar-sh/sdk` v1)**:
+   - `createPolarCheckout` for instant hosted checkouts with modern snake_case parameter mapping.
+   - `createPolarCustomerPortalSession` for typesafe customer billing portals.
+   - `createPolarWebhookHandler` supporting Standard Webhooks (`webhook-id`, `webhook-timestamp`, `webhook-signature`, `whsec_`) and syncing subscriptions directly into Drizzle database.
 
-9. **Resend Transactional Email Engine**:
-   - `sendMagicLinkEmail` and `sendWelcomeEmail` with responsive, branded HTML templates.
+9. **Tailwind CSS v4 & Variant Engine (`tailwind-variants` v4)**:
+   - Centralized in `src/lib/utils/cn.ts` with `tailwind-merge@3.7.0` under the hood.
+   - Native conflict resolution for Tailwind v4 CSS variable utilities (`bg-(--var)`), dynamic modifiers, and `@theme` tokens.
+
+10. **Resend Transactional Email Engine**:
+
+- `sendMagicLinkEmail` and `sendWelcomeEmail` with responsive, branded HTML templates.
 
 ---
 
@@ -64,7 +70,7 @@
 - **AI Primitives**: `<AiChat>`, `<PromptBar>`, `<AiThought>`, `<AiToolCall>`.
 - **Charts (Pure SVG)**: `<LineChart>`, `<BarChart>`, `<DonutChart>`.
 - **SaaS Suite**: `<Gate>`, `<AuthCard>`, `<UserMenu>`, `<OrgSwitcher>`, `<PricingCard>`, `<PricingTable>`, `<SubscriptionCard>`, `useAuth()`.
-- **Elements**: `Button`, `ButtonGroup`, `Badge`, `Avatar`, `AvatarGroup`, `DataTable` (with Column Visibility & Export), `Chip`, `Meter`, `MetricCard`, `Kbd`, `Icon`, `Spinner`, `Progress`, `Skeleton`, `Link`, `Logo`, `CodeBlock` (with Svelte 5 Runes, Python 3.13+, ES2026/TS6 & Tailwind v4 Highlighting), `Tree`, `Timeline`, `Terminal`, `VirtualList`, `Carousel`.
+- **Elements**: `Button`, `ButtonGroup`, `Badge`, `Avatar`, `AvatarGroup`, `DataTable` (with Column Visibility & Export), `Chip`, `Meter`, `MetricCard`, `Kbd`, `Icon`, `Spinner`, `Progress`, `Skeleton`, `Link`, `Logo`, `CodeBlock` (with Svelte 5 Runes, Python 3.13+, ES2026/TS6, Tailwind v4, YAML, TOML, Rust, Go, SQL & GraphQL Highlighting), `Tree`, `Timeline`, `Terminal`, `VirtualList`, `Carousel`.
 - **Forms**: `Form`, `FormField`, `Input`, `InputOTP`, `Textarea`, `Checkbox`, `Switch`, `Select`, `Combobox`, `MultiSelect`, `NumberInput`, `RadioGroup`, `Slider`, `ColorPicker`, `ToggleGroup`, `DatePicker`, `DateRangePicker`, `Dropzone`, `<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`.
 - **Layout**: `Container`, `Header`, `Footer`, `Section`, `Card`, `Divider`, `YaxaApp`, `DashboardShell` (with independent sidebar tokens), `ResizablePanels`.
 - **Navigation & Overlays**: `Tabs`, `Breadcrumb`, `Pagination`, `CommandPalette` (`⌘K`), `DropdownMenu`, `ContextMenu`, `Modal`, `Drawer`, `Slideover`, `Popover`, `Tooltip` (with `arrow={false}` & `unstyled`), `Alert`, `Accordion`, `NotificationCenter`, `Stepper`.
@@ -84,7 +90,7 @@
 ## ✅ Verification Results
 
 - **`pnpm check`**: **0 errors, 0 warnings**
-- **`pnpm test`**: **59 test files passed, 188 unit tests passed**
+- **`pnpm test`**: **61 test files passed, 214 unit & DOM tests passed** (Zero external browser dependencies; Playwright fully replaced with in-memory Vitest suites)
 - **`pnpm build`**: **Production build & SSR bundle succeeded**
 - **`pnpm package`**: **Library distribution (`dist/`) generated**
 - **`pnpm format`**: **All files formatted cleanly with Prettier**

@@ -1,2 +1,4 @@
 allowBuilds:
   esbuild: true
+minimumReleaseAgeExclude:
+  - tailwind-variants@4.0.1

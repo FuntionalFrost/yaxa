@@ -1,8 +1,9 @@
-import { Polar } from '@polar-sh/sdk';
+import { createPolar, type Polar } from '@polar-sh/sdk/2026-10';
 
 export interface PolarConfig {
 	accessToken?: string;
 	server?: 'sandbox' | 'production';
+	environment?: 'sandbox' | 'production';
 }
 
 /**
@@ -14,15 +15,16 @@ export function getPolarClient(config: PolarConfig = {}): Polar {
 		(typeof process !== 'undefined' ? process.env.POLAR_ACCESS_TOKEN : undefined) ||
 		'';
 
-	const server =
+	const environment =
+		config.environment ||
 		config.server ||
 		((typeof process !== 'undefined' && process.env.POLAR_ENVIRONMENT === 'production'
 			? 'production'
 			: 'sandbox') as 'sandbox' | 'production');
 
-	return new Polar({
+	return createPolar({
 		accessToken,
-		server
+		environment
 	});
 }
 
@@ -50,8 +52,8 @@ export async function createPolarCheckout(
 
 	const result = await polar.checkouts.create({
 		products: [options.productId],
-		customerEmail: options.customerEmail,
-		successUrl,
+		customer_email: options.customerEmail,
+		success_url: successUrl,
 		metadata: options.metadata
 	});
 
@@ -69,12 +71,12 @@ export async function createPolarCustomerPortalSession(
 	polar?: Polar
 ): Promise<{ url: string }> {
 	const client = polar || getPolarClient();
-	const session = await (client.customerSessions as any).create({
-		customerId
+	const session = await client.customerSessions.create({
+		customer_id: customerId
 	});
 
 	return {
-		url: session.customerPortalUrl || ''
+		url: (session as any).customer_portal_url || (session as any).customerPortalUrl || ''
 	};
 }
 

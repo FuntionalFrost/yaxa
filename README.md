@@ -12,6 +12,8 @@ _Nuxt UI v4 & Nuxt UI Pro Equivalent for SvelteKit 2 & 3 & Svelte 5 with Built-i
 [![Tailwind CSS v4](https://img.shields.io/badge/Tailwind_CSS-v4.0-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com)
 [![Bits UI](https://img.shields.io/badge/Bits_UI-v2.0-18181b?style=flat)](https://bits-ui.com)
 [![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](LICENSE)
+[![Security Policy](https://img.shields.io/badge/Security-Policy-blue.svg)](SECURITY.md)
+[![Contributing](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 [**Live Documentation & Playground →**](https://yaxa.vercel.app)
 
@@ -293,12 +295,12 @@ theme.setAccent('sky'); // Sky Cyan (#0ea5e9)
 
 ## 🤝 Contributing
 
-Contributions are always welcome!
+Contributions are always welcome! Please read our [Contributing Guidelines](CONTRIBUTING.md) and [Security Policy](SECURITY.md) before submitting pull requests.
 
 1. Fork the repository: `git clone https://github.com/FuntionalFrost/yaxa.git`
 2. Install dependencies: `pnpm install`
 3. Start development server: `pnpm dev`
-4. Run type checking & linting: `pnpm check && pnpm lint`
+4. Run verification gates: `pnpm lint && pnpm check && pnpm test && pnpm build`
 
 ---
 

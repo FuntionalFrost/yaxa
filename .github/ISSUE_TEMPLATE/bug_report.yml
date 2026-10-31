@@ -1,0 +1,69 @@
+name: 🐛 Bug Report
+description: File a structured report to help us reproduce and fix a bug in Yaxa
+title: 'fix: '
+labels: ['bug', 'triage']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting an issue! Please verify that you are on the latest release of Yaxa before submitting.
+  - type: dropdown
+    id: subpath
+    attributes:
+      label: Affected Component or Subpath
+      description: Which area of Yaxa does this bug affect?
+      options:
+        - 'yaxa-svelte (Core UI / Elements / Forms / Layout)'
+        - 'yaxa-svelte/ai (AiChat / PromptBar / Primitives)'
+        - 'yaxa-svelte/charts (Line / Bar / Donut)'
+        - 'yaxa-svelte/auth (Better-Auth / Passkeys / 2FA)'
+        - 'yaxa-svelte/db (Drizzle ORM / Neon / Turso)'
+        - 'yaxa-svelte/polar (Polar.sh / Webhooks)'
+        - 'yaxa-svelte/server (Server Hooks / SEO / OG)'
+        - 'yaxa-svelte/email (Resend / Templates)'
+        - 'yaxa-svelte/storage (S3 / R2 Presigned Uploads)'
+        - 'yaxa-svelte/theme.css or yaxa.css'
+        - 'Documentation / Website'
+    validations:
+      required: true
+  - type: input
+    id: svelte-version
+    attributes:
+      label: Svelte & SvelteKit Version
+      placeholder: 'e.g. svelte@5.57.3, @sveltejs/kit@3.1.1'
+    validations:
+      required: true
+  - type: input
+    id: reproduction-url
+    attributes:
+      label: Minimal Reproduction Link
+      description: Please provide a minimal reproduction URL (StackBlitz, CodeSandbox, or GitHub repository).
+      placeholder: 'https://stackblitz.com/...'
+    validations:
+      required: false
+  - type: textarea
+    id: description
+    attributes:
+      label: Steps to Reproduce & Expected Behavior
+      description: Step-by-step instructions to reproduce the issue and what you expected to happen.
+      placeholder: |
+        1. Render `<Button variant="solid" color="primary">Click</Button>`
+        2. Inspect CSS output in DOM
+        3. Class collision occurs with custom class
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console Errors or Diagnostics
+      description: Relevant terminal logs or browser console exceptions (if applicable).
+      render: shell
+  - type: checkboxes
+    id: verification
+    attributes:
+      label: Pre-submission Checklist
+      options:
+        - label: I searched existing issues and confirmed this is not a duplicate.
+          required: true
+        - label: This issue does not contain sensitive security vulnerabilities (reported via devfrost@protonmail.com).
+          required: true

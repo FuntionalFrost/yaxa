@@ -251,6 +251,8 @@ Zero-dependency, zero-WASM syntax highlighter with multi-line state preservation
 - **Tailwind CSS v4 & CSS**: Directives (`@theme`, `@utility`, `@custom-variant`, `@source`, `@plugin`, `@apply`, `@keyframes`, etc.), custom properties (`--color-*`), hex colors, and property declarations.
 - **Bash / Shell**: Variables (`$VAR`, `${VAR}`), flags (`-f`, `--output`), and utilities (`curl`, `docker`, `pnpm`, etc.).
 - **JSON**: Differentiates object keys from string values.
+- **YAML / YML**: Bare and quoted keys, document markers (`---`, `...`), anchors (`&anchor`), aliases (`*alias`), tags (`!tag`), block scalars (`|`, `>`), booleans (`true`/`false`/`yes`/`no`/`on`/`off`), nulls, and ISO timestamps.
+- **TOML**: Table headers (`[table]`, `[[array]]`), bare and quoted key-value pairs (`key = value`), boolean constants, float specials (`inf`, `nan`), ISO datetimes, and triple-quoted multi-line strings (`"""..."""`, `'''...'''`).
 - **Markdown & GFM**: Headings, blockquotes, task lists (`- [x]`), fenced code blocks, and horizontal rules.
 - **Rust, Go, SQL, GraphQL, Vue, JSX/TSX, and LaTeX Math**.
 

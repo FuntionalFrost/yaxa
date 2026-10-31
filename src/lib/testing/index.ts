@@ -268,6 +268,15 @@ export function createMockPolarClient() {
 	return {
 		createdCheckouts,
 		checkouts: {
+			create: async (params: any) => {
+				const checkout = {
+					id: `chk_mock_${Date.now()}`,
+					url: `https://polar.sh/checkout/mock_${Date.now()}`,
+					...params
+				};
+				createdCheckouts.push(checkout);
+				return checkout;
+			},
 			custom: {
 				create: async (params: any) => {
 					const checkout = {
@@ -282,9 +291,11 @@ export function createMockPolarClient() {
 		},
 		customerSessions: {
 			create: async (params: any) => {
+				const customerId = params.customer_id || params.customerId || 'cust_123';
 				return {
 					id: `cs_mock_${Date.now()}`,
-					customerPortalUrl: `https://polar.sh/portal/mock_${params.customerId || 'cust_123'}`
+					customerPortalUrl: `https://polar.sh/portal/mock_${customerId}`,
+					customer_portal_url: `https://polar.sh/portal/mock_${customerId}`
 				};
 			}
 		}

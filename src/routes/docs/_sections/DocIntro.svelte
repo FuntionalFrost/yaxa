@@ -214,7 +214,7 @@
 						<td class="px-4 py-2.5 font-bold text-zinc-900 dark:text-white">Syntax Engine</td>
 						<td class="px-4 py-2.5">Shiki / Prism (WASM/Heavy)</td>
 						<td class="px-4 py-2.5 font-mono"
-							>&lt;CodeBlock /&gt; (Zero-WASM Svelte 5/Python 3.13+/ES2026/TS6/GFM)</td
+							>&lt;CodeBlock /&gt; (Zero-WASM Svelte 5/Python 3.13+/ES2026/TS6/YAML/TOML)</td
 						>
 						<td class="px-4 py-2.5"><Badge color="primary" size="xs">Pure Web</Badge></td>
 					</tr>
