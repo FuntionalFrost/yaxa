@@ -1,0 +1,56 @@
+name: Publish to GitHub Packages
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish-gpr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup pnpm
+        uses: pnpm/setup@v3
+        with:
+          cache: true
+          require-lockfile: true
+
+      - name: Build & Package Library
+        run: |
+          pnpm check
+          pnpm test
+          pnpm package
+        env:
+          PUBLIC_APP_URL: https://yaxa.vercel.app
+          BETTER_AUTH_SECRET: ci-dummy-secret-key-123456789-production
+          BETTER_AUTH_URL: https://yaxa.vercel.app
+
+      - name: Scope package for GitHub Packages
+        run: |
+          node -e '
+            const fs = require("fs");
+            const pkg = JSON.parse(fs.readFileSync("./package.json", "utf8"));
+            pkg.name = "@funtionalfrost/yaxa-svelte";
+            pkg.publishConfig = { registry: "https://npm.pkg.github.com" };
+            fs.writeFileSync("./package.json", JSON.stringify(pkg, null, 2));
+          '
+
+      - name: Setup .npmrc
+        run: |
+          echo "@funtionalfrost:registry=https://npm.pkg.github.com" > .npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" >> .npmrc
+
+      - name: Publish to GitHub Packages
+        run: pnpm publish --no-git-checks
