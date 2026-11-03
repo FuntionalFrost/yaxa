@@ -145,6 +145,22 @@ export const POST = yaxaEndpoint({
   }
 });
 `;
+
+	const docsSnippet = `// src/routes/api/docs/+server.ts
+import { createApiDocsHandler } from 'yaxa-svelte/server';
+import { POST as createProject } from '../projects/+server';
+
+export const GET = createApiDocsHandler({
+  title: 'Acme SaaS API',
+  version: '1.0.0',
+  theme: 'scalar', // 'scalar' (default) | 'swagger' | 'redoc'
+  endpoints: {
+    '/api/projects': {
+      POST: createProject
+    }
+  }
+});
+`;
 </script>
 
 <div class="space-y-12">
@@ -340,6 +356,24 @@ export const POST = yaxaEndpoint({
 			code={endpointSnippet}
 			language="typescript"
 			filename="src/routes/api/projects/+server.ts"
+			showLineNumbers={true}
+		/>
+	</div>
+
+	<!-- Auto-Generated OpenAPI & Interactive Docs -->
+	<div class="space-y-6">
+		<h2 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+			6. Auto-Generated OpenAPI 3.1 & Interactive Docs (`createApiDocsHandler`)
+		</h2>
+		<p class="text-sm text-zinc-600 dark:text-zinc-400">
+			Instantly generate live interactive API documentation using <strong>Scalar</strong> (modern
+			dark-mode reference), <strong>Swagger UI</strong>, or <strong>Redoc</strong> directly from your
+			endpoints, with raw OpenAPI 3.1 JSON export for SDK generation:
+		</p>
+		<CodeBlock
+			code={docsSnippet}
+			language="typescript"
+			filename="src/routes/api/docs/+server.ts"
 			showLineNumbers={true}
 		/>
 	</div>

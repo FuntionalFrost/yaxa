@@ -118,7 +118,7 @@ export const DOC_NAV_GROUPS: DocNavGroup[] = [
 				href: '/docs/saas-suite',
 				title: 'Full-Stack Solo SaaS Toolkit',
 				description:
-					'Batteries-included Auth (Better-Auth, Passkeys, 2FA), yaxaEndpoint pipeline & guards, Database ORM (Drizzle with Neon & Turso), Billing (Polar.sh), Resend email, and drop-in Svelte 5 components.',
+					'Batteries-included Auth (Better-Auth, Passkeys, 2FA), yaxaEndpoint pipeline & guards, OpenAPI 3.1 & Scalar docs, Database ORM (Drizzle with Neon & Turso), Billing (Polar.sh), Resend email, and drop-in Svelte 5 components.',
 				category: 'Solo SaaS Suite',
 				badge: 'Full-Stack'
 			},

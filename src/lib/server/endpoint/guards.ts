@@ -15,11 +15,17 @@ export interface RequireAuthOptions {
 	detail?: string;
 }
 
+export interface YaxaGuardMetadata {
+	type: 'auth' | 'role' | 'rateLimit' | string;
+	roles?: string[];
+	options?: any;
+}
+
 /**
  * Declarative Guard: Enforces that the request has an active authenticated user in `event.locals.user`.
  */
 export function requireAuth(options: RequireAuthOptions = {}): Guard {
-	return (event: RequestEvent) => {
+	const guard: Guard = (event: RequestEvent) => {
 		const user = (event.locals as any)?.user;
 
 		if (!user) {
@@ -39,6 +45,13 @@ export function requireAuth(options: RequireAuthOptions = {}): Guard {
 			});
 		}
 	};
+
+	(guard as any)._yaxaGuard = {
+		type: 'auth',
+		options
+	} as YaxaGuardMetadata;
+
+	return guard;
 }
 
 export interface RequireRoleOptions {
@@ -52,7 +65,7 @@ export interface RequireRoleOptions {
 export function requireRole(roles: string | string[], options: RequireRoleOptions = {}): Guard {
 	const allowedRoles = Array.isArray(roles) ? roles : [roles];
 
-	return (event: RequestEvent) => {
+	const guard: Guard = (event: RequestEvent) => {
 		const locals = event.locals as any;
 		const user = locals?.user;
 
@@ -83,6 +96,14 @@ export function requireRole(roles: string | string[], options: RequireRoleOption
 			});
 		}
 	};
+
+	(guard as any)._yaxaGuard = {
+		type: 'role',
+		roles: allowedRoles,
+		options
+	} as YaxaGuardMetadata;
+
+	return guard;
 }
 
 export interface RateLimitOptions {
@@ -137,7 +158,7 @@ export function rateLimit(options: RateLimitOptions = {}): Guard {
 	const points = options.points ?? 60;
 	const windowMs = (options.windowSeconds ?? 60) * 1000;
 
-	return (event: RequestEvent) => {
+	const guard: Guard = (event: RequestEvent) => {
 		let key: string;
 		if (options.keyGenerator) {
 			key = options.keyGenerator(event);
@@ -186,6 +207,13 @@ export function rateLimit(options: RateLimitOptions = {}): Guard {
 
 		bucket.tokens -= 1;
 	};
+
+	(guard as any)._yaxaGuard = {
+		type: 'rateLimit',
+		options: { points, windowSeconds: options.windowSeconds ?? 60 }
+	} as YaxaGuardMetadata;
+
+	return guard;
 }
 
 /**

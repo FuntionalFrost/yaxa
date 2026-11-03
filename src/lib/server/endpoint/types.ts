@@ -142,6 +142,10 @@ export interface YaxaEndpointConfig<
 	description?: string;
 	tags?: string[];
 	deprecated?: boolean;
+	operationId?: string;
+	path?: string;
+	method?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH' | string;
+	responses?: Record<number, { description: string; schema?: any }>;
 
 	/**
 	 * Core business logic handler.

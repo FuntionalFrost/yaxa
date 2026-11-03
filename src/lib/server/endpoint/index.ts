@@ -1,6 +1,7 @@
 import type { RequestEvent, RequestHandler } from '@sveltejs/kit';
 import { isProblemDetails, problemResponse } from './problem';
 import { validateData } from './validate';
+import { globalApiRegistry } from '../openapi/registry';
 import type { YaxaEndpointConfig, YaxaEndpointContext, InferValidatorOutput } from './types';
 
 /**
@@ -268,6 +269,10 @@ export function yaxaEndpoint<
 
 	// Attach configuration metadata for runtime reflection and OpenAPI generation (Milestone 3)
 	(handler as any)._yaxaConfig = config;
+
+	if (config.path && config.method) {
+		globalApiRegistry.register(config.path, { [config.method]: handler });
+	}
 
 	return handler as RequestHandler & { _yaxaConfig: typeof config };
 }

@@ -96,3 +96,24 @@ export type {
 	ValidationSuccess,
 	ValidationFailure
 } from './endpoint/index';
+
+// Auto-Generated OpenAPI 3.1 & Interactive Docs (Milestone 3)
+export {
+	generateOpenApiSpec,
+	createApiDocsHandler,
+	createApiRegistry,
+	globalApiRegistry,
+	convertToJsonSchema
+} from './openapi/index';
+export type {
+	OpenApiSpec31,
+	OpenApiOperation,
+	OpenApiParameter,
+	OpenApiRequestBody,
+	OpenApiResponse,
+	GenerateOpenApiOptions,
+	ApiDocsOptions,
+	ApiDocsTheme,
+	EndpointLike,
+	EndpointMap
+} from './openapi/index';
