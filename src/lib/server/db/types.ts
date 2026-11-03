@@ -80,3 +80,23 @@ export interface PricingTier {
 	buttonText?: string;
 	features: (string | PricingFeature)[];
 }
+
+export type JobStatus = 'pending' | 'processing' | 'completed' | 'failed';
+
+export interface YaxaJob<TPayload = any> {
+	id: string;
+	queue: string;
+	name: string;
+	payload: TPayload;
+	status: JobStatus;
+	priority: number;
+	attempts: number;
+	maxAttempts: number;
+	runAt: Date;
+	lockedAt?: Date | null;
+	lockedBy?: string | null;
+	failedReason?: string | null;
+	createdAt: Date;
+	updatedAt: Date;
+	completedAt?: Date | null;
+}

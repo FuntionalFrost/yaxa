@@ -161,6 +161,56 @@ export const GET = createApiDocsHandler({
   }
 });
 `;
+
+	const jobsSnippet = `// 1. Enqueue job (with optional transactional outbox)
+import { enqueueJob } from 'yaxa-svelte/server';
+
+await enqueueJob('send-welcome-email', {
+  userId: 'usr_123',
+  email: 'founder@example.com'
+}, {
+  delay: '5m',       // Human delay: '30s', '5m', '2h', or ms
+  priority: 10,      // Higher numbers run first
+  maxAttempts: 5     // Exponential backoff retries with jitter
+});
+
+// 2. Define worker handler
+import { defineWorker, createJobRunner } from 'yaxa-svelte/server';
+
+const emailWorker = defineWorker({
+  name: 'send-welcome-email',
+  handler: async (payload, { attempt, log }) => {
+    log(\`Sending welcome email (attempt \${attempt})\`);
+    await sendEmail(payload.email, 'Welcome to Yaxa!');
+  }
+});
+
+// 3. Process jobs in a Serverless Cron route or long-running worker
+export const runner = createJobRunner({
+  workers: [emailWorker],
+  batchSize: 10
+});
+
+// In src/routes/api/cron/jobs/+server.ts (Vercel Cron / serverless):
+export const GET = async () => {
+  const result = await runner.processNextBatch();
+  return Response.json(result);
+};
+`;
+
+	const eventBusSnippet = `import { eventBus } from 'yaxa-svelte/server';
+
+// Decouple business domains with async error-isolated event subscribers
+eventBus.on('user.created', async ({ userId, email }) => {
+  await enqueueJob('send-welcome-email', { userId, email });
+});
+
+// Dispatch anywhere from server endpoints, webhooks, or action handlers:
+await eventBus.emit('user.created', {
+  userId: 'usr_123',
+  email: 'founder@example.com'
+});
+`;
 </script>
 
 <div class="space-y-12">
@@ -374,6 +424,43 @@ export const GET = createApiDocsHandler({
 			code={docsSnippet}
 			language="typescript"
 			filename="src/routes/api/docs/+server.ts"
+			showLineNumbers={true}
+		/>
+	</div>
+
+	<!-- Background Workflows & Persistent Job Queue -->
+	<div class="space-y-6">
+		<h2 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+			7. Background Workflows & Persistent Job Queue (`enqueueJob`)
+		</h2>
+		<p class="text-sm text-zinc-600 dark:text-zinc-400">
+			Zero-infrastructure background task execution backed by your existing Drizzle database
+			(PostgreSQL or SQLite/Turso). Features atomic row leasing, exponential retry backoff with
+			jitter, Dead-Letter Queue (DLQ), and dual execution models (Serverless Cron or persistent
+			runner):
+		</p>
+		<CodeBlock
+			code={jobsSnippet}
+			language="typescript"
+			filename="src/lib/server/jobs.ts"
+			showLineNumbers={true}
+			highlightLines={[4, 8, 17, 26, 33]}
+		/>
+	</div>
+
+	<!-- Domain Event Bus -->
+	<div class="space-y-6">
+		<h2 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+			8. Embedded Domain Events (`eventBus`)
+		</h2>
+		<p class="text-sm text-zinc-600 dark:text-zinc-400">
+			Decouple application domains without Kafka, RabbitMQ, or external message brokers. Execute
+			asynchronous subscribers with complete error isolation:
+		</p>
+		<CodeBlock
+			code={eventBusSnippet}
+			language="typescript"
+			filename="src/lib/server/events.ts"
 			showLineNumbers={true}
 		/>
 	</div>

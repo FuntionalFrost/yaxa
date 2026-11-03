@@ -161,3 +161,25 @@ export const subscription = sqliteTable('subscription', {
 	createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
 	updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull()
 });
+
+// ---------------------------------------------------------------------------
+// Background Jobs & Workflows Queue (SQLite / Turso)
+// ---------------------------------------------------------------------------
+
+export const job = sqliteTable('yaxa_job', {
+	id: text('id').primaryKey(),
+	queue: text('queue').notNull().default('default'),
+	name: text('name').notNull(),
+	payload: text('payload').notNull(),
+	status: text('status').notNull().default('pending'), // 'pending' | 'processing' | 'completed' | 'failed'
+	priority: integer('priority').notNull().default(0),
+	attempts: integer('attempts').notNull().default(0),
+	maxAttempts: integer('max_attempts').notNull().default(3),
+	runAt: integer('run_at', { mode: 'timestamp' }).notNull(),
+	lockedAt: integer('locked_at', { mode: 'timestamp' }),
+	lockedBy: text('locked_by'),
+	failedReason: text('failed_reason'),
+	createdAt: integer('created_at', { mode: 'timestamp' }).notNull(),
+	updatedAt: integer('updated_at', { mode: 'timestamp' }).notNull(),
+	completedAt: integer('completed_at', { mode: 'timestamp' })
+});

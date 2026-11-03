@@ -33,7 +33,7 @@
 - [Components - Forms & Inputs](https://yaxa.vercel.app/docs/comp-forms): FormField, Input, Textarea, Select, Combobox, MultiSelect, NumberInput, Checkbox, RadioGroup, Switch, Slider, ColorPicker, ToggleGroup, DatePicker, DateRangePicker, InputOTP, Dropzone.
 - [Components - Advanced Form Controls](https://yaxa.vercel.app/docs/advanced-forms): RichTextEditor (Markdown WYSIWYG), PhoneInput (international country picker), CreditCardInput (brand detection & masking).
 - [Components - Overlays & Navigation](https://yaxa.vercel.app/docs/comp-overlays): Modal, Drawer (responsive modal ⇄ bottom sheet), Slideover, Popover, Tooltip, Alert, Accordion, ContextMenu, NotificationCenter, Breadcrumb, Pagination, Tabs, Stepper, CommandPalette, DropdownMenu.
-- [SaaS Suite - Full-Stack Auth & Multi-Tenancy](https://yaxa.vercel.app/docs/saas-suite): Better-Auth client/server hooks, Multi-Tenant OrgSwitcher, Drizzle ORM schemas (Postgres & SQLite), Polar checkout & webhooks, Resend emails, and S3 file uploads.
+- [SaaS Suite - Full-Stack Auth & Backend Workflows](https://yaxa.vercel.app/docs/saas-suite): Better-Auth client/server hooks, Multi-Tenant OrgSwitcher, yaxaEndpoint pipeline & guards, OpenAPI 3.1 & Scalar docs, persistent Background Job Queue & Event Bus, Drizzle ORM schemas (Postgres & SQLite), Polar checkout & webhooks, Resend emails, and S3 file uploads.
 
 ## Installation & Quickstart
 

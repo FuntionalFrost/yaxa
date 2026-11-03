@@ -59,8 +59,16 @@
    - Native conflict resolution for Tailwind v4 CSS variable utilities (`bg-(--var)`), dynamic modifiers, and `@theme` tokens.
 
 10. **Resend Transactional Email Engine**:
+    - `sendMagicLinkEmail` and `sendWelcomeEmail` with responsive, branded HTML templates.
 
-- `sendMagicLinkEmail` and `sendWelcomeEmail` with responsive, branded HTML templates.
+11. **Type-Safe Endpoint Pipeline (`yaxaEndpoint`)**:
+    - Declarative auth & role guards (`requireAuth`, `requireRole`, `rateLimit`), Standard Schema & Zod validation, and RFC 7807 Problem Details error formatting.
+
+12. **Auto-Generated OpenAPI 3.1 & Interactive Documentation (`createApiDocsHandler`)**:
+    - Auto-generated OpenAPI 3.1.0 specifications with instant themeable interactive documentation ([Scalar](https://scalar.com/), Swagger UI, Redoc) and raw JSON export.
+
+13. **Persistent Background Workflows & In-Process Event Bus**:
+    - Embedded Drizzle-backed persistent job queue (`enqueueJob`, `defineWorker`, `createJobRunner`) with transactional outbox support (`{ tx }`), exponential backoff retries, Dead-Letter Queue (DLQ), and asynchronous domain `eventBus`.
 
 ---
 
@@ -90,7 +98,7 @@
 ## ✅ Verification Results
 
 - **`pnpm check`**: **0 errors, 0 warnings**
-- **`pnpm test`**: **61 test files passed, 214 unit & DOM tests passed** (Zero external browser dependencies; Playwright fully replaced with in-memory Vitest suites)
+- **`pnpm test`**: **64 test files passed, 261 unit & DOM tests passed**
 - **`pnpm build`**: **Production build & SSR bundle succeeded**
 - **`pnpm package`**: **Library distribution (`dist/`) generated**
 - **`pnpm format`**: **All files formatted cleanly with Prettier**

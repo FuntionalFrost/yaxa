@@ -161,3 +161,25 @@ export const subscription = pgTable('subscription', {
 	createdAt: timestamp('created_at', { mode: 'date' }).notNull(),
 	updatedAt: timestamp('updated_at', { mode: 'date' }).notNull()
 });
+
+// ---------------------------------------------------------------------------
+// Background Jobs & Workflows Queue (PostgreSQL)
+// ---------------------------------------------------------------------------
+
+export const job = pgTable('yaxa_job', {
+	id: text('id').primaryKey(),
+	queue: text('queue').notNull().default('default'),
+	name: text('name').notNull(),
+	payload: text('payload').notNull(),
+	status: text('status').notNull().default('pending'), // 'pending' | 'processing' | 'completed' | 'failed'
+	priority: integer('priority').notNull().default(0),
+	attempts: integer('attempts').notNull().default(0),
+	maxAttempts: integer('max_attempts').notNull().default(3),
+	runAt: timestamp('run_at', { mode: 'date' }).notNull(),
+	lockedAt: timestamp('locked_at', { mode: 'date' }),
+	lockedBy: text('locked_by'),
+	failedReason: text('failed_reason'),
+	createdAt: timestamp('created_at', { mode: 'date' }).notNull(),
+	updatedAt: timestamp('updated_at', { mode: 'date' }).notNull(),
+	completedAt: timestamp('completed_at', { mode: 'date' })
+});

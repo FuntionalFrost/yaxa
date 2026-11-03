@@ -117,3 +117,27 @@ export type {
 	EndpointLike,
 	EndpointMap
 } from './openapi/index';
+
+// Embedded Background Workflows, Job Queue & Domain Events (Milestone 6)
+export {
+	enqueueJob,
+	defineWorker,
+	createJobRunner,
+	eventBus,
+	EventBus,
+	parseJobDelay
+} from './jobs/index';
+export type {
+	JobRecord,
+	JobDelay,
+	EnqueueJobOptions,
+	WorkerContext,
+	WorkerHandler,
+	WorkerDefinition,
+	JobRunnerOptions,
+	JobBatchResult,
+	JobRunner,
+	EventHandler,
+	EventSubscription,
+	IEventBus
+} from './jobs/index';
