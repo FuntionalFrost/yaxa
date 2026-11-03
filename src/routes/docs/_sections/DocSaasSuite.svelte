@@ -107,8 +107,8 @@ import { Button, Modal, UserMenu, useToast, useColorMode, springTilt } from 'yax
 // 2. Full-Stack Client Auth (Passkeys, 2FA, & Polymorphic AuthCards)
 import { useAuth, AuthCard, PasskeyUI, TwoFactorModal } from 'yaxa-svelte/auth';
 
-// 3. SvelteKit Server Hooks, Auth Factory, Pagination & SEO Handlers
-import { createYaxaHook, createYaxaAuth, createYaxaAuthHook, parseDataTableQuery } from 'yaxa-svelte/server';
+// 3. SvelteKit Server Hooks, Auth Factory, yaxaEndpoint Pipeline & SEO Handlers
+import { yaxaEndpoint, requireAuth, requireRole, rateLimit, createYaxaHook, createYaxaAuth } from 'yaxa-svelte/server';
 
 // 4. Drizzle ORM Database Schema & Client
 import { getDb, schemaPg, schemaSqlite } from 'yaxa-svelte/db';
@@ -118,6 +118,32 @@ import { createPolarCheckout, createPolarWebhookHandler } from 'yaxa-svelte/pola
 
 // 6. S3 / Cloudflare R2 Presigned Uploads
 import { createPresignedUploadUrl } from 'yaxa-svelte/storage';
+`;
+
+	const endpointSnippet = `// src/routes/api/projects/+server.ts
+import { yaxaEndpoint, requireAuth, requireRole, rateLimit } from 'yaxa-svelte/server';
+import { z } from 'zod';
+
+const CreateProjectSchema = z.object({
+  name: z.string().min(3),
+  description: z.string().optional()
+});
+
+export const POST = yaxaEndpoint({
+  status: 201,
+  guards: [
+    requireAuth(),
+    requireRole(['admin', 'owner']),
+    rateLimit({ points: 20, windowSeconds: 60 })
+  ],
+  schema: {
+    body: CreateProjectSchema
+  },
+  handle: async ({ body, user, orgId }) => {
+    // Guaranteed type-safe body, authenticated user, and active orgId
+    return { id: 'proj_123', name: body.name, orgId };
+  }
+});
 `;
 </script>
 
@@ -294,6 +320,26 @@ import { createPresignedUploadUrl } from 'yaxa-svelte/storage';
 			code={subpathsSnippet}
 			language="typescript"
 			filename="subpath-imports.ts"
+			showLineNumbers={true}
+		/>
+	</div>
+
+	<!-- Type-Safe Endpoint Pipeline -->
+	<div class="space-y-6">
+		<h2 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+			5. Type-Safe Endpoint Pipeline (`yaxaEndpoint`)
+		</h2>
+		<p class="text-sm text-zinc-600 dark:text-zinc-400">
+			Eliminate endpoint boilerplate in <code
+				class="rounded bg-zinc-100 px-1.5 py-0.5 font-mono text-xs dark:bg-zinc-800"
+				>+server.ts</code
+			> with declarative auth guards, sliding-window rate limiting, multi-engine validation (Zod, Valibot,
+			Standard Schema), and automated RFC 7807 Problem Details error formatting:
+		</p>
+		<CodeBlock
+			code={endpointSnippet}
+			language="typescript"
+			filename="src/routes/api/projects/+server.ts"
 			showLineNumbers={true}
 		/>
 	</div>

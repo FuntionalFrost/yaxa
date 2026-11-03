@@ -241,13 +241,46 @@ export const POST = createPolarWebhookHandler();
 
 ---
 
+## ⚡ Type-Safe Endpoint Pipeline (`yaxaEndpoint` & Declarative Guards)
+
+Eliminate endpoint boilerplate in `+server.ts` with declarative auth guards, sliding-window rate limiting, multi-engine validation (Zod, Valibot, Standard Schema), and RFC 7807 Problem Details:
+
+```ts
+// src/routes/api/projects/+server.ts
+import { yaxaEndpoint, requireAuth, requireRole, rateLimit } from 'yaxa-svelte/server';
+import { z } from 'zod';
+
+const CreateProjectSchema = z.object({
+	name: z.string().min(3),
+	description: z.string().optional()
+});
+
+export const POST = yaxaEndpoint({
+	status: 201,
+	guards: [
+		requireAuth(),
+		requireRole(['admin', 'owner']),
+		rateLimit({ points: 20, windowSeconds: 60 })
+	],
+	schema: {
+		body: CreateProjectSchema
+	},
+	handle: async ({ body, user, orgId }) => {
+		// Guaranteed type-safe body, authenticated user, and active orgId
+		return { id: 'proj_123', name: body.name, orgId };
+	}
+});
+```
+
+---
+
 ## 📦 Subpath Exports Architecture
 
 | Subpath                 | Description                                                                                                                               |
 | :---------------------- | :---------------------------------------------------------------------------------------------------------------------------------------- |
 | `yaxa-svelte`           | Core UI Primitives, SEO Components, `<Gate />`, Theme System & Composables (`useGate`, `useUpload`, `useToast`, `useClipboard`, etc.)     |
 | `yaxa-svelte/admin`     | Drizzle ORM Schema Introspection, `<AdminDashboard />`, `createYaxaAdminHook`, `createDrizzleAdmin`, `<DevSandbox />`, `<RecordDrawer />` |
-| `yaxa-svelte/server`    | Universal Server Hooks, SEO endpoints, Drizzle DB drivers, Cloud Storage handlers, and Email dispatch                                     |
+| `yaxa-svelte/server`    | `yaxaEndpoint` Pipeline, Declarative Guards, RFC 7807, Universal Server Hooks, SEO endpoints, Drizzle DB, Storage & Email                 |
 | `yaxa-svelte/auth`      | Better-Auth client & server integration (`useAuth`, `<AuthCard />`, `<PasskeyUI />`, `<TwoFactorModal />`, `createYaxaAuth`)              |
 | `yaxa-svelte/db`        | Multi-dialect Drizzle ORM clients & schemas for Neon (PostgreSQL) and Turso (SQLite/LibSQL)                                               |
 | `yaxa-svelte/polar`     | Polar.sh billing, customer portal sessions, and webhook synchronization                                                                   |

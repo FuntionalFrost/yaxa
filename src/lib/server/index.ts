@@ -65,3 +65,34 @@ export type {
 	PresignedUploadResult,
 	S3UploadHandlerOptions
 } from './storage/index';
+
+// Endpoint Pipeline, Guards & RFC 7807 Validation (Milestone 1)
+export {
+	yaxaEndpoint,
+	createProblemDetails,
+	problemResponse,
+	isProblemDetails,
+	requireAuth,
+	requireRole,
+	rateLimit,
+	composeGuards,
+	validateData
+} from './endpoint/index';
+export type {
+	YaxaEndpointConfig,
+	YaxaEndpointContext,
+	YaxaEndpointSchemaConfig,
+	YaxaInterceptor,
+	Guard,
+	GuardResult,
+	ProblemDetails,
+	CreateProblemOptions,
+	RequireAuthOptions,
+	RequireRoleOptions,
+	RateLimitOptions,
+	AnyValidator,
+	InferValidatorOutput,
+	ValidationOutcome,
+	ValidationSuccess,
+	ValidationFailure
+} from './endpoint/index';
