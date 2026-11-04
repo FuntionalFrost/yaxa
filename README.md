@@ -346,22 +346,68 @@ export const GET = async () => {
 
 ---
 
+## 📡 Real-Time Server-Sent Events (`yaxaSSE`, `broadcast`, & `useSSE`)
+
+Zero-infrastructure real-time communication across serverless and Node.js without third-party subscriptions. Features declarative SSE streaming, automatic keep-alive heartbeats, multi-channel pub/sub broadcasting, and a reactive Svelte 5 client rune with exponential reconnect backoff:
+
+```ts
+// 1. Server-Sent Events Endpoint (src/routes/api/events/+server.ts)
+import { yaxaSSE, requireAuth } from 'yaxa-svelte/server';
+
+export const GET = yaxaSSE({
+	guards: [requireAuth()],
+	channel: (event) => `org:${event.locals.orgId}`,
+	keepAliveIntervalMs: 15000, // Heartbeat ping prevents proxy & Vercel timeouts
+	onConnect: ({ send, user }) => {
+		send('connected', { userId: user.id });
+	}
+});
+
+// 2. Publish from anywhere (Endpoints, Webhooks, Background Workers)
+import { broadcast } from 'yaxa-svelte/server';
+
+await broadcast(`org:${orgId}`, 'invoice.settled', {
+	invoiceId: 'inv_4982',
+	amount: 29.0
+});
+```
+
+```svelte
+<!-- 3. Reactive Svelte 5 Client Rune -->
+<script lang="ts">
+	import { useSSE } from 'yaxa-svelte';
+
+	const stream = useSSE('/api/events');
+
+	// Typed event listeners with automatic cleanup
+	stream.on('invoice.settled', (data) => {
+		toast.success(`Payment settled: $${data.amount}`);
+	});
+</script>
+
+<Badge color={stream.connected ? 'success' : 'neutral'}>
+	{stream.connected ? 'Live Stream' : 'Connecting...'}
+</Badge>
+```
+
+---
+
 ## 📦 Subpath Exports Architecture
 
-| Subpath                 | Description                                                                                                                                                                                |
-| :---------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `yaxa-svelte`           | Core UI Primitives, SEO Components, `<Gate />`, Theme System & Composables (`useGate`, `useUpload`, `useToast`, `useClipboard`, etc.)                                                      |
-| `yaxa-svelte/admin`     | Drizzle ORM Schema Introspection, `<AdminDashboard />`, `createYaxaAdminHook`, `createDrizzleAdmin`, `<DevSandbox />`, `<RecordDrawer />`                                                  |
-| `yaxa-svelte/server`    | `yaxaEndpoint` Pipeline, Declarative Guards, OpenAPI 3.1 & Scalar Docs, RFC 7807, Background Jobs (`enqueueJob`, `createJobRunner`), `eventBus`, Server Hooks, Drizzle DB, Storage & Email |
-| `yaxa-svelte/auth`      | Better-Auth client & server integration (`useAuth`, `<AuthCard />`, `<PasskeyUI />`, `<TwoFactorModal />`, `createYaxaAuth`)                                                               |
-| `yaxa-svelte/db`        | Multi-dialect Drizzle ORM clients & schemas for Neon (PostgreSQL) and Turso (SQLite/LibSQL)                                                                                                |
-| `yaxa-svelte/polar`     | Polar.sh billing, customer portal sessions, and webhook synchronization                                                                                                                    |
-| `yaxa-svelte/email`     | Resend transactional email templates with automatic development console fallback                                                                                                           |
-| `yaxa-svelte/storage`   | AWS S3 and Cloudflare R2 presigned upload URL generators                                                                                                                                   |
-| `yaxa-svelte/testing`   | Test mocks & utilities (`createMockSiteConfig`, `createMockUser`, `createTestWrapperProps`)                                                                                                |
-| `yaxa-svelte/vite`      | Turnkey Vite plugin (`yaxa()`)                                                                                                                                                             |
-| `yaxa-svelte/yaxa.css`  | Standalone turnkey Tailwind CSS v4 stylesheet with base styling, `@theme`, and scrollbars                                                                                                  |
-| `yaxa-svelte/theme.css` | Pure Tailwind CSS v4 design tokens, `:root` variables, and harmonic radius scale without `@import 'tailwindcss'`                                                                           |
+| Subpath                 | Description                                                                                                                                                                                                                |
+| :---------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `yaxa-svelte`           | Core UI Primitives, SEO Components, `<Gate />`, Theme System & Composables (`useGate`, `useUpload`, `useSSE`, `useToast`, `useClipboard`, etc.)                                                                            |
+| `yaxa-svelte/admin`     | Drizzle ORM Schema Introspection, `<AdminDashboard />`, `createYaxaAdminHook`, `createDrizzleAdmin`, `<DevSandbox />`, `<RecordDrawer />`                                                                                  |
+| `yaxa-svelte/server`    | `yaxaEndpoint` Pipeline, Declarative Guards, OpenAPI 3.1 & Scalar Docs, RFC 7807, Real-Time SSE (`yaxaSSE`, `broadcast`), Background Jobs (`enqueueJob`, `createJobRunner`), `eventBus`, Server Hooks, DB, Storage & Email |
+| `yaxa-svelte/auth`      | Better-Auth client & server integration (`useAuth`, `<AuthCard />`, `<PasskeyUI />`, `<TwoFactorModal />`, `createYaxaAuth`)                                                                                               |
+| `yaxa-svelte/db`        | Multi-dialect Drizzle ORM clients & schemas for Neon (PostgreSQL) and Turso (SQLite/LibSQL)                                                                                                                                |
+| `yaxa-svelte/polar`     | Polar.sh billing, customer portal sessions, and webhook synchronization                                                                                                                                                    |
+| `yaxa-svelte/email`     | Resend transactional email templates with automatic development console fallback                                                                                                                                           |
+| `yaxa-svelte/storage`   | AWS S3 and Cloudflare R2 presigned upload URL generators                                                                                                                                                                   |
+| `yaxa-svelte/testing`   | Test mocks & utilities (`createMockSiteConfig`, `createMockUser`, `createTestWrapperProps`)                                                                                                                                |
+| `yaxa-svelte/vite`      | Turnkey Vite plugin (`yaxa()`)                                                                                                                                                                                             |
+| `yaxa-svelte/yaxa.css`  | Standalone turnkey Tailwind CSS v4 stylesheet with base styling, `@theme`, and scrollbars                                                                                                                                  |
+| `yaxa-svelte/theme.css` | Pure Tailwind CSS v4 design tokens, `:root` variables, and harmonic radius scale without `@import 'tailwindcss'`                                                                                                           |
 
 ---
 

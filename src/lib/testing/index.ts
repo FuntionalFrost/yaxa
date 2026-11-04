@@ -158,6 +158,8 @@ export interface MockRequestEventOptions {
 	params?: Record<string, string>;
 	locals?: Record<string, any>;
 	cookies?: Record<string, string>;
+	signal?: AbortSignal;
+	request?: Request;
 }
 
 /**
@@ -181,11 +183,14 @@ export function createMockRequestEvent(options: MockRequestEventOptions = {}): R
 		}
 	}
 
-	const request = new Request(url.toString(), {
-		method,
-		headers,
-		body: method !== 'GET' && method !== 'HEAD' ? bodyContent : undefined
-	});
+	const request =
+		options.request ||
+		new Request(url.toString(), {
+			method,
+			headers,
+			body: method !== 'GET' && method !== 'HEAD' ? bodyContent : undefined,
+			signal: options.signal
+		});
 
 	const cookieStore = new Map<string, string>(Object.entries(options.cookies || {}));
 

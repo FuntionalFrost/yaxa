@@ -211,6 +211,48 @@ await eventBus.emit('user.created', {
   email: 'founder@example.com'
 });
 `;
+
+	const realtimeSnippet =
+		`// 1. Declarative Server-Sent Events Endpoint
+// src/routes/api/events/+server.ts
+import { yaxaSSE, requireAuth } from 'yaxa-svelte/server';
+
+export const GET = yaxaSSE({
+  guards: [requireAuth()],
+  channel: (event) => \`org:\${event.locals.orgId}\`,
+  keepAliveIntervalMs: 15_000, // Heartbeat ping prevents proxy & Vercel timeouts
+  onConnect: ({ send, user }) => {
+    send('connected', { userId: user.id });
+  }
+});
+
+// 2. Broadcast from anywhere (Endpoints, Webhooks, Background Jobs)
+import { broadcast } from 'yaxa-svelte/server';
+
+await broadcast(\`org:\${orgId}\`, 'invoice.settled', {
+  invoiceId: 'inv_4982',
+  amount: 29.00
+});
+
+// 3. Reactive Svelte 5 Client Rune
+// src/routes/dashboard/+page.svelte
+<` +
+		`script lang="ts">
+  import { useSSE } from 'yaxa-svelte';
+
+  const stream = useSSE('/api/events');
+
+  // Typed event listeners with automatic cleanup
+  stream.on('invoice.settled', (data) => {
+    toast.success(\`Payment settled: $\${data.amount}\`);
+  });
+<` +
+		`/script>
+
+<Badge color={stream.connected ? 'success' : 'neutral'}>
+  {stream.connected ? 'Live Stream' : 'Connecting...'}
+</Badge>
+`;
 </script>
 
 <div class="space-y-12">
@@ -491,6 +533,26 @@ await eventBus.emit('user.created', {
 			language="typescript"
 			filename="src/lib/server/events.ts"
 			showLineNumbers={true}
+		/>
+	</div>
+
+	<!-- Real-Time SSE & Channel Broadcaster -->
+	<div class="space-y-6">
+		<h2 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+			9. Real-Time Server-Sent Events (`yaxaSSE`, `broadcast`, `useSSE`)
+		</h2>
+		<p class="text-sm text-zinc-600 dark:text-zinc-400">
+			Zero-infrastructure real-time communication across serverless and Node.js without third-party
+			subscriptions. Features declarative SSE streaming, automatic keep-alive heartbeats,
+			multi-channel pub/sub broadcasting, and a reactive Svelte 5 client rune with exponential
+			reconnect backoff:
+		</p>
+		<CodeBlock
+			code={realtimeSnippet}
+			language="typescript"
+			filename="realtime-workflow.ts"
+			showLineNumbers={true}
+			highlightLines={[4, 7, 16, 24, 27]}
 		/>
 	</div>
 </div>

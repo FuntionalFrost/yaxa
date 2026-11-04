@@ -141,3 +141,21 @@ export type {
 	EventSubscription,
 	IEventBus
 } from './jobs/index';
+
+// Adapter-Agnostic Real-Time Abstractions & Server-Sent Events (Milestone 5)
+export {
+	yaxaSSE,
+	formatSSEFrame,
+	broadcast,
+	createBroadcaster,
+	globalBroadcaster,
+	MemoryBroadcaster
+} from './realtime/index';
+export type {
+	SSEMessage,
+	SSEClientContext,
+	YaxaSSEOptions,
+	BroadcastMessage,
+	BroadcastSubscriber,
+	Broadcaster
+} from './realtime/index';

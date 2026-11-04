@@ -248,6 +248,13 @@ export { useFormAction } from './composables/useFormAction.svelte';
 export type { UseFormActionOptions } from './composables/useFormAction.svelte';
 export { useIdle } from './composables/useIdle.svelte';
 export type { UseIdleOptions } from './composables/useIdle.svelte';
+export { useSSE } from './composables/useSSE.svelte';
+export type {
+	SSEStatus,
+	UseSSEOptions,
+	SSEEventHandler,
+	SSEResult
+} from './composables/useSSE.svelte';
 
 // Theming & Theme Studio
 export { default as ThemeStudio } from './components/theme/ThemeStudio.svelte';

@@ -70,6 +70,9 @@
 13. **Persistent Background Workflows & In-Process Event Bus**:
     - Embedded Drizzle-backed persistent job queue (`enqueueJob`, `defineWorker`, `createJobRunner`) with transactional outbox support (`{ tx }`), exponential backoff retries, Dead-Letter Queue (DLQ), and asynchronous domain `eventBus`.
 
+14. **Adapter-Agnostic Real-Time Abstractions (`yaxaSSE`, `broadcast()`, & `useSSE()`)**:
+    - Declarative Server-Sent Events with keep-alive heartbeats, multi-channel pub/sub broadcasting (`MemoryBroadcaster`), and reactive Svelte 5 runes composable (`useSSE`) with exponential reconnect backoff.
+
 ---
 
 ## 🧩 50+ Svelte 5 Components & Runes Composables
@@ -82,7 +85,7 @@
 - **Forms**: `Form`, `FormField`, `Input`, `InputOTP`, `Textarea`, `Checkbox`, `Switch`, `Select`, `Combobox`, `MultiSelect`, `NumberInput`, `RadioGroup`, `Slider`, `ColorPicker`, `ToggleGroup`, `DatePicker`, `DateRangePicker`, `Dropzone`, `<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`.
 - **Layout**: `Container`, `Header`, `Footer`, `Section`, `Card`, `Divider`, `YaxaApp`, `DashboardShell` (with independent sidebar tokens), `ResizablePanels`.
 - **Navigation & Overlays**: `Tabs`, `Breadcrumb`, `Pagination`, `CommandPalette` (`⌘K`), `DropdownMenu`, `ContextMenu`, `Modal`, `Drawer`, `Slideover`, `Popover`, `Tooltip` (with `arrow={false}` & `unstyled`), `Alert`, `Accordion`, `NotificationCenter`, `Stepper`.
-- **Composables**: `useAuth`, `useGate`, `useUpload`, `useClipboard`, `useShortcuts`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`, `useIdle`, `useInfiniteScroll`, `useSortable`.
+- **Composables**: `useAuth`, `useGate`, `useUpload`, `useSSE`, `useClipboard`, `useShortcuts`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`, `useIdle`, `useInfiniteScroll`, `useSortable`.
 
 ---
 
@@ -99,7 +102,7 @@
 ## ✅ Verification Results
 
 - **`pnpm check`**: **0 errors, 0 warnings**
-- **`pnpm test`**: **64 test files passed, 264 unit & DOM tests passed**
+- **`pnpm test`**: **66 test files passed, 283 unit & DOM tests passed**
 - **`pnpm build`**: **Production build & SSR bundle succeeded**
 - **`pnpm package`**: **Library distribution (`dist/`) generated**
 - **`pnpm format`**: **All files formatted cleanly with Prettier**
