@@ -92,6 +92,23 @@
 			keywords: ['organization', 'teams', 'org', 'tenant', 'roles']
 		},
 		{
+			title: 'Real-Time SSE & Broadcaster (yaxaSSE, useSSE)',
+			description: 'Declarative Server-Sent Events, pub/sub broadcaster, and Svelte 5 client rune.',
+			category: 'SaaS Suite',
+			href: '/docs/saas-suite#realtime-sse',
+			badge: 'Real-Time',
+			keywords: ['sse', 'realtime', 'stream', 'events', 'broadcast', 'websocket']
+		},
+		{
+			title: 'Type-Safe Client RPC (createApiClient)',
+			description:
+				'Zero-codegen type-safe client proxy for yaxaEndpoint routes with RFC 7807 problem details.',
+			category: 'SaaS Suite',
+			href: '/docs/saas-suite#client-rpc',
+			badge: 'Client RPC',
+			keywords: ['api', 'client', 'rpc', 'fetch', 'trpc', 'eden', 'typesafe']
+		},
+		{
 			title: 'Dynamic OpenGraph Engine',
 			description: 'Zero-WASM server-side SVG social preview card generator (/api/og).',
 			category: 'Site & SEO',

@@ -392,11 +392,60 @@ await broadcast(`org:${orgId}`, 'invoice.settled', {
 
 ---
 
+## 🔗 End-to-End Type-Safe Client RPC (`createApiClient`)
+
+Zero-codegen end-to-end type safety bridging your server `yaxaEndpoint` routes directly into Svelte 5 components and universal `load` functions. Adds less than 500 bytes gzipped to your client bundle:
+
+```ts
+// 1. Define Route Type Map (src/lib/api.ts)
+export type AppApi = {
+	'/api/projects': typeof import('../routes/api/projects/+server');
+	'/api/projects/[id]': typeof import('../routes/api/projects/[id]/+server');
+};
+```
+
+```svelte
+<!-- 2. Type-Safe Client in Svelte 5 (+page.svelte) -->
+<script lang="ts">
+	import { createApiClient } from 'yaxa-svelte';
+	import type { AppApi } from '$lib/api';
+
+	const api = createApiClient<AppApi>();
+
+	async function createProject() {
+		// ✨ Autocompleted URL, body, query, and response!
+		const { data, error, ok } = await api['/api/projects'].post({
+			body: { name: 'Apollo SaaS' },
+			query: { notify: true }
+		});
+
+		if (error) {
+			// 🛡️ Strongly typed RFC 7807 ProblemDetails
+			toast.error(error.title, error.detail);
+			return;
+		}
+
+		toast.success(`Created ${data.name} (#${data.id})`);
+	}
+</script>
+```
+
+```ts
+// 3. Universal SSR Load Function with SvelteKit fetch (src/routes/projects/+page.ts)
+export const load = async ({ fetch }) => {
+	const api = createApiClient<AppApi>({ fetch });
+	const { data: projects } = await api['/api/projects'].get();
+	return { projects: projects ?? [] };
+};
+```
+
+---
+
 ## 📦 Subpath Exports Architecture
 
 | Subpath                 | Description                                                                                                                                                                                                                |
 | :---------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `yaxa-svelte`           | Core UI Primitives, SEO Components, `<Gate />`, Theme System & Composables (`useGate`, `useUpload`, `useSSE`, `useToast`, `useClipboard`, etc.)                                                                            |
+| `yaxa-svelte`           | Core UI Primitives, SEO Components, `<Gate />`, Type-Safe Client RPC (`createApiClient`), Theme System & Composables (`useGate`, `useUpload`, `useSSE`, `useToast`, `useClipboard`, etc.)                                  |
 | `yaxa-svelte/admin`     | Drizzle ORM Schema Introspection, `<AdminDashboard />`, `createYaxaAdminHook`, `createDrizzleAdmin`, `<DevSandbox />`, `<RecordDrawer />`                                                                                  |
 | `yaxa-svelte/server`    | `yaxaEndpoint` Pipeline, Declarative Guards, OpenAPI 3.1 & Scalar Docs, RFC 7807, Real-Time SSE (`yaxaSSE`, `broadcast`), Background Jobs (`enqueueJob`, `createJobRunner`), `eventBus`, Server Hooks, DB, Storage & Email |
 | `yaxa-svelte/auth`      | Better-Auth client & server integration (`useAuth`, `<AuthCard />`, `<PasskeyUI />`, `<TwoFactorModal />`, `createYaxaAuth`)                                                                                               |

@@ -253,6 +253,47 @@ await broadcast(\`org:\${orgId}\`, 'invoice.settled', {
   {stream.connected ? 'Live Stream' : 'Connecting...'}
 </Badge>
 `;
+
+	const apiClientSnippet =
+		`// 1. Define Route Types (src/lib/api.ts)
+export type AppApi = {
+  '/api/projects': typeof import('../routes/api/projects/+server');
+  '/api/projects/[id]': typeof import('../routes/api/projects/[id]/+server');
+};
+
+// 2. Type-Safe Client in Svelte 5 (+page.svelte)
+<` +
+		`script lang="ts">
+  import { createApiClient } from 'yaxa-svelte';
+  import type { AppApi } from '$lib/api';
+
+  const api = createApiClient<AppApi>();
+
+  async function createProject() {
+    // ✨ Autocompleted URL, body, query, and response!
+    const { data, error, ok } = await api['/api/projects'].post({
+      body: { name: 'Apollo SaaS' },
+      query: { notify: true }
+    });
+
+    if (error) {
+      // 🛡️ Strongly typed RFC 7807 ProblemDetails
+      toast.error(error.title, error.detail);
+      return;
+    }
+
+    toast.success(\`Created \${data.name} (#\${data.id})\`);
+  }
+<` +
+		`/script>
+
+// 3. Universal SSR Load Function (src/routes/projects/+page.ts)
+export const load = async ({ fetch }) => {
+  const api = createApiClient<AppApi>({ fetch });
+  const { data: projects } = await api['/api/projects'].get();
+  return { projects: projects ?? [] };
+};
+`;
 </script>
 
 <div class="space-y-12">
@@ -537,7 +578,7 @@ await broadcast(\`org:\${orgId}\`, 'invoice.settled', {
 	</div>
 
 	<!-- Real-Time SSE & Channel Broadcaster -->
-	<div class="space-y-6">
+	<div class="space-y-6" id="realtime-sse">
 		<h2 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
 			9. Real-Time Server-Sent Events (`yaxaSSE`, `broadcast`, `useSSE`)
 		</h2>
@@ -553,6 +594,28 @@ await broadcast(\`org:\${orgId}\`, 'invoice.settled', {
 			filename="realtime-workflow.ts"
 			showLineNumbers={true}
 			highlightLines={[4, 7, 16, 24, 27]}
+		/>
+	</div>
+
+	<!-- Type-Safe Client RPC -->
+	<div class="space-y-6" id="client-rpc">
+		<h2 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+			10. Type-Safe Client RPC (`createApiClient`)
+		</h2>
+		<p class="text-sm text-zinc-600 dark:text-zinc-400">
+			Zero-codegen end-to-end type safety bridging your server <code
+				class="text-primary font-mono text-xs">yaxaEndpoint</code
+			>
+			definitions directly into Svelte 5 components and universal
+			<code class="text-primary font-mono text-xs">load</code> functions. Adds less than 500 bytes gzipped
+			to the client bundle with complete RFC 7807 error discrimination:
+		</p>
+		<CodeBlock
+			code={apiClientSnippet}
+			language="typescript"
+			filename="src/lib/api-client.ts"
+			showLineNumbers={true}
+			highlightLines={[2, 11, 15, 20, 30]}
 		/>
 	</div>
 </div>

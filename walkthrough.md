@@ -73,6 +73,9 @@
 14. **Adapter-Agnostic Real-Time Abstractions (`yaxaSSE`, `broadcast()`, & `useSSE()`)**:
     - Declarative Server-Sent Events with keep-alive heartbeats, multi-channel pub/sub broadcasting (`MemoryBroadcaster`), and reactive Svelte 5 runes composable (`useSSE`) with exponential reconnect backoff.
 
+15. **End-to-End Type-Safe Client RPC (`createApiClient`)**:
+    - Zero-codegen type safety bridging server `yaxaEndpoint` routes directly into Svelte 5 components and universal `load` functions. Features dynamic path bracket interpolation (`/api/projects/[id]`), native RFC 7807 problem details error discrimination (`{ data, error, ok }`), and an ultra-lightweight (<500 B gzipped) ES Proxy-based footprint.
+
 ---
 
 ## 🧩 50+ Svelte 5 Components & Runes Composables
@@ -85,7 +88,7 @@
 - **Forms**: `Form`, `FormField`, `Input`, `InputOTP`, `Textarea`, `Checkbox`, `Switch`, `Select`, `Combobox`, `MultiSelect`, `NumberInput`, `RadioGroup`, `Slider`, `ColorPicker`, `ToggleGroup`, `DatePicker`, `DateRangePicker`, `Dropzone`, `<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`.
 - **Layout**: `Container`, `Header`, `Footer`, `Section`, `Card`, `Divider`, `YaxaApp`, `DashboardShell` (with independent sidebar tokens), `ResizablePanels`.
 - **Navigation & Overlays**: `Tabs`, `Breadcrumb`, `Pagination`, `CommandPalette` (`⌘K`), `DropdownMenu`, `ContextMenu`, `Modal`, `Drawer`, `Slideover`, `Popover`, `Tooltip` (with `arrow={false}` & `unstyled`), `Alert`, `Accordion`, `NotificationCenter`, `Stepper`.
-- **Composables**: `useAuth`, `useGate`, `useUpload`, `useSSE`, `useClipboard`, `useShortcuts`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`, `useIdle`, `useInfiniteScroll`, `useSortable`.
+- **Composables & Client RPC**: `createApiClient`, `useAuth`, `useGate`, `useUpload`, `useSSE`, `useClipboard`, `useShortcuts`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`, `useIdle`, `useInfiniteScroll`, `useSortable`.
 
 ---
 
@@ -102,7 +105,7 @@
 ## ✅ Verification Results
 
 - **`pnpm check`**: **0 errors, 0 warnings**
-- **`pnpm test`**: **66 test files passed, 283 unit & DOM tests passed**
+- **`pnpm test`**: **67 test files passed, 302 unit & DOM tests passed**
 - **`pnpm build`**: **Production build & SSR bundle succeeded**
 - **`pnpm package`**: **Library distribution (`dist/`) generated**
 - **`pnpm format`**: **All files formatted cleanly with Prettier**

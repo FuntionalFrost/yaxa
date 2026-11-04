@@ -361,6 +361,18 @@ export type { FeatureGridProps, FeatureItem } from './components/blocks/FeatureG
 export { createMockSiteConfig, createMockUser, createTestWrapperProps } from './testing';
 export type { YaxaTestOptions } from './testing';
 
+// Type-Safe Client RPC
+export { createApiClient, interpolatePath, serializeQueryParams } from './client';
+export type {
+	ApiClient,
+	ApiClientConfig,
+	ClientRequestOptions,
+	ClientResponse,
+	InferEndpoint,
+	RouteMethods,
+	ProblemDetails as ClientProblemDetails
+} from './client';
+
 // Utilities
 export { cn, tv } from './utils/cn';
 export type { VariantProps } from './utils/cn';
