@@ -295,7 +295,8 @@ export const GET = createApiDocsHandler({
 });
 ```
 
-- **Interactive Reference UI:** Open `/api/docs` in your browser.
+- **Interactive Reference UI:** Open `/api/docs` in your browser (supports `?theme=scalar` (default), `?theme=swagger`, or `?theme=redoc`).
+- **Live Demo:** Try it live on [yaxa.vercel.app/api/docs](https://yaxa.vercel.app/api/docs).
 - **Raw OpenAPI 3.1 JSON:** Request `/api/docs?format=json` or send `Accept: application/json` for SDK generation.
 
 ---

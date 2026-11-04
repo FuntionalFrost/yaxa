@@ -5,6 +5,7 @@
 ## Quick Links
 
 - [Documentation](https://yaxa.vercel.app/docs/intro): Full guides, interactive sandboxes, and API references.
+- [Interactive API Docs (Scalar/Swagger/OpenAPI 3.1)](https://yaxa.vercel.app/api/docs): Live interactive API playground and OpenAPI 3.1 schema reference.
 - [AI Coding Agent Skill](https://yaxa.vercel.app/skills.md): Full markdown instructions and rules for AI coding assistants.
 - [GitHub Repository](https://github.com/FuntionalFrost/yaxa): Open-source source code and issues.
 - [npm Package](https://www.npmjs.com/package/yaxa-svelte): Official npm package registry.

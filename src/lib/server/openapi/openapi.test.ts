@@ -272,4 +272,20 @@ describe('createApiDocsHandler Endpoint', () => {
 		expect(html).toContain('redoc.standalone.js');
 		expect(html).toContain('redoc-container');
 	});
+
+	it('allows overriding theme dynamically via ?theme query parameter', async () => {
+		const handler = createApiDocsHandler({
+			title: 'Dynamic Theme Test',
+			theme: 'scalar'
+		});
+
+		const event = createMockRequestEvent({
+			url: 'http://localhost:5173/api/docs?theme=swagger'
+		});
+
+		const response = await handler(event);
+		expect(response.status).toBe(200);
+		const html = await response.text();
+		expect(html).toContain('swagger-ui-dist');
+	});
 });

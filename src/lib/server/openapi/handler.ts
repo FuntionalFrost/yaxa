@@ -1,5 +1,5 @@
 import type { RequestEvent, RequestHandler } from '@sveltejs/kit';
-import type { ApiDocsOptions } from './types';
+import type { ApiDocsOptions, ApiDocsTheme } from './types';
 import { generateOpenApiSpec } from './generator';
 
 function renderScalarHtml(specJson: string, title: string): string {
@@ -84,11 +84,14 @@ function renderRedocHtml(specJson: string, title: string): string {
  * page (Scalar, Swagger UI, or Redoc) or returns raw OpenAPI 3.1 JSON when ?format=json is requested.
  */
 export function createApiDocsHandler(options: ApiDocsOptions = {}): RequestHandler {
-	const theme = options.theme || 'scalar';
+	const defaultTheme = options.theme || 'scalar';
 
 	return async (event: RequestEvent) => {
 		const { url, request } = event;
 		const format = url.searchParams.get('format');
+		const themeQuery = url.searchParams.get('theme') as ApiDocsTheme | null;
+		const activeTheme: ApiDocsTheme =
+			themeQuery && ['scalar', 'swagger', 'redoc'].includes(themeQuery) ? themeQuery : defaultTheme;
 		const acceptHeader = request.headers.get('accept') || '';
 
 		const spec = generateOpenApiSpec(options);
@@ -111,9 +114,9 @@ export function createApiDocsHandler(options: ApiDocsOptions = {}): RequestHandl
 		const specJson = JSON.stringify(spec);
 		let html: string;
 
-		if (theme === 'swagger') {
+		if (activeTheme === 'swagger') {
 			html = renderSwaggerHtml(specJson, spec.info.title);
-		} else if (theme === 'redoc') {
+		} else if (activeTheme === 'redoc') {
 			html = renderRedocHtml(specJson, spec.info.title);
 		} else {
 			html = renderScalarHtml(specJson, spec.info.title);

@@ -90,6 +90,7 @@
 
 - **Live Documentation**: [https://yaxa.vercel.app](https://yaxa.vercel.app)
 - **Theme Studio**: Interactive theme customizer at [`/theme`](src/routes/theme/+page.svelte) or on [yaxa.vercel.app/theme](https://yaxa.vercel.app/theme).
+- **Interactive API Docs (Scalar/Swagger/Redoc)**: Explore live OpenAPI 3.1 endpoints at [`/api/docs`](src/routes/api/docs/+server.ts) or on [yaxa.vercel.app/api/docs](https://yaxa.vercel.app/api/docs).
 - **SaaS Showcase**: Explore the interactive SaaS flow at [`/saas`](src/routes/saas/+page.svelte) or on [yaxa.vercel.app/saas](https://yaxa.vercel.app/saas).
 - **SaaS Docs**: Full implementation guide in [`src/routes/docs/_sections/DocSaasSuite.svelte`](src/routes/docs/_sections/DocSaasSuite.svelte) or on [yaxa.vercel.app/docs/saas-suite](https://yaxa.vercel.app/docs/saas-suite).
 
@@ -98,7 +99,7 @@
 ## ✅ Verification Results
 
 - **`pnpm check`**: **0 errors, 0 warnings**
-- **`pnpm test`**: **64 test files passed, 261 unit & DOM tests passed**
+- **`pnpm test`**: **64 test files passed, 264 unit & DOM tests passed**
 - **`pnpm build`**: **Production build & SSR bundle succeeded**
 - **`pnpm package`**: **Library distribution (`dist/`) generated**
 - **`pnpm format`**: **All files formatted cleanly with Prettier**

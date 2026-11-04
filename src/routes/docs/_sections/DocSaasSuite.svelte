@@ -426,6 +426,35 @@ await eventBus.emit('user.created', {
 			filename="src/routes/api/docs/+server.ts"
 			showLineNumbers={true}
 		/>
+		<div class="flex flex-wrap items-center gap-3 pt-2">
+			<a
+				href="/api/docs"
+				target="_blank"
+				rel="noreferrer"
+				class="inline-flex items-center gap-1.5 rounded-lg bg-primary-600 px-3.5 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-primary-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600 dark:bg-primary-500 dark:hover:bg-primary-400"
+			>
+				<span>Open Live Scalar Docs</span>
+				<span class="opacity-75">↗</span>
+			</a>
+			<a
+				href="/api/docs?theme=swagger"
+				target="_blank"
+				rel="noreferrer"
+				class="inline-flex items-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-3 py-2 text-xs font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+			>
+				<span>Swagger UI</span>
+				<span class="opacity-75">↗</span>
+			</a>
+			<a
+				href="/api/docs?format=json"
+				target="_blank"
+				rel="noreferrer"
+				class="inline-flex items-center gap-1.5 rounded-lg border border-zinc-300 bg-white px-3 py-2 font-mono text-xs font-medium text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-200 dark:hover:bg-zinc-700"
+			>
+				<span>OpenAPI 3.1 JSON</span>
+				<span class="opacity-75">↗</span>
+			</a>
+		</div>
 	</div>
 
 	<!-- Background Workflows & Persistent Job Queue -->
