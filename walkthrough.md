@@ -76,6 +76,12 @@
 15. **End-to-End Type-Safe Client RPC (`createApiClient`)**:
     - Zero-codegen type safety bridging server `yaxaEndpoint` routes directly into Svelte 5 components and universal `load` functions. Features dynamic path bracket interpolation (`/api/projects/[id]`), native RFC 7807 problem details error discrimination (`{ data, error, ok }`), and an ultra-lightweight (<500 B gzipped) ES Proxy-based footprint.
 
+16. **Holistic Site SEO & Structured Data Optimization**:
+    - Enriched metadata across `/theme`, `/saas`, and `/api/docs` with targeted keywords and dynamic 1200x630 `/api/og` social share cards.
+    - Wired `BreadcrumbList` and `TechArticle` Schema.org JSON-LD into all documentation pages (`/docs/[slug]`).
+    - Added `/api/docs` to `sitemap.xml` and enhanced standalone Scalar/Swagger API reference HTML templates with canonical, robots, and OpenGraph meta tags.
+    - Expanded global `site.config.ts` description and keywords to index full-stack SaaS, OpenAPI 3.1, client RPC, and real-time SSE features.
+
 ---
 
 ## 🧩 50+ Svelte 5 Components & Runes Composables

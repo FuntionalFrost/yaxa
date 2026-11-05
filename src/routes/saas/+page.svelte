@@ -36,6 +36,20 @@
 <Seo
 	title="Solo SaaS Suite Showcase"
 	description="Experience the batteries-included Svelte 5 SaaS stack: Better-Auth, Drizzle ORM, Polar.sh payments, and drop-in SaaS components."
+	keywords={[
+		'SvelteKit SaaS',
+		'Svelte 5 SaaS Stack',
+		'Better-Auth Svelte',
+		'Polar.sh Payments',
+		'Drizzle ORM SvelteKit',
+		'Feature Gating',
+		'Passkeys WebAuthn'
+	]}
+	ogImage={{
+		title: 'Solo SaaS Suite',
+		description: 'Full-stack SaaS: Better-Auth, Drizzle, Polar & Gating',
+		badge: 'Full-Stack SaaS'
+	}}
 />
 
 <div class="space-y-12 pb-16">

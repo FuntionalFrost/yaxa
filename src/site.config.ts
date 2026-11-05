@@ -2,9 +2,9 @@ import { defineSiteConfig } from '#lib/site/config.js';
 
 export const siteConfig = defineSiteConfig({
 	name: 'Yaxa',
-	title: 'Yaxa — The Intuitive Svelte UI Library',
+	title: 'Yaxa — The Intuitive Svelte UI Library & Solo SaaS Framework',
 	description:
-		'A comprehensive Svelte 5 UI component library with 50+ accessible components powered by Bits UI & Tailwind Variants and automated SEO for building modern web applications.',
+		'Nuxt UI v4 equivalent for SvelteKit 2 & 3 and Svelte 5. 50+ accessible components with Tailwind CSS v4, type-safe API pipeline (yaxaEndpoint), OpenAPI 3.1 & Scalar interactive docs, real-time SSE, background job queue, and automated SEO.',
 	url: 'https://yaxa.vercel.app',
 	email: 'devfrost@protonmail.com',
 	logo: '/favicon.svg',
@@ -43,6 +43,13 @@ export const siteConfig = defineSiteConfig({
 			'Nuxt UI',
 			'Tailwind CSS v4',
 			'UI Components',
+			'SvelteKit SaaS',
+			'OpenAPI 3.1',
+			'Scalar',
+			'Type-Safe RPC',
+			'Server-Sent Events',
+			'SSE',
+			'Job Queue',
 			'SEO',
 			'OpenGraph',
 			'Sitemap',
@@ -56,7 +63,7 @@ export const siteConfig = defineSiteConfig({
 	sitemap: {
 		changefreq: 'weekly',
 		priority: 0.8,
-		exclude: ['/api/*']
+		exclude: ['/api/auth/*', '/api/cron/*', '/api/events', '/api/projects']
 	},
 	nav: [
 		{ label: 'Docs', href: '/docs/intro' },

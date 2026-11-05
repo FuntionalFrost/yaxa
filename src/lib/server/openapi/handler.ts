@@ -2,13 +2,46 @@ import type { RequestEvent, RequestHandler } from '@sveltejs/kit';
 import type { ApiDocsOptions, ApiDocsTheme } from './types';
 import { generateOpenApiSpec } from './generator';
 
-function renderScalarHtml(specJson: string, title: string): string {
+interface DocMeta {
+	title: string;
+	description?: string;
+	canonicalUrl?: string;
+	ogImage?: string;
+}
+
+function renderHeadMeta({ title, description, canonicalUrl, ogImage }: DocMeta): string {
+	const descTag = description
+		? `<meta name="description" content="${description.replace(/"/g, '&quot;')}" />`
+		: '';
+	const canonicalTag = canonicalUrl ? `<link rel="canonical" href="${canonicalUrl}" />` : '';
+	const ogImageTag = ogImage ? `<meta property="og:image" content="${ogImage}" />` : '';
+	const ogDescTag = description
+		? `<meta property="og:description" content="${description.replace(/"/g, '&quot;')}" />`
+		: '';
+	const ogUrlTag = canonicalUrl ? `<meta property="og:url" content="${canonicalUrl}" />` : '';
+
+	return `    <title>${title}</title>
+    ${descTag}
+    <meta name="robots" content="index, follow" />
+    ${canonicalTag}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="${title.replace(/"/g, '&quot;')}" />
+    ${ogDescTag}
+    ${ogUrlTag}
+    ${ogImageTag}
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="${title.replace(/"/g, '&quot;')}" />
+    ${ogDescTag}
+    ${ogImageTag}`.trim();
+}
+
+function renderScalarHtml(specJson: string, meta: DocMeta): string {
 	return `<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>${title}</title>
+    ${renderHeadMeta(meta)}
     <style>
       body { margin: 0; background-color: #0f172a; }
     </style>
@@ -22,13 +55,13 @@ function renderScalarHtml(specJson: string, title: string): string {
 </html>`;
 }
 
-function renderSwaggerHtml(specJson: string, title: string): string {
+function renderSwaggerHtml(specJson: string, meta: DocMeta): string {
 	return `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>${title}</title>
+    ${renderHeadMeta(meta)}
     <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css" />
     <style>
       body { margin: 0; background: #fafafa; }
@@ -53,13 +86,13 @@ function renderSwaggerHtml(specJson: string, title: string): string {
 </html>`;
 }
 
-function renderRedocHtml(specJson: string, title: string): string {
+function renderRedocHtml(specJson: string, meta: DocMeta): string {
 	return `<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>${title}</title>
+    ${renderHeadMeta(meta)}
     <style>
       body { margin: 0; padding: 0; }
     </style>
@@ -112,14 +145,23 @@ export function createApiDocsHandler(options: ApiDocsOptions = {}): RequestHandl
 
 		// Render Interactive HTML Docs
 		const specJson = JSON.stringify(spec);
+		const canonicalUrl = `${url.origin}${url.pathname}`;
+		const ogImage = `${url.origin}/api/og?title=${encodeURIComponent(spec.info.title)}&badge=API+Docs`;
+		const meta: DocMeta = {
+			title: spec.info.title,
+			description: spec.info.description,
+			canonicalUrl,
+			ogImage
+		};
+
 		let html: string;
 
 		if (activeTheme === 'swagger') {
-			html = renderSwaggerHtml(specJson, spec.info.title);
+			html = renderSwaggerHtml(specJson, meta);
 		} else if (activeTheme === 'redoc') {
-			html = renderRedocHtml(specJson, spec.info.title);
+			html = renderRedocHtml(specJson, meta);
 		} else {
-			html = renderScalarHtml(specJson, spec.info.title);
+			html = renderScalarHtml(specJson, meta);
 		}
 
 		return new Response(html, {
