@@ -153,7 +153,7 @@ import { POST as createProject } from '../projects/+server';
 export const GET = createApiDocsHandler({
   title: 'Acme SaaS API',
   version: '1.0.0',
-  theme: 'scalar', // 'scalar' (default) | 'swagger' | 'redoc'
+  theme: 'scalar', // 'scalar' (default) | 'swagger'
   endpoints: {
     '/api/projects': {
       POST: createProject
@@ -293,6 +293,65 @@ export const load = async ({ fetch }) => {
   const { data: projects } = await api['/api/projects'].get();
   return { projects: projects ?? [] };
 };
+`;
+
+	const querySnippet =
+		`// 1. Reactive Runes Query & Optimistic Mutation
+// src/routes/dashboard/+page.svelte
+<` +
+		`script lang="ts">
+  import { api } from '$lib/api';
+  import { createQuery, createMutation } from 'yaxa-svelte';
+
+  let activeOrg = $state('org_enterprise');
+
+  // ✨ Auto-refetches when activeOrg changes, coalesces requests, and syncs on focus
+  const projects = createQuery(
+    () => api['/api/projects'].get({ query: { orgId: activeOrg } }),
+    {
+      staleTimeMs: 15_000,
+      refetchOnWindowFocus: true,
+      subscribeToSse: \`org:\${activeOrg}/projects\` // ⚡ Auto-invalidates on SSE broadcast
+    }
+  );
+
+  // 🛡️ Optimistic mutation with automatic rollback on RFC 7807 error
+  const createProject = createMutation(
+    (name: string) => api['/api/projects'].post({ body: { name, orgId: activeOrg } }),
+    {
+      onMutate: (name) => {
+        const previous = projects.data;
+        projects.optimisticUpdate((curr) => [
+          { id: 'temp-' + Date.now(), name, status: 'creating' },
+          ...(curr ?? [])
+        ]);
+        return { previous }; // Snapshot for rollback
+      },
+      onError: (err, _name, context) => {
+        if (context?.previous) projects.setData(context.previous);
+        toast.error(err.title, err.detail);
+      },
+      onSettled: () => projects.invalidate()
+    }
+  );
+<` +
+		`/script>
+
+{#if projects.isLoading}
+  <Skeleton count={3} class="h-10 w-full" />
+{:else if projects.data}
+  <ul>
+    {#each projects.data as project}
+      <li class={project.id.startsWith('temp-') ? 'opacity-50' : ''}>
+        {project.name}
+      </li>
+    {/each}
+  </ul>
+{/if}
+
+<Button onclick={() => createProject.mutate('New Project')} loading={createProject.isPending}>
+  Create Project
+</Button>
 `;
 </script>
 
@@ -500,8 +559,8 @@ export const load = async ({ fetch }) => {
 		</h2>
 		<p class="text-sm text-zinc-600 dark:text-zinc-400">
 			Instantly generate live interactive API documentation using <strong>Scalar</strong> (modern
-			dark-mode reference), <strong>Swagger UI</strong>, or <strong>Redoc</strong> directly from your
-			endpoints, with raw OpenAPI 3.1 JSON export for SDK generation:
+			dark-mode reference with interactive request runner) or <strong>Swagger UI</strong> directly from
+			your endpoints, with raw OpenAPI 3.1 JSON export for SDK generation:
 		</p>
 		<CodeBlock
 			code={docsSnippet}
@@ -616,6 +675,25 @@ export const load = async ({ fetch }) => {
 			filename="src/lib/api-client.ts"
 			showLineNumbers={true}
 			highlightLines={[2, 11, 15, 20, 30]}
+		/>
+	</div>
+
+	<!-- Reactive Runes Query & Cache -->
+	<div class="space-y-6" id="reactive-query">
+		<h2 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+			11. Runes-Native Reactive Query & Realtime RPC (`createQuery`, `createMutation`)
+		</h2>
+		<p class="text-sm text-zinc-600 dark:text-zinc-400">
+			A zero-overhead query and mutation engine designed natively for Svelte 5 runes. Features
+			request coalescing, stale-while-revalidate, window focus and reconnect revalidation,
+			optimistic mutations with automatic rollback, and live Server-Sent Events cache invalidation:
+		</p>
+		<CodeBlock
+			code={querySnippet}
+			language="svelte"
+			filename="src/routes/dashboard/+page.svelte"
+			showLineNumbers={true}
+			highlightLines={[9, 13, 20, 24, 30, 34]}
 		/>
 	</div>
 </div>

@@ -86,35 +86,9 @@ function renderSwaggerHtml(specJson: string, meta: DocMeta): string {
 </html>`;
 }
 
-function renderRedocHtml(specJson: string, meta: DocMeta): string {
-	return `<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    ${renderHeadMeta(meta)}
-    <style>
-      body { margin: 0; padding: 0; }
-    </style>
-  </head>
-  <body>
-    <div id="redoc-container"></div>
-    <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"></script>
-    <script>
-      Redoc.init(${specJson}, {
-        scrollYOffset: 50,
-        theme: {
-          colors: { primary: { main: '#3b82f6' } }
-        }
-      }, document.getElementById('redoc-container'));
-    </script>
-  </body>
-</html>`;
-}
-
 /**
  * Creates a turnkey SvelteKit RequestHandler that generates an interactive OpenAPI 3.1 documentation
- * page (Scalar, Swagger UI, or Redoc) or returns raw OpenAPI 3.1 JSON when ?format=json is requested.
+ * page (Scalar or Swagger UI) or returns raw OpenAPI 3.1 JSON when ?format=json is requested.
  */
 export function createApiDocsHandler(options: ApiDocsOptions = {}): RequestHandler {
 	const defaultTheme = options.theme || 'scalar';
@@ -124,7 +98,7 @@ export function createApiDocsHandler(options: ApiDocsOptions = {}): RequestHandl
 		const format = url.searchParams.get('format');
 		const themeQuery = url.searchParams.get('theme') as ApiDocsTheme | null;
 		const activeTheme: ApiDocsTheme =
-			themeQuery && ['scalar', 'swagger', 'redoc'].includes(themeQuery) ? themeQuery : defaultTheme;
+			themeQuery && ['scalar', 'swagger'].includes(themeQuery) ? themeQuery : defaultTheme;
 		const acceptHeader = request.headers.get('accept') || '';
 
 		const spec = generateOpenApiSpec(options);
@@ -154,15 +128,10 @@ export function createApiDocsHandler(options: ApiDocsOptions = {}): RequestHandl
 			ogImage
 		};
 
-		let html: string;
-
-		if (activeTheme === 'swagger') {
-			html = renderSwaggerHtml(specJson, meta);
-		} else if (activeTheme === 'redoc') {
-			html = renderRedocHtml(specJson, meta);
-		} else {
-			html = renderScalarHtml(specJson, meta);
-		}
+		const html =
+			activeTheme === 'swagger'
+				? renderSwaggerHtml(specJson, meta)
+				: renderScalarHtml(specJson, meta);
 
 		return new Response(html, {
 			headers: {

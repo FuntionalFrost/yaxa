@@ -361,8 +361,18 @@ export type { FeatureGridProps, FeatureItem } from './components/blocks/FeatureG
 export { createMockSiteConfig, createMockUser, createTestWrapperProps } from './testing';
 export type { YaxaTestOptions } from './testing';
 
-// Type-Safe Client RPC
-export { createApiClient, interpolatePath, serializeQueryParams } from './client';
+// Type-Safe Client RPC & Runes Query Engine
+export {
+	createApiClient,
+	interpolatePath,
+	serializeQueryParams,
+	createQuery,
+	createMutation,
+	QueryClient,
+	getQueryClient,
+	setQueryClient,
+	hashQueryKey
+} from './client';
 export type {
 	ApiClient,
 	ApiClientConfig,
@@ -370,7 +380,16 @@ export type {
 	ClientResponse,
 	InferEndpoint,
 	RouteMethods,
-	ProblemDetails as ClientProblemDetails
+	ProblemDetails as ClientProblemDetails,
+	QueryKey,
+	QueryStatus,
+	QueryCacheEntry,
+	CreateQueryOptions,
+	CreateQueryResult,
+	CreateMutationOptions,
+	CreateMutationResult,
+	QueryFn,
+	MutationFn
 } from './client';
 
 // Utilities

@@ -253,14 +253,14 @@ describe('createApiDocsHandler Endpoint', () => {
 		expect(html).toContain('SwaggerUIBundle');
 	});
 
-	it('renders Redoc HTML when theme is redoc', async () => {
+	it('falls back to scalar HTML when an unrecognized theme query is passed', async () => {
 		const handler = createApiDocsHandler({
-			title: 'Redoc Docs Test',
-			theme: 'redoc'
+			title: 'Fallback Docs Test',
+			theme: 'scalar'
 		});
 
 		const event = createMockRequestEvent({
-			url: 'http://localhost:5173/api/docs'
+			url: 'http://localhost:5173/api/docs?theme=unknown'
 		});
 
 		const response = await handler(event);
@@ -268,9 +268,8 @@ describe('createApiDocsHandler Endpoint', () => {
 		expect(response.headers.get('content-type')).toContain('text/html');
 
 		const html = await response.text();
-		expect(html).toContain('<title>Redoc Docs Test</title>');
-		expect(html).toContain('redoc.standalone.js');
-		expect(html).toContain('redoc-container');
+		expect(html).toContain('<title>Fallback Docs Test</title>');
+		expect(html).toContain('@scalar/api-reference');
 	});
 
 	it('allows overriding theme dynamically via ?theme query parameter', async () => {

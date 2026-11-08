@@ -5,6 +5,7 @@
 **The Intuitive Svelte UI & Solo SaaS Library**  
 _Nuxt UI v4 & Nuxt UI Pro Equivalent for SvelteKit 2 & 3 & Svelte 5 with Built-in SEO & SaaS Parity._
 
+[![Live Demo](https://img.shields.io/badge/Live_Demo-yaxa.vercel.app-000000?style=flat&logo=vercel&logoColor=white)](https://yaxa.vercel.app)
 [![npm version](https://img.shields.io/npm/v/yaxa-svelte.svg?color=CB3837&logo=npm)](https://www.npmjs.com/package/yaxa-svelte)
 [![npm downloads](https://img.shields.io/npm/dm/yaxa-svelte.svg?color=blue)](https://www.npmjs.com/package/yaxa-svelte)
 [![Svelte 5](https://img.shields.io/badge/Svelte-5.0+-FF3E00?style=flat&logo=svelte&logoColor=white)](https://svelte.dev)
@@ -15,7 +16,13 @@ _Nuxt UI v4 & Nuxt UI Pro Equivalent for SvelteKit 2 & 3 & Svelte 5 with Built-i
 [![Security Policy](https://img.shields.io/badge/Security-Policy-blue.svg)](SECURITY.md)
 [![Contributing](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-[**Live Documentation & Playground →**](https://yaxa.vercel.app)
+<br />
+
+[**🚀 Live Demo**](https://yaxa.vercel.app) &nbsp;•&nbsp;
+[**📚 Documentation**](https://yaxa.vercel.app/docs) &nbsp;•&nbsp;
+[**🎨 Theme Studio**](https://yaxa.vercel.app/theme) &nbsp;•&nbsp;
+[**💼 SaaS Showcase**](https://yaxa.vercel.app/saas) &nbsp;•&nbsp;
+[**⚡ Scalar API Reference**](https://yaxa.vercel.app/api/docs)
 
 </div>
 
@@ -276,7 +283,7 @@ export const POST = yaxaEndpoint({
 
 ## 📜 Auto-Generated OpenAPI 3.1 & Interactive Docs (`/api/docs`)
 
-Instantly generate an OpenAPI 3.1 specification and host interactive documentation ([Scalar](https://scalar.com/), Swagger UI, or Redoc) directly from your `yaxaEndpoint` routes:
+Instantly generate an OpenAPI 3.1 specification and host interactive documentation ([Scalar](https://scalar.com/) or Swagger UI) directly from your `yaxaEndpoint` routes:
 
 ```ts
 // src/routes/api/docs/+server.ts
@@ -286,7 +293,7 @@ import { POST as createProject } from '../projects/+server';
 export const GET = createApiDocsHandler({
 	title: 'Acme SaaS API',
 	version: '1.0.0',
-	theme: 'scalar', // 'scalar' (default) | 'swagger' | 'redoc'
+	theme: 'scalar', // 'scalar' (default) | 'swagger'
 	endpoints: {
 		'/api/projects': {
 			POST: createProject
@@ -295,7 +302,7 @@ export const GET = createApiDocsHandler({
 });
 ```
 
-- **Interactive Reference UI:** Open `/api/docs` in your browser (supports `?theme=scalar` (default), `?theme=swagger`, or `?theme=redoc`).
+- **Interactive Reference UI:** Open `/api/docs` in your browser (supports `?theme=scalar` (default) or `?theme=swagger`).
 - **Live Demo:** Try it live on [yaxa.vercel.app/api/docs](https://yaxa.vercel.app/api/docs).
 - **Raw OpenAPI 3.1 JSON:** Request `/api/docs?format=json` or send `Accept: application/json` for SDK generation.
 
@@ -441,22 +448,81 @@ export const load = async ({ fetch }) => {
 
 ---
 
+## ⚡ Runes-Native Reactive Query & Realtime RPC (`createQuery`, `createMutation`)
+
+A zero-overhead, runes-native query and mutation cache built specifically for Svelte 5. Features request coalescing, stale-while-revalidate, window focus revalidation, optimistic updates with automatic rollback, and live SSE cache invalidation:
+
+```svelte
+<!-- src/routes/projects/+page.svelte -->
+<script lang="ts">
+	import { api } from '$lib/api';
+	import { createQuery, createMutation } from 'yaxa-svelte';
+
+	let activeOrg = $state('org_123');
+
+	// 1. Reactive Query: auto-refetches when activeOrg changes
+	const projects = createQuery(() => api['/api/projects'].get({ query: { orgId: activeOrg } }), {
+		staleTimeMs: 15_000,
+		refetchOnWindowFocus: true,
+		subscribeToSse: `org:${activeOrg}/projects` // ⚡ Live SSE invalidation
+	});
+
+	// 2. Optimistic Mutation with Automatic Rollback on RFC 7807 Error
+	const createProject = createMutation(
+		(name: string) => api['/api/projects'].post({ body: { name, orgId: activeOrg } }),
+		{
+			onMutate: (name) => {
+				const previous = projects.data;
+				projects.optimisticUpdate((curr) => [
+					{ id: 'temp-' + Date.now(), name, status: 'creating' },
+					...(curr ?? [])
+				]);
+				return { previous }; // Snapshot for rollback
+			},
+			onError: (err, _name, context) => {
+				if (context?.previous) projects.setData(context.previous);
+				toast.error(err.title, err.detail);
+			},
+			onSettled: () => projects.invalidate()
+		}
+	);
+</script>
+
+{#if projects.isLoading}
+	<Skeleton count={3} class="h-10 w-full" />
+{:else if projects.data}
+	<ul>
+		{#each projects.data as project}
+			<li class={project.id.startsWith('temp-') ? 'opacity-50' : ''}>
+				{project.name}
+			</li>
+		{/each}
+	</ul>
+{/if}
+
+<Button onclick={() => createProject.mutate('New Project')} loading={createProject.isPending}>
+	Create Project
+</Button>
+```
+
+---
+
 ## 📦 Subpath Exports Architecture
 
-| Subpath                 | Description                                                                                                                                                                                                                |
-| :---------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `yaxa-svelte`           | Core UI Primitives, SEO Components, `<Gate />`, Type-Safe Client RPC (`createApiClient`), Theme System & Composables (`useGate`, `useUpload`, `useSSE`, `useToast`, `useClipboard`, etc.)                                  |
-| `yaxa-svelte/admin`     | Drizzle ORM Schema Introspection, `<AdminDashboard />`, `createYaxaAdminHook`, `createDrizzleAdmin`, `<DevSandbox />`, `<RecordDrawer />`                                                                                  |
-| `yaxa-svelte/server`    | `yaxaEndpoint` Pipeline, Declarative Guards, OpenAPI 3.1 & Scalar Docs, RFC 7807, Real-Time SSE (`yaxaSSE`, `broadcast`), Background Jobs (`enqueueJob`, `createJobRunner`), `eventBus`, Server Hooks, DB, Storage & Email |
-| `yaxa-svelte/auth`      | Better-Auth client & server integration (`useAuth`, `<AuthCard />`, `<PasskeyUI />`, `<TwoFactorModal />`, `createYaxaAuth`)                                                                                               |
-| `yaxa-svelte/db`        | Multi-dialect Drizzle ORM clients & schemas for Neon (PostgreSQL) and Turso (SQLite/LibSQL)                                                                                                                                |
-| `yaxa-svelte/polar`     | Polar.sh billing, customer portal sessions, and webhook synchronization                                                                                                                                                    |
-| `yaxa-svelte/email`     | Resend transactional email templates with automatic development console fallback                                                                                                                                           |
-| `yaxa-svelte/storage`   | AWS S3 and Cloudflare R2 presigned upload URL generators                                                                                                                                                                   |
-| `yaxa-svelte/testing`   | Test mocks & utilities (`createMockSiteConfig`, `createMockUser`, `createTestWrapperProps`)                                                                                                                                |
-| `yaxa-svelte/vite`      | Turnkey Vite plugin (`yaxa()`)                                                                                                                                                                                             |
-| `yaxa-svelte/yaxa.css`  | Standalone turnkey Tailwind CSS v4 stylesheet with base styling, `@theme`, and scrollbars                                                                                                                                  |
-| `yaxa-svelte/theme.css` | Pure Tailwind CSS v4 design tokens, `:root` variables, and harmonic radius scale without `@import 'tailwindcss'`                                                                                                           |
+| Subpath                 | Description                                                                                                                                                                                                                                                    |
+| :---------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `yaxa-svelte`           | Core UI Primitives, SEO Components, `<Gate />`, Type-Safe Client RPC (`createApiClient`), Runes Query Engine (`createQuery`, `createMutation`, `QueryClient`), Theme System & Composables (`useGate`, `useUpload`, `useSSE`, `useToast`, `useClipboard`, etc.) |
+| `yaxa-svelte/admin`     | Drizzle ORM Schema Introspection, `<AdminDashboard />`, `createYaxaAdminHook`, `createDrizzleAdmin`, `<DevSandbox />`, `<RecordDrawer />`                                                                                                                      |
+| `yaxa-svelte/server`    | `yaxaEndpoint` Pipeline, Declarative Guards, OpenAPI 3.1 & Scalar Docs, RFC 7807, Real-Time SSE (`yaxaSSE`, `broadcast`), Background Jobs (`enqueueJob`, `createJobRunner`), `eventBus`, Server Hooks, DB, Storage & Email                                     |
+| `yaxa-svelte/auth`      | Better-Auth client & server integration (`useAuth`, `<AuthCard />`, `<PasskeyUI />`, `<TwoFactorModal />`, `createYaxaAuth`)                                                                                                                                   |
+| `yaxa-svelte/db`        | Multi-dialect Drizzle ORM clients & schemas for Neon (PostgreSQL) and Turso (SQLite/LibSQL)                                                                                                                                                                    |
+| `yaxa-svelte/polar`     | Polar.sh billing, customer portal sessions, and webhook synchronization                                                                                                                                                                                        |
+| `yaxa-svelte/email`     | Resend transactional email templates with automatic development console fallback                                                                                                                                                                               |
+| `yaxa-svelte/storage`   | AWS S3 and Cloudflare R2 presigned upload URL generators                                                                                                                                                                                                       |
+| `yaxa-svelte/testing`   | Test mocks & utilities (`createMockSiteConfig`, `createMockUser`, `createTestWrapperProps`)                                                                                                                                                                    |
+| `yaxa-svelte/vite`      | Turnkey Vite plugin (`yaxa()`)                                                                                                                                                                                                                                 |
+| `yaxa-svelte/yaxa.css`  | Standalone turnkey Tailwind CSS v4 stylesheet with base styling, `@theme`, and scrollbars                                                                                                                                                                      |
+| `yaxa-svelte/theme.css` | Pure Tailwind CSS v4 design tokens, `:root` variables, and harmonic radius scale without `@import 'tailwindcss'`                                                                                                                                               |
 
 ---
 

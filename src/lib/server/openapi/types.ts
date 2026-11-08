@@ -112,14 +112,13 @@ export interface GenerateOpenApiOptions {
 	registry?: any; // ApiRegistry
 }
 
-export type ApiDocsTheme = 'scalar' | 'swagger' | 'redoc';
+export type ApiDocsTheme = 'scalar' | 'swagger';
 
 export interface ApiDocsOptions extends GenerateOpenApiOptions {
 	/**
 	 * Interactive UI theme:
-	 * - 'scalar' (default): Modern, dark-mode native, high contrast developer reference.
+	 * - 'scalar' (default): Modern, dark-mode native, high contrast developer reference with interactive runner.
 	 * - 'swagger': Classic Swagger UI with interactive Try-It-Out console.
-	 * - 'redoc': Clean 3-panel technical documentation format.
 	 */
 	theme?: ApiDocsTheme;
 	/**

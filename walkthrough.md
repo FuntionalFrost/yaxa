@@ -65,7 +65,7 @@
     - Declarative auth & role guards (`requireAuth`, `requireRole`, `rateLimit`), Standard Schema & Zod validation, and RFC 7807 Problem Details error formatting.
 
 12. **Auto-Generated OpenAPI 3.1 & Interactive Documentation (`createApiDocsHandler`)**:
-    - Auto-generated OpenAPI 3.1.0 specifications with instant themeable interactive documentation ([Scalar](https://scalar.com/), Swagger UI, Redoc) and raw JSON export.
+    - Auto-generated OpenAPI 3.1.0 specifications with instant themeable interactive documentation ([Scalar](https://scalar.com/), Swagger UI) and raw JSON export.
 
 13. **Persistent Background Workflows & In-Process Event Bus**:
     - Embedded Drizzle-backed persistent job queue (`enqueueJob`, `defineWorker`, `createJobRunner`) with transactional outbox support (`{ tx }`), exponential backoff retries, Dead-Letter Queue (DLQ), and asynchronous domain `eventBus`.
@@ -82,6 +82,9 @@
     - Added `/api/docs` to `sitemap.xml` and enhanced standalone Scalar/Swagger API reference HTML templates with canonical, robots, and OpenGraph meta tags.
     - Expanded global `site.config.ts` description and keywords to index full-stack SaaS, OpenAPI 3.1, client RPC, and real-time SSE features.
 
+17. **Runes-Native Reactive Query & Realtime RPC (`createQuery`, `createMutation`, `QueryClient`)**:
+    - Idiomatic Svelte 5 runes query cache (`$state` / `$derived`) with request coalescing, stale-while-revalidate, window focus revalidation, optimistic mutations with automatic rollback, and live Server-Sent Events cache invalidation (`subscribeToSse`).
+
 ---
 
 ## 🧩 50+ Svelte 5 Components & Runes Composables
@@ -94,7 +97,7 @@
 - **Forms**: `Form`, `FormField`, `Input`, `InputOTP`, `Textarea`, `Checkbox`, `Switch`, `Select`, `Combobox`, `MultiSelect`, `NumberInput`, `RadioGroup`, `Slider`, `ColorPicker`, `ToggleGroup`, `DatePicker`, `DateRangePicker`, `Dropzone`, `<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`.
 - **Layout**: `Container`, `Header`, `Footer`, `Section`, `Card`, `Divider`, `YaxaApp`, `DashboardShell` (with independent sidebar tokens), `ResizablePanels`.
 - **Navigation & Overlays**: `Tabs`, `Breadcrumb`, `Pagination`, `CommandPalette` (`⌘K`), `DropdownMenu`, `ContextMenu`, `Modal`, `Drawer`, `Slideover`, `Popover`, `Tooltip` (with `arrow={false}` & `unstyled`), `Alert`, `Accordion`, `NotificationCenter`, `Stepper`.
-- **Composables & Client RPC**: `createApiClient`, `useAuth`, `useGate`, `useUpload`, `useSSE`, `useClipboard`, `useShortcuts`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`, `useIdle`, `useInfiniteScroll`, `useSortable`.
+- **Composables & Client RPC / Queries**: `createQuery`, `createMutation`, `QueryClient`, `createApiClient`, `useAuth`, `useGate`, `useUpload`, `useSSE`, `useClipboard`, `useShortcuts`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`, `useIdle`, `useInfiniteScroll`, `useSortable`.
 
 ---
 
@@ -102,7 +105,7 @@
 
 - **Live Documentation**: [https://yaxa.vercel.app](https://yaxa.vercel.app)
 - **Theme Studio**: Interactive theme customizer at [`/theme`](src/routes/theme/+page.svelte) or on [yaxa.vercel.app/theme](https://yaxa.vercel.app/theme).
-- **Interactive API Docs (Scalar/Swagger/Redoc)**: Explore live OpenAPI 3.1 endpoints at [`/api/docs`](src/routes/api/docs/+server.ts) or on [yaxa.vercel.app/api/docs](https://yaxa.vercel.app/api/docs).
+- **Interactive API Docs (Scalar/Swagger)**: Explore live OpenAPI 3.1 endpoints at [`/api/docs`](src/routes/api/docs/+server.ts) or on [yaxa.vercel.app/api/docs](https://yaxa.vercel.app/api/docs).
 - **SaaS Showcase**: Explore the interactive SaaS flow at [`/saas`](src/routes/saas/+page.svelte) or on [yaxa.vercel.app/saas](https://yaxa.vercel.app/saas).
 - **SaaS Docs**: Full implementation guide in [`src/routes/docs/_sections/DocSaasSuite.svelte`](src/routes/docs/_sections/DocSaasSuite.svelte) or on [yaxa.vercel.app/docs/saas-suite](https://yaxa.vercel.app/docs/saas-suite).
 
@@ -111,7 +114,7 @@
 ## ✅ Verification Results
 
 - **`pnpm check`**: **0 errors, 0 warnings**
-- **`pnpm test`**: **67 test files passed, 302 unit & DOM tests passed**
+- **`pnpm test`**: **68 test files passed, 316 unit & DOM tests passed**
 - **`pnpm build`**: **Production build & SSR bundle succeeded**
 - **`pnpm package`**: **Library distribution (`dist/`) generated**
 - **`pnpm format`**: **All files formatted cleanly with Prettier**
