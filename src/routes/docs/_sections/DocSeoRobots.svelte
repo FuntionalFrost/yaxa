@@ -13,6 +13,8 @@ import { siteConfig } from './site.config';
 // - /sitemap.xsl (styled visual dashboard)
 // - /site.webmanifest
 // - /api/og
+// - /llms.txt (AI search discovery)
+// - /skill.md (agent skills & IDE rules)
 export const handle = createYaxaHook(siteConfig);`;
 
 	const customSitemapSnippet = `// src/site.config.ts
@@ -40,7 +42,7 @@ export const siteConfig = defineSiteConfig({
 	description="Automated environment-gated robots.txt, dynamic XML sitemaps with human-readable XSL stylesheets, and PWA site.webmanifest generation."
 	badge="SEO Suite"
 	category="Site & SEO Kit"
-	importStatement={"import { createRobotsHandler, createSitemapHandler, createManifestHandler } from 'yaxa-svelte';"}
+	importStatement={"import { createRobotsHandler, createSitemapHandler, createManifestHandler } from 'yaxa-svelte/seo';"}
 />
 
 <div class="space-y-8">
@@ -62,7 +64,7 @@ export const siteConfig = defineSiteConfig({
 			Test the live generated endpoints on this deployment:
 		</p>
 
-		<div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+		<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 			<a
 				href="/robots.txt"
 				target="_blank"
@@ -129,6 +131,52 @@ export const siteConfig = defineSiteConfig({
 					class="mt-3 flex items-center text-xs font-semibold text-sky-600 group-hover:underline dark:text-sky-400"
 				>
 					View manifest ↗
+				</div>
+			</a>
+
+			<a
+				href="/llms.txt"
+				target="_blank"
+				class="group flex flex-col justify-between rounded-xl border border-zinc-200 bg-white p-4 transition-all hover:border-primary-500 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/40"
+			>
+				<div>
+					<div class="mb-2 flex items-center justify-between">
+						<span class="font-mono text-xs font-bold text-purple-600 dark:text-purple-400"
+							>/llms.txt</span
+						>
+						<Badge size="xs" variant="subtle" color="primary">Markdown</Badge>
+					</div>
+					<p class="text-xs text-zinc-500">
+						AI search standard for Perplexity, ChatGPT Search, Claude &amp; Cursor.
+					</p>
+				</div>
+				<div
+					class="mt-3 flex items-center text-xs font-semibold text-purple-600 group-hover:underline dark:text-purple-400"
+				>
+					View llms.txt ↗
+				</div>
+			</a>
+
+			<a
+				href="/skill.md"
+				target="_blank"
+				class="group flex flex-col justify-between rounded-xl border border-zinc-200 bg-white p-4 transition-all hover:border-primary-500 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900/40"
+			>
+				<div>
+					<div class="mb-2 flex items-center justify-between">
+						<span class="font-mono text-xs font-bold text-amber-600 dark:text-amber-400"
+							>/skill.md</span
+						>
+						<Badge size="xs" variant="subtle" color="warning">Agent Skill</Badge>
+					</div>
+					<p class="text-xs text-zinc-500">
+						Machine-readable rules teaching AI agents strict Svelte 5 and Yaxa guidelines.
+					</p>
+				</div>
+				<div
+					class="mt-3 flex items-center text-xs font-semibold text-amber-600 group-hover:underline dark:text-amber-400"
+				>
+					View skill.md ↗
 				</div>
 			</a>
 		</div>

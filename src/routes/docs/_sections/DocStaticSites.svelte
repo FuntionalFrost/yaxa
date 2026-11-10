@@ -30,13 +30,24 @@ export const prerender = true;
 export const ssr = true;`;
 
 	const staticOgSnippet = `// src/routes/api/og/+server.ts
-import { createOgImageHandler } from 'yaxa-svelte';
+import { createOgImageHandler } from 'yaxa-svelte/seo';
 import { siteConfig } from '../../site.config';
 
-// Mark the SVG OG route as prerenderable
+// Mark the SVG OG route as prerenderable for @sveltejs/adapter-static
 export const prerender = true;
 
 export const GET = createOgImageHandler({ config: siteConfig });`;
+
+	const staticSitemapSnippet = `// src/routes/sitemap.xml/+server.ts
+import { createSitemapHandler } from 'yaxa-svelte/seo';
+import { siteConfig } from '../../site.config';
+
+export const prerender = true;
+
+export const GET = createSitemapHandler({
+  config: siteConfig,
+  staticRoutes: ['/', '/docs', '/about']
+});`;
 
 	const cloudflareSnippet = `# Cloudflare Pages Build Settings
 Build command:      pnpm build
@@ -164,6 +175,16 @@ jobs:
 		<DocCodeBlock
 			code={staticOgSnippet}
 			filename="src/routes/api/og/+server.ts"
+			language="typescript"
+		/>
+		<p class="mt-3 text-sm leading-relaxed text-neutral-600 dark:text-neutral-400">
+			Import from the zero-dependency <code class="font-mono text-xs">yaxa-svelte/seo</code> subpath to
+			generate pre-rendered XML sitemaps with human-readable XSL styling without importing any database
+			or auth peer dependencies:
+		</p>
+		<DocCodeBlock
+			code={staticSitemapSnippet}
+			filename="src/routes/sitemap.xml/+server.ts"
 			language="typescript"
 		/>
 	</div>

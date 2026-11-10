@@ -18,6 +18,7 @@
 		badge?: string;
 		items?: FAQItem[];
 		categories?: string[];
+		enableSchema?: boolean;
 		class?: string;
 	};
 </script>
@@ -26,6 +27,7 @@
 	import Icon from '../elements/Icon.svelte';
 	import Badge from '../elements/Badge.svelte';
 	import { smoothSlide } from '../../motion/transitions';
+	import { generateFaqSchema } from '#lib/site/schema.js';
 
 	let {
 		title = 'Frequently Asked Questions',
@@ -33,8 +35,11 @@
 		badge = 'FAQ',
 		items = [],
 		categories = [],
+		enableSchema = true,
 		class: className = ''
 	}: FAQProps = $props();
+
+	let faqSchema = $derived(enableSchema && items.length > 0 ? generateFaqSchema(items) : null);
 
 	let selectedCategory = $state('all');
 	let openIds = $state<Array<string | number>>([]);
@@ -57,6 +62,12 @@
 		}
 	}
 </script>
+
+<svelte:head>
+	{#if faqSchema}
+		{@html `<script type="application/ld+json">${JSON.stringify(faqSchema)}</` + `script>`}
+	{/if}
+</svelte:head>
 
 <section class={faqVariants({ class: className })}>
 	{#if title || description || badge}

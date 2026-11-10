@@ -1,5 +1,6 @@
 import { createContext } from 'svelte';
 import { type SiteConfig, DEFAULT_SITE_CONFIG } from './config';
+import type { PageSeoConfig } from './seo-helpers';
 
 export interface AuthUserContext {
 	id?: string;
@@ -18,6 +19,7 @@ export interface AuthUserContext {
 export class YaxaState {
 	#configGetter: () => SiteConfig;
 	#userGetter: () => AuthUserContext | null;
+	#pageSeo = $state<PageSeoConfig | null>(null);
 
 	constructor(
 		configGetter: () => SiteConfig = () => DEFAULT_SITE_CONFIG,
@@ -33,6 +35,14 @@ export class YaxaState {
 
 	get user(): AuthUserContext | null {
 		return this.#userGetter() ?? null;
+	}
+
+	get pageSeo(): PageSeoConfig | null {
+		return this.#pageSeo;
+	}
+
+	setPageSeo(seo: PageSeoConfig | null) {
+		this.#pageSeo = seo;
 	}
 }
 

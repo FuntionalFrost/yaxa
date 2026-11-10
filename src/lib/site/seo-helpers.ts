@@ -16,6 +16,7 @@ export interface PageSeoConfig {
 	noindex?: boolean;
 	nofollow?: boolean;
 	schema?: Record<string, unknown> | Record<string, unknown>[];
+	[key: string]: unknown;
 }
 
 /**

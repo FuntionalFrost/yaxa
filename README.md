@@ -75,7 +75,7 @@ import { yaxa } from 'yaxa-svelte/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
-	plugins: [tailwindcss(), sveltekit(), yaxa()]
+ plugins: [tailwindcss(), sveltekit(), yaxa()]
 });
 ```
 
@@ -90,25 +90,25 @@ Create `src/site.config.ts` — your single source of truth for branding, metada
 import { defineSiteConfig } from 'yaxa-svelte';
 
 export const siteConfig = defineSiteConfig({
-	name: 'My Indie SaaS',
-	title: 'My Indie SaaS — Build Fast with SvelteKit',
-	description: 'Fast, beautiful, accessible web applications.',
-	url: 'https://my-app.com',
-	// Single-email mode: Solo devs can set one email for contact, support & DPO
-	email: 'hello@my-app.com',
-	project: {
-		license: 'MIT',
-		type: 'open-source',
-		repositoryUrl: 'https://github.com/my-org/my-app'
-	},
-	theme: {
-		accent: 'svelte', // 'svelte' | 'emerald' | 'amber' | 'sky' | 'violet' | 'rose' | 'indigo'
-		neutral: 'zinc', // 'zinc' | 'slate' | 'stone' | 'neutral'
-		defaultMode: 'dark'
-	},
-	socials: {
-		github: 'https://github.com/my-org/my-app'
-	}
+ name: 'My Indie SaaS',
+ title: 'My Indie SaaS — Build Fast with SvelteKit',
+ description: 'Fast, beautiful, accessible web applications.',
+ url: 'https://my-app.com',
+ // Single-email mode: Solo devs can set one email for contact, support & DPO
+ email: 'hello@my-app.com',
+ project: {
+  license: 'MIT',
+  type: 'open-source',
+  repositoryUrl: 'https://github.com/my-org/my-app'
+ },
+ theme: {
+  accent: 'svelte', // 'svelte' | 'emerald' | 'amber' | 'sky' | 'violet' | 'rose' | 'indigo'
+  neutral: 'zinc', // 'zinc' | 'slate' | 'stone' | 'neutral'
+  defaultMode: 'dark'
+ },
+ socials: {
+  github: 'https://github.com/my-org/my-app'
+ }
 });
 ```
 
@@ -170,20 +170,24 @@ Handle **all 5 SEO endpoints** and **Better-Auth session parsing** in `src/hooks
 ```ts
 // src/hooks.server.ts
 import { sequence } from '@sveltejs/kit/hooks';
-import { createYaxaHook } from 'yaxa-svelte/server';
+import { createYaxaHook } from 'yaxa-svelte/seo';
 import { createYaxaAuth, createYaxaAuthHook } from 'yaxa-svelte/auth';
 import { siteConfig } from './site.config';
 
 const yaxaHook = createYaxaHook(siteConfig);
 const auth = createYaxaAuth();
 const authHook = createYaxaAuthHook({
-	auth,
-	protectedPaths: ['/dashboard', '/settings', '/billing'],
-	loginPath: '/login'
+ auth,
+ protectedPaths: ['/dashboard', '/settings', '/billing'],
+ loginPath: '/login'
 });
 
 export const handle = sequence(yaxaHook, authHook);
 ```
+
+> **Pure Static Sites (`@sveltejs/adapter-static`):** Import directly from `yaxa-svelte/seo` (`createSitemapHandler`, `createRobotsHandler`, `createOgImageHandler`, `generateSitemapXsl`) with `export const prerender = true`. Completely headless with **zero DB, auth, or server runtime peer dependencies**.
+
+````
 
 ---
 
@@ -193,16 +197,16 @@ Declarative and programmatic subscription tier and RBAC gating with automatic Sv
 
 ```svelte
 <script lang="ts">
-	import { Gate, useGate } from 'yaxa-svelte';
+ import { Gate, useGate } from 'yaxa-svelte';
 
-	const gate = useGate();
+ const gate = useGate();
 </script>
 
 <!-- 0 props needed when wrapped in <YaxaApp user={data.user}> -->
 <Gate requiredPlan="pro" preview={true}>
-	<AdvancedAnalyticsWidget />
+ <AdvancedAnalyticsWidget />
 </Gate>
-```
+````
 
 ---
 
@@ -258,24 +262,24 @@ import { yaxaEndpoint, requireAuth, requireRole, rateLimit } from 'yaxa-svelte/s
 import { z } from 'zod';
 
 const CreateProjectSchema = z.object({
-	name: z.string().min(3),
-	description: z.string().optional()
+ name: z.string().min(3),
+ description: z.string().optional()
 });
 
 export const POST = yaxaEndpoint({
-	status: 201,
-	guards: [
-		requireAuth(),
-		requireRole(['admin', 'owner']),
-		rateLimit({ points: 20, windowSeconds: 60 })
-	],
-	schema: {
-		body: CreateProjectSchema
-	},
-	handle: async ({ body, user, orgId }) => {
-		// Guaranteed type-safe body, authenticated user, and active orgId
-		return { id: 'proj_123', name: body.name, orgId };
-	}
+ status: 201,
+ guards: [
+  requireAuth(),
+  requireRole(['admin', 'owner']),
+  rateLimit({ points: 20, windowSeconds: 60 })
+ ],
+ schema: {
+  body: CreateProjectSchema
+ },
+ handle: async ({ body, user, orgId }) => {
+  // Guaranteed type-safe body, authenticated user, and active orgId
+  return { id: 'proj_123', name: body.name, orgId };
+ }
 });
 ```
 
@@ -291,14 +295,14 @@ import { createApiDocsHandler } from 'yaxa-svelte/server';
 import { POST as createProject } from '../projects/+server';
 
 export const GET = createApiDocsHandler({
-	title: 'Acme SaaS API',
-	version: '1.0.0',
-	theme: 'scalar', // 'scalar' (default) | 'swagger'
-	endpoints: {
-		'/api/projects': {
-			POST: createProject
-		}
-	}
+ title: 'Acme SaaS API',
+ version: '1.0.0',
+ theme: 'scalar', // 'scalar' (default) | 'swagger'
+ endpoints: {
+  '/api/projects': {
+   POST: createProject
+  }
+ }
 });
 ```
 
@@ -317,37 +321,37 @@ import { enqueueJob, defineWorker, createJobRunner, eventBus } from 'yaxa-svelte
 
 // 1. Decoupled domain events
 eventBus.on('user.created', async ({ userId, email }) => {
-	// 2. Enqueue background job (optionally pass active transaction { tx } for transactional outbox)
-	await enqueueJob(
-		'send-welcome-email',
-		{ userId, email },
-		{
-			delay: '5m', // '30s', '5m', '2h', or ms
-			priority: 10,
-			maxAttempts: 5
-		}
-	);
+ // 2. Enqueue background job (optionally pass active transaction { tx } for transactional outbox)
+ await enqueueJob(
+  'send-welcome-email',
+  { userId, email },
+  {
+   delay: '5m', // '30s', '5m', '2h', or ms
+   priority: 10,
+   maxAttempts: 5
+  }
+ );
 });
 
 // 3. Define worker
 const emailWorker = defineWorker({
-	name: 'send-welcome-email',
-	handler: async (payload, { attempt, log }) => {
-		log(`Sending welcome email (attempt ${attempt})`);
-		await sendEmail(payload.email);
-	}
+ name: 'send-welcome-email',
+ handler: async (payload, { attempt, log }) => {
+  log(`Sending welcome email (attempt ${attempt})`);
+  await sendEmail(payload.email);
+ }
 });
 
 // 4. Run in Serverless Cron (Vercel Cron) or background container
 export const runner = createJobRunner({
-	workers: [emailWorker],
-	batchSize: 10
+ workers: [emailWorker],
+ batchSize: 10
 });
 
 // In src/routes/api/cron/jobs/+server.ts:
 export const GET = async () => {
-	const result = await runner.processNextBatch();
-	return Response.json(result);
+ const result = await runner.processNextBatch();
+ return Response.json(result);
 };
 ```
 
@@ -362,20 +366,20 @@ Zero-infrastructure real-time communication across serverless and Node.js withou
 import { yaxaSSE, requireAuth } from 'yaxa-svelte/server';
 
 export const GET = yaxaSSE({
-	guards: [requireAuth()],
-	channel: (event) => `org:${event.locals.orgId}`,
-	keepAliveIntervalMs: 15000, // Heartbeat ping prevents proxy & Vercel timeouts
-	onConnect: ({ send, user }) => {
-		send('connected', { userId: user.id });
-	}
+ guards: [requireAuth()],
+ channel: (event) => `org:${event.locals.orgId}`,
+ keepAliveIntervalMs: 15000, // Heartbeat ping prevents proxy & Vercel timeouts
+ onConnect: ({ send, user }) => {
+  send('connected', { userId: user.id });
+ }
 });
 
 // 2. Publish from anywhere (Endpoints, Webhooks, Background Workers)
 import { broadcast } from 'yaxa-svelte/server';
 
 await broadcast(`org:${orgId}`, 'invoice.settled', {
-	invoiceId: 'inv_4982',
-	amount: 29.0
+ invoiceId: 'inv_4982',
+ amount: 29.0
 });
 ```
 
@@ -399,6 +403,46 @@ await broadcast(`org:${orgId}`, 'invoice.settled', {
 
 ---
 
+## 🤖 AI Streaming Bridge & Runes Chat (`useAiChat` & `createAiStreamHandler`)
+
+Zero-boilerplate bridge connecting SvelteKit streaming endpoints directly to `<AiChat>`, with progressive text streaming, thought duration/step inspection, tool invocation cards, and abortable retries:
+
+```ts
+// 1. Server Streaming Endpoint (src/routes/api/ai/chat/+server.ts)
+import { createAiStreamHandler, requireAuth } from 'yaxa-svelte/server';
+
+export const POST = createAiStreamHandler({
+ guards: [requireAuth()],
+ // Built-in realistic mock streaming for instant zero-config dev & demos,
+ // or provide your custom handler with Google Gemini, Anthropic, or OpenAI:
+ handler: async function* ({ messages }) {
+  yield { type: 'thought', thought: { running: true, text: 'Analyzing user request...' } };
+  // Yield text deltas, thoughts, and tool call states
+  yield { type: 'text', delta: 'Hello from your AI backend!' };
+  yield { type: 'done' };
+ }
+});
+```
+
+```svelte
+<!-- 2. Svelte 5 Client Chat (+page.svelte) -->
+<script lang="ts">
+	import { AiChat, useAiChat } from 'yaxa-svelte';
+
+	const chat = useAiChat({ api: '/api/ai/chat' });
+</script>
+
+<AiChat
+	messages={chat.messages}
+	loading={chat.loading}
+	onsend={(text) => chat.send(text)}
+	onstop={() => chat.stop()}
+	onretry={(msg) => chat.retry(msg)}
+/>
+```
+
+---
+
 ## 🔗 End-to-End Type-Safe Client RPC (`createApiClient`)
 
 Zero-codegen end-to-end type safety bridging your server `yaxaEndpoint` routes directly into Svelte 5 components and universal `load` functions. Adds less than 500 bytes gzipped to your client bundle:
@@ -406,8 +450,8 @@ Zero-codegen end-to-end type safety bridging your server `yaxaEndpoint` routes d
 ```ts
 // 1. Define Route Type Map (src/lib/api.ts)
 export type AppApi = {
-	'/api/projects': typeof import('../routes/api/projects/+server');
-	'/api/projects/[id]': typeof import('../routes/api/projects/[id]/+server');
+ '/api/projects': typeof import('../routes/api/projects/+server');
+ '/api/projects/[id]': typeof import('../routes/api/projects/[id]/+server');
 };
 ```
 
@@ -440,9 +484,9 @@ export type AppApi = {
 ```ts
 // 3. Universal SSR Load Function with SvelteKit fetch (src/routes/projects/+page.ts)
 export const load = async ({ fetch }) => {
-	const api = createApiClient<AppApi>({ fetch });
-	const { data: projects } = await api['/api/projects'].get();
-	return { projects: projects ?? [] };
+ const api = createApiClient<AppApi>({ fetch });
+ const { data: projects } = await api['/api/projects'].get();
+ return { projects: projects ?? [] };
 };
 ```
 
@@ -509,20 +553,21 @@ A zero-overhead, runes-native query and mutation cache built specifically for Sv
 
 ## 📦 Subpath Exports Architecture
 
-| Subpath                 | Description                                                                                                                                                                                                                                                    |
-| :---------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `yaxa-svelte`           | Core UI Primitives, SEO Components, `<Gate />`, Type-Safe Client RPC (`createApiClient`), Runes Query Engine (`createQuery`, `createMutation`, `QueryClient`), Theme System & Composables (`useGate`, `useUpload`, `useSSE`, `useToast`, `useClipboard`, etc.) |
-| `yaxa-svelte/admin`     | Drizzle ORM Schema Introspection, `<AdminDashboard />`, `createYaxaAdminHook`, `createDrizzleAdmin`, `<DevSandbox />`, `<RecordDrawer />`                                                                                                                      |
-| `yaxa-svelte/server`    | `yaxaEndpoint` Pipeline, Declarative Guards, OpenAPI 3.1 & Scalar Docs, RFC 7807, Real-Time SSE (`yaxaSSE`, `broadcast`), Background Jobs (`enqueueJob`, `createJobRunner`), `eventBus`, Server Hooks, DB, Storage & Email                                     |
-| `yaxa-svelte/auth`      | Better-Auth client & server integration (`useAuth`, `<AuthCard />`, `<PasskeyUI />`, `<TwoFactorModal />`, `createYaxaAuth`)                                                                                                                                   |
-| `yaxa-svelte/db`        | Multi-dialect Drizzle ORM clients & schemas for Neon (PostgreSQL) and Turso (SQLite/LibSQL)                                                                                                                                                                    |
-| `yaxa-svelte/polar`     | Polar.sh billing, customer portal sessions, and webhook synchronization                                                                                                                                                                                        |
-| `yaxa-svelte/email`     | Resend transactional email templates with automatic development console fallback                                                                                                                                                                               |
-| `yaxa-svelte/storage`   | AWS S3 and Cloudflare R2 presigned upload URL generators                                                                                                                                                                                                       |
-| `yaxa-svelte/testing`   | Test mocks & utilities (`createMockSiteConfig`, `createMockUser`, `createTestWrapperProps`)                                                                                                                                                                    |
-| `yaxa-svelte/vite`      | Turnkey Vite plugin (`yaxa()`)                                                                                                                                                                                                                                 |
-| `yaxa-svelte/yaxa.css`  | Standalone turnkey Tailwind CSS v4 stylesheet with base styling, `@theme`, and scrollbars                                                                                                                                                                      |
-| `yaxa-svelte/theme.css` | Pure Tailwind CSS v4 design tokens, `:root` variables, and harmonic radius scale without `@import 'tailwindcss'`                                                                                                                                               |
+| Subpath                 | Description                                                                                                                                                                                                                                                                            |
+| :---------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `yaxa-svelte`           | Core UI Primitives, SEO Components, `<Gate />`, Type-Safe Client RPC (`createApiClient`), Runes Query Engine (`createQuery`, `createMutation`, `QueryClient`), Theme System & Composables (`useGate`, `useUpload`, `useSSE`, `useToast`, `useClipboard`, etc.)                         |
+| `yaxa-svelte/seo`       | Standalone SEO & Agent Engine: Sitemaps, robots.txt, XSL stylesheets, OpenGraph SVG, Schema.org JSON-LD (FAQPage, Product), WebManifest, llms.txt, skill.md, `useSeo()` runes, and prerendering utilities (Zero DB/Auth dependencies; 100% compatible with `@sveltejs/adapter-static`) |
+| `yaxa-svelte/admin`     | Drizzle ORM Schema Introspection, `<AdminDashboard />`, `createYaxaAdminHook`, `createDrizzleAdmin`, `<DevSandbox />`, `<RecordDrawer />`                                                                                                                                              |
+| `yaxa-svelte/server`    | `yaxaEndpoint` Pipeline, Declarative Guards, OpenAPI 3.1 & Scalar Docs, RFC 7807, Real-Time SSE (`yaxaSSE`, `broadcast`), AI Streaming (`createAiStreamHandler`), Background Jobs (`enqueueJob`, `createJobRunner`), `eventBus`, Server Hooks, DB, Storage & Email                     |
+| `yaxa-svelte/auth`      | Better-Auth client & server integration (`useAuth`, `<SignInCard />`, `<SignUpCard />`, `<ResetPasswordCard />`, `<AuthCard />`, `<PasskeyUI />`, `<TwoFactorModal />`, `createYaxaAuth`)                                                                                              |
+| `yaxa-svelte/db`        | Multi-dialect Drizzle ORM clients & schemas for Neon (PostgreSQL) and Turso (SQLite/LibSQL)                                                                                                                                                                                            |
+| `yaxa-svelte/polar`     | Polar.sh billing, customer portal sessions, and webhook synchronization                                                                                                                                                                                                                |
+| `yaxa-svelte/email`     | Resend transactional email templates with automatic development console fallback                                                                                                                                                                                                       |
+| `yaxa-svelte/storage`   | AWS S3 and Cloudflare R2 presigned upload URL generators                                                                                                                                                                                                                               |
+| `yaxa-svelte/testing`   | Test mocks & utilities (`createMockSiteConfig`, `createMockUser`, `createTestWrapperProps`)                                                                                                                                                                                            |
+| `yaxa-svelte/vite`      | Turnkey Vite plugin (`yaxa()`)                                                                                                                                                                                                                                                         |
+| `yaxa-svelte/yaxa.css`  | Standalone turnkey Tailwind CSS v4 stylesheet with base styling, `@theme`, and scrollbars                                                                                                                                                                                              |
+| `yaxa-svelte/theme.css` | Pure Tailwind CSS v4 design tokens, `:root` variables, and harmonic radius scale without `@import 'tailwindcss'`                                                                                                                                                                       |
 
 ---
 
@@ -531,9 +576,9 @@ A zero-overhead, runes-native query and mutation cache built specifically for Sv
 | Category               | Components                                                                                                                                                                                                                                                                                                               |
 | :--------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Theming & Studio**   | `<ThemeStudio>`, `theme`, `ACCENT_PALETTES`, `NEUTRAL_PALETTES`, `RADIUS_PRESETS`, Harmonic Radius Multiplier Scale, Chart Palette Series Tokens                                                                                                                                                                         |
-| **AI Primitives**      | `<AiChat>`, `<PromptBar>`, `<AiThought>`, `<AiToolCall>`                                                                                                                                                                                                                                                                 |
+| **AI Primitives**      | `<AiChat>`, `<PromptBar>`, `<AiThought>`, `<AiToolCall>`, `useAiChat`                                                                                                                                                                                                                                                    |
 | **Charts (Pure SVG)**  | `<LineChart>`, `<BarChart>`, `<DonutChart>` (0 external charting dependencies, auto-responsive, dark/light theme aware)                                                                                                                                                                                                  |
-| **SaaS & Auth Suite**  | `<PasskeyUI>` (WebAuthn), `<TwoFactorModal>` (TOTP), `<AuthCard>` (Polymorphic), `<Gate>`, `<UserMenu>`, `<OrgSwitcher>`, `<PricingCard>`, `<PricingTable>`, `<SubscriptionCard>`, `useAuth`, `useGate`, `useUpload`                                                                                                     |
+| **SaaS & Auth Suite**  | `<SignInCard>`, `<SignUpCard>`, `<ResetPasswordCard>`, `<PasskeyUI>` (WebAuthn), `<TwoFactorModal>` (TOTP), `<AuthCard>` (Polymorphic), `<Gate>`, `<UserMenu>`, `<OrgSwitcher>`, `<PricingCard>`, `<PricingTable>`, `<SubscriptionCard>`, `useAuth`, `useGate`, `useUpload`                                              |
 | **Admin Suite**        | `<AdminDashboard>`, `<RecordDrawer>`, `<DevSandbox>`, `<ImpersonationBanner>`, `createYaxaAdminHook`, `createDrizzleAdmin`                                                                                                                                                                                               |
 | **Elements & Code**    | `<CodeDiff>` (Interactive Diff & Changelog), `<CodeBlock>`, `<DataTable>` (Client & Server Modes), `Button`, `ButtonGroup`, `Badge`, `Avatar`, `AvatarGroup`, `Chip`, `Meter`, `MetricCard`, `Kbd`, `Icon`, `Spinner`, `Progress`, `Skeleton`, `Link`, `Logo`, `Tree`, `Timeline`, `Terminal`, `VirtualList`, `Carousel` |
 | **Forms (Auto-Wired)** | `<Form>`, `<FormField>`, `Input`, `InputOTP`, `Textarea`, `Checkbox`, `Switch`, `Select`, `Combobox`, `MultiSelect`, `NumberInput`, `PhoneInput`, `CreditCardInput`, `RadioGroup`, `Slider`, `ColorPicker`, `ToggleGroup`, `DatePicker`, `DateRangePicker`, `Dropzone`, `<RichTextEditor>`                               |

@@ -65,6 +65,8 @@ export { default as AiThought } from './components/ai/AiThought.svelte';
 export type { AiThoughtProps } from './components/ai/AiThought.svelte';
 export { default as AiToolCall } from './components/ai/AiToolCall.svelte';
 export type { AiToolCallProps, ToolCallStatus } from './components/ai/AiToolCall.svelte';
+export { useAiChat } from './components/ai/useAiChat.svelte';
+export type { UseAiChatOptions, UseAiChatReturn } from './components/ai/useAiChat.svelte';
 
 // Native Theme-Aware SVG Charts
 export { default as LineChart } from './components/charts/LineChart.svelte';
@@ -314,6 +316,10 @@ export { createSitemapXslHandler, generateSitemapXsl } from './site/sitemap-xsl'
 export { createOgImageHandler, generateOgSvg } from './site/og';
 export type { OgImageOptions } from './site/og';
 export { createManifestHandler } from './site/manifest';
+export { createLlmsTxtHandler, generateLlmsTxt } from './site/llms';
+export type { LlmsTxtOptions, LlmsSection, LlmsLink } from './site/llms';
+export { createSkillHandler, generateSkillMd } from './site/skill';
+export type { SkillOptions, SkillAction } from './site/skill';
 export {
 	generateWebSiteSchema,
 	generateOrganizationSchema,
@@ -321,11 +327,20 @@ export {
 	generateSoftwareSourceCodeSchema,
 	generatePersonSchema,
 	generateArticleSchema,
-	generateBreadcrumbSchema
+	generateBreadcrumbSchema,
+	generateFaqSchema,
+	generateProductSchema
 } from './site/schema';
-export type { SchemaType, BreadcrumbItem, ArticleSchemaData } from './site/schema';
+export type {
+	SchemaType,
+	BreadcrumbItem,
+	ArticleSchemaData,
+	FaqItem,
+	ProductSchemaData
+} from './site/schema';
 export { definePageSeo } from './site/seo-helpers';
 export type { PageSeoConfig } from './site/seo-helpers';
+export { useSeo } from './site/useSeo.svelte';
 export { yaxa } from './vite/index';
 export type { YaxaPluginOptions } from './vite/index';
 
@@ -338,6 +353,18 @@ export type { OrgSwitcherProps, OrgItem } from './components/saas/OrgSwitcher.sv
 export { default as PricingCard } from './components/saas/PricingCard.svelte';
 export { default as PricingTable } from './components/saas/PricingTable.svelte';
 export { default as SubscriptionCard } from './components/saas/SubscriptionCard.svelte';
+export { default as AuthCard } from './components/saas/AuthCard.svelte';
+export type { AuthCardProps, AuthCardMode } from './components/saas/AuthCard.svelte';
+export { default as SignInCard } from './components/saas/SignInCard.svelte';
+export type { SignInCardProps } from './components/saas/SignInCard.svelte';
+export { default as SignUpCard } from './components/saas/SignUpCard.svelte';
+export type { SignUpCardProps } from './components/saas/SignUpCard.svelte';
+export { default as ResetPasswordCard } from './components/saas/ResetPasswordCard.svelte';
+export type { ResetPasswordCardProps } from './components/saas/ResetPasswordCard.svelte';
+export { default as PasskeyUI } from './components/saas/PasskeyUI.svelte';
+export { default as TwoFactorModal } from './components/saas/TwoFactorModal.svelte';
+export { useAuth } from './composables/useAuth.svelte';
+export type { SocialProvider } from './composables/useAuth.svelte';
 export { useGate } from './composables/useGate.svelte';
 export type { UseGateOptions } from './composables/useGate.svelte';
 export { useUpload } from './composables/useUpload.svelte';

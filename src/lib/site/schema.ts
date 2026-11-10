@@ -17,6 +17,23 @@ export interface BreadcrumbItem {
 	url: string;
 }
 
+export interface FaqItem {
+	question: string;
+	answer: string;
+}
+
+export interface ProductSchemaData {
+	name: string;
+	description?: string;
+	image?: string;
+	price: number | string;
+	currency?: string;
+	inStock?: boolean;
+	brand?: string;
+	sku?: string;
+	url?: string;
+}
+
 export interface ArticleSchemaData {
 	title: string;
 	description: string;
@@ -198,5 +215,51 @@ export function generateBreadcrumbSchema(config: SiteConfig, items: BreadcrumbIt
 			name: item.name,
 			item: item.url.startsWith('http') ? item.url : `${config.url}${item.url}`
 		}))
+	};
+}
+
+export function generateFaqSchema(items: FaqItem[]) {
+	return {
+		'@context': 'https://schema.org',
+		'@type': 'FAQPage',
+		mainEntity: items.map((item) => ({
+			'@type': 'Question',
+			name: item.question,
+			acceptedAnswer: {
+				'@type': 'Answer',
+				text: item.answer
+			}
+		}))
+	};
+}
+
+export function generateProductSchema(config: SiteConfig, product: ProductSchemaData) {
+	const baseUrl = (config.url || '').replace(/\/$/, '');
+	return {
+		'@context': 'https://schema.org',
+		'@type': 'Product',
+		name: product.name,
+		description: product.description || config.description,
+		image: product.image
+			? product.image.startsWith('http')
+				? product.image
+				: `${baseUrl}${product.image}`
+			: undefined,
+		brand: {
+			'@type': 'Brand',
+			name: product.brand || config.name
+		},
+		offers: {
+			'@type': 'Offer',
+			price: String(product.price),
+			priceCurrency: product.currency || 'USD',
+			availability:
+				product.inStock !== false ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+			url: product.url
+				? product.url.startsWith('http')
+					? product.url
+					: `${baseUrl}${product.url}`
+				: baseUrl
+		}
 	};
 }

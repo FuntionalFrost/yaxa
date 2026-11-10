@@ -2,10 +2,47 @@
 	import DocHeader from '../_components/DocHeader.svelte';
 	import DocSandbox from '../_components/DocSandbox.svelte';
 	import DocPropsTable from '../_components/DocPropsTable.svelte';
+	import DocCodeBlock from '../_components/DocCodeBlock.svelte';
 	import AiChat, { type AiMessage } from '#lib/components/ai/AiChat.svelte';
 	import PromptBar from '#lib/components/ai/PromptBar.svelte';
 	import AiThought from '#lib/components/ai/AiThought.svelte';
 	import AiToolCall from '#lib/components/ai/AiToolCall.svelte';
+
+	const serverAiStreamSnippet = `// src/routes/api/ai/chat/+server.ts
+import { createAiStreamHandler, requireAuth } from 'yaxa-svelte/server';
+
+export const POST = createAiStreamHandler({
+  guards: [requireAuth()],
+  // Zero-config realistic mock streaming for development & demos,
+  // or stream live from Google Gemini, Anthropic, OpenAI, or Ollama:
+  handler: async function* ({ messages }) {
+    yield {
+      type: 'thought',
+      thought: { running: true, text: 'Analyzing database models...' }
+    };
+    // Yield text deltas, thoughts, and tool call status frames
+    yield { type: 'text', delta: 'Here is the generated analysis.' };
+    yield { type: 'done' };
+  }
+});`;
+
+	const clientUseAiChatSnippet =
+		`<!-- +page.svelte -->
+<` +
+		`script lang="ts">
+  import { AiChat, useAiChat } from 'yaxa-svelte';
+
+  const chat = useAiChat({ api: '/api/ai/chat' });
+<` +
+		`/script>
+
+<AiChat
+  messages={chat.messages}
+  loading={chat.loading}
+  onsend={(text) => chat.send(text)}
+  onstop={() => chat.stop()}
+  onretry={(msg) => chat.retry(msg)}
+/>`;
 
 	let samplePrompt = $state('');
 	let sampleMessages = $state<AiMessage[]>([
@@ -79,7 +116,7 @@
   onsend={(text) => handleSend(text)}
 />`}
 		>
-			<div class="h-[520px] w-full">
+			<div class="h-130 w-full">
 				<AiChat messages={sampleMessages} assistantName="Yaxa Copilot" onsend={handleSend} />
 			</div>
 		</DocSandbox>
@@ -176,5 +213,29 @@
 				/>
 			</div>
 		</DocSandbox>
+	</section>
+
+	<!-- Full-Stack AI Streaming Bridge -->
+	<section class="space-y-4">
+		<h2 class="text-lg font-bold text-neutral-900 dark:text-white">
+			Full-Stack AI Streaming Bridge (createAiStreamHandler &amp; useAiChat)
+		</h2>
+		<p class="text-xs text-neutral-500">
+			Connect your SvelteKit backend directly to &lt;AiChat&gt; using Server-Sent Events (SSE).
+			Handles progressive text deltas, thoughts, tool executions, abortable streams, and retries.
+		</p>
+
+		<div class="space-y-4">
+			<DocCodeBlock
+				code={serverAiStreamSnippet}
+				filename="src/routes/api/ai/chat/+server.ts"
+				language="typescript"
+			/>
+			<DocCodeBlock
+				code={clientUseAiChatSnippet}
+				filename="src/routes/chat/+page.svelte"
+				language="svelte"
+			/>
+		</div>
 	</section>
 </div>

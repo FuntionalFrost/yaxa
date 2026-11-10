@@ -26,15 +26,15 @@
 - [Getting Started - Theming & Theme Studio](https://yaxa.vercel.app/docs/theming): Visual theme designer, harmonic radius scale, chart palettes, `@theme` tokens, and atmospheric background utilities (`yaxa-grain`, `yaxa-mesh-glow`).
 - [Getting Started - Static Sites (SSG)](https://yaxa.vercel.app/docs/static-sites): Deploying static websites with `@sveltejs/adapter-static`.
 - [Getting Started - Page Blocks](https://yaxa.vercel.app/docs/blocks): DashboardShell, Carousel, VirtualList, ResizablePanels, Terminal, Timeline, Testimonials, FAQ, FeatureGrid, MetricCard, and Stepper.
-- [AI Primitives](https://yaxa.vercel.app/docs/ai-primitives): AiChat, PromptBar, AiThought, and AiToolCall for conversational agent workflows.
+- [AI Primitives & Streaming](https://yaxa.vercel.app/docs/ai-primitives): AiChat, PromptBar, AiThought, AiToolCall, useAiChat runes composable, and createAiStreamHandler SSE bridge for conversational agent workflows.
 - [Charts Suite](https://yaxa.vercel.app/docs/charts): Zero-dependency pure SVG LineChart, BarChart, and DonutChart with auto-responsive tooltips.
 - [SEO Suite - Dynamic OpenGraph](https://yaxa.vercel.app/docs/seo-og): `/api/og` server route and `createOgImageHandler`.
-- [SEO Suite - Robots & Sitemaps](https://yaxa.vercel.app/docs/seo-robots): Automated `robots.txt` and XML sitemaps with human-readable XSL.
+- [SEO Suite - Sitemaps, Robots, LLMs.txt & Agent Skills](https://yaxa.vercel.app/docs/seo-robots): Automated `robots.txt`, XML sitemaps with human-readable XSL, `/llms.txt` discovery, `/skill.md` IDE agent rules, and `useSeo` runes composable.
 - [Components - Buttons & Elements](https://yaxa.vercel.app/docs/comp-buttons): Button, ButtonGroup, Badge, Avatar, AvatarGroup, Chip, Kbd, Progress, Meter, Skeleton (with compound recipes: card, user, metric, table-row), Spinner, CodeBlock, SortableList, DataTable (with column visibility & CSV/JSON export), Tree, Timeline, Terminal, VirtualList, Carousel.
 - [Components - Forms & Inputs](https://yaxa.vercel.app/docs/comp-forms): FormField, Input, Textarea, Select, Combobox, MultiSelect, NumberInput, Checkbox, RadioGroup, Switch, Slider, ColorPicker, ToggleGroup, DatePicker, DateRangePicker, InputOTP, Dropzone.
 - [Components - Advanced Form Controls](https://yaxa.vercel.app/docs/advanced-forms): RichTextEditor (Markdown WYSIWYG), PhoneInput (international country picker), CreditCardInput (brand detection & masking).
 - [Components - Overlays & Navigation](https://yaxa.vercel.app/docs/comp-overlays): Modal, Drawer (responsive modal ⇄ bottom sheet), Slideover, Popover, Tooltip, Alert, Accordion, ContextMenu, NotificationCenter, Breadcrumb, Pagination, Tabs, Stepper, CommandPalette, DropdownMenu.
-- [SaaS Suite - Full-Stack Auth & Backend Workflows](https://yaxa.vercel.app/docs/saas-suite): Better-Auth client/server hooks, Multi-Tenant OrgSwitcher, yaxaEndpoint pipeline & guards, OpenAPI 3.1 & Scalar docs, Type-Safe Client RPC (createApiClient), Real-Time SSE & Broadcaster (yaxaSSE, useSSE), persistent Background Job Queue & Event Bus, Drizzle ORM schemas (Postgres & SQLite), Polar checkout & webhooks, Resend emails, and S3 file uploads.
+- [SaaS Suite - Full-Stack Auth & Backend Workflows](https://yaxa.vercel.app/docs/saas-suite): Better-Auth client/server hooks, Turnkey SignInCard, SignUpCard, ResetPasswordCard, Multi-Tenant OrgSwitcher, yaxaEndpoint pipeline & guards, OpenAPI 3.1 & Scalar docs, Type-Safe Client RPC (createApiClient), Real-Time SSE & Broadcaster (yaxaSSE, useSSE), persistent Background Job Queue & Event Bus, Drizzle ORM schemas (Postgres & SQLite), Polar checkout & webhooks, Resend emails, and S3 file uploads.
 
 ## Installation & Quickstart
 

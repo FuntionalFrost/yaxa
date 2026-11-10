@@ -9,3 +9,6 @@ export type { AiThoughtProps } from './AiThought.svelte';
 
 export { default as AiToolCall } from './AiToolCall.svelte';
 export type { AiToolCallProps, ToolCallStatus } from './AiToolCall.svelte';
+
+export { useAiChat } from './useAiChat.svelte';
+export type { UseAiChatOptions, UseAiChatReturn } from './useAiChat.svelte';

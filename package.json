@@ -45,6 +45,10 @@
 			"svelte": "./dist/index.js",
 			"default": "./dist/index.js"
 		},
+		"./seo": {
+			"types": "./dist/site/index.d.ts",
+			"default": "./dist/site/index.js"
+		},
 		"./admin": {
 			"types": "./dist/admin/index.d.ts",
 			"svelte": "./dist/admin/index.js",

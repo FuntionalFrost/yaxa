@@ -29,6 +29,7 @@
 
 6. **1-Line Server Hooks (`createYaxaHook` & `createYaxaAuthHook`)**:
    - Manage all 5 SEO endpoints (`/robots.txt`, `/sitemap.xml`, `/sitemap.xsl`, `/site.webmanifest`, `/api/og`) with **1 line** in `src/hooks.server.ts`:
+
      ```ts
      import { sequence } from '@sveltejs/kit/hooks';
      import { createYaxaHook } from 'yaxa-svelte/server';
@@ -38,9 +39,9 @@
      const yaxaHook = createYaxaHook(siteConfig);
      const auth = createYaxaAuth();
      const authHook = createYaxaAuthHook({
-     	auth,
-     	protectedPaths: ['/dashboard', '/settings', '/billing'],
-     	loginPath: '/login'
+      auth,
+      protectedPaths: ['/dashboard', '/settings', '/billing'],
+      loginPath: '/login'
      });
 
      export const handle = sequence(yaxaHook, authHook);
@@ -85,19 +86,42 @@
 17. **Runes-Native Reactive Query & Realtime RPC (`createQuery`, `createMutation`, `QueryClient`)**:
     - Idiomatic Svelte 5 runes query cache (`$state` / `$derived`) with request coalescing, stale-while-revalidate, window focus revalidation, optimistic mutations with automatic rollback, and live Server-Sent Events cache invalidation (`subscribeToSse`).
 
+18. **Dedicated Zero-Dependency SEO Subpath (`yaxa-svelte/seo`)**:
+    - Standalone, tree-shakable entry point (`dist/site/index.js`) exporting `<Seo>`, `<Favicons>`, `useSeo`, static XML sitemaps, human-readable XSL stylesheets, environment-aware `robots.txt`, dynamic SVG OpenGraph cards, PWA WebManifests, and Schema.org JSON-LD generators.
+    - Zero peer dependencies (no Drizzle ORM, no Better-Auth, no Polar SDK, no database drivers).
+    - 100% compatible with pure static SvelteKit sites using `@sveltejs/adapter-static` and `export const prerender = true`.
+
+19. **Next-Gen SEO & Generative AI Discoverability (`useSeo`, `FAQPage`, `Product`, `llms.txt`)**:
+    - **`useSeo()` Composable**: Pure Svelte 5 runes composable (Nuxt's `useSeoMeta()` equivalent) for setting reactive title, description, and OG metadata directly in `<script lang="ts">`.
+    - **Interactive FAQ Rich Snippets**: Implemented `generateFaqSchema` and wired `enableSchema={true}` into `<FAQ>` to automatically render Google FAQ accordion search dropdowns.
+    - **SaaS Product & Offer Schemas**: Implemented `generateProductSchema` for subscription tiers and pricing models.
+    - **AI Search Standard (`/llms.txt`)**: Built `createLlmsTxtHandler` and `generateLlmsTxt` (llmstxt.org) providing structured markdown briefings for Perplexity, ChatGPT Search, Claude, and Cursor.
+    - **Canonical URL Normalization**: Fixed double-slash URLs when `config.url` includes trailing slashes.
+
+20. **AI Agent Skills & IDE Guidelines (`createSkillHandler` & `/skill.md`)**:
+    - Machine-readable instructions teaching AI coding assistants (Cursor, Antigravity, Claude Code, Copilot) how to write pure Svelte 5 runes and correctly use Yaxa UI components and API actions.
+    - Served via `createSkillHandler` or automatically mounted via `createYaxaHook` at `/skill.md` and `/.well-known/skill.md`.
+
+21. **AI Streaming Bridge (`createAiStreamHandler` & `useAiChat`)**:
+    - SvelteKit endpoint streaming handler (`POST /api/ai/chat`) with Server-Sent Events (SSE), multi-provider abstraction, and zero-config mock streaming.
+    - Svelte 5 runes composable (`useAiChat`) coordinating progressive streaming deltas, `<AiThought>` reasoning durations/steps, and `<AiToolCall>` invocation states.
+
+22. **Turnkey Auth Suite (`<SignInCard>`, `<SignUpCard>`, `<ResetPasswordCard>`)**:
+    - Drop-in cards for authentication workflows with Better-Auth, social logins (GitHub, Google), passkeys, magic links, and token-based password reset.
+
 ---
 
 ## 🧩 50+ Svelte 5 Components & Runes Composables
 
 - **Theming & Studio**: `<ThemeStudio>`, `theme`, `ACCENT_PALETTES`, `NEUTRAL_PALETTES`, `RADIUS_PRESETS`, Harmonic Radius Scale, Chart Palette Tokens.
-- **AI Primitives**: `<AiChat>`, `<PromptBar>`, `<AiThought>`, `<AiToolCall>`.
+- **AI Primitives**: `<AiChat>`, `<PromptBar>`, `<AiThought>`, `<AiToolCall>`, `useAiChat()`.
 - **Charts (Pure SVG)**: `<LineChart>`, `<BarChart>`, `<DonutChart>`.
-- **SaaS Suite**: `<Gate>`, `<AuthCard>`, `<UserMenu>`, `<OrgSwitcher>`, `<PricingCard>`, `<PricingTable>`, `<SubscriptionCard>`, `useAuth()`.
+- **SaaS Suite**: `<SignInCard>`, `<SignUpCard>`, `<ResetPasswordCard>`, `<AuthCard>`, `<PasskeyUI>`, `<TwoFactorModal>`, `<Gate>`, `<UserMenu>`, `<OrgSwitcher>`, `<PricingCard>`, `<PricingTable>`, `<SubscriptionCard>`, `useAuth()`.
 - **Elements**: `Button`, `ButtonGroup`, `Badge`, `Avatar`, `AvatarGroup`, `DataTable` (with Column Visibility & Export), `Chip`, `Meter`, `MetricCard`, `Kbd`, `Icon`, `Spinner`, `Progress`, `Skeleton`, `Link`, `Logo`, `CodeBlock` (with Svelte 5 Runes, Python 3.13+, ES2026/TS6, Tailwind v4, YAML, TOML, Rust, Go, SQL & GraphQL Highlighting), `Tree`, `Timeline`, `Terminal`, `VirtualList`, `Carousel`.
 - **Forms**: `Form`, `FormField`, `Input`, `InputOTP`, `Textarea`, `Checkbox`, `Switch`, `Select`, `Combobox`, `MultiSelect`, `NumberInput`, `RadioGroup`, `Slider`, `ColorPicker`, `ToggleGroup`, `DatePicker`, `DateRangePicker`, `Dropzone`, `<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`.
 - **Layout**: `Container`, `Header`, `Footer`, `Section`, `Card`, `Divider`, `YaxaApp`, `DashboardShell` (with independent sidebar tokens), `ResizablePanels`.
 - **Navigation & Overlays**: `Tabs`, `Breadcrumb`, `Pagination`, `CommandPalette` (`⌘K`), `DropdownMenu`, `ContextMenu`, `Modal`, `Drawer`, `Slideover`, `Popover`, `Tooltip` (with `arrow={false}` & `unstyled`), `Alert`, `Accordion`, `NotificationCenter`, `Stepper`.
-- **Composables & Client RPC / Queries**: `createQuery`, `createMutation`, `QueryClient`, `createApiClient`, `useAuth`, `useGate`, `useUpload`, `useSSE`, `useClipboard`, `useShortcuts`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`, `useIdle`, `useInfiniteScroll`, `useSortable`.
+- **Composables & Client RPC / Queries**: `createQuery`, `createMutation`, `QueryClient`, `createApiClient`, `useAiChat`, `useAuth`, `useGate`, `useUpload`, `useSSE`, `useClipboard`, `useShortcuts`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`, `useIdle`, `useInfiniteScroll`, `useSortable`.
 
 ---
 
@@ -114,7 +138,7 @@
 ## ✅ Verification Results
 
 - **`pnpm check`**: **0 errors, 0 warnings**
-- **`pnpm test`**: **68 test files passed, 316 unit & DOM tests passed**
+- **`pnpm test`**: **72 test files passed, 342 unit & DOM tests passed**
 - **`pnpm build`**: **Production build & SSR bundle succeeded**
 - **`pnpm package`**: **Library distribution (`dist/`) generated**
 - **`pnpm format`**: **All files formatted cleanly with Prettier**

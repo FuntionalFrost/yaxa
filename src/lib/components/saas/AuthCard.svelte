@@ -1,13 +1,5 @@
-<script lang="ts">
-	import Card from '../layout/Card.svelte';
-	import Button from '../elements/Button.svelte';
-	import Input from '../forms/Input.svelte';
-	import FormField from '../forms/FormField.svelte';
-	import InputOTP from '../forms/InputOTP.svelte';
-	import Divider from '../layout/Divider.svelte';
-	import Alert from '../overlays/Alert.svelte';
-	import Icon from '../elements/Icon.svelte';
-	import { useAuth, type SocialProvider } from '../../composables/useAuth.svelte';
+<script module lang="ts">
+	import type { SocialProvider } from '../../composables/useAuth.svelte';
 
 	export type AuthCardMode =
 		| 'signin'
@@ -18,7 +10,7 @@
 		| '2fa-verify'
 		| 'email-change';
 
-	interface Props {
+	export interface AuthCardProps {
 		title?: string;
 		subtitle?: string;
 		mode?: AuthCardMode;
@@ -33,6 +25,18 @@
 		onsuccess?: () => void;
 		onerror?: (err: string) => void;
 	}
+</script>
+
+<script lang="ts">
+	import Card from '../layout/Card.svelte';
+	import Button from '../elements/Button.svelte';
+	import Input from '../forms/Input.svelte';
+	import FormField from '../forms/FormField.svelte';
+	import InputOTP from '../forms/InputOTP.svelte';
+	import Divider from '../layout/Divider.svelte';
+	import Alert from '../overlays/Alert.svelte';
+	import Icon from '../elements/Icon.svelte';
+	import { useAuth } from '../../composables/useAuth.svelte';
 
 	let {
 		title,
@@ -48,7 +52,7 @@
 		class: className = '',
 		onsuccess,
 		onerror
-	}: Props = $props();
+	}: AuthCardProps = $props();
 
 	const auth = useAuth();
 

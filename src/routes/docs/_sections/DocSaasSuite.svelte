@@ -104,19 +104,22 @@ export const POST = createPolarWebhookHandler({
 	const subpathsSnippet = `// 1. Core UI Components & Headless Actions (Zero Backend Overhead)
 import { Button, Modal, UserMenu, useToast, useColorMode, springTilt } from 'yaxa-svelte';
 
-// 2. Full-Stack Client Auth (Passkeys, 2FA, & Polymorphic AuthCards)
-import { useAuth, AuthCard, PasskeyUI, TwoFactorModal } from 'yaxa-svelte/auth';
+// 2. Full-Stack Client Auth (Turnkey Cards, Passkeys, 2FA)
+import { useAuth, SignInCard, SignUpCard, ResetPasswordCard, AuthCard, PasskeyUI, TwoFactorModal } from 'yaxa-svelte/auth';
 
-// 3. SvelteKit Server Hooks, Auth Factory, yaxaEndpoint Pipeline & SEO Handlers
-import { yaxaEndpoint, requireAuth, requireRole, rateLimit, createYaxaHook, createYaxaAuth } from 'yaxa-svelte/server';
+// 3. Pure Zero-Dependency SEO & Agent Discovery for Static & Serverless Sites
+import { Seo, useSeo, createRobotsHandler, createSitemapHandler, createLlmsTxtHandler, createSkillHandler } from 'yaxa-svelte/seo';
 
-// 4. Drizzle ORM Database Schema & Client
+// 4. SvelteKit Server Hooks, Auth Factory, yaxaEndpoint Pipeline, AI Streaming & SSE
+import { yaxaEndpoint, requireAuth, requireRole, rateLimit, createAiStreamHandler, yaxaSSE, broadcast, createYaxaHook, createYaxaAuth } from 'yaxa-svelte/server';
+
+// 5. Drizzle ORM Database Schema & Client
 import { getDb, schemaPg, schemaSqlite } from 'yaxa-svelte/db';
 
-// 5. Polar.sh Billing & Webhooks
+// 6. Polar.sh Billing & Webhooks
 import { createPolarCheckout, createPolarWebhookHandler } from 'yaxa-svelte/polar';
 
-// 6. S3 / Cloudflare R2 Presigned Uploads
+// 7. S3 / Cloudflare R2 Presigned Uploads
 import { createPresignedUploadUrl } from 'yaxa-svelte/storage';
 `;
 

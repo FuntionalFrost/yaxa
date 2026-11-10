@@ -11,6 +11,10 @@ export { createSitemapXslHandler, generateSitemapXsl } from '../site/sitemap-xsl
 export { createOgImageHandler, generateOgSvg } from '../site/og';
 export type { OgImageOptions } from '../site/og';
 export { createManifestHandler } from '../site/manifest';
+export { createLlmsTxtHandler, generateLlmsTxt } from '../site/llms';
+export type { LlmsTxtOptions, LlmsSection, LlmsLink } from '../site/llms';
+export { createSkillHandler, generateSkillMd } from '../site/skill';
+export type { SkillOptions, SkillAction } from '../site/skill';
 
 // Database, Drizzle ORM & Server Pagination
 export { getDb, schemaPg, schemaSqlite } from './db/index';
@@ -159,3 +163,12 @@ export type {
 	BroadcastSubscriber,
 	Broadcaster
 } from './realtime/index';
+
+// AI Streaming & Real-Time Reasoning Engine
+export { createAiStreamHandler } from './ai/index';
+export type {
+	AiStreamChunk,
+	AiStreamContext,
+	AiStreamHandlerFn,
+	CreateAiStreamHandlerOptions
+} from './ai/index';

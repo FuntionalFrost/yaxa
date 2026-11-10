@@ -39,10 +39,15 @@
 
 	// Read config from prop or reactive Yaxa context
 	let config = $derived(propConfig || yaxa.config);
+	let baseUrl = $derived((config.url || '').replace(/\/$/, ''));
 
-	// Dynamic resolution from props OR SvelteKit page.data (e.g. +page.server.ts load data)
+	// Dynamic resolution from props OR useSeo() OR SvelteKit page.data (e.g. +page.server.ts load data)
 	let pageData = $derived(page.data || {});
-	let pageSeo = $derived((pageData.seo as Record<string, unknown>) || {});
+	let pageSeo = $derived(
+		(yaxa.pageSeo as unknown as Record<string, unknown>) ||
+			(pageData.seo as Record<string, unknown>) ||
+			{}
+	);
 
 	let resolvedTitle = $derived(
 		propTitle ||
@@ -73,9 +78,9 @@
 	let currentUrl = $derived.by(() => {
 		if (propCanonical) return propCanonical;
 		try {
-			return `${config.url}${page.url.pathname}`;
+			return `${baseUrl}${page.url.pathname}`;
 		} catch {
-			return config.url;
+			return baseUrl;
 		}
 	});
 
@@ -83,7 +88,9 @@
 
 	let resolvedOgImageUrl = $derived.by(() => {
 		if (typeof ogImage === 'string') {
-			return ogImage.startsWith('http') ? ogImage : `${config.url}${ogImage}`;
+			return ogImage.startsWith('http')
+				? ogImage
+				: `${baseUrl}${ogImage.startsWith('/') ? '' : '/'}${ogImage}`;
 		}
 		if (typeof ogImage === 'object' && ogImage !== null) {
 			const pairs: string[] = [];
@@ -101,7 +108,7 @@
 				pairs.push(`badge=${encodeURIComponent(computeProjectBadge(config.project))}`);
 			}
 			if (img.theme) pairs.push(`theme=${encodeURIComponent(img.theme)}`);
-			return `${config.url}/api/og?${pairs.join('&')}`;
+			return `${baseUrl}/api/og?${pairs.join('&')}`;
 		}
 		if (resolvedTitle && resolvedTitle !== config.name) {
 			const pairs: string[] = [
@@ -111,9 +118,9 @@
 			if (config.project) {
 				pairs.push(`badge=${encodeURIComponent(computeProjectBadge(config.project))}`);
 			}
-			return `${config.url}/api/og?${pairs.join('&')}`;
+			return `${baseUrl}/api/og?${pairs.join('&')}`;
 		}
-		return `${config.url}${config.seo?.defaultOgImage || '/api/og'}`;
+		return `${baseUrl}${config.seo?.defaultOgImage || '/api/og'}`;
 	});
 
 	let robotsContent = $derived.by(() => {
@@ -156,7 +163,7 @@
 		<meta name="keywords" content={keywords.join(', ')} />
 	{/if}
 	<link rel="canonical" href={currentUrl} />
-	<link rel="sitemap" type="application/xml" href="{config.url}/sitemap.xml" />
+	<link rel="sitemap" type="application/xml" href="{baseUrl}/sitemap.xml" />
 	<meta name="robots" content={robotsContent} />
 	<meta name="theme-color" content={config.theme?.primaryColor || '#ff3e00'} />
 	{#if config.project?.license}
