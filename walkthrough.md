@@ -39,9 +39,9 @@
      const yaxaHook = createYaxaHook(siteConfig);
      const auth = createYaxaAuth();
      const authHook = createYaxaAuthHook({
-      auth,
-      protectedPaths: ['/dashboard', '/settings', '/billing'],
-      loginPath: '/login'
+     	auth,
+     	protectedPaths: ['/dashboard', '/settings', '/billing'],
+     	loginPath: '/login'
      });
 
      export const handle = sequence(yaxaHook, authHook);

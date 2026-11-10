@@ -75,7 +75,7 @@ import { yaxa } from 'yaxa-svelte/vite';
 import { defineConfig } from 'vite';
 
 export default defineConfig({
- plugins: [tailwindcss(), sveltekit(), yaxa()]
+	plugins: [tailwindcss(), sveltekit(), yaxa()]
 });
 ```
 
@@ -90,25 +90,25 @@ Create `src/site.config.ts` — your single source of truth for branding, metada
 import { defineSiteConfig } from 'yaxa-svelte';
 
 export const siteConfig = defineSiteConfig({
- name: 'My Indie SaaS',
- title: 'My Indie SaaS — Build Fast with SvelteKit',
- description: 'Fast, beautiful, accessible web applications.',
- url: 'https://my-app.com',
- // Single-email mode: Solo devs can set one email for contact, support & DPO
- email: 'hello@my-app.com',
- project: {
-  license: 'MIT',
-  type: 'open-source',
-  repositoryUrl: 'https://github.com/my-org/my-app'
- },
- theme: {
-  accent: 'svelte', // 'svelte' | 'emerald' | 'amber' | 'sky' | 'violet' | 'rose' | 'indigo'
-  neutral: 'zinc', // 'zinc' | 'slate' | 'stone' | 'neutral'
-  defaultMode: 'dark'
- },
- socials: {
-  github: 'https://github.com/my-org/my-app'
- }
+	name: 'My Indie SaaS',
+	title: 'My Indie SaaS — Build Fast with SvelteKit',
+	description: 'Fast, beautiful, accessible web applications.',
+	url: 'https://my-app.com',
+	// Single-email mode: Solo devs can set one email for contact, support & DPO
+	email: 'hello@my-app.com',
+	project: {
+		license: 'MIT',
+		type: 'open-source',
+		repositoryUrl: 'https://github.com/my-org/my-app'
+	},
+	theme: {
+		accent: 'svelte', // 'svelte' | 'emerald' | 'amber' | 'sky' | 'violet' | 'rose' | 'indigo'
+		neutral: 'zinc', // 'zinc' | 'slate' | 'stone' | 'neutral'
+		defaultMode: 'dark'
+	},
+	socials: {
+		github: 'https://github.com/my-org/my-app'
+	}
 });
 ```
 
@@ -177,9 +177,9 @@ import { siteConfig } from './site.config';
 const yaxaHook = createYaxaHook(siteConfig);
 const auth = createYaxaAuth();
 const authHook = createYaxaAuthHook({
- auth,
- protectedPaths: ['/dashboard', '/settings', '/billing'],
- loginPath: '/login'
+	auth,
+	protectedPaths: ['/dashboard', '/settings', '/billing'],
+	loginPath: '/login'
 });
 
 export const handle = sequence(yaxaHook, authHook);
@@ -262,24 +262,24 @@ import { yaxaEndpoint, requireAuth, requireRole, rateLimit } from 'yaxa-svelte/s
 import { z } from 'zod';
 
 const CreateProjectSchema = z.object({
- name: z.string().min(3),
- description: z.string().optional()
+	name: z.string().min(3),
+	description: z.string().optional()
 });
 
 export const POST = yaxaEndpoint({
- status: 201,
- guards: [
-  requireAuth(),
-  requireRole(['admin', 'owner']),
-  rateLimit({ points: 20, windowSeconds: 60 })
- ],
- schema: {
-  body: CreateProjectSchema
- },
- handle: async ({ body, user, orgId }) => {
-  // Guaranteed type-safe body, authenticated user, and active orgId
-  return { id: 'proj_123', name: body.name, orgId };
- }
+	status: 201,
+	guards: [
+		requireAuth(),
+		requireRole(['admin', 'owner']),
+		rateLimit({ points: 20, windowSeconds: 60 })
+	],
+	schema: {
+		body: CreateProjectSchema
+	},
+	handle: async ({ body, user, orgId }) => {
+		// Guaranteed type-safe body, authenticated user, and active orgId
+		return { id: 'proj_123', name: body.name, orgId };
+	}
 });
 ```
 
@@ -295,14 +295,14 @@ import { createApiDocsHandler } from 'yaxa-svelte/server';
 import { POST as createProject } from '../projects/+server';
 
 export const GET = createApiDocsHandler({
- title: 'Acme SaaS API',
- version: '1.0.0',
- theme: 'scalar', // 'scalar' (default) | 'swagger'
- endpoints: {
-  '/api/projects': {
-   POST: createProject
-  }
- }
+	title: 'Acme SaaS API',
+	version: '1.0.0',
+	theme: 'scalar', // 'scalar' (default) | 'swagger'
+	endpoints: {
+		'/api/projects': {
+			POST: createProject
+		}
+	}
 });
 ```
 
@@ -321,37 +321,37 @@ import { enqueueJob, defineWorker, createJobRunner, eventBus } from 'yaxa-svelte
 
 // 1. Decoupled domain events
 eventBus.on('user.created', async ({ userId, email }) => {
- // 2. Enqueue background job (optionally pass active transaction { tx } for transactional outbox)
- await enqueueJob(
-  'send-welcome-email',
-  { userId, email },
-  {
-   delay: '5m', // '30s', '5m', '2h', or ms
-   priority: 10,
-   maxAttempts: 5
-  }
- );
+	// 2. Enqueue background job (optionally pass active transaction { tx } for transactional outbox)
+	await enqueueJob(
+		'send-welcome-email',
+		{ userId, email },
+		{
+			delay: '5m', // '30s', '5m', '2h', or ms
+			priority: 10,
+			maxAttempts: 5
+		}
+	);
 });
 
 // 3. Define worker
 const emailWorker = defineWorker({
- name: 'send-welcome-email',
- handler: async (payload, { attempt, log }) => {
-  log(`Sending welcome email (attempt ${attempt})`);
-  await sendEmail(payload.email);
- }
+	name: 'send-welcome-email',
+	handler: async (payload, { attempt, log }) => {
+		log(`Sending welcome email (attempt ${attempt})`);
+		await sendEmail(payload.email);
+	}
 });
 
 // 4. Run in Serverless Cron (Vercel Cron) or background container
 export const runner = createJobRunner({
- workers: [emailWorker],
- batchSize: 10
+	workers: [emailWorker],
+	batchSize: 10
 });
 
 // In src/routes/api/cron/jobs/+server.ts:
 export const GET = async () => {
- const result = await runner.processNextBatch();
- return Response.json(result);
+	const result = await runner.processNextBatch();
+	return Response.json(result);
 };
 ```
 
@@ -366,20 +366,20 @@ Zero-infrastructure real-time communication across serverless and Node.js withou
 import { yaxaSSE, requireAuth } from 'yaxa-svelte/server';
 
 export const GET = yaxaSSE({
- guards: [requireAuth()],
- channel: (event) => `org:${event.locals.orgId}`,
- keepAliveIntervalMs: 15000, // Heartbeat ping prevents proxy & Vercel timeouts
- onConnect: ({ send, user }) => {
-  send('connected', { userId: user.id });
- }
+	guards: [requireAuth()],
+	channel: (event) => `org:${event.locals.orgId}`,
+	keepAliveIntervalMs: 15000, // Heartbeat ping prevents proxy & Vercel timeouts
+	onConnect: ({ send, user }) => {
+		send('connected', { userId: user.id });
+	}
 });
 
 // 2. Publish from anywhere (Endpoints, Webhooks, Background Workers)
 import { broadcast } from 'yaxa-svelte/server';
 
 await broadcast(`org:${orgId}`, 'invoice.settled', {
- invoiceId: 'inv_4982',
- amount: 29.0
+	invoiceId: 'inv_4982',
+	amount: 29.0
 });
 ```
 
@@ -412,15 +412,15 @@ Zero-boilerplate bridge connecting SvelteKit streaming endpoints directly to `<A
 import { createAiStreamHandler, requireAuth } from 'yaxa-svelte/server';
 
 export const POST = createAiStreamHandler({
- guards: [requireAuth()],
- // Built-in realistic mock streaming for instant zero-config dev & demos,
- // or provide your custom handler with Google Gemini, Anthropic, or OpenAI:
- handler: async function* ({ messages }) {
-  yield { type: 'thought', thought: { running: true, text: 'Analyzing user request...' } };
-  // Yield text deltas, thoughts, and tool call states
-  yield { type: 'text', delta: 'Hello from your AI backend!' };
-  yield { type: 'done' };
- }
+	guards: [requireAuth()],
+	// Built-in realistic mock streaming for instant zero-config dev & demos,
+	// or provide your custom handler with Google Gemini, Anthropic, or OpenAI:
+	handler: async function* ({ messages }) {
+		yield { type: 'thought', thought: { running: true, text: 'Analyzing user request...' } };
+		// Yield text deltas, thoughts, and tool call states
+		yield { type: 'text', delta: 'Hello from your AI backend!' };
+		yield { type: 'done' };
+	}
 });
 ```
 
@@ -450,8 +450,8 @@ Zero-codegen end-to-end type safety bridging your server `yaxaEndpoint` routes d
 ```ts
 // 1. Define Route Type Map (src/lib/api.ts)
 export type AppApi = {
- '/api/projects': typeof import('../routes/api/projects/+server');
- '/api/projects/[id]': typeof import('../routes/api/projects/[id]/+server');
+	'/api/projects': typeof import('../routes/api/projects/+server');
+	'/api/projects/[id]': typeof import('../routes/api/projects/[id]/+server');
 };
 ```
 
@@ -484,9 +484,9 @@ export type AppApi = {
 ```ts
 // 3. Universal SSR Load Function with SvelteKit fetch (src/routes/projects/+page.ts)
 export const load = async ({ fetch }) => {
- const api = createApiClient<AppApi>({ fetch });
- const { data: projects } = await api['/api/projects'].get();
- return { projects: projects ?? [] };
+	const api = createApiClient<AppApi>({ fetch });
+	const { data: projects } = await api['/api/projects'].get();
+	return { projects: projects ?? [] };
 };
 ```
 

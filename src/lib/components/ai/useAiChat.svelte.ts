@@ -116,8 +116,7 @@ export function useAiChat(options: UseAiChatOptions = {}): UseAiChatReturn {
 		try {
 			const customHeaders =
 				typeof options.headers === 'function' ? options.headers() : options.headers || {};
-			const customBody =
-				typeof options.body === 'function' ? options.body() : options.body || {};
+			const customBody = typeof options.body === 'function' ? options.body() : options.body || {};
 
 			const response = await fetch(api, {
 				method: 'POST',
