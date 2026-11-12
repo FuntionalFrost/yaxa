@@ -28,7 +28,7 @@ Always import from the specific subpath corresponding to the layer:
 
 | Subpath | Description & Key Exports |
 | :--- | :--- |
-| `yaxa-svelte` | **Core UI Primitives, Layouts, AI Primitives, Charts, Client RPC & Composables**: `Button`, `Input`, `Modal`, `Drawer`, `Toast`, `Toaster`, `DataTable`, `VirtualList`, `ResizablePanels`, `Carousel`, `DashboardShell`, `Combobox`, `MultiSelect`, `NumberInput`, `Stepper`, `Timeline`, `Tree`, `Terminal`, `OrgSwitcher`, `NotificationCenter`, `Testimonials`, `FAQ`, `FeatureGrid`, `Gate`, `<SignInCard>`, `<SignUpCard>`, `<ResetPasswordCard>`, `<AuthCard>`, `YaxaApp`, `<ThemeStudio>`, `<AiChat>`, `<PromptBar>`, `<AiThought>`, `<AiToolCall>`, `useAiChat`, `<LineChart>`, `<BarChart>`, `<DonutChart>`, `<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`, `createApiClient`, `useIdle`, `useGate`, `useUpload`, `useSSE`, `useToast`, `toast`, `definePageSeo`, `defineSiteConfig`, `cn`, `tv`. |  
+| `yaxa-svelte` | **Core UI Primitives, Layouts, AI Primitives, Charts, Client RPC & Composables**: `Button`, `Input`, `Modal`, `Drawer`, `Toast`, `Toaster`, `DataTable`, `VirtualList`, `ResizablePanels`, `Carousel`, `DashboardShell`, `Combobox`, `MultiSelect`, `NumberInput`, `Stepper`, `Timeline`, `Tree`, `Terminal`, `OrgSwitcher`, `NotificationCenter`, `Testimonials`, `FAQ`, `FeatureGrid`, `Gate`, `YaxaApp`, `<ThemeStudio>`, `<AiChat>`, `<PromptBar>`, `<AiThought>`, `<AiToolCall>`, `useAiChat`, `<LineChart>`, `<BarChart>`, `<DonutChart>`, `<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`, `createApiClient`, `useIdle`, `useGate`, `useUpload`, `useSSE`, `useToast`, `toast`, `definePageSeo`, `defineSiteConfig`, `cn`, `tv`. |
 | `yaxa-svelte/seo` | **Pure Zero-Dependency SEO & Agent Engine**: `<Seo>`, `<Favicons>`, `useSeo`, `createRobotsHandler`, `createSitemapHandler`, `createSitemapXslHandler`, `generateSitemapXsl`, `createManifestHandler`, `createOgImageHandler`, `generateOgSvg`, `createLlmsTxtHandler`, `generateLlmsTxt`, `createSkillHandler`, `generateSkillMd`, `defineSiteConfig`, `definePageSeo`, Schema.org generators (`generateFaqSchema`, `generateProductSchema`, `generateWebSiteSchema`, `generateOrganizationSchema`). 100% compatible with `@sveltejs/adapter-static` with zero DB/auth dependencies. |
 | `yaxa-svelte/yaxa.css` | **Turnkey Tailwind CSS v4 Stylesheet**: Full standalone stylesheet importing `@import 'tailwindcss'`, `@plugin '@tailwindcss/typography'`, theme variables (`@theme`), harmonic radius multiplier scale, and adaptive scrollbars. |
 | `yaxa-svelte/theme.css` | **Standalone Tailwind CSS v4 Design Tokens**: Pure `@theme` variables, `:root` CSS variables, dark mode variants, and harmonic radius scale without `@import 'tailwindcss'`. Ideal for custom Tailwind pipelines (automatically scans component templates via embedded `@source`). |
@@ -49,9 +49,7 @@ Always import from the specific subpath corresponding to the layer:
 All Yaxa components follow strict Svelte 5 runes conventions:
 
 ### A. Variant-Driven Styling via `tailwind-variants`
-
 Elements declare variants inside `<script module>` and resolve them reactively with `$derived`:
-
 ```svelte
 <!-- Example Pattern -->
 <script module lang="ts">
@@ -74,9 +72,7 @@ Elements declare variants inside `<script module>` and resolve them reactively w
 ```
 
 ### B. Svelte 5 Snippets for Slots
-
 Never use `<slot />` or `<svelte:fragment>`. Use Svelte 5 `Snippet` props:
-
 ```svelte
 <Button leading={iconSnippet} trailing={chevronSnippet}>
   {#snippet iconSnippet()}
@@ -87,17 +83,13 @@ Never use `<slot />` or `<svelte:fragment>`. Use Svelte 5 `Snippet` props:
 ```
 
 ### C. Standard Event Handlers
-
 Never use Svelte 4 `on:click`. Use modern HTML/runes event handlers:
-
 * `onclick={(e) => ...}`
 * `onkeydown={(e) => ...}`
 * `onchange={(e) => ...}`
 
 ### D. Universal Compound `ui` Prop & Semantic `data-slot`
-
 To achieve full Nuxt UI v4 parity, all composite components (`Card`, `Modal`, `Drawer`, `Tabs`, `Accordion`, `Alert`, `Breadcrumb`, `Tooltip`, `Input`, `Checkbox`, `Switch`, `CommandPalette`) accept a typed `ui?: Partial<Record<SlotKey, string>>` prop for type-safe slot overrides, and render semantic `data-slot="..."` attributes on internal DOM elements:
-
 ```svelte
 <!-- Direct slot styling via ui prop -->
 <Card ui={{ root: 'rounded-2xl', header: 'bg-neutral-50/50 p-6', body: 'space-y-4' }}>
@@ -105,25 +97,21 @@ To achieve full Nuxt UI v4 parity, all composite components (`Card`, `Modal`, `D
 </Card>
 
 <!-- Or targeting via data-slot in Tailwind classes -->
-<Card class="**:data-[slot=header]:border-b-2" />
+<Card class="[&_[data-slot=header]]:border-b-2" />
 ```
 
 ### E. Platform-Adaptive Shortcuts (`<Kbd>`)
-
 `<Kbd>` dynamically adapts modifier keys based on the user's operating system:
-
 ```svelte
 <!-- Automatically displays ⌘K on macOS/iOS and Ctrl K on Windows/Linux -->
 <Kbd combo={['meta', 'k']} size="xs" />
 ```
 
 ### F. Dark Mode Surface Elevation & Reduced Motion Compliance
-
 * **Surface Elevation**: Elevated components (`Modal`, `Drawer`, `Card`, `CommandPalette`, active segmented `Tabs`) utilize `.yaxa-surface-elevated` for subtle inner rim lighting (`inset 0 0 0 1px rgba(255, 255, 255, 0.08)`) and high-fidelity depth in dark mode.
 * **WCAG 2.2 AAA Motion**: `theme.css` enforces `@media (prefers-reduced-motion: reduce)` zero-specificity safeguards, while components support `motion-reduce:transition-none` and `motion-reduce:animate-none`.
 
 ### G. Atmospheric Utilities, Skeleton Recipes & Segmented Tabs
-
 * **Atmospheric Utilities**: `theme.css` provides `@utility yaxa-grain` (tactile inline SVG data-URI noise texture) and `@utility yaxa-mesh-glow` (dark/light radial ambient gradient backdrops) with zero runtime bundle overhead.
 * **Turnkey Skeleton Recipes**: `<Skeleton recipe="card" | "user" | "metric" | "table-row">` generates instant compound loading skeletons with circular avatars, badges, and staggered lines.
 * **Segmented Sliding Tabs**: `<Tabs variant="segmented" />` features a dynamic sliding active indicator element that measures bounding box offsets and glides between tabs via CSS transitions with graceful SSR hydration fallback.
@@ -133,11 +121,9 @@ To achieve full Nuxt UI v4 parity, all composite components (`Card`, `Modal`, `D
 ## 4. Context & Full-Stack SaaS Composition
 
 ### Root Layout (`<YaxaApp>`)
-
 Wrap your application in `<YaxaApp>` inside `src/routes/+layout.svelte`. It provides dynamic theme tokens, SEO fallbacks, and auth context to descendant components:
 
 **Option A (Turnkey Zero-Config)**:
-
 ```svelte
 <!-- src/routes/+layout.svelte -->
 <script lang="ts">
@@ -154,7 +140,6 @@ Wrap your application in `<YaxaApp>` inside `src/routes/+layout.svelte`. It prov
 ```
 
 **Option B (Optimized Tailwind CSS v4 Pipeline)**:
-
 ```css
 /* src/app.css */
 @import 'tailwindcss';
@@ -163,7 +148,6 @@ Wrap your application in `<YaxaApp>` inside `src/routes/+layout.svelte`. It prov
 ```
 
 Then in `src/routes/+layout.svelte`, import `../app.css` instead of `yaxa.css`:
-
 ```svelte
 <!-- src/routes/+layout.svelte -->
 <script lang="ts">
@@ -180,9 +164,7 @@ Then in `src/routes/+layout.svelte`, import `../app.css` instead of `yaxa.css`:
 ```
 
 ### Feature & Plan Gating (`<Gate>` & `useGate`)
-
 Declarative and programmatic tier and RBAC gating with automatic context fallback:
-
 ```svelte
 <script lang="ts">
   import { Gate, useGate } from 'yaxa-svelte';
@@ -202,9 +184,7 @@ Declarative and programmatic tier and RBAC gating with automatic context fallbac
 ```
 
 ### Type-Safe Page SEO (`definePageSeo`)
-
 Return SEO definitions directly from `+page.ts` or `+page.server.ts`. `<YaxaApp>` automatically renders the meta tags, OpenGraph cards, and JSON-LD schemas:
-
 ```ts
 // src/routes/dashboard/+page.ts
 import { definePageSeo } from 'yaxa-svelte';

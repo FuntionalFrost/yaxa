@@ -172,6 +172,9 @@ Supported Form Inputs:
 
 ## 5. SaaS, Authentication & Billing Primitives
 
+> [!NOTE]
+> All turnkey authentication cards (`<AuthCard>`, `<SignInCard>`, `<SignUpCard>`, `<ResetPasswordCard>`, `<PasskeyUI>`, `<TwoFactorModal>`) and the `useAuth` composable are exported strictly from **`yaxa-svelte/auth`** to keep the core `yaxa-svelte` package 100% peer-dependency-free. Context-driven SaaS components (`<Gate>`, `<UserMenu>`, `<OrgSwitcher>`, `<PricingCard>`, `<PricingTable>`, `<SubscriptionCard>`, `useGate`, `useUpload`) are available directly from the root **`yaxa-svelte`** entry point.
+
 ### 5.1 `<AuthCard>` Polymorphic State Machine
 
 Supports turnkey switching between authentication modes without page reloads:

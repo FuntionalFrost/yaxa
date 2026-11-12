@@ -3,14 +3,30 @@ import AuthCard from './AuthCard.svelte';
 import SignInCard from './SignInCard.svelte';
 import SignUpCard from './SignUpCard.svelte';
 import ResetPasswordCard from './ResetPasswordCard.svelte';
+import {
+	AuthCard as SubpathAuthCard,
+	SignInCard as SubpathSignInCard,
+	SignUpCard as SubpathSignUpCard,
+	ResetPasswordCard as SubpathResetPasswordCard,
+	PasskeyUI,
+	TwoFactorModal,
+	useAuth
+} from '#lib/auth/index.js';
 import { renderComponent } from '#lib/testing/index.js';
 
 describe('Turnkey Auth Suite Components', () => {
-	it('exports all auth card component definitions', () => {
+	it('exports all auth card component definitions from yaxa-svelte/auth', () => {
 		expect(AuthCard).toBeDefined();
 		expect(SignInCard).toBeDefined();
 		expect(SignUpCard).toBeDefined();
 		expect(ResetPasswordCard).toBeDefined();
+		expect(SubpathAuthCard).toBeDefined();
+		expect(SubpathSignInCard).toBeDefined();
+		expect(SubpathSignUpCard).toBeDefined();
+		expect(SubpathResetPasswordCard).toBeDefined();
+		expect(PasskeyUI).toBeDefined();
+		expect(TwoFactorModal).toBeDefined();
+		expect(typeof useAuth).toBe('function');
 	});
 
 	it('renders SignInCard with sign-in fields and action buttons', () => {

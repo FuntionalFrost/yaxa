@@ -353,18 +353,6 @@ export type { OrgSwitcherProps, OrgItem } from './components/saas/OrgSwitcher.sv
 export { default as PricingCard } from './components/saas/PricingCard.svelte';
 export { default as PricingTable } from './components/saas/PricingTable.svelte';
 export { default as SubscriptionCard } from './components/saas/SubscriptionCard.svelte';
-export { default as AuthCard } from './components/saas/AuthCard.svelte';
-export type { AuthCardProps, AuthCardMode } from './components/saas/AuthCard.svelte';
-export { default as SignInCard } from './components/saas/SignInCard.svelte';
-export type { SignInCardProps } from './components/saas/SignInCard.svelte';
-export { default as SignUpCard } from './components/saas/SignUpCard.svelte';
-export type { SignUpCardProps } from './components/saas/SignUpCard.svelte';
-export { default as ResetPasswordCard } from './components/saas/ResetPasswordCard.svelte';
-export type { ResetPasswordCardProps } from './components/saas/ResetPasswordCard.svelte';
-export { default as PasskeyUI } from './components/saas/PasskeyUI.svelte';
-export { default as TwoFactorModal } from './components/saas/TwoFactorModal.svelte';
-export { useAuth } from './composables/useAuth.svelte';
-export type { SocialProvider } from './composables/useAuth.svelte';
 export { useGate } from './composables/useGate.svelte';
 export type { UseGateOptions } from './composables/useGate.svelte';
 export { useUpload } from './composables/useUpload.svelte';

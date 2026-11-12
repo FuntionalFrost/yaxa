@@ -116,12 +116,12 @@
 - **Theming & Studio**: `<ThemeStudio>`, `theme`, `ACCENT_PALETTES`, `NEUTRAL_PALETTES`, `RADIUS_PRESETS`, Harmonic Radius Scale, Chart Palette Tokens.
 - **AI Primitives**: `<AiChat>`, `<PromptBar>`, `<AiThought>`, `<AiToolCall>`, `useAiChat()`.
 - **Charts (Pure SVG)**: `<LineChart>`, `<BarChart>`, `<DonutChart>`.
-- **SaaS Suite**: `<SignInCard>`, `<SignUpCard>`, `<ResetPasswordCard>`, `<AuthCard>`, `<PasskeyUI>`, `<TwoFactorModal>`, `<Gate>`, `<UserMenu>`, `<OrgSwitcher>`, `<PricingCard>`, `<PricingTable>`, `<SubscriptionCard>`, `useAuth()`.
+- **SaaS Suite**: `<Gate>`, `<UserMenu>`, `<OrgSwitcher>`, `<PricingCard>`, `<PricingTable>`, `<SubscriptionCard>`, `useGate()`, `useUpload()` (Root); `<SignInCard>`, `<SignUpCard>`, `<ResetPasswordCard>`, `<AuthCard>`, `<PasskeyUI>`, `<TwoFactorModal>`, `useAuth()` (`yaxa-svelte/auth`).
 - **Elements**: `Button`, `ButtonGroup`, `Badge`, `Avatar`, `AvatarGroup`, `DataTable` (with Column Visibility & Export), `Chip`, `Meter`, `MetricCard`, `Kbd`, `Icon`, `Spinner`, `Progress`, `Skeleton`, `Link`, `Logo`, `CodeBlock` (with Svelte 5 Runes, Python 3.13+, ES2026/TS6, Tailwind v4, YAML, TOML, Rust, Go, SQL & GraphQL Highlighting), `Tree`, `Timeline`, `Terminal`, `VirtualList`, `Carousel`.
 - **Forms**: `Form`, `FormField`, `Input`, `InputOTP`, `Textarea`, `Checkbox`, `Switch`, `Select`, `Combobox`, `MultiSelect`, `NumberInput`, `RadioGroup`, `Slider`, `ColorPicker`, `ToggleGroup`, `DatePicker`, `DateRangePicker`, `Dropzone`, `<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`.
 - **Layout**: `Container`, `Header`, `Footer`, `Section`, `Card`, `Divider`, `YaxaApp`, `DashboardShell` (with independent sidebar tokens), `ResizablePanels`.
 - **Navigation & Overlays**: `Tabs`, `Breadcrumb`, `Pagination`, `CommandPalette` (`⌘K`), `DropdownMenu`, `ContextMenu`, `Modal`, `Drawer`, `Slideover`, `Popover`, `Tooltip` (with `arrow={false}` & `unstyled`), `Alert`, `Accordion`, `NotificationCenter`, `Stepper`.
-- **Composables & Client RPC / Queries**: `createQuery`, `createMutation`, `QueryClient`, `createApiClient`, `useAiChat`, `useAuth`, `useGate`, `useUpload`, `useSSE`, `useClipboard`, `useShortcuts`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`, `useIdle`, `useInfiniteScroll`, `useSortable`.
+- **Composables & Client RPC / Queries**: `createQuery`, `createMutation`, `QueryClient`, `createApiClient`, `useAiChat`, `useGate`, `useUpload`, `useSSE`, `useClipboard`, `useShortcuts`, `useColorMode`, `useToast`, `useMediaQuery`, `useDebounce`, `useIdle`, `useInfiniteScroll`, `useSortable`, `useAuth` (`yaxa-svelte/auth`).
 
 ---
 
