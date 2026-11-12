@@ -11,6 +11,10 @@
 	"bugs": {
 		"url": "https://github.com/FuntionalFrost/yaxa/issues"
 	},
+	"funding": {
+		"type": "github",
+		"url": "https://github.com/sponsors/FuntionalFrost"
+	},
 	"packageManager": "pnpm@12.18.0",
 	"engines": {
 		"node": ">=24"

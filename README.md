@@ -15,6 +15,7 @@ _Nuxt UI v4 & Nuxt UI Pro Equivalent for SvelteKit 2 & 3 & Svelte 5 with Built-i
 [![License: MIT](https://img.shields.io/badge/License-MIT-emerald.svg)](LICENSE)
 [![Security Policy](https://img.shields.io/badge/Security-Policy-blue.svg)](SECURITY.md)
 [![Contributing](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
+[![Sponsor](https://img.shields.io/badge/Sponsor-%E2%99%A5-ea4aaa?style=flat&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/FuntionalFrost)
 
 <br />
 
@@ -612,6 +613,16 @@ Contributions are always welcome! Please read our [Contributing Guidelines](CONT
 2. Install dependencies: `pnpm install`
 3. Start development server: `pnpm dev`
 4. Run verification gates: `pnpm lint && pnpm check && pnpm test && pnpm build`
+
+---
+
+## 💖 Sponsors & Backing
+
+If you find Yaxa helpful for your applications or business, consider supporting its continuous development and maintenance:
+
+[![Sponsor on GitHub](https://img.shields.io/badge/Sponsor_on_GitHub-ea4aaa?style=for-the-badge&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/FuntionalFrost)
+
+- **[GitHub Sponsors](https://github.com/sponsors/FuntionalFrost)**: Fund ongoing feature additions, bug fixes, SvelteKit version tracking, and documentation improvements.
 
 ---
 
