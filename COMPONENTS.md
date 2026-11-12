@@ -67,7 +67,7 @@ Components map directly to Tailwind CSS v4 `@theme` custom properties and dynami
 
 ### 2.2 Compound `ui` Prop & Semantic `data-slot`
 
-All composite components (`Card`, `Modal`, `Drawer`, `Tabs`, `Accordion`, `Alert`, `Breadcrumb`, `Tooltip`, `Input`, `Checkbox`, `Switch`, `CommandPalette`) implement:
+All composite components (`Card`, `Modal`, `Drawer`, `Tabs`, `Accordion`, `Alert`, `Breadcrumb`, `Tooltip`, `Input`, `Checkbox`, `Switch`, `CommandPalette`, `Callout`, `CodeGroup`, `Steps`) implement:
 
 1. **Typed `ui` Prop**: `ui?: Partial<Record<SlotKey, string>>` for type-safe granular slot class overrides.
 2. **Semantic `data-slot="..."` DOM Attributes**: Enables parent or global CSS targeting (e.g., `class="[&_[data-slot=header]]:border-b"`).
@@ -242,7 +242,9 @@ Features:
 
 ---
 
-## 7. Developer Experience & Elements
+## 7. Developer Experience, Docs & Content Primitives
+
+All content primitives automatically isolate themselves from surrounding prose styles via `not-prose`, making them drop-in ready for `<Markdown>` or MDsveX documentation pages.
 
 ### 7.1 `<CodeBlock>`
 
@@ -274,9 +276,55 @@ Visual code diff and changelog comparison viewer.
 - **Statistics**: Additions badge (`+N`), deletions badge (`-N`), and filename badge.
 - **Syntax**: Tokenized syntax coloring for added/removed/unchanged lines.
 
+### 7.3 `<Callout>`
+
+Semantic documentation admonition and callout card with 8 variants (`note`, `info`, `tip`, `success`, `important`, `warning`, `caution`, `danger`):
+
+- Automatic default titles and Lucide-style SVG icons per variant when `title` or `icon` are omitted.
+- Optional clickable link card (`href`, `target`), dismissible state (`closable`, `onclose`), and `children` snippet slot.
+- Compound `ui` slots: `root`, `iconWrapper`, `content`, `title`, `description`, `closeButton`.
+
+### 7.4 `<CodeGroup>`
+
+Multi-tabbed code block container built on `<CodeBlock>` with cross-instance tab synchronization:
+
+- **Cross-Instance Reactivity (`syncKey`)**: Synchronizes active tab selection (e.g., `syncKey="pkg"` for `pnpm` / `npm` / `bun`) across every `<CodeGroup>` on the page via a module-level `SvelteMap` backed by `localStorage` persistence.
+- Supports per-tab `label`, `code`, `language`, `filename`, `icon`, `highlightLines`, and `showLineNumbers`.
+- Compound `ui` slots: `root`, `header`, `tabList`, `tab`, `copyButton`, `body`.
+
+### 7.5 `<Steps>`
+
+Vertical numbered step-by-step guide with timeline connector lines:
+
+- Supports declarative `items` array (`title`, `description`, `badge`, `icon`, `code`, `language`, `filename`, `completed`) or custom `children` snippet.
+- Integrates directly with `<CodeBlock>` for inline command and configuration snippets inside any step.
+- Compound `ui` slots: `root`, `step`, `indicator`, `line`, `content`, `title`, `description`, `codeWrapper`.
+
 ---
 
-## 8. Motion & Physics Engine
+## 8. Server Architecture & Zero-Dependency Observability (`yaxa-svelte/server`)
+
+All server-only utilities live under the isolated **`yaxa-svelte/server`** subpath so client bundles remain 100% pure.
+
+### 8.1 `yaxaEndpoint` Declarative Pipeline
+
+Type-safe SvelteKit `RequestHandler` builder with:
+
+- Standard Schema v1 validation (`params`, `query`, `body`, `output`) compatible with Zod, Valibot, and ArkType.
+- Composable middleware `guards` (`authGuard`, `rateLimitGuard`, `csrfGuard`).
+- Automatic `x-request-id`, W3C `traceparent`, and `server-timing` HTTP response headers.
+
+### 8.2 Zero-Dependency Observability (`requestId`, `traceId`, `logger`, `timing`)
+
+Every `yaxaEndpoint` handler receives structured observability primitives on its `context` argument with zero external dependencies:
+
+- **W3C Trace Context (`resolveTraceContext`, `parseTraceparent`)**: Extracts incoming `x-request-id` and W3C `traceparent` (`00-<traceId>-<spanId>-<flags>`) headers or generates cryptographic IDs via Web Crypto API.
+- **Structured Request Logger (`createRequestLogger`)**: Outputs JSON logs in production and colorized logs in development, automatically redacting sensitive keys (`password`, `token`, `secret`, `authorization`, `apiKey`, `cookie`, `creditCard`, etc.) at any nesting depth. Supports `.child()` sub-loggers.
+- **`Server-Timing` Metrics (`createServerTiming`)**: Automatically records `guards`, `validation`, `handler`, and `total` durations, plus custom `timing.start('db')` / `timing.measure('cache', fn)` spans that render directly in browser DevTools Network timing waterfall charts.
+
+---
+
+## 9. Motion & Physics Engine
 
 Yaxa UI includes custom Svelte actions for tactile, high-performance physical UI:
 
@@ -288,7 +336,7 @@ Yaxa UI includes custom Svelte actions for tactile, high-performance physical UI
 
 ---
 
-## 9. Testing & Quality Assurance Standards
+## 10. Testing & Quality Assurance Standards
 
 All components must comply with:
 
@@ -299,7 +347,7 @@ All components must comply with:
 
 ---
 
-## 10. AI Agent & Contributor Quick-Start
+## 11. AI Agent & Contributor Quick-Start
 
 When modifying or contributing to Yaxa UI:
 

@@ -372,6 +372,27 @@ export {
 } from './components/blocks/FeatureGrid.svelte';
 export type { FeatureGridProps, FeatureItem } from './components/blocks/FeatureGrid.svelte';
 
+// Docs & Content Primitives (Prose Callouts, Synced CodeGroups & Step Guides)
+export {
+	Callout,
+	calloutVariants,
+	CodeGroup,
+	codeGroupVariants,
+	Steps,
+	stepsVariants
+} from './components/content/index';
+export type {
+	CalloutProps,
+	CalloutSlots,
+	CalloutType,
+	CodeGroupProps,
+	CodeGroupSlots,
+	CodeGroupItem,
+	StepsProps,
+	StepsSlots,
+	StepGuideItem
+} from './components/content/index';
+
 // Testing Utilities
 export { createMockSiteConfig, createMockUser, createTestWrapperProps } from './testing';
 export type { YaxaTestOptions } from './testing';

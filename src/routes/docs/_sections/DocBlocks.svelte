@@ -16,6 +16,31 @@
 	import Badge from '#lib/components/elements/Badge.svelte';
 	import Icon from '#lib/components/elements/Icon.svelte';
 	import ToggleGroup from '#lib/components/forms/ToggleGroup.svelte';
+	import Callout from '#lib/components/content/Callout.svelte';
+	import CodeGroup from '#lib/components/content/CodeGroup.svelte';
+	import Steps, { type StepGuideItem } from '#lib/components/content/Steps.svelte';
+
+	const demoCodeGroupItems = [
+		{ label: 'pnpm', code: 'pnpm add yaxa-svelte @lucide/svelte' },
+		{ label: 'npm', code: 'npm install yaxa-svelte @lucide/svelte' },
+		{ label: 'bun', code: 'bun add yaxa-svelte @lucide/svelte' }
+	];
+
+	const demoStepGuide: StepGuideItem[] = [
+		{
+			title: 'Install Core Package',
+			badge: 'Step 1',
+			description: 'Add Yaxa UI to your SvelteKit 2 & 3 project with zero peer dependencies.',
+			code: 'pnpm add yaxa-svelte @lucide/svelte'
+		},
+		{
+			title: 'Import Tailwind CSS v4 Theme',
+			badge: 'Step 2',
+			description: 'Load harmonic radius tokens, adaptive scrollbars, and typography.',
+			code: "@import 'yaxa-svelte/yaxa.css';",
+			language: 'css'
+		}
+	];
 
 	let dashboardInterval = $state('30d');
 	let currentStep = $state(1);
@@ -413,6 +438,28 @@
 				description="Instant answers to questions about architecture, licensing, and edge deployments."
 				items={demoFAQ}
 			/>
+		</div>
+	</DocSandbox>
+
+	<!-- Docs & Content Primitives (<Callout />, <CodeGroup />, <Steps />) -->
+	<DocSandbox title="Docs & Content Primitives (<Callout />, <CodeGroup />, <Steps />)">
+		<div class="mx-auto w-full max-w-2xl space-y-6">
+			<div class="space-y-3">
+				<Callout
+					type="tip"
+					title="Zero-Dependency Pure UI"
+					description="Callout, CodeGroup, and Steps work seamlessly inside mdsvex prose or standalone Svelte 5 pages."
+				/>
+				<Callout
+					type="warning"
+					title="Synchronized Package Manager Tabs"
+					description="Switching tabs in any CodeGroup with syncKey='pkg-manager' automatically updates all matching groups across your docs."
+				/>
+			</div>
+
+			<CodeGroup items={demoCodeGroupItems} syncKey="pkg-manager" />
+
+			<Steps items={demoStepGuide} />
 		</div>
 	</DocSandbox>
 </div>

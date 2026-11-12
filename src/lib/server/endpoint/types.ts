@@ -1,4 +1,5 @@
 import type { RequestEvent } from '@sveltejs/kit';
+import type { YaxaLogger, YaxaLoggerOptions, ServerTimingTracker } from '../observability/types';
 
 /**
  * Standard RFC 7807 Problem Details representation.
@@ -93,6 +94,22 @@ export interface YaxaEndpointContext<TBody = any, TQuery = any, TParams = any, T
 	user: any;
 	session: any;
 	orgId: string | null;
+	/**
+	 * Request correlation ID (from incoming `x-request-id` or auto-generated `req_...`).
+	 */
+	requestId: string;
+	/**
+	 * W3C Distributed Trace ID (32-hex characters).
+	 */
+	traceId: string;
+	/**
+	 * Request-scoped structured logger pre-bound with traceId, requestId, userId, and orgId.
+	 */
+	logger: YaxaLogger;
+	/**
+	 * Request-scoped Server-Timing metric tracker (`timing.start()`, `timing.measure()`).
+	 */
+	timing: ServerTimingTracker;
 }
 
 /**
@@ -134,6 +151,11 @@ export interface YaxaEndpointConfig<
 	 * Optional response interceptors (e.g. audit logging, timing headers).
 	 */
 	interceptors?: YaxaInterceptor[];
+
+	/**
+	 * Optional structured logger configuration for this endpoint.
+	 */
+	loggerOptions?: YaxaLoggerOptions;
 
 	/**
 	 * OpenAPI metadata annotations (used by Milestone 3 auto-docs).

@@ -114,10 +114,11 @@
 ## 🧩 50+ Svelte 5 Components & Runes Composables
 
 - **Theming & Studio**: `<ThemeStudio>`, `theme`, `ACCENT_PALETTES`, `NEUTRAL_PALETTES`, `RADIUS_PRESETS`, Harmonic Radius Scale, Chart Palette Tokens.
+- **Docs & Content Primitives**: `<Callout>` (`note`, `tip`, `important`, `warning`, `caution`, `danger`), `<CodeGroup>` (Synced multi-tab code blocks with `syncKey`), `<Steps>` (Numbered vertical step guides), `<CodeDiff>`, `CodeBlock` (with Svelte 5 Runes, Python 3.13+, ES2026/TS6, Tailwind v4, YAML, TOML, Rust, Go, SQL & GraphQL Highlighting).
 - **AI Primitives**: `<AiChat>`, `<PromptBar>`, `<AiThought>`, `<AiToolCall>`, `useAiChat()`.
 - **Charts (Pure SVG)**: `<LineChart>`, `<BarChart>`, `<DonutChart>`.
 - **SaaS Suite**: `<Gate>`, `<UserMenu>`, `<OrgSwitcher>`, `<PricingCard>`, `<PricingTable>`, `<SubscriptionCard>`, `useGate()`, `useUpload()` (Root); `<SignInCard>`, `<SignUpCard>`, `<ResetPasswordCard>`, `<AuthCard>`, `<PasskeyUI>`, `<TwoFactorModal>`, `useAuth()` (`yaxa-svelte/auth`).
-- **Elements**: `Button`, `ButtonGroup`, `Badge`, `Avatar`, `AvatarGroup`, `DataTable` (with Column Visibility & Export), `Chip`, `Meter`, `MetricCard`, `Kbd`, `Icon`, `Spinner`, `Progress`, `Skeleton`, `Link`, `Logo`, `CodeBlock` (with Svelte 5 Runes, Python 3.13+, ES2026/TS6, Tailwind v4, YAML, TOML, Rust, Go, SQL & GraphQL Highlighting), `Tree`, `Timeline`, `Terminal`, `VirtualList`, `Carousel`.
+- **Elements**: `Button`, `ButtonGroup`, `Badge`, `Avatar`, `AvatarGroup`, `DataTable` (with Column Visibility & Export), `Chip`, `Meter`, `MetricCard`, `Kbd`, `Icon`, `Spinner`, `Progress`, `Skeleton`, `Link`, `Logo`, `Tree`, `Timeline`, `Terminal`, `VirtualList`, `Carousel`.
 - **Forms**: `Form`, `FormField`, `Input`, `InputOTP`, `Textarea`, `Checkbox`, `Switch`, `Select`, `Combobox`, `MultiSelect`, `NumberInput`, `RadioGroup`, `Slider`, `ColorPicker`, `ToggleGroup`, `DatePicker`, `DateRangePicker`, `Dropzone`, `<RichTextEditor>`, `<PhoneInput>`, `<CreditCardInput>`.
 - **Layout**: `Container`, `Header`, `Footer`, `Section`, `Card`, `Divider`, `YaxaApp`, `DashboardShell` (with independent sidebar tokens), `ResizablePanels`.
 - **Navigation & Overlays**: `Tabs`, `Breadcrumb`, `Pagination`, `CommandPalette` (`⌘K`), `DropdownMenu`, `ContextMenu`, `Modal`, `Drawer`, `Slideover`, `Popover`, `Tooltip` (with `arrow={false}` & `unstyled`), `Alert`, `Accordion`, `NotificationCenter`, `Stepper`.

@@ -29,6 +29,9 @@ describe('Root Entry Point Purity (yaxa-svelte)', () => {
 		'enqueueJob',
 		'defineWorker',
 		'createJobRunner',
+		'createRequestLogger',
+		'createServerTiming',
+		'resolveTraceContext',
 		// Admin (strictly yaxa-svelte/admin)
 		'createYaxaAdminHook',
 		'createDrizzleAdmin',
@@ -110,5 +113,8 @@ describe('Root Entry Point Purity (yaxa-svelte)', () => {
 		expect(typeof rootExports.UserMenu).toBe('function');
 		expect(typeof rootExports.useGate).toBe('function');
 		expect(typeof rootExports.useYaxa).toBe('function');
+		expect(typeof rootExports.Callout).toBe('function');
+		expect(typeof rootExports.CodeGroup).toBe('function');
+		expect(typeof rootExports.Steps).toBe('function');
 	});
 });

@@ -2,6 +2,9 @@ import type { RequestEvent, RequestHandler } from '@sveltejs/kit';
 import { isProblemDetails, problemResponse } from './problem';
 import { validateData } from './validate';
 import { globalApiRegistry } from '../openapi/registry';
+import { resolveTraceContext } from '../observability/trace';
+import { createServerTiming } from '../observability/timing';
+import { createRequestLogger } from '../observability/logger';
 import type { YaxaEndpointConfig, YaxaEndpointContext, InferValidatorOutput } from './types';
 
 /**
@@ -106,27 +109,85 @@ export function yaxaEndpoint<
 	const handler: RequestHandler = async (event: RequestEvent) => {
 		const { request, url, locals, params } = event;
 
+		// 0. Initialize Zero-Dependency Observability (W3C Trace Context, Request ID & Server-Timing)
+		const trace = resolveTraceContext(
+			request.headers.get('traceparent'),
+			(locals as any)?.requestId || request.headers.get('x-request-id')
+		);
+		const timing = createServerTiming();
+		const stopTotal = timing.start('total', 'Total Endpoint Execution');
+
+		if (locals && typeof locals === 'object') {
+			(locals as any).requestId = trace.requestId;
+			(locals as any).traceId = trace.traceId;
+		}
+
+		const finalizeResponse = (res: Response): Response => {
+			stopTotal();
+			const serverTimingHeader = timing.toHeader();
+			try {
+				if (!res.headers.has('x-request-id')) {
+					res.headers.set('x-request-id', trace.requestId);
+				}
+				if (!res.headers.has('traceparent')) {
+					res.headers.set('traceparent', trace.traceparent);
+				}
+				if (serverTimingHeader) {
+					const existing = res.headers.get('server-timing');
+					res.headers.set(
+						'server-timing',
+						existing ? `${existing}, ${serverTimingHeader}` : serverTimingHeader
+					);
+				}
+				return res;
+			} catch {
+				// Fallback if headers are immutable
+				const headers = new Headers(res.headers);
+				if (!headers.has('x-request-id')) headers.set('x-request-id', trace.requestId);
+				if (!headers.has('traceparent')) headers.set('traceparent', trace.traceparent);
+				if (serverTimingHeader) {
+					const existing = headers.get('server-timing');
+					headers.set(
+						'server-timing',
+						existing ? `${existing}, ${serverTimingHeader}` : serverTimingHeader
+					);
+				}
+				return new Response(res.body, {
+					status: res.status,
+					statusText: res.statusText,
+					headers
+				});
+			}
+		};
+
 		// 1. Execute Declarative Guards in Series
 		if (config.guards && config.guards.length > 0) {
+			const stopGuards = timing.start('guards', 'Endpoint Guards');
 			for (const guard of config.guards) {
 				const result = await guard(event);
 
 				if (result instanceof Response) {
-					return result;
+					stopGuards();
+					return finalizeResponse(result);
 				}
 
 				if (isProblemDetails(result)) {
-					return problemResponse(result);
+					stopGuards();
+					return finalizeResponse(problemResponse(result));
 				}
 
 				if (result === false) {
-					return problemResponse({
-						status: 403,
-						title: 'Forbidden',
-						detail: 'Access denied by endpoint guard.'
-					});
+					stopGuards();
+					return finalizeResponse(
+						problemResponse({
+							status: 403,
+							title: 'Forbidden',
+							detail: 'Access denied by endpoint guard.'
+						})
+					);
 				}
 			}
+			stopGuards();
 		}
 
 		// 2. Parse Raw Inputs
@@ -141,7 +202,7 @@ export function yaxaEndpoint<
 		if (request.method !== 'GET' && request.method !== 'HEAD') {
 			const parsed = await parseRequestBody(request);
 			if (!parsed.ok) {
-				return parsed.response;
+				return finalizeResponse(parsed.response);
 			}
 			rawBody = parsed.body;
 		}
@@ -154,6 +215,7 @@ export function yaxaEndpoint<
 		let validatedHeaders: any = rawHeaders;
 
 		if (config.schema) {
+			const stopValidation = timing.start('validation', 'Schema Validation');
 			if (config.schema.params) {
 				const res = await validateData(config.schema.params, rawParams, 'params');
 				if (res.success) validatedParams = res.data;
@@ -177,19 +239,39 @@ export function yaxaEndpoint<
 				if (res.success) validatedBody = res.data;
 				else allInvalidParams.push(...res.invalidParams);
 			}
+			stopValidation();
 		}
 
 		if (allInvalidParams.length > 0) {
-			return problemResponse({
-				status: 422,
-				title: 'Unprocessable Entity',
-				detail: `Validation failed for ${allInvalidParams.length} parameter(s).`,
-				type: 'https://yaxa.dev/errors/validation-failed',
-				invalidParams: allInvalidParams
-			});
+			return finalizeResponse(
+				problemResponse({
+					status: 422,
+					title: 'Unprocessable Entity',
+					detail: `Validation failed for ${allInvalidParams.length} parameter(s).`,
+					type: 'https://yaxa.dev/errors/validation-failed',
+					invalidParams: allInvalidParams
+				})
+			);
 		}
 
-		// 4. Construct Rich Endpoint Context
+		// 4. Construct Rich Endpoint Context with Bound Logger & Timing
+		const user = (locals as any)?.user || null;
+		const session = (locals as any)?.session || null;
+		const orgId = (locals as any)?.orgId || null;
+
+		const logger = createRequestLogger(
+			{
+				requestId: trace.requestId,
+				traceId: trace.traceId,
+				spanId: trace.spanId,
+				method: request.method,
+				path: url.pathname,
+				userId: user?.id || null,
+				orgId
+			},
+			config.loggerOptions
+		);
+
 		const context: YaxaEndpointContext<
 			InferValidatorOutput<TBodySchema>,
 			InferValidatorOutput<TQuerySchema>,
@@ -204,19 +286,26 @@ export function yaxaEndpoint<
 			query: validatedQuery as InferValidatorOutput<TQuerySchema>,
 			params: validatedParams as InferValidatorOutput<TParamsSchema>,
 			headers: validatedHeaders as InferValidatorOutput<THeadersSchema>,
-			user: (locals as any)?.user || null,
-			session: (locals as any)?.session || null,
-			orgId: (locals as any)?.orgId || null
+			user,
+			session,
+			orgId,
+			requestId: trace.requestId,
+			traceId: trace.traceId,
+			logger,
+			timing
 		};
 
 		// 5. Execute Handler wrapped in Interceptors & Error Boundary
 		const runHandler = async (): Promise<Response> => {
 			const defaultStatus = config.status || 200;
+			const stopHandler = timing.start('handler', 'Business Handler');
 
 			let result: any;
 			try {
 				result = await config.handle(context);
+				stopHandler();
 			} catch (err: any) {
+				stopHandler();
 				// Allow SvelteKit redirects and HTTP errors to bubble up
 				if (err && typeof err === 'object' && ('status' in err || 'location' in err)) {
 					throw err;
@@ -226,7 +315,9 @@ export function yaxaEndpoint<
 					return err;
 				}
 
-				console.error('[Yaxa Endpoint Error]', err);
+				logger.error('Unhandled endpoint exception', {
+					error: err instanceof Error ? err.message : String(err)
+				});
 
 				return problemResponse({
 					status: 500,
@@ -261,10 +352,12 @@ export function yaxaEndpoint<
 				(next, interceptor) => () => interceptor(context, next),
 				runHandler
 			);
-			return pipeline();
+			const interceptedRes = await pipeline();
+			return finalizeResponse(interceptedRes);
 		}
 
-		return runHandler();
+		const finalRes = await runHandler();
+		return finalizeResponse(finalRes);
 	};
 
 	// Attach configuration metadata for runtime reflection and OpenAPI generation (Milestone 3)

@@ -172,3 +172,21 @@ export type {
 	AiStreamHandlerFn,
 	CreateAiStreamHandlerOptions
 } from './ai/index';
+
+// Zero-Dependency Observability, W3C Distributed Tracing & Server-Timing (Milestone 4)
+export {
+	parseTraceparent,
+	resolveTraceContext,
+	randomHex,
+	createServerTiming,
+	createRequestLogger
+} from './observability/index';
+export type {
+	LogLevel,
+	LogEntry,
+	YaxaLoggerOptions,
+	YaxaLogger,
+	TraceContext,
+	TimingMetric,
+	ServerTimingTracker
+} from './observability/index';

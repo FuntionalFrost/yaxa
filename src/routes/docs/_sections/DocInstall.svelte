@@ -1,7 +1,29 @@
 <script lang="ts">
 	import DocHeader from '../_components/DocHeader.svelte';
 	import DocCodeBlock from '../_components/DocCodeBlock.svelte';
+	import CodeGroup from '#lib/components/content/CodeGroup.svelte';
 	import Badge from '#lib/components/elements/Badge.svelte';
+
+	const createAppItems = [
+		{ label: 'pnpm', code: 'pnpm dlx sv create my-app' },
+		{ label: 'npm', code: 'npx sv create my-app' },
+		{ label: 'bun', code: 'bunx sv create my-app' }
+	];
+
+	const installItems = [
+		{
+			label: 'pnpm',
+			code: 'pnpm add yaxa-svelte @lucide/svelte\npnpm add -D tailwindcss @tailwindcss/vite @tailwindcss/typography'
+		},
+		{
+			label: 'npm',
+			code: 'npm install yaxa-svelte @lucide/svelte\nnpm install -D tailwindcss @tailwindcss/vite @tailwindcss/typography'
+		},
+		{
+			label: 'bun',
+			code: 'bun add yaxa-svelte @lucide/svelte\nbun add -d tailwindcss @tailwindcss/vite @tailwindcss/typography'
+		}
+	];
 
 	const viteSnippet = `import { sveltekit } from '@sveltejs/kit/vite';
 import tailwindcss from '@tailwindcss/vite';
@@ -86,7 +108,7 @@ curl -fsSL https://yaxa.vercel.app/skills.md -o AGENTS.md`;
 		<p class="text-xs text-zinc-600 dark:text-zinc-400">
 			If you don't already have a SvelteKit app, initialize one using the official CLI:
 		</p>
-		<DocCodeBlock code="pnpm create svelte@latest my-app" filename="Terminal" language="bash" />
+		<CodeGroup items={createAppItems} syncKey="pkg-manager" />
 	</div>
 
 	<!-- Step 2 -->
@@ -104,12 +126,7 @@ curl -fsSL https://yaxa.vercel.app/skills.md -o AGENTS.md`;
 		<p class="text-xs text-zinc-600 dark:text-zinc-400">
 			Install the core package, Tailwind CSS v4, and the modern <code>@lucide/svelte</code> icon library:
 		</p>
-		<DocCodeBlock
-			code="pnpm add yaxa-svelte @lucide/svelte
-pnpm add -D tailwindcss @tailwindcss/vite @tailwindcss/typography"
-			filename="Terminal"
-			language="bash"
-		/>
+		<CodeGroup items={installItems} syncKey="pkg-manager" />
 	</div>
 
 	<!-- Step 3 -->
