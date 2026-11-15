@@ -4,6 +4,9 @@ import { renderComponent } from '#lib/testing/index.js';
 import Callout, { calloutVariants } from './Callout.svelte';
 import CodeGroup, { codeGroupVariants } from './CodeGroup.svelte';
 import Steps, { stepsVariants } from './Steps.svelte';
+import Markdown, { parseMarkdownBlocks, tokenizeInlineMarkdown } from './Markdown.svelte';
+import Collapsible, { collapsibleVariants } from './Collapsible.svelte';
+import ActionBar from '../overlays/ActionBar.svelte';
 
 describe('Docs & Content Primitives (Callout, CodeGroup, Steps)', () => {
 	describe('Callout', () => {
@@ -128,6 +131,102 @@ describe('Docs & Content Primitives (Callout, CodeGroup, Steps)', () => {
 			expect(target.textContent).toContain('Configure Styles');
 			expect(target.textContent).toContain('pnpm add yaxa-svelte');
 
+			cleanup();
+		});
+	});
+
+	describe('Markdown', () => {
+		it('parses headings, GFM alerts, tables, task lists, and code blocks', () => {
+			const md = `# Release v2.9
+
+> [!TIP] Fast Setup
+> Zero external dependencies required.
+
+- [x] Ship Markdown renderer
+- [ ] Add Sparkline
+
+| Feature | Status |
+| :--- | :---: |
+| Callout | Ready |
+
+\`\`\`ts
+const x = 42;
+\`\`\``;
+
+			const blocks = parseMarkdownBlocks(md);
+			expect(blocks.map((b) => b.type)).toEqual(['heading', 'callout', 'list', 'table', 'code']);
+
+			const { target, cleanup } = renderComponent(Markdown, { content: md });
+			expect(target.querySelector('h1')?.textContent).toContain('Release v2.9');
+			expect(target.textContent).toContain('Fast Setup');
+			expect(target.textContent).toContain('Ship Markdown renderer');
+			expect(target.querySelector('table')?.textContent).toContain('Callout');
+			cleanup();
+		});
+
+		it('blocks unsafe javascript: links in inline markdown', () => {
+			const tokens = tokenizeInlineMarkdown(
+				'Click [Safe](https://yaxa.dev) or [Evil](javascript:alert(1))'
+			);
+			const linkTokens = tokens.filter((t) => t.type === 'link');
+			expect(linkTokens).toHaveLength(1);
+			expect(linkTokens[0]).toMatchObject({ type: 'link', href: 'https://yaxa.dev' });
+		});
+	});
+
+	describe('ActionBar', () => {
+		it('renders floating toolbar when count > 0 and triggers onclear', () => {
+			let cleared = false;
+			const { target, cleanup } = renderComponent(ActionBar, {
+				count: 3,
+				label: 'rows selected',
+				onclear: () => {
+					cleared = true;
+				}
+			});
+
+			expect(target.querySelector('[role="toolbar"]')).not.toBeNull();
+			expect(target.textContent).toContain('3');
+			expect(target.textContent).toContain('rows selected');
+
+			const clearBtn = target.querySelector(
+				'[data-slot="clearButton"]'
+			) as HTMLButtonElement | null;
+			clearBtn?.click();
+			flushSync();
+			expect(cleared).toBe(true);
+			cleanup();
+		});
+	});
+
+	describe('Collapsible', () => {
+		it('generates root classes with not-prose isolation', () => {
+			const slots = collapsibleVariants({ variant: 'bordered' });
+			expect(slots.root()).toContain('not-prose');
+		});
+
+		it('toggles open state when trigger button is clicked', () => {
+			let toggledState: boolean | null = null;
+			const { target, cleanup } = renderComponent(Collapsible, {
+				title: 'System Logs',
+				description: 'Expand for stack trace',
+				badge: 'Debug',
+				open: false,
+				ontoggle: (next: boolean) => {
+					toggledState = next;
+				}
+			});
+
+			const trigger = target.querySelector('[data-slot="trigger"]') as HTMLButtonElement | null;
+			expect(trigger?.getAttribute('aria-expanded')).toBe('false');
+			expect(target.textContent).toContain('System Logs');
+			expect(target.textContent).toContain('Debug');
+
+			trigger?.click();
+			flushSync();
+
+			expect(toggledState).toBe(true);
+			expect(trigger?.getAttribute('aria-expanded')).toBe('true');
 			cleanup();
 		});
 	});

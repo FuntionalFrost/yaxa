@@ -19,6 +19,96 @@
 	import Callout from '#lib/components/content/Callout.svelte';
 	import CodeGroup from '#lib/components/content/CodeGroup.svelte';
 	import Steps, { type StepGuideItem } from '#lib/components/content/Steps.svelte';
+	import Markdown from '#lib/components/content/Markdown.svelte';
+	import Collapsible from '#lib/components/content/Collapsible.svelte';
+	import KanbanBoard, { type KanbanColumn } from '#lib/components/elements/KanbanBoard.svelte';
+	import Calendar, {
+		formatIsoDate,
+		type CalendarEvent
+	} from '#lib/components/elements/Calendar.svelte';
+
+	let mdSize = $state<'sm' | 'md' | 'lg'>('md');
+	let collapsibleOpen = $state(false);
+	let collapsibleBordered = $state(true);
+
+	const sampleMarkdown = `### Zero-Dependency GFM Markdown
+Render **bold**, *italic*, \`inline code\`, and [secure links](https://svelte.dev) without \`{@html}\` XSS risks.
+
+> [!TIP] Native Integration
+> Fenced code blocks delegate to \`<CodeBlock>\` and GitHub alerts delegate to \`<Callout>\`.
+
+| Feature | Bundle Cost | XSS Safe |
+| --- | --- | --- |
+| GFM Tables & Lists | 0 KB external | Yes |
+| Syntax Highlighting | Built-in | Yes |`;
+
+	let kanbanColumns = $state<KanbanColumn[]>([
+		{
+			id: 'backlog',
+			title: 'Backlog',
+			color: '#71717a',
+			items: [
+				{
+					id: 'k-1',
+					title: 'Add WebAuthn Passkey enrollment flow',
+					description: 'Support biometric login on mobile & desktop browsers.',
+					badge: 'Auth',
+					priority: 'medium',
+					assignee: { name: 'Sarah Chen' }
+				},
+				{
+					id: 'k-2',
+					title: 'Export DataTable selection to CSV',
+					badge: 'Data',
+					priority: 'low',
+					assignee: { name: 'Marcus Vance' }
+				}
+			]
+		},
+		{
+			id: 'in-progress',
+			title: 'In Progress',
+			color: '#f59e0b',
+			limit: 2,
+			items: [
+				{
+					id: 'k-3',
+					title: 'Zero-dependency Webhook HMAC verifier',
+					description: 'Web Crypto SHA-256 constant-time signature validation.',
+					badge: 'Security',
+					priority: 'urgent',
+					assignee: { name: 'Elena Rostova' }
+				}
+			]
+		},
+		{
+			id: 'done',
+			title: 'Shipped',
+			color: '#10b981',
+			items: [
+				{
+					id: 'k-4',
+					title: 'Svelte 5 Runes Query & RPC Client',
+					badge: 'Core',
+					priority: 'high',
+					assignee: { name: 'Sarah Chen' }
+				}
+			]
+		}
+	]);
+
+	const todayStr = formatIsoDate(new Date());
+	let calendarView = $state<'month' | 'week'>('month');
+	const calendarEvents: CalendarEvent[] = [
+		{ id: 'ev-1', title: 'v1.8 Release Cut', date: todayStr, time: '10:00 AM', color: 'primary' },
+		{
+			id: 'ev-2',
+			title: 'Security Audit Review',
+			date: todayStr,
+			time: '2:30 PM',
+			color: 'success'
+		}
+	];
 
 	const demoCodeGroupItems = [
 		{ label: 'pnpm', code: 'pnpm add yaxa-svelte @lucide/svelte' },
@@ -442,24 +532,113 @@
 	</DocSandbox>
 
 	<!-- Docs & Content Primitives (<Callout />, <CodeGroup />, <Steps />) -->
-	<DocSandbox title="Docs & Content Primitives (<Callout />, <CodeGroup />, <Steps />)">
-		<div class="mx-auto w-full max-w-2xl space-y-6">
-			<div class="space-y-3">
-				<Callout
-					type="tip"
-					title="Zero-Dependency Pure UI"
-					description="Callout, CodeGroup, and Steps work seamlessly inside mdsvex prose or standalone Svelte 5 pages."
-				/>
-				<Callout
-					type="warning"
-					title="Synchronized Package Manager Tabs"
-					description="Switching tabs in any CodeGroup with syncKey='pkg-manager' automatically updates all matching groups across your docs."
-				/>
+	<div id="docs-content-primitives">
+		<DocSandbox title="Docs & Content Primitives (<Callout />, <CodeGroup />, <Steps />)">
+			<div class="mx-auto w-full max-w-2xl space-y-6">
+				<div class="space-y-3">
+					<Callout
+						type="tip"
+						title="Zero-Dependency Pure UI"
+						description="Callout, CodeGroup, and Steps work seamlessly inside mdsvex prose or standalone Svelte 5 pages."
+					/>
+					<Callout
+						type="warning"
+						title="Synchronized Package Manager Tabs"
+						description="Switching tabs in any CodeGroup with syncKey='pkg-manager' automatically updates all matching groups across your docs."
+					/>
+				</div>
+
+				<CodeGroup items={demoCodeGroupItems} syncKey="pkg-manager" />
+
+				<Steps items={demoStepGuide} />
 			</div>
+		</DocSandbox>
+	</div>
 
-			<CodeGroup items={demoCodeGroupItems} syncKey="pkg-manager" />
+	<!-- Zero-Dependency Markdown & Collapsible -->
+	<div id="markdown-collapsible">
+		<DocSandbox
+			title="Zero-Dependency Markdown & Collapsible (<Markdown />, <Collapsible />)"
+			code={`<Markdown content={markdownText} size="${mdSize}" />\n\n<Collapsible title="View Raw AST Configuration" bind:open={open} bordered={${collapsibleBordered}}>\n  <p>Collapsible content body...</p>\n</Collapsible>`}
+			propControls={[
+				{
+					name: 'size',
+					label: 'Markdown Size',
+					type: 'select',
+					options: ['sm', 'md', 'lg'],
+					value: mdSize,
+					onchange: (v) => (mdSize = v)
+				},
+				{
+					name: 'open',
+					label: 'Collapsible Open',
+					type: 'boolean',
+					value: collapsibleOpen,
+					onchange: (v) => (collapsibleOpen = v)
+				},
+				{
+					name: 'bordered',
+					label: 'Bordered',
+					type: 'boolean',
+					value: collapsibleBordered,
+					onchange: (v) => (collapsibleBordered = v)
+				}
+			]}
+		>
+			<div class="mx-auto w-full max-w-2xl space-y-6">
+				<Markdown content={sampleMarkdown} size={mdSize} />
 
-			<Steps items={demoStepGuide} />
-		</div>
-	</DocSandbox>
+				<Collapsible
+					title="Collapsible Spoiler / Technical Details"
+					description="Click or toggle the prop control below to expand"
+					badge="Svelte 5"
+					icon="code"
+					bind:open={collapsibleOpen}
+					bordered={collapsibleBordered}
+				>
+					<p class="text-xs leading-relaxed text-neutral-600 dark:text-neutral-400">
+						<code>&lt;Collapsible&gt;</code> uses smooth Svelte 5 slide transitions, accessible
+						<code>aria-expanded</code> semantics, and includes <code>not-prose</code> so it can be embedded
+						directly inside documentation prose.
+					</p>
+				</Collapsible>
+			</div>
+		</DocSandbox>
+	</div>
+
+	<!-- Multi-Column KanbanBoard -->
+	<div id="kanban-board">
+		<DocSandbox
+			title="Multi-Column Drag & Keyboard Board (<KanbanBoard />)"
+			description="Drag cards across columns or use the accessible ← / → quick-move buttons on hover/focus."
+			code={`<KanbanBoard bind:columns={columns} onmove={(e) => console.log(e)} />`}
+		>
+			<div class="w-full">
+				<KanbanBoard bind:columns={kanbanColumns} />
+			</div>
+		</DocSandbox>
+	</div>
+
+	<!-- Full Event Calendar -->
+	<div id="event-calendar">
+		<DocSandbox
+			title="Month & Week Event Grid (<Calendar />)"
+			description="Switch between 42-cell month grids and 7-day week views with typed event pills."
+			code={`<Calendar events={events} bind:view={view} />`}
+			propControls={[
+				{
+					name: 'view',
+					label: 'Calendar View',
+					type: 'select',
+					options: ['month', 'week'],
+					value: calendarView,
+					onchange: (v) => (calendarView = v)
+				}
+			]}
+		>
+			<div class="w-full">
+				<Calendar events={calendarEvents} bind:view={calendarView} />
+			</div>
+		</DocSandbox>
+	</div>
 </div>

@@ -1,3 +1,14 @@
+<script lang="ts" module>
+	export interface SandboxPropControl {
+		name: string;
+		label?: string;
+		type: 'select' | 'boolean' | 'text';
+		options?: readonly string[];
+		value: any;
+		onchange: (value: any) => void;
+	}
+</script>
+
 <script lang="ts">
 	import type { Snippet } from 'svelte';
 	import DocCodeBlock from './DocCodeBlock.svelte';
@@ -7,6 +18,7 @@
 		description?: string;
 		code?: string;
 		filename?: string;
+		propControls?: SandboxPropControl[];
 		controls?: Snippet;
 		children: Snippet;
 		class?: string;
@@ -18,6 +30,7 @@
 		description,
 		code = '',
 		filename = '',
+		propControls = [],
 		controls,
 		children,
 		class: className = '',
@@ -120,18 +133,69 @@
 
 	{#if activeTab === 'preview'}
 		<div
-			class="flex min-h-[120px] w-full min-w-0 items-center justify-center overflow-x-auto p-4 sm:p-8"
+			class="flex min-h-30 w-full min-w-0 items-center justify-center overflow-x-auto p-4 sm:p-8"
 		>
 			{@render children()}
 		</div>
-		{#if controls}
-			<div
-				class="border-t border-zinc-200 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-950/40"
-			>
-				{@render controls()}
-			</div>
-		{/if}
 	{:else if code}
 		<DocCodeBlock {code} {filename} class="my-0 rounded-none border-0" />
+	{/if}
+
+	{#if propControls.length > 0 || controls}
+		<div
+			class="border-t border-zinc-200 bg-zinc-50/50 p-4 dark:border-zinc-800 dark:bg-zinc-950/40"
+		>
+			{#if propControls.length > 0}
+				<div class="flex flex-wrap items-center gap-4 text-xs">
+					{#each propControls as ctrl (ctrl.name)}
+						{#if ctrl.type === 'select' && ctrl.options}
+							<div class="flex flex-wrap items-center gap-1.5">
+								<span class="mr-0.5 font-mono text-[11px] font-semibold text-neutral-500">
+									{ctrl.label || ctrl.name}:
+								</span>
+								{#each ctrl.options as opt (opt)}
+									<button
+										type="button"
+										onclick={() => ctrl.onchange(opt)}
+										class="rounded px-2 py-0.5 font-medium transition-all {ctrl.value === opt
+											? 'bg-primary-600 text-white shadow-xs'
+											: 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200 dark:bg-neutral-800 dark:text-neutral-300'}"
+									>
+										{opt}
+									</button>
+								{/each}
+							</div>
+						{:else if ctrl.type === 'boolean'}
+							<label
+								class="flex cursor-pointer items-center gap-1.5 font-medium text-neutral-600 select-none dark:text-neutral-300"
+							>
+								<input
+									type="checkbox"
+									checked={Boolean(ctrl.value)}
+									onchange={(e) => ctrl.onchange(e.currentTarget.checked)}
+									class="rounded text-primary-600"
+								/>
+								<span class="font-mono text-[11px]">{ctrl.label || ctrl.name}</span>
+							</label>
+						{:else if ctrl.type === 'text'}
+							<label class="flex items-center gap-1.5 text-neutral-600 dark:text-neutral-300">
+								<span class="font-mono text-[11px] font-semibold text-neutral-500">
+									{ctrl.label || ctrl.name}:
+								</span>
+								<input
+									type="text"
+									value={ctrl.value ?? ''}
+									oninput={(e) => ctrl.onchange(e.currentTarget.value)}
+									class="rounded border border-neutral-300 bg-white px-2 py-0.5 text-xs text-neutral-900 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100"
+								/>
+							</label>
+						{/if}
+					{/each}
+				</div>
+			{/if}
+			{#if controls}
+				{@render controls()}
+			{/if}
+		</div>
 	{/if}
 </div>

@@ -4,7 +4,7 @@ export const siteConfig = defineSiteConfig({
 	name: 'Yaxa',
 	title: 'Yaxa — The Intuitive Svelte UI Library & Solo SaaS Framework',
 	description:
-		'Nuxt UI v4 equivalent for SvelteKit 2 & 3 and Svelte 5. 50+ accessible components with Tailwind CSS v4, type-safe API pipeline (yaxaEndpoint), OpenAPI 3.1 & Scalar interactive docs, real-time SSE, background job queue, and automated SEO.',
+		'Nuxt UI v4 equivalent for SvelteKit 2 & 3 and Svelte 5. 80+ accessible components with Tailwind CSS v4, type-safe API pipeline (yaxaEndpoint), OpenAPI 3.1 & Scalar interactive docs, real-time SSE, background job queue, and automated SEO.',
 	url: 'https://yaxa.vercel.app',
 	email: 'devfrost@protonmail.com',
 	logo: '/favicon.svg',

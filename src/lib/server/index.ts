@@ -1,4 +1,5 @@
-// Yaxa Server Suite - SvelteKit Server Hooks, Auth, Database, Payments & Email
+// Yaxa Server Suite - 100% Peer-Dependency-Free SvelteKit Server Hooks, Endpoints, OpenAPI, SSE, Jobs & Observability
+// Optional SDK integrations live in dedicated subpaths: yaxa-svelte/auth, yaxa-svelte/db, yaxa-svelte/polar, yaxa-svelte/email, yaxa-svelte/storage
 
 // Server Hooks & SEO Endpoints
 export { createYaxaHook } from '../site/hook';
@@ -16,10 +17,14 @@ export type { LlmsTxtOptions, LlmsSection, LlmsLink } from '../site/llms';
 export { createSkillHandler, generateSkillMd } from '../site/skill';
 export type { SkillOptions, SkillAction } from '../site/skill';
 
-// Database, Drizzle ORM & Server Pagination
-export { getDb, schemaPg, schemaSqlite } from './db/index';
+// Server DataTable Pagination & Pure SaaS Domain Types
+export { parseDataTableQuery, createDataTableResponse } from './db/pagination';
 export type {
-	DbConfig,
+	DataTableQueryParams,
+	DataTableQueryOptions,
+	DataTableResponse
+} from './db/pagination';
+export type {
 	DbDriver,
 	SaasUser,
 	OrgRole,
@@ -30,45 +35,11 @@ export type {
 	SubscriptionStatus,
 	PricingTier,
 	PricingFeature
-} from './db/index';
-export { parseDataTableQuery, createDataTableResponse } from './db/pagination';
-export type {
-	DataTableQueryParams,
-	DataTableQueryOptions,
-	DataTableResponse
-} from './db/pagination';
+} from './db/types';
 
-// Authentication (Better-Auth)
-export { createYaxaAuth } from './auth/index';
-export type { YaxaAuthConfig, YaxaAuth } from './auth/index';
+// Zero-Dependency Auth Route Protection Hook (for createYaxaAuth factory, import from 'yaxa-svelte/auth')
 export { createYaxaAuthHook } from './auth/hook';
 export type { YaxaAuthHookOptions } from './auth/hook';
-
-// Polar.sh Payments & Webhooks
-export {
-	getPolarClient,
-	createPolarCheckout,
-	createPolarCustomerPortalSession,
-	createPolarWebhookHandler
-} from './polar/index';
-export type { PolarConfig, CreateCheckoutOptions, PolarWebhookOptions } from './polar/index';
-
-// Transactional Emails (Resend)
-export { getResendClient, sendMagicLinkEmail, sendWelcomeEmail } from './email/index';
-export type {
-	ResendEmailConfig,
-	SendMagicLinkOptions,
-	SendWelcomeEmailOptions
-} from './email/index';
-
-// Cloud Storage (AWS S3 & Cloudflare R2)
-export { getS3Client, createPresignedUploadUrl, createS3UploadHandler } from './storage/index';
-export type {
-	S3StorageConfig,
-	PresignedUploadOptions,
-	PresignedUploadResult,
-	S3UploadHandlerOptions
-} from './storage/index';
 
 // Endpoint Pipeline, Guards & RFC 7807 Validation (Milestone 1)
 export {
@@ -79,6 +50,7 @@ export {
 	requireAuth,
 	requireRole,
 	rateLimit,
+	csrfGuard,
 	composeGuards,
 	validateData
 } from './endpoint/index';
@@ -94,6 +66,7 @@ export type {
 	RequireAuthOptions,
 	RequireRoleOptions,
 	RateLimitOptions,
+	CsrfGuardOptions,
 	AnyValidator,
 	InferValidatorOutput,
 	ValidationOutcome,
@@ -190,3 +163,17 @@ export type {
 	TimingMetric,
 	ServerTimingTracker
 } from './observability/index';
+
+// Zero-Dependency HTTP Security Headers & HMAC Webhook Verifier
+export {
+	buildSecurityHeaders,
+	createSecurityHeadersHook,
+	computeHmacSha256Hex,
+	verifyWebhookSignature,
+	createWebhookHandler
+} from './security/index';
+export type {
+	SecurityHeadersOptions,
+	VerifyWebhookSignatureOptions,
+	CreateWebhookHandlerOptions
+} from './security/index';

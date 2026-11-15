@@ -154,8 +154,9 @@ export const siteConfig = defineSiteConfig({
 		<p
 			class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed font-normal text-neutral-600 sm:text-xl dark:text-neutral-400"
 		>
-			50+ accessible components powered by Bits UI & Tailwind Variants. Includes AI chat primitives,
-			native SVG charts, solo SaaS workflows, and the real-time Visual Web Theme Studio.
+			75+ accessible components & primitives powered by Bits UI & Tailwind Variants. Includes AI
+			chat primitives, native SVG charts, docs content blocks, solo SaaS workflows, and the
+			real-time Visual Web Theme Studio.
 		</p>
 
 		<!-- Action CTA Buttons -->

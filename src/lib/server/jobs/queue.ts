@@ -1,5 +1,4 @@
 import type { EnqueueJobOptions, JobDelay, JobRecord } from './types';
-import { schemaPg, schemaSqlite } from '../db';
 
 /**
  * Parses delay specifier ('5m', '30s', '2h', number ms, Date) into an absolute Date.
@@ -80,8 +79,12 @@ export async function enqueueJob<TPayload = any>(
 	if (client) {
 		try {
 			const payloadString = JSON.stringify(payload);
-			// Determine table schema (detect postgres vs sqlite table)
-			const table = (client as any)?.schema?.job || schemaPg.job || schemaSqlite.job;
+			// Determine table schema (detect postgres vs sqlite table, lazy-loading schema only when needed)
+			let table = (client as any)?.schema?.job || (client as any)?._?.fullSchema?.job;
+			if (!table) {
+				const { schemaPg, schemaSqlite } = await import('../db');
+				table = schemaPg.job || schemaSqlite.job;
+			}
 
 			await (client as any).insert(table).values({
 				id,

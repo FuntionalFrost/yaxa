@@ -5,6 +5,11 @@
 	import Icon from '../../components/elements/Icon.svelte';
 	import Progress from '../../components/elements/Progress.svelte';
 	import { useUpload } from '../../composables/useUpload.svelte';
+	import {
+		getRegisteredFlags,
+		setFeatureFlagOverride,
+		clearFeatureFlagOverrides
+	} from '../../composables/useFeatureFlag.svelte';
 	import { useYaxa } from '../../site/context';
 
 	interface Props {
@@ -28,6 +33,17 @@
 	// Storage Upload Sandbox
 	const uploader = useUpload();
 	let selectedFile = $state<File | null>(null);
+
+	// Feature Flags Sandbox
+	let customFlagKey = $state('');
+	const registeredFlags = $derived(getRegisteredFlags(user));
+
+	function addCustomFlagOverride() {
+		const trimmed = customFlagKey.trim();
+		if (!trimmed) return;
+		setFeatureFlagOverride(trimmed, true);
+		customFlagKey = '';
+	}
 
 	async function handleSendTestEmail() {
 		isSendingEmail = true;
@@ -283,6 +299,92 @@
 					{user?.plan || user?.tier || 'free'}
 				</p>
 			</div>
+		</div>
+	</Card>
+
+	<!-- 4. Feature Flags & Rollout Overrides -->
+	<Card class="space-y-4 border-neutral-200 p-6 shadow-xs lg:col-span-2 dark:border-neutral-800">
+		<div
+			class="flex flex-wrap items-center justify-between gap-2 border-b border-neutral-200 pb-3 dark:border-neutral-800"
+		>
+			<div class="flex items-center gap-2.5">
+				<div
+					class="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-100 text-violet-600 dark:bg-violet-950/60 dark:text-violet-400"
+				>
+					<Icon name="bolt" class="h-4 w-4" />
+				</div>
+				<div>
+					<h3 class="text-sm font-bold text-neutral-900 dark:text-neutral-100">
+						Feature Flag Overrides (`defineFlags` / `useFeatureFlag`)
+					</h3>
+					<p class="text-xs text-neutral-500">
+						Toggle local browser overrides for feature flags and percentage rollouts
+					</p>
+				</div>
+			</div>
+			<div class="flex items-center gap-2">
+				<Button
+					variant="ghost"
+					size="xs"
+					color="neutral"
+					onclick={() => clearFeatureFlagOverrides()}
+				>
+					Reset All Overrides
+				</Button>
+			</div>
+		</div>
+
+		{#if registeredFlags.length > 0}
+			<div class="divide-y divide-neutral-200/80 text-xs dark:divide-neutral-800/80">
+				{#each registeredFlags as item (item.key)}
+					<div class="flex items-center justify-between gap-4 py-2.5">
+						<div class="min-w-0">
+							<div class="flex items-center gap-2">
+								<span class="font-mono font-semibold text-neutral-900 dark:text-neutral-100">
+									{item.key}
+								</span>
+								{#if item.override !== null}
+									<Badge size="xs" color="warning" variant="subtle">Overridden</Badge>
+								{/if}
+								{#if typeof item.config.rolloutPercentage === 'number'}
+									<Badge size="xs" color="info" variant="subtle">
+										{item.config.rolloutPercentage}% Rollout
+									</Badge>
+								{/if}
+							</div>
+							{#if item.config.description}
+								<p class="mt-0.5 text-neutral-500">{item.config.description}</p>
+							{/if}
+						</div>
+						<div class="flex shrink-0 items-center gap-2">
+							<Button
+								size="xs"
+								variant={item.effective ? 'solid' : 'outline'}
+								color={item.effective ? 'primary' : 'neutral'}
+								onclick={() => setFeatureFlagOverride(item.key, !item.effective)}
+							>
+								{item.effective ? 'Enabled' : 'Disabled'}
+							</Button>
+						</div>
+					</div>
+				{/each}
+			</div>
+		{:else}
+			<p class="text-xs text-neutral-500">
+				No flags registered yet. Define flags with <code class="font-mono">defineFlags()</code> or add
+				a flag key below.
+			</p>
+		{/if}
+
+		<div class="flex items-center gap-2 pt-1">
+			<input
+				type="text"
+				bind:value={customFlagKey}
+				placeholder="Enter flag key (e.g. beta-kanban)..."
+				aria-label="Custom feature flag key"
+				class="w-full max-w-xs rounded-md border border-neutral-300 bg-white px-3 py-1.5 font-mono text-xs text-neutral-900 placeholder-neutral-400 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 focus:outline-none dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-100"
+			/>
+			<Button size="xs" variant="outline" onclick={addCustomFlagOverride}>Enable Flag</Button>
 		</div>
 	</Card>
 </div>

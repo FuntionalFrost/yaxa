@@ -95,5 +95,55 @@ export default defineConfig(
 				}
 			]
 		}
+	},
+	{
+		files: ['src/lib/server/index.ts'],
+		rules: {
+			'no-restricted-imports': [
+				'error',
+				{
+					paths: [
+						{
+							name: 'better-auth',
+							message:
+								'yaxa-svelte/server must stay 100% peer-dependency-free. Use yaxa-svelte/auth.'
+						},
+						{
+							name: 'drizzle-orm',
+							message: 'yaxa-svelte/server must stay 100% peer-dependency-free. Use yaxa-svelte/db.'
+						},
+						{
+							name: '@polar-sh/sdk',
+							message:
+								'yaxa-svelte/server must stay 100% peer-dependency-free. Use yaxa-svelte/polar.'
+						},
+						{
+							name: 'resend',
+							message:
+								'yaxa-svelte/server must stay 100% peer-dependency-free. Use yaxa-svelte/email.'
+						},
+						{
+							name: '@aws-sdk/client-s3',
+							message:
+								'yaxa-svelte/server must stay 100% peer-dependency-free. Use yaxa-svelte/storage.'
+						}
+					],
+					patterns: [
+						{
+							group: [
+								'./db/index*',
+								'./db/schema*',
+								'./auth/index*',
+								'./polar/**',
+								'./email/**',
+								'./storage/**'
+							],
+							message:
+								'yaxa-svelte/server must stay 100% peer-dependency-free. Optional SDK integrations belong in their dedicated subpaths (auth, db, polar, email, storage).'
+						}
+					]
+				}
+			]
+		}
 	}
 );

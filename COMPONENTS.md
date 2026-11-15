@@ -198,11 +198,12 @@ Supports turnkey switching between authentication modes without page reloads:
 - Step 2: Verification step using `<InputOTP>`.
 - Step 3: Generates download/copy-ready emergency recovery backup codes.
 
-### 5.4 `<PricingTable>` & Subscription Feature Gating
+### 5.4 `<PricingTable>`, `<Gate>` & Feature Flags (`defineFlags`, `useFeatureFlag`)
 
 - Interactive monthly/annual billing cycle toggle with discount badges.
 - Highlighted "Popular" tier with visual glow elevation.
 - Feature comparison checklist with tooltips and CTA triggers compatible with Polar.sh and Stripe Checkout.
+- **Feature Flags & Rollouts (`defineFlags`, `useFeatureFlag`, `<Gate flag="...">`)**: Deterministic 32-bit FNV-1a percentage rollouts (`0–100`), plan/role targeting, reactive browser overrides persisted to `localStorage`, and live toggle controls in `<DevSandbox>` (`yaxa-svelte/admin`).
 
 ---
 
@@ -300,18 +301,36 @@ Vertical numbered step-by-step guide with timeline connector lines:
 - Integrates directly with `<CodeBlock>` for inline command and configuration snippets inside any step.
 - Compound `ui` slots: `root`, `step`, `indicator`, `line`, `content`, `title`, `description`, `codeWrapper`.
 
+### 7.6 `<Markdown>`
+
+Zero-dependency, XSS-proof Markdown & GitHub Flavored Markdown (GFM) renderer:
+
+- Tokenizes block and inline syntax into native Svelte DOM nodes without `{@html}` (blocking `javascript:` URLs by construction).
+- Automatically delegates fenced code blocks to `<CodeBlock>` and GitHub alerts (`> [!NOTE]`, `> [!TIP]`, `> [!IMPORTANT]`, `> [!WARNING]`, `> [!CAUTION]`) to `<Callout>`.
+- Supports GFM tables with column alignment, task lists (`- [x]`), headings with slug IDs, blockquotes, and compound `ui` slots.
+
+### 7.7 `<Collapsible>`, `<Sparkline>`, `<ActionBar>`, `<KanbanBoard>` & `<Calendar>`
+
+- **`<Collapsible>`**: Expandable spoiler and technical detail container (`open`, `bordered`, `icon`, `badge`, `disabled`) with `not-prose` isolation and smooth Svelte 5 slide transitions.
+- **`<Sparkline>`**: Inline SVG trend chart with automatic directional color detection (`color="auto"` turns emerald when trending up and rose when trending down), smooth Bézier or linear curves, area gradient fill, and end-point indicator dot.
+- **`<ActionBar>`**: Floating bottom bulk-action toolbar (`open`, `count`, `label`, `onclear`, `closeOnEscape`) that pairs with `<DataTable>` multi-row selection.
+- **`<KanbanBoard>`**: Multi-column drag-and-drop and keyboard-accessible (`←` / `→`) pipeline board with column WIP limit indicators, priority badges, and custom card snippets.
+- **`<Calendar>`**: Full `month` (42-cell) and `week` (7-day) event grid with `Today` navigation, color-coded event pills, and `+N more` overflow badges.
+
 ---
 
-## 8. Server Architecture & Zero-Dependency Observability (`yaxa-svelte/server`)
+## 8. Server Architecture, Security & Zero-Dependency Observability (`yaxa-svelte/server`)
 
-All server-only utilities live under the isolated **`yaxa-svelte/server`** subpath so client bundles remain 100% pure.
+All zero-dependency server utilities live under the isolated **`yaxa-svelte/server`** subpath (enforced by `src/lib/server/server-purity.test.ts` so no third-party SDK peer dependencies are ever pulled in).
 
-### 8.1 `yaxaEndpoint` Declarative Pipeline
+### 8.1 `yaxaEndpoint` Declarative Pipeline & Security
 
 Type-safe SvelteKit `RequestHandler` builder with:
 
 - Standard Schema v1 validation (`params`, `query`, `body`, `output`) compatible with Zod, Valibot, and ArkType.
-- Composable middleware `guards` (`authGuard`, `rateLimitGuard`, `csrfGuard`).
+- Composable middleware `guards` (`requireAuth`, `requireRole`, `rateLimit`, `csrfGuard`).
+- **HTTP Security Headers (`createSecurityHeadersHook`, `buildSecurityHeaders`)**: Attaches HSTS, `X-Frame-Options`, `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `Cross-Origin-Opener-Policy`, and structured `Content-Security-Policy` headers.
+- **Web Crypto HMAC Webhooks (`createWebhookHandler`, `verifyWebhookSignature`)**: Zero-dependency HMAC-SHA256 verification supporting `sha256=<hex>` and timestamped `t=...,v1=...` headers with replay-attack tolerance and schema validation.
 - Automatic `x-request-id`, W3C `traceparent`, and `server-timing` HTTP response headers.
 
 ### 8.2 Zero-Dependency Observability (`requestId`, `traceId`, `logger`, `timing`)

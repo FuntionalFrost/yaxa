@@ -73,7 +73,8 @@ DATABASE_URL="postgresql://user:password@ep-cool-db.us-east-2.aws.neon.tech/neon
 
 	const hookCodeSnippet = `// src/hooks.server.ts
 import { sequence } from '@sveltejs/kit/hooks';
-import { createYaxaHook, createYaxaAuth, createYaxaAuthHook } from 'yaxa-svelte/server';
+import { createYaxaHook, createYaxaAuthHook } from 'yaxa-svelte/server';
+import { createYaxaAuth } from 'yaxa-svelte/auth';
 import { siteConfig } from './site.config';
 
 const yaxaHook = createYaxaHook(siteConfig);
@@ -104,14 +105,14 @@ export const POST = createPolarWebhookHandler({
 	const subpathsSnippet = `// 1. Core UI Components & Headless Actions (Zero Backend Overhead)
 import { Button, Modal, UserMenu, useToast, useColorMode, springTilt } from 'yaxa-svelte';
 
-// 2. Full-Stack Client Auth (Turnkey Cards, Passkeys, 2FA)
-import { useAuth, SignInCard, SignUpCard, ResetPasswordCard, AuthCard, PasskeyUI, TwoFactorModal } from 'yaxa-svelte/auth';
+// 2. Full-Stack Auth (Turnkey Cards, Passkeys, 2FA, Better-Auth Server Factory)
+import { useAuth, createYaxaAuth, SignInCard, SignUpCard, ResetPasswordCard, AuthCard, PasskeyUI, TwoFactorModal } from 'yaxa-svelte/auth';
 
 // 3. Pure Zero-Dependency SEO & Agent Discovery for Static & Serverless Sites
 import { Seo, useSeo, createRobotsHandler, createSitemapHandler, createLlmsTxtHandler, createSkillHandler } from 'yaxa-svelte/seo';
 
-// 4. SvelteKit Server Hooks, Auth Factory, yaxaEndpoint Pipeline, AI Streaming & SSE
-import { yaxaEndpoint, requireAuth, requireRole, rateLimit, createAiStreamHandler, yaxaSSE, broadcast, createYaxaHook, createYaxaAuth } from 'yaxa-svelte/server';
+// 4. 100% Peer-Dependency-Free Server Hooks, yaxaEndpoint Pipeline, Observability, AI Streaming & SSE
+import { yaxaEndpoint, requireAuth, requireRole, rateLimit, createRequestLogger, createServerTiming, resolveTraceContext, createAiStreamHandler, yaxaSSE, broadcast, createYaxaHook, createYaxaAuthHook } from 'yaxa-svelte/server';
 
 // 5. Drizzle ORM Database Schema & Client
 import { getDb, schemaPg, schemaSqlite } from 'yaxa-svelte/db';
@@ -356,6 +357,81 @@ export const load = async ({ fetch }) => {
   Create Project
 </Button>
 `;
+
+	const observabilitySnippet = `// src/routes/api/checkout/+server.ts
+import { yaxaEndpoint, requireAuth } from 'yaxa-svelte/server';
+import { z } from 'zod';
+
+export const POST = yaxaEndpoint({
+  guards: [requireAuth()],
+  schema: {
+    body: z.object({ planId: z.string(), apiKey: z.string().optional() })
+  },
+  // ✨ Automatic requestId, W3C traceId, structured logger, and Server-Timing waterfall
+  handler: async ({ body, user, requestId, traceId, logger, timing }) => {
+    // 🛡️ Sensitive fields (apiKey, password, token, authorization) are auto-redacted!
+    logger.info('Starting checkout session', { userId: user.id, body });
+
+    // ⏱️ Measure custom sub-spans for Chrome/Firefox DevTools Network Timing tab
+    const session = await timing.measure(
+      'polar_checkout',
+      async () => ({ id: 'chk_9821', traceId, requestId }),
+      'Polar Checkout API'
+    );
+
+    // Response automatically includes:
+    // - x-request-id: <requestId>
+    // - traceparent: 00-<traceId>-<spanId>-01
+    // - server-timing: guards;dur=0.2, validation;dur=0.4, polar_checkout;dur=41.8, handler;dur=42.1, total;dur=42.9
+    return session;
+  }
+});
+`;
+
+	const securityWebhookSnippet = `// 1. Zero-Dependency HMAC-SHA256 Webhook Endpoint (src/routes/api/webhooks/github/+server.ts)
+import { createWebhookHandler } from 'yaxa-svelte/server';
+import { z } from 'zod';
+
+export const POST = createWebhookHandler({
+  secret: process.env.WEBHOOK_SECRET!,
+  signatureHeader: 'x-hub-signature-256', // Supports sha256=<hex> and Stripe/Polar t=...,v1=...
+  toleranceSeconds: 300,
+  schema: z.object({ action: z.string(), repository: z.object({ full_name: z.string() }) }),
+  handler: async ({ payload }) => {
+    return { processed: payload.repository.full_name, action: payload.action };
+  }
+});
+
+// 2. CSRF Guard & HTTP Security Headers Hook (src/hooks.server.ts)
+import { sequence } from '@sveltejs/kit/hooks';
+import { createYaxaHook, createSecurityHeadersHook, csrfGuard } from 'yaxa-svelte/server';
+
+export const handle = sequence(
+  createYaxaHook(siteConfig),
+  createSecurityHeadersHook({
+    frameOptions: 'DENY',
+    contentSecurityPolicy: { "default-src": ["'self'"] }
+  })
+);
+`;
+
+	const featureFlagsSnippet = `// 1. Register Typed Feature Flags & Rollouts (src/lib/flags.ts)
+import { defineFlags } from 'yaxa-svelte';
+
+export const flags = defineFlags({
+  'ai-copilot-v2': {
+    enabled: true,
+    rolloutPercentage: 50, // Deterministic FNV-1a hash per user.id / email
+    allowedPlans: ['pro', 'enterprise'],
+    description: 'Next-gen streaming AI assistant with Markdown rendering'
+  },
+  'kanban-pipeline': true
+});
+
+// 2. Use in Svelte 5 Components (+page.svelte)
+import { Gate, useFeatureFlag } from 'yaxa-svelte';
+const copilotFlag = useFeatureFlag('ai-copilot-v2');
+// Or declaratively via <Gate flag="ai-copilot-v2" requiredPlan="pro">`;
 </script>
 
 <div class="space-y-12">
@@ -697,6 +773,71 @@ export const load = async ({ fetch }) => {
 			filename="src/routes/dashboard/+page.svelte"
 			showLineNumbers={true}
 			highlightLines={[9, 13, 20, 24, 30, 34]}
+		/>
+	</div>
+
+	<!-- Zero-Dependency Observability & Distributed Tracing -->
+	<div class="space-y-6" id="observability">
+		<h2 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+			12. Zero-Dependency Observability (`logger`, `timing`, `traceparent`)
+		</h2>
+		<p class="text-sm text-zinc-600 dark:text-zinc-400">
+			Every <code class="text-primary font-mono text-xs">yaxaEndpoint</code> automatically resolves
+			incoming W3C <code class="font-mono text-xs">traceparent</code> and
+			<code class="font-mono text-xs">x-request-id</code> headers, injects a structured JSON/dev
+			logger with recursive secret redaction, and emits HTTP
+			<code class="font-mono text-xs">Server-Timing</code> headers that render directly in browser DevTools
+			Network waterfall charts:
+		</p>
+		<CodeBlock
+			code={observabilitySnippet}
+			language="typescript"
+			filename="src/routes/api/checkout/+server.ts"
+			showLineNumbers={true}
+			highlightLines={[10, 12, 15, 22, 23, 24, 25]}
+		/>
+	</div>
+
+	<!-- Server Security Headers, CSRF Guard & Webhooks -->
+	<div class="space-y-6" id="security-webhooks">
+		<h2 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+			13. CSRF Guard, Security Headers & HMAC Webhooks (`csrfGuard`, `createWebhookHandler`)
+		</h2>
+		<p class="text-sm text-zinc-600 dark:text-zinc-400">
+			Protect state-changing endpoints with <code class="font-mono text-xs">csrfGuard</code>, attach
+			HSTS/CSP headers via <code class="font-mono text-xs">createSecurityHeadersHook</code>, and
+			verify incoming HMAC-SHA256 webhooks (<code class="font-mono text-xs">sha256=...</code> or
+			timestamped <code class="font-mono text-xs">t=...,v1=...</code>) using Web Crypto API with
+			zero external SDKs:
+		</p>
+		<CodeBlock
+			code={securityWebhookSnippet}
+			language="typescript"
+			filename="src/routes/api/webhooks/github/+server.ts"
+			showLineNumbers={true}
+			highlightLines={[4, 6, 8, 19, 20]}
+		/>
+	</div>
+
+	<!-- Feature Flags & Deterministic Rollouts -->
+	<div class="space-y-6" id="feature-flags">
+		<h2 class="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+			14. Feature Flags & Deterministic Rollouts (`defineFlags`, `useFeatureFlag`)
+		</h2>
+		<p class="text-sm text-zinc-600 dark:text-zinc-400">
+			Define typed feature flags with deterministic 32-bit FNV-1a percentage rollouts (<code
+				class="font-mono text-xs">0–100</code
+			>), subscription plan and role targeting, reactive
+			<code class="font-mono text-xs">&lt;Gate flag="..." /&gt;</code>
+			integration, and live browser override switches inside
+			<code class="font-mono text-xs">&lt;DevSandbox /&gt;</code>:
+		</p>
+		<CodeBlock
+			code={featureFlagsSnippet}
+			language="typescript"
+			filename="src/lib/flags.ts"
+			showLineNumbers={true}
+			highlightLines={[4, 7, 8, 15]}
 		/>
 	</div>
 </div>

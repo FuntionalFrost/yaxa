@@ -115,6 +115,69 @@
 			href: '/docs/seo-og',
 			badge: 'SEO',
 			keywords: ['og', 'opengraph', 'social', 'image', 'svg', 'twitter']
+		},
+		{
+			title: 'Callout, CodeGroup & Steps',
+			description:
+				'Documentation admonitions, cross-instance synced code tabs (syncKey), and vertical step guides.',
+			category: 'Content Primitives',
+			href: '/docs/blocks#docs-content-primitives',
+			badge: 'Content',
+			keywords: ['callout', 'codegroup', 'steps', 'admonition', 'tabs', 'docs', 'prose', 'synckey']
+		},
+		{
+			title: 'Zero-Dependency Observability (logger, timing, traceparent)',
+			description:
+				'W3C traceparent resolution, structured secret-redacting logger, and Server-Timing HTTP waterfalls.',
+			category: 'SaaS Suite',
+			href: '/docs/saas-suite#observability',
+			badge: 'Observability',
+			keywords: ['logger', 'timing', 'server-timing', 'traceparent', 'requestid', 'traceid', 'logs']
+		},
+		{
+			title: 'Markdown & Collapsible',
+			description:
+				'Zero-dependency XSS-safe GFM Markdown renderer and smooth expandable spoiler container.',
+			category: 'Content Primitives',
+			href: '/docs/blocks#markdown-collapsible',
+			badge: 'Content',
+			keywords: ['markdown', 'md', 'gfm', 'prose', 'collapsible', 'spoiler', 'expand']
+		},
+		{
+			title: 'KanbanBoard',
+			description:
+				'Multi-column drag-and-drop task pipeline board with WIP limits and keyboard card movement.',
+			category: 'Layout Blocks',
+			href: '/docs/blocks#kanban-board',
+			badge: 'Productivity',
+			keywords: ['kanban', 'board', 'columns', 'tasks', 'drag', 'pipeline', 'wip']
+		},
+		{
+			title: 'Calendar (Month & Week Event Grid)',
+			description:
+				'Full month and week event calendar grid with Today navigation and color-coded event pills.',
+			category: 'Layout Blocks',
+			href: '/docs/blocks#event-calendar',
+			badge: 'Productivity',
+			keywords: ['calendar', 'events', 'schedule', 'month', 'week', 'dates']
+		},
+		{
+			title: 'Feature Flags (defineFlags, useFeatureFlag)',
+			description:
+				'Reactive feature flags with deterministic percentage rollouts, plan/role targeting, and local overrides.',
+			category: 'SaaS Suite',
+			href: '/docs/saas-suite#feature-flags',
+			badge: 'Feature Flags',
+			keywords: ['flags', 'feature', 'rollout', 'ab', 'defineflags', 'usefeatureflag', 'gate']
+		},
+		{
+			title: 'CSRF, Security Headers & Webhook Verifier',
+			description:
+				'Zero-dependency csrfGuard, createSecurityHeadersHook, and Web Crypto HMAC-SHA256 createWebhookHandler.',
+			category: 'SaaS Suite',
+			href: '/docs/saas-suite#security-webhooks',
+			badge: 'Security',
+			keywords: ['csrf', 'webhook', 'hmac', 'security', 'headers', 'csp', 'hsts']
 		}
 	];
 
@@ -126,7 +189,15 @@
 
 	let query = $state('');
 	let selectedIndex = $state(0);
-	let inputElement: HTMLInputElement | null = $state(null);
+
+	function autoFocusInput(node: HTMLInputElement) {
+		query = '';
+		selectedIndex = 0;
+		const timer = setTimeout(() => {
+			node.focus();
+		}, 50);
+		return () => clearTimeout(timer);
+	}
 
 	let filteredResults = $derived.by(() => {
 		const q = query.trim().toLowerCase();
@@ -138,16 +209,6 @@
 			const inKeywords = item.keywords?.some((k) => k.includes(q)) ?? false;
 			return inTitle || inDesc || inCategory || inKeywords;
 		});
-	});
-
-	$effect(() => {
-		if (open) {
-			query = '';
-			selectedIndex = 0;
-			setTimeout(() => {
-				inputElement?.focus();
-			}, 50);
-		}
 	});
 
 	function handleGlobalKeydown(e: KeyboardEvent) {
@@ -211,7 +272,7 @@
 				<input
 					id="doc-search-modal-input"
 					name="docSearch"
-					bind:this={inputElement}
+					{@attach autoFocusInput}
 					bind:value={query}
 					onkeydown={handleModalKeydown}
 					type="text"
@@ -239,7 +300,7 @@
 					</div>
 				{:else}
 					<div class="space-y-1">
-						{#each filteredResults as item, index}
+						{#each filteredResults as item, index (item.href)}
 							{@const isSelected = index === selectedIndex}
 							<button
 								type="button"

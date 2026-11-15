@@ -3,6 +3,8 @@
 	import type { AuthUserContext } from '#lib/site/context.js';
 
 	export interface GateProps {
+		/** Optional feature flag key registered via `defineFlags` or `useFeatureFlag` */
+		flag?: string;
 		/** Required subscription plan tier or array of allowed plan tiers (e.g. 'pro', ['pro', 'enterprise']) */
 		requiredPlan?: string | string[];
 		/** Required user role or array of allowed roles (e.g. 'admin', ['admin', 'manager']) */
@@ -38,12 +40,14 @@
 
 <script lang="ts">
 	import { useYaxa } from '#lib/site/context.js';
+	import { evaluateFeatureFlag } from '#lib/composables/useFeatureFlag.svelte.js';
 	import Icon from '../elements/Icon.svelte';
 	import Button from '../elements/Button.svelte';
 
 	const DEFAULT_PLANS_ORDER = ['free', 'starter', 'pro', 'business', 'enterprise'];
 
 	let {
+		flag,
 		requiredPlan,
 		requiredRole,
 		plansOrder = DEFAULT_PLANS_ORDER,
@@ -110,7 +114,14 @@
 		return customCheck(effectiveUser);
 	});
 
-	const hasAccess = $derived(isAdmin || (isPlanAllowed && isRoleAllowed && isCustomAllowed));
+	const isFlagAllowed = $derived.by(() => {
+		if (!flag) return true;
+		return evaluateFeatureFlag(flag, effectiveUser, false);
+	});
+
+	const hasAccess = $derived(
+		isFlagAllowed && (isAdmin || (isPlanAllowed && isRoleAllowed && isCustomAllowed))
+	);
 </script>
 
 {#if hasAccess}

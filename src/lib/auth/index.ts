@@ -12,3 +12,5 @@ export type { PasskeyUiProps } from '../components/saas/PasskeyUI.svelte';
 export { default as TwoFactorModal } from '../components/saas/TwoFactorModal.svelte';
 export { useAuth } from '../composables/useAuth.svelte';
 export type { UseAuthOptions, SocialProvider, PasskeyInfo } from '../composables/useAuth.svelte';
+export { createYaxaAuth, createYaxaAuthHook } from '../server/auth/index';
+export type { YaxaAuthConfig, YaxaAuth, YaxaAuthHookOptions } from '../server/auth/index';

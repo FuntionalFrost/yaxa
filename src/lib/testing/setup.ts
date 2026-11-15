@@ -36,4 +36,25 @@ if (typeof window !== 'undefined') {
 			}
 		} as any;
 	}
+
+	if (typeof Element !== 'undefined' && !Element.prototype.animate) {
+		Element.prototype.animate = function () {
+			const anim = {
+				onfinish: null as (() => void) | null,
+				cancel: () => {},
+				finish: () => {
+					anim.onfinish?.();
+				},
+				play: () => {},
+				pause: () => {},
+				reverse: () => {},
+				addEventListener: () => {},
+				removeEventListener: () => {}
+			};
+			queueMicrotask(() => {
+				anim.onfinish?.();
+			});
+			return anim as unknown as Animation;
+		};
+	}
 }

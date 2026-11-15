@@ -4,6 +4,7 @@
 	import LineChart from '#lib/components/charts/LineChart.svelte';
 	import BarChart from '#lib/components/charts/BarChart.svelte';
 	import DonutChart from '#lib/components/charts/DonutChart.svelte';
+	import Sparkline from '#lib/components/charts/Sparkline.svelte';
 
 	const sampleLineData = [
 		{ label: 'Jan', revenue: 1400, costs: 600 },
@@ -124,6 +125,54 @@
 					centerLabel="Total MRR"
 					centerValue="$14.5k"
 				/>
+			</div>
+		</DocSandbox>
+	</section>
+
+	<!-- Inline Sparkline -->
+	<section class="space-y-4" id="sparkline">
+		<h2 class="text-lg font-bold text-neutral-900 dark:text-white">
+			Inline KPI Sparkline (&lt;Sparkline /&gt;)
+		</h2>
+		<p class="text-xs text-neutral-500">
+			Compact SVG trend line with automatic directional color detection (<code class="font-mono"
+				>color="auto"</code
+			>), area gradient fill, and end-point indicator dot for DataTable cells and MetricCards.
+		</p>
+
+		<DocSandbox
+			code={`<Sparkline data={[12, 18, 15, 29, 34, 48]} />
+<Sparkline data={[45, 38, 42, 24, 19, 14]} />
+<Sparkline data={[20, 28, 25, 39, 44, 52]} color="primary" />`}
+		>
+			<div class="grid w-full grid-cols-1 gap-4 sm:grid-cols-3">
+				<div
+					class="flex items-center justify-between rounded-xl border border-neutral-200 p-4 dark:border-neutral-800"
+				>
+					<div>
+						<div class="text-xs text-neutral-500">MRR Growth</div>
+						<div class="text-lg font-bold text-emerald-600 dark:text-emerald-400">+28.4%</div>
+					</div>
+					<Sparkline data={[12, 18, 15, 29, 34, 48]} />
+				</div>
+				<div
+					class="flex items-center justify-between rounded-xl border border-neutral-200 p-4 dark:border-neutral-800"
+				>
+					<div>
+						<div class="text-xs text-neutral-500">Churn Rate</div>
+						<div class="text-lg font-bold text-rose-600 dark:text-rose-400">-1.2%</div>
+					</div>
+					<Sparkline data={[45, 38, 42, 24, 19, 14]} />
+				</div>
+				<div
+					class="flex items-center justify-between rounded-xl border border-neutral-200 p-4 dark:border-neutral-800"
+				>
+					<div>
+						<div class="text-xs text-neutral-500">Active Sessions</div>
+						<div class="text-lg font-bold text-neutral-900 dark:text-neutral-100">1,420</div>
+					</div>
+					<Sparkline data={[20, 28, 25, 39, 44, 52]} color="primary" />
+				</div>
 			</div>
 		</DocSandbox>
 	</section>

@@ -8,6 +8,8 @@ import type { DbDriver } from './types';
 
 export * from './types';
 export { schemaPg, schemaSqlite };
+export { parseDataTableQuery, createDataTableResponse } from './pagination';
+export type { DataTableQueryParams, DataTableQueryOptions, DataTableResponse } from './pagination';
 
 export interface DbConfig {
 	driver?: DbDriver;

@@ -32,6 +32,10 @@ describe('Root Entry Point Purity (yaxa-svelte)', () => {
 		'createRequestLogger',
 		'createServerTiming',
 		'resolveTraceContext',
+		'csrfGuard',
+		'createSecurityHeadersHook',
+		'createWebhookHandler',
+		'verifyWebhookSignature',
 		// Admin (strictly yaxa-svelte/admin)
 		'createYaxaAdminHook',
 		'createDrizzleAdmin',
@@ -116,5 +120,13 @@ describe('Root Entry Point Purity (yaxa-svelte)', () => {
 		expect(typeof rootExports.Callout).toBe('function');
 		expect(typeof rootExports.CodeGroup).toBe('function');
 		expect(typeof rootExports.Steps).toBe('function');
+		expect(typeof rootExports.Markdown).toBe('function');
+		expect(typeof rootExports.Collapsible).toBe('function');
+		expect(typeof rootExports.Sparkline).toBe('function');
+		expect(typeof rootExports.ActionBar).toBe('function');
+		expect(typeof rootExports.KanbanBoard).toBe('function');
+		expect(typeof rootExports.Calendar).toBe('function');
+		expect(typeof rootExports.defineFlags).toBe('function');
+		expect(typeof rootExports.useFeatureFlag).toBe('function');
 	});
 });

@@ -33,6 +33,12 @@
 		assistantName?: string;
 		placeholder?: string;
 		autoScroll?: boolean;
+		/**
+		 * Render assistant messages using the zero-dependency `<Markdown />` renderer
+		 * (supports fenced code blocks, tables, GFM alerts, and lists).
+		 * @default true
+		 */
+		markdown?: boolean;
 		class?: string;
 		onsend?: (text: string, files?: File[]) => void;
 		onstop?: () => void;
@@ -49,6 +55,7 @@
 	import PromptBar from './PromptBar.svelte';
 	import AiThought from './AiThought.svelte';
 	import AiToolCall from './AiToolCall.svelte';
+	import Markdown from '../content/Markdown.svelte';
 	import { useToast } from '../../composables/useToast.svelte';
 	import { cn } from '../../utils/cn';
 
@@ -60,6 +67,7 @@
 		assistantName = 'AI Assistant',
 		placeholder = 'Ask a question or type / for commands...',
 		autoScroll = true,
+		markdown = true,
 		class: className = '',
 		onsend,
 		onstop,
@@ -69,23 +77,17 @@
 		footer
 	}: AiChatProps = $props();
 
-	let scrollContainer: HTMLDivElement | null = $state(null);
 	let promptValue = $state('');
 	const toast = useToast();
 
-	function scrollToBottom(smooth = true) {
-		if (!scrollContainer) return;
-		scrollContainer.scrollTo({
-			top: scrollContainer.scrollHeight,
-			behavior: smooth ? 'smooth' : 'auto'
-		});
-	}
-
-	$effect(() => {
+	function autoScrollBottom(node: HTMLDivElement) {
 		if (autoScroll && messages.length > 0) {
-			scrollToBottom(true);
+			node.scrollTo({
+				top: node.scrollHeight,
+				behavior: 'smooth'
+			});
 		}
-	});
+	}
 
 	function copyMessage(text: string) {
 		if (typeof navigator !== 'undefined' && navigator.clipboard) {
@@ -134,7 +136,7 @@
 
 	<!-- Scrollable Messages Container -->
 	<div
-		bind:this={scrollContainer}
+		{@attach autoScrollBottom}
 		class="flex-1 yaxa-scrollbar space-y-6 overflow-y-auto p-4 sm:p-6"
 	>
 		{#if messages.length === 0}
@@ -209,7 +211,11 @@
 										: 'border border-neutral-200/80 bg-neutral-50 text-neutral-900 dark:border-neutral-800/80 dark:bg-neutral-900 dark:text-neutral-100'
 								)}
 							>
-								<div class="break-words whitespace-pre-wrap">{msg.content}</div>
+								{#if markdown && msg.role !== 'user'}
+									<Markdown content={msg.content} size="sm" />
+								{:else}
+									<div class="break-words whitespace-pre-wrap">{msg.content}</div>
+								{/if}
 
 								{#if msg.isStreaming}
 									<span class="inline-block h-4 w-1.5 animate-pulse bg-current"></span>

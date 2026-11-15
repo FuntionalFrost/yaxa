@@ -50,6 +50,31 @@ export {
 export type { VirtualListProps } from './components/elements/VirtualList.svelte';
 export { default as Carousel, carouselVariants } from './components/elements/Carousel.svelte';
 export type { CarouselProps } from './components/elements/Carousel.svelte';
+export {
+	default as KanbanBoard,
+	kanbanBoardVariants
+} from './components/elements/KanbanBoard.svelte';
+export type {
+	KanbanBoardProps,
+	KanbanBoardSlots,
+	KanbanBoardVariants,
+	KanbanColumn,
+	KanbanItem,
+	KanbanMoveEvent
+} from './components/elements/KanbanBoard.svelte';
+export {
+	default as Calendar,
+	calendarVariants,
+	formatIsoDate,
+	parseIsoDate
+} from './components/elements/Calendar.svelte';
+export type {
+	CalendarProps,
+	CalendarSlots,
+	CalendarVariants,
+	CalendarEvent,
+	CalendarEventColor
+} from './components/elements/Calendar.svelte';
 
 // AI-Native Primitives
 export { default as AiChat } from './components/ai/AiChat.svelte';
@@ -79,6 +104,12 @@ export { default as BarChart } from './components/charts/BarChart.svelte';
 export type { BarChartProps, BarSeries } from './components/charts/BarChart.svelte';
 export { default as DonutChart } from './components/charts/DonutChart.svelte';
 export type { DonutChartProps, DonutDataItem } from './components/charts/DonutChart.svelte';
+export { default as Sparkline, sparklineVariants } from './components/charts/Sparkline.svelte';
+export type {
+	SparklineProps,
+	SparklineSlots,
+	SparklineColor
+} from './components/charts/Sparkline.svelte';
 
 // Form Controls & Superforms Context
 export { default as Form } from './components/forms/Form.svelte';
@@ -191,6 +222,8 @@ export { default as Toast, toastVariants } from './components/overlays/Toast.sve
 export type { ToastProps } from './components/overlays/Toast.svelte';
 export { default as Toaster } from './components/overlays/Toaster.svelte';
 export type { ToasterProps } from './components/overlays/Toaster.svelte';
+export { default as ActionBar, actionBarVariants } from './components/overlays/ActionBar.svelte';
+export type { ActionBarProps, ActionBarSlots } from './components/overlays/ActionBar.svelte';
 
 // Headless Actions Suite
 export {
@@ -355,6 +388,21 @@ export { default as PricingTable } from './components/saas/PricingTable.svelte';
 export { default as SubscriptionCard } from './components/saas/SubscriptionCard.svelte';
 export { useGate } from './composables/useGate.svelte';
 export type { UseGateOptions } from './composables/useGate.svelte';
+export {
+	defineFlags,
+	useFeatureFlag,
+	evaluateFeatureFlag,
+	setFeatureFlagOverride,
+	clearFeatureFlagOverrides,
+	getRegisteredFlags,
+	computeRolloutBucket
+} from './composables/useFeatureFlag.svelte';
+export type {
+	FeatureFlagConfig,
+	FeatureFlagInput,
+	RegisteredFlagSnapshot,
+	UseFeatureFlagOptions
+} from './composables/useFeatureFlag.svelte';
 export { useUpload } from './composables/useUpload.svelte';
 export type { UseUploadOptions, UploadResult } from './composables/useUpload.svelte';
 
@@ -372,14 +420,20 @@ export {
 } from './components/blocks/FeatureGrid.svelte';
 export type { FeatureGridProps, FeatureItem } from './components/blocks/FeatureGrid.svelte';
 
-// Docs & Content Primitives (Prose Callouts, Synced CodeGroups & Step Guides)
+// Docs & Content Primitives (Prose Callouts, Synced CodeGroups, Step Guides, Markdown & Collapsible)
 export {
 	Callout,
 	calloutVariants,
 	CodeGroup,
 	codeGroupVariants,
 	Steps,
-	stepsVariants
+	stepsVariants,
+	Markdown,
+	markdownVariants,
+	parseMarkdownBlocks,
+	tokenizeInlineMarkdown,
+	Collapsible,
+	collapsibleVariants
 } from './components/content/index';
 export type {
 	CalloutProps,
@@ -390,7 +444,14 @@ export type {
 	CodeGroupItem,
 	StepsProps,
 	StepsSlots,
-	StepGuideItem
+	StepGuideItem,
+	MarkdownProps,
+	MarkdownSlots,
+	MarkdownBlock,
+	InlineToken,
+	CollapsibleProps,
+	CollapsibleSlots,
+	CollapsibleVariants
 } from './components/content/index';
 
 // Testing Utilities

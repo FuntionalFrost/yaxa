@@ -16,7 +16,7 @@ export interface RequireAuthOptions {
 }
 
 export interface YaxaGuardMetadata {
-	type: 'auth' | 'role' | 'rateLimit' | string;
+	type: 'auth' | 'role' | 'rateLimit' | 'csrf' | string;
 	roles?: string[];
 	options?: any;
 }
@@ -211,6 +211,107 @@ export function rateLimit(options: RateLimitOptions = {}): Guard {
 	(guard as any)._yaxaGuard = {
 		type: 'rateLimit',
 		options: { points, windowSeconds: options.windowSeconds ?? 60 }
+	} as YaxaGuardMetadata;
+
+	return guard;
+}
+
+export interface CsrfGuardOptions {
+	/**
+	 * Additional trusted origins allowed to make state-changing requests
+	 * (e.g. ['https://app.example.com']). The request's own origin (`event.url.origin`)
+	 * is always trusted automatically.
+	 */
+	trustedOrigins?: string[];
+	/**
+	 * When true, also requires a double-submit CSRF token where the header
+	 * (default `x-csrf-token`) matches the cookie (default `yaxa_csrf`).
+	 * @default false
+	 */
+	requireToken?: boolean;
+	/**
+	 * Header name for double-submit token verification.
+	 * @default 'x-csrf-token'
+	 */
+	headerName?: string;
+	/**
+	 * Cookie name for double-submit token verification.
+	 * @default 'yaxa_csrf'
+	 */
+	cookieName?: string;
+	/**
+	 * HTTP methods exempt from CSRF verification.
+	 * @default ['GET', 'HEAD', 'OPTIONS']
+	 */
+	safeMethods?: string[];
+	/**
+	 * Custom RFC 7807 detail message on failure.
+	 */
+	detail?: string;
+}
+
+/**
+ * Declarative Guard: Enforces Cross-Site Request Forgery (CSRF) protection on state-changing requests
+ * via Origin/Referer host verification and optional double-submit token matching.
+ */
+export function csrfGuard(options: CsrfGuardOptions = {}): Guard {
+	const safeMethods = (options.safeMethods ?? ['GET', 'HEAD', 'OPTIONS']).map((m) =>
+		m.toUpperCase()
+	);
+	const headerName = options.headerName ?? 'x-csrf-token';
+	const cookieName = options.cookieName ?? 'yaxa_csrf';
+
+	const guard: Guard = (event: RequestEvent) => {
+		const method = event.request.method.toUpperCase();
+		if (safeMethods.includes(method)) {
+			return;
+		}
+
+		const allowedOrigins = new Set<string>([event.url.origin, ...(options.trustedOrigins ?? [])]);
+
+		const originHeader = event.request.headers.get('origin');
+		const refererHeader = event.request.headers.get('referer');
+
+		let sourceOrigin: string | null = originHeader;
+		if (!sourceOrigin && refererHeader) {
+			try {
+				sourceOrigin = new URL(refererHeader).origin;
+			} catch {
+				sourceOrigin = null;
+			}
+		}
+
+		if (!sourceOrigin || !allowedOrigins.has(sourceOrigin)) {
+			return problemResponse({
+				status: 403,
+				title: 'Forbidden',
+				detail:
+					options.detail ||
+					'CSRF verification failed: request origin does not match trusted origin.',
+				type: 'https://yaxa.dev/errors/csrf-origin-mismatch'
+			});
+		}
+
+		if (options.requireToken) {
+			const headerToken = event.request.headers.get(headerName);
+			const cookieToken = event.cookies?.get?.(cookieName);
+
+			if (!headerToken || !cookieToken || headerToken !== cookieToken) {
+				return problemResponse({
+					status: 403,
+					title: 'Forbidden',
+					detail:
+						options.detail ||
+						'CSRF verification failed: missing or invalid double-submit CSRF token.',
+					type: 'https://yaxa.dev/errors/csrf-token-invalid'
+				});
+			}
+		}
+	};
+
+	(guard as any)._yaxaGuard = {
+		type: 'csrf',
+		options
 	} as YaxaGuardMetadata;
 
 	return guard;
