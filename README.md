@@ -622,6 +622,7 @@ Contributions are always welcome! Please read our [Contributing Guidelines](CONT
 If you find Yaxa helpful for your applications or business, consider supporting its continuous development and maintenance:
 
 [![Sponsor on GitHub](https://img.shields.io/badge/Sponsor_on_GitHub-ea4aaa?style=for-the-badge&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/FuntionalFrost)
+[![Yaxa on StartupScores](https://startupscores.com/badge/yaxa.svg?style=shield&v=combo&theme=dark)](https://startupscores.com/open-source/yaxa)
 
 - **[GitHub Sponsors](https://github.com/sponsors/FuntionalFrost)**: Fund ongoing feature additions, bug fixes, SvelteKit version tracking, and documentation improvements.
 
