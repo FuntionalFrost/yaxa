@@ -359,7 +359,7 @@
 		<!-- Social Login Buttons -->
 		{#if showSocial && (currentMode === 'signin' || currentMode === 'signup') && providers.length > 0}
 			<div class="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-				{#each providers as provider}
+				{#each providers as provider (provider)}
 					<Button
 						variant="outline"
 						class="w-full justify-center gap-2 font-medium"

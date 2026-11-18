@@ -99,7 +99,7 @@
 	<!-- Category Filter Tabs -->
 	{#if availableCategories.length > 2}
 		<div class="mb-8 flex flex-wrap items-center justify-center gap-2">
-			{#each availableCategories as cat}
+			{#each availableCategories as cat (cat)}
 				<button
 					type="button"
 					onclick={() => (selectedCategory = cat)}

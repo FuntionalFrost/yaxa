@@ -288,7 +288,7 @@
 				<div
 					class="mb-3 flex flex-wrap gap-1 border-b border-neutral-100 pb-2.5 dark:border-neutral-800"
 				>
-					{#each activePresets as preset}
+					{#each activePresets as preset, i (`${i}-${preset.label}`)}
 						<button
 							type="button"
 							onclick={() => applyPreset(preset)}
@@ -326,7 +326,7 @@
 
 			<!-- Weekday Headers -->
 			<div class="mt-2 grid grid-cols-7 gap-0 text-center">
-				{#each WEEKDAYS as day}
+				{#each WEEKDAYS as day, i (`${i}-${day}`)}
 					<span class="py-0.5 text-xs font-medium text-neutral-400 dark:text-neutral-500">
 						{day}
 					</span>
@@ -335,7 +335,7 @@
 
 			<!-- Calendar Matrix -->
 			<div class="mt-1 grid grid-cols-7 gap-y-1">
-				{#each calendarDays as cell}
+				{#each calendarDays as cell, idx (idx)}
 					<div
 						class={cn(
 							'flex h-8 items-center justify-center',

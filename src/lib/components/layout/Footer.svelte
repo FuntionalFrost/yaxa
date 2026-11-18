@@ -117,7 +117,7 @@
 			<div>
 				<h3 class="text-base font-semibold text-neutral-900 dark:text-white">Navigation</h3>
 				<ul class="mt-4 space-y-2.5 text-sm text-neutral-600 dark:text-neutral-400">
-					{#each currentConfig.nav || [] as item}
+					{#each currentConfig.nav || [] as item, i (`${i}-${item.href}`)}
 						<li>
 							<a
 								href={item.href}

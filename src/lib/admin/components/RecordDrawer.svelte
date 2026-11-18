@@ -114,7 +114,7 @@
 			{:else}
 				<!-- Column Fields Form -->
 				<div class="max-h-[520px] space-y-4 overflow-y-auto pr-1">
-					{#each columns as col}
+					{#each columns as col (col.name)}
 						<div class="space-y-1.5">
 							<div class="flex items-center justify-between">
 								<label

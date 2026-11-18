@@ -49,7 +49,7 @@ export function createYaxaHook(optionsOrConfig: SiteConfig | YaxaHookOptions): H
 		if (pathname === '/site.webmanifest') {
 			return manifestHandler(event as unknown as Parameters<typeof manifestHandler>[0]);
 		}
-		if (pathname === '/api/og') {
+		if (pathname === '/api/og' && event.route?.id !== '/api/og') {
 			return ogHandler(event as unknown as Parameters<typeof ogHandler>[0]);
 		}
 		if (pathname === '/llms.txt') {

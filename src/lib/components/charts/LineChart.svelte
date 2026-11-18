@@ -202,7 +202,7 @@
 		aria-label="Interactive Line Chart"
 	>
 		<defs>
-			{#each seriesPaths as sp, idx}
+			{#each seriesPaths as sp, idx (`${sp.series.key}-${idx}`)}
 				{#if sp.series.area}
 					<linearGradient id="area-grad-{idx}" x1="0" y1="0" x2="0" y2="1">
 						<stop offset="0%" stop-color={sp.color} stop-opacity="0.3" />
@@ -215,7 +215,7 @@
 		<!-- Gridlines -->
 		{#if showGrid}
 			<g class="stroke-neutral-200/70 dark:stroke-neutral-800/70" stroke-dasharray="3 3">
-				{#each yTicks as tick}
+				{#each yTicks as tick, i (i)}
 					{@const y = getY(tick)}
 					<line x1={padding.left} y1={y} x2={width - padding.right} y2={y} />
 				{/each}
@@ -224,7 +224,7 @@
 
 		<!-- Y-Axis Labels -->
 		<g class="fill-neutral-400 text-[10px] select-none dark:fill-neutral-500">
-			{#each yTicks as tick}
+			{#each yTicks as tick, i (i)}
 				{@const y = getY(tick)}
 				<text x={padding.left - 8} y={y + 3} text-anchor="end">
 					{yAxisFormat(tick)}
@@ -234,7 +234,7 @@
 
 		<!-- X-Axis Labels -->
 		<g class="fill-neutral-400 text-[10px] select-none dark:fill-neutral-500">
-			{#each data as d, i}
+			{#each data as d, i (i)}
 				{#if data.length <= 8 || i % Math.ceil(data.length / 6) === 0 || i === data.length - 1}
 					{@const x = getX(i)}
 					<text {x} y={height - 8} text-anchor="middle">
@@ -245,14 +245,14 @@
 		</g>
 
 		<!-- Area Fills -->
-		{#each seriesPaths as sp, idx}
+		{#each seriesPaths as sp, idx (`${sp.series.key}-${idx}`)}
 			{#if sp.areaPath}
 				<path d={sp.areaPath} fill="url(#area-grad-{idx})" />
 			{/if}
 		{/each}
 
 		<!-- Line Curves -->
-		{#each seriesPaths as sp}
+		{#each seriesPaths as sp, idx (`${sp.series.key}-${idx}`)}
 			<path
 				d={sp.linePath}
 				fill="none"
@@ -266,8 +266,8 @@
 
 		<!-- Data Dots -->
 		{#if showDots}
-			{#each seriesPaths as sp}
-				{#each sp.points as pt}
+			{#each seriesPaths as sp, idx (`${sp.series.key}-${idx}`)}
+				{#each sp.points as pt, ptIdx (ptIdx)}
 					<circle
 						cx={pt.x}
 						cy={pt.y}
@@ -293,7 +293,7 @@
 				stroke-width="1.5"
 				stroke-dasharray="2 2"
 			/>
-			{#each seriesPaths as sp}
+			{#each seriesPaths as sp, idx (`${sp.series.key}-${idx}`)}
 				{@const pt = sp.points[hoveredIdx]}
 				{#if pt}
 					<circle cx={pt.x} cy={pt.y} r="5" fill={sp.color} stroke="white" stroke-width="2" />
@@ -313,7 +313,7 @@
 			<div class="mb-1 font-semibold text-neutral-800 dark:text-neutral-200">
 				{xAxisFormat(activeItem.label)}
 			</div>
-			{#each seriesPaths as sp}
+			{#each seriesPaths as sp, idx (`${sp.series.key}-${idx}`)}
 				{@const val = Number(activeItem[sp.series.key] ?? 0)}
 				<div class="flex items-center justify-between gap-3 text-[11px]">
 					<div class="flex items-center gap-1.5">
@@ -335,7 +335,7 @@
 		<div
 			class="mt-3 flex flex-wrap items-center justify-center gap-4 text-xs text-neutral-600 dark:text-neutral-300"
 		>
-			{#each seriesPaths as sp}
+			{#each seriesPaths as sp, idx (`${sp.series.key}-${idx}`)}
 				<div class="flex items-center gap-1.5">
 					<span class="h-2.5 w-2.5 rounded-full" style="background-color: {sp.color}"></span>
 					<span>{sp.series.label || sp.series.key}</span>

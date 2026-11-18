@@ -35,8 +35,8 @@ jobs:
       - run: pnpm check
       - run: pnpm test
       - run: pnpm build
-
         env:
           PUBLIC_APP_URL: https://yaxa.vercel.app
           BETTER_AUTH_SECRET: ci-dummy-secret-key-123456789-production
           BETTER_AUTH_URL: https://yaxa.vercel.app
+      - run: pnpm package

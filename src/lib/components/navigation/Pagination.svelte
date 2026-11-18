@@ -81,7 +81,7 @@
 	</Button>
 
 	<!-- Page Numbers -->
-	{#each paginationRange as p}
+	{#each paginationRange as p, i (`${i}-${p}`)}
 		{#if typeof p === 'number'}
 			<Button
 				variant={page === p ? 'solid' : 'ghost'}

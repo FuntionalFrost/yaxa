@@ -6,7 +6,7 @@
 	"homepage": "https://yaxa.vercel.app",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/FuntionalFrost/yaxa.git"
+		"url": "git+https://github.com/FuntionalFrost/yaxa.git"
 	},
 	"bugs": {
 		"url": "https://github.com/FuntionalFrost/yaxa/issues"

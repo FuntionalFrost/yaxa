@@ -51,7 +51,7 @@
 			class="animate-in fade-in-0 zoom-in-95 z-50 min-w-48 overflow-hidden rounded-xl border border-neutral-200 bg-white p-1.5 text-neutral-900 shadow-xl dark:border-neutral-800 dark:bg-neutral-900 dark:text-neutral-100 {className}"
 			sideOffset={6}
 		>
-			{#each items as item}
+			{#each items as item, i (item.id ?? i)}
 				{#if item.separator}
 					<DropdownMenu.Separator class="-mx-1 my-1 h-px bg-neutral-200 dark:bg-neutral-800" />
 				{:else}

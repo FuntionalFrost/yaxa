@@ -342,7 +342,7 @@
 							<div class="px-1 text-[10px] font-semibold text-neutral-500 uppercase">
 								Toggle Columns
 							</div>
-							{#each columns as col}
+							{#each columns as col, i (`${String(col.key)}-${i}`)}
 								{@const colKey = String(col.key)}
 								{@const isVisible = !hiddenKeys.includes(colKey)}
 								<label
@@ -414,7 +414,7 @@
 								/>
 							</th>
 						{/if}
-						{#each visibleColumns as column}
+						{#each visibleColumns as column, i (`${String(column.key)}-${i}`)}
 							{@const colKey = String(column.key)}
 							{@const isSorted = sortKey === colKey}
 							{@const widthStyle = effectiveWidths[colKey]
@@ -509,7 +509,7 @@
 										/>
 									</td>
 								{/if}
-								{#each visibleColumns as column}
+								{#each visibleColumns as column, i (`${String(column.key)}-${i}`)}
 									{@const colKey = String(column.key)}
 									{@const widthStyle = effectiveWidths[colKey]
 										? `width: ${effectiveWidths[colKey]}px; min-width: ${effectiveWidths[colKey]}px;`
@@ -544,7 +544,7 @@
 						onchange={(e) => handlePageSizeChange(Number((e.target as HTMLSelectElement).value))}
 						class="rounded border border-neutral-200 bg-white px-2 py-1 text-xs text-neutral-700 dark:border-neutral-800 dark:bg-neutral-800 dark:text-neutral-200"
 					>
-						{#each pageSizeOptions as opt}
+						{#each pageSizeOptions as opt (opt)}
 							<option value={opt}>{opt}</option>
 						{/each}
 					</select>

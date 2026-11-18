@@ -114,7 +114,7 @@
 		className
 	)}
 >
-	{#each normalizedItems as item}
+	{#each normalizedItems as item, i (`${i}-${item.value}`)}
 		{@const selected = isSelected(item.value)}
 		{@const itemDisabled = disabled || item.disabled}
 		<button

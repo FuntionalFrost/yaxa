@@ -1,7 +1,11 @@
 import { error } from '@sveltejs/kit';
-import type { PageLoad } from './$types';
-import { getDocItemBySlug } from '../_data/docs-nav';
+import type { EntryGenerator, PageLoad } from './$types';
+import { ALL_DOC_ITEMS, getDocItemBySlug } from '../_data/docs-nav';
 import type { Component } from 'svelte';
+
+export const prerender = true;
+
+export const entries: EntryGenerator = () => ALL_DOC_ITEMS.map((item) => ({ slug: item.id }));
 
 const SECTION_MODULES = import.meta.glob<{ default: Component }>('../_sections/Doc*.svelte');
 

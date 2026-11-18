@@ -7,6 +7,7 @@
 	import Tooltip from '#lib/components/overlays/Tooltip.svelte';
 	import DropdownMenu, { type MenuItem } from '#lib/components/navigation/DropdownMenu.svelte';
 	import Alert from '#lib/components/overlays/Alert.svelte';
+	import ActionBar from '#lib/components/overlays/ActionBar.svelte';
 	import DataTable, { type Column } from '#lib/components/elements/DataTable.svelte';
 	import Button from '#lib/components/elements/Button.svelte';
 	import Badge from '#lib/components/elements/Badge.svelte';
@@ -31,6 +32,7 @@
 	let popoverOpen = $state(false);
 	let currentPage = $state(2);
 	let tableSearch = $state('');
+	let selectedTableRows = $state<typeof demoTableData>([]);
 	const toast = useToast();
 
 	const localeRune = useLocale();
@@ -494,7 +496,7 @@
 					<span class="text-xs font-semibold text-neutral-600 dark:text-neutral-400">Language:</span
 					>
 					<div class="flex gap-1">
-						{#each ['en', 'ar', 'de', 'fr'] as l}
+						{#each ['en', 'ar', 'de', 'fr'] as l (l)}
 							<Button
 								size="xs"
 								variant={localeRune.locale === l ? 'solid' : 'ghost'}
@@ -550,7 +552,7 @@
 				use:infiniteScroll
 				class="h-48 space-y-2 overflow-y-auto rounded-xl border border-neutral-200 bg-white p-3 dark:border-neutral-800 dark:bg-neutral-900/50"
 			>
-				{#each feedItems as item}
+				{#each feedItems as item, i (`${i}-${item}`)}
 					<div
 						class="flex items-center gap-2 rounded-lg bg-neutral-50 p-2 text-xs text-neutral-700 dark:bg-neutral-800/60 dark:text-neutral-300"
 					>
@@ -600,10 +602,30 @@
 		<div
 			class="rounded-xl border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900/40"
 		>
-			<div class="mb-3 max-w-xs">
-				<Input bind:value={tableSearch} placeholder="Filter components..." icon="search" />
+			<div class="mb-3 flex flex-wrap items-center justify-between gap-3">
+				<div class="w-full max-w-xs">
+					<Input bind:value={tableSearch} placeholder="Filter components..." icon="search" />
+				</div>
+				<Button
+					size="xs"
+					variant={selectedTableRows.length > 0 ? 'outline' : 'soft'}
+					color="primary"
+					onclick={() => {
+						selectedTableRows = selectedTableRows.length > 0 ? [] : demoTableData.slice(0, 2);
+					}}
+				>
+					{selectedTableRows.length > 0
+						? 'Clear Sample Selection'
+						: 'Select Sample Rows (Demo <ActionBar />)'}
+				</Button>
 			</div>
-			<DataTable data={demoTableData} columns={demoColumns} searchQuery={tableSearch} selectable>
+			<DataTable
+				data={demoTableData}
+				columns={demoColumns}
+				searchQuery={tableSearch}
+				selectable
+				bind:selected={selectedTableRows}
+			>
 				{#snippet cell(item: (typeof demoTableData)[number], col: Column)}
 					{#if col.key === 'name'}
 						<span class="font-mono font-bold text-primary-600 dark:text-primary-400"
@@ -622,6 +644,43 @@
 					{/if}
 				{/snippet}
 			</DataTable>
+
+			<ActionBar
+				open={selectedTableRows.length > 0}
+				count={selectedTableRows.length}
+				onclear={() => (selectedTableRows = [])}
+			>
+				<Button
+					size="xs"
+					variant="soft"
+					color="primary"
+					icon="arrow-down-tray"
+					onclick={() => {
+						toast.success(
+							'CSV Exported',
+							`Exported ${selectedTableRows.length} selected component row(s).`
+						);
+						selectedTableRows = [];
+					}}
+				>
+					Export CSV
+				</Button>
+				<Button
+					size="xs"
+					variant="soft"
+					color="error"
+					icon="trash"
+					onclick={() => {
+						toast.success(
+							'Selection Cleared',
+							`Simulated bulk action for ${selectedTableRows.length} selected row(s).`
+						);
+						selectedTableRows = [];
+					}}
+				>
+					Delete Selected
+				</Button>
+			</ActionBar>
 		</div>
 	</div>
 </div>

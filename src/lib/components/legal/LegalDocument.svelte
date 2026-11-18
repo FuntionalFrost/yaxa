@@ -387,7 +387,7 @@
 					Table of Contents
 				</h3>
 				<nav class="space-y-2">
-					{#each allSections as sec}
+					{#each allSections as sec, i (`${i}-${sec.id}`)}
 						<a
 							href="#{sec.id}"
 							class="block text-sm text-neutral-600 transition-colors hover:text-primary-600 dark:text-neutral-400 dark:hover:text-primary-400"
@@ -401,16 +401,18 @@
 
 		<!-- Content Column -->
 		<div class="space-y-12 lg:col-span-3">
-			{#each allSections as sec}
+			{#each allSections as sec, i (`${i}-${sec.id}`)}
 				<section
 					id={sec.id}
 					class="scroll-mt-24 space-y-4 border-b border-neutral-100 pb-10 last:border-0 dark:border-neutral-900"
 				>
-					<h2 class="text-xl font-bold tracking-tight break-words text-neutral-900 dark:text-white">
+					<h2
+						class="text-xl font-bold tracking-tight wrap-break-word text-neutral-900 dark:text-white"
+					>
 						{sec.title}
 					</h2>
 					<div
-						class="prose max-w-none break-words text-neutral-600 prose-neutral dark:text-neutral-300 dark:prose-invert"
+						class="prose max-w-none wrap-break-word text-neutral-600 prose-neutral dark:text-neutral-300 dark:prose-invert"
 					>
 						{@html formatLegalHtml(sec.content || '')}
 					</div>

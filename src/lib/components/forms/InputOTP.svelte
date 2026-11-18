@@ -146,7 +146,7 @@
 <div
 	class={cn('flex max-w-full items-center justify-center gap-1 select-none sm:gap-2', className)}
 >
-	{#each Array.from({ length }, (_, i) => i) as index}
+	{#each Array.from({ length }, (_, i) => i) as index (index)}
 		{#if separator && index === separatorIndex}
 			<span class="px-0.5 font-bold text-neutral-400 select-none sm:px-1 dark:text-neutral-600">
 				−

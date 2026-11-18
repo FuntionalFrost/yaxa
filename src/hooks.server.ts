@@ -1,12 +1,19 @@
 import type { HandleServerError } from '@sveltejs/kit/hooks';
 import { createYaxaHook } from '#lib/site/hook.js';
 import { siteConfig } from './site.config';
+import { SITEMAP_STATIC_ROUTES } from './routes/docs/_data/docs-nav';
 
 /**
  * Compose the yaxa all-in-one hook (handles /robots.txt, /sitemap.xml,
  * /sitemap.xsl, /site.webmanifest, /api/og) with the root handle export.
  */
-export const handle = createYaxaHook(siteConfig);
+export const handle = createYaxaHook({
+	config: siteConfig,
+	sitemap: {
+		config: siteConfig,
+		staticRoutes: SITEMAP_STATIC_ROUTES
+	}
+});
 
 /**
  * Catch-all server error handler.

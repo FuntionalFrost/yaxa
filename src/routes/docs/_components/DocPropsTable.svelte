@@ -106,7 +106,7 @@
 		class="overflow-hidden rounded-2xl border border-neutral-200/90 bg-white/95 shadow-sm backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-900/80"
 	>
 		<div class="overflow-x-auto">
-			<table class="w-full min-w-[640px] text-left text-xs">
+			<table class="w-full min-w-160 text-left text-xs">
 				<thead>
 					<tr
 						class="border-b border-neutral-200/90 bg-linear-to-r from-neutral-50 via-neutral-100/50 to-neutral-50 text-[11px] font-bold tracking-wider text-neutral-600 uppercase dark:border-neutral-800 dark:from-neutral-900 dark:via-neutral-900/70 dark:to-neutral-900 dark:text-neutral-400"
@@ -151,7 +151,7 @@
 								<!-- Type Definition Column (Syntax Colored Pills) -->
 								<td class="px-4 py-3.5 align-top">
 									<div class="flex flex-wrap items-center gap-1.5 font-mono text-[11px]">
-										{#each formatType(item.type) as typePart, idx}
+										{#each formatType(item.type) as typePart, idx (`${idx}-${typePart}`)}
 											{#if idx > 0}
 												<span class="font-sans font-bold text-neutral-400 dark:text-neutral-600"
 													>|</span

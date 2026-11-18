@@ -160,7 +160,7 @@
 	<!-- Dropzone Box -->
 	<button
 		type="button"
-		class="relative flex min-h-[160px] w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed p-6 text-center transition-all outline-none {isDragging
+		class="relative flex min-h-40 w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed p-6 text-center transition-all outline-none {isDragging
 			? 'border-primary-500 bg-primary-50/50 ring-4 ring-primary-500/10 dark:border-primary-400 dark:bg-primary-950/30'
 			: 'border-neutral-300 bg-neutral-50/50 hover:border-neutral-400 hover:bg-neutral-100/50 dark:border-neutral-700 dark:bg-neutral-900/30 dark:hover:border-neutral-600 dark:hover:bg-neutral-900/60'} {disabled
 			? 'cursor-not-allowed opacity-50'
@@ -230,7 +230,7 @@
 	<!-- File Previews List -->
 	{#if files.length > 0}
 		<div class="space-y-2">
-			{#each files as file, idx}
+			{#each files as file, idx (`${idx}-${file.name}`)}
 				<div
 					class="flex items-center justify-between rounded-xl border border-neutral-200 bg-white p-3 text-xs shadow-xs transition-all dark:border-neutral-800 dark:bg-neutral-900"
 				>

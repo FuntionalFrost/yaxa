@@ -296,7 +296,7 @@
 								<span class="font-semibold text-zinc-700 dark:text-zinc-300">Switch User Plan:</span
 								>
 								<div class="flex flex-wrap items-center gap-2">
-									{#each ['Free', 'Starter', 'Pro', 'Enterprise'] as plan}
+									{#each ['Free', 'Starter', 'Pro', 'Enterprise'] as plan (plan)}
 										<Button
 											size="xs"
 											variant={mockUserTier.toLowerCase() === plan.toLowerCase()
@@ -528,7 +528,7 @@
 						>
 							<span class="font-semibold text-zinc-700 dark:text-zinc-300">Switch User Plan:</span>
 							<div class="flex flex-wrap items-center gap-2">
-								{#each ['Free', 'Starter', 'Pro', 'Enterprise'] as plan}
+								{#each ['Free', 'Starter', 'Pro', 'Enterprise'] as plan (plan)}
 									<Button
 										size="xs"
 										variant={mockUserTier.toLowerCase() === plan.toLowerCase()

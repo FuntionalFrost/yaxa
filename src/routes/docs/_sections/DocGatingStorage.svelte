@@ -1,14 +1,77 @@
 <script lang="ts">
 	import Badge from '#lib/components/elements/Badge.svelte';
+	import Button from '#lib/components/elements/Button.svelte';
 	import Card from '#lib/components/layout/Card.svelte';
 	import Icon from '#lib/components/elements/Icon.svelte';
 	import Gate from '#lib/components/saas/Gate.svelte';
 	import CodeBlock from '#lib/components/elements/CodeBlock.svelte';
 	import { useGate } from '#lib/composables/useGate.svelte.js';
+	import {
+		defineFlags,
+		useFeatureFlag,
+		setFeatureFlagOverride,
+		clearFeatureFlagOverrides
+	} from '#lib/composables/useFeatureFlag.svelte.js';
 
 	// Simulated user state for interactive live playground
 	let simPlan = $state<'free' | 'starter' | 'pro' | 'enterprise'>('free');
 	let simRole = $state<'user' | 'admin'>('user');
+
+	const simUser = $derived({
+		id: 'usr_demo_123',
+		email: 'alex@example.com',
+		plan: simPlan,
+		role: simRole
+	});
+
+	defineFlags({
+		'ai-copilot': {
+			description: 'AI Copilot & Smart Suggestions (50% Pro+ Rollout)',
+			enabled: true,
+			allowedPlans: ['pro', 'enterprise'],
+			rolloutPercentage: 50
+		},
+		'beta-kanban': {
+			description: 'Beta Kanban Swimlanes',
+			defaultValue: false
+		}
+	});
+
+	const aiCopilotFlag = useFeatureFlag('ai-copilot', {
+		defaultValue: false,
+		description: 'AI Copilot & Smart Suggestions (50% Pro+ Rollout)'
+	});
+	const betaKanbanFlag = useFeatureFlag('beta-kanban', {
+		defaultValue: false,
+		description: 'Beta Kanban Swimlanes'
+	});
+
+	const flagsSnippet =
+		`// 1. Register typed feature flags (src/lib/flags.ts)
+import { defineFlags, useFeatureFlag } from 'yaxa-svelte';
+
+export const flags = defineFlags({
+  'ai-copilot': {
+    description: 'AI Copilot (50% rollout for Pro & Enterprise)',
+    enabled: true,
+    allowedPlans: ['pro', 'enterprise'],
+    rolloutPercentage: 50
+  },
+  'beta-kanban': {
+    description: 'Beta Kanban Swimlanes',
+    defaultValue: false
+  }
+});
+
+// 2. Use declaratively in Svelte 5 with <Gate flag="...">
+<` +
+		`Gate flag="ai-copilot" preview upgradeTitle="AI Copilot Preview">
+  <CopilotWorkspace />
+</Gate>
+
+// 3. Or programmatically with the useFeatureFlag() rune
+const copilot = useFeatureFlag('ai-copilot');
+// copilot.enabled, copilot.setOverride(true), copilot.toggle()`;
 
 	const gate = $derived(
 		useGate({
@@ -129,7 +192,7 @@ export const POST = createS3UploadHandler({
 			<div class="flex flex-wrap items-center gap-2">
 				<span class="text-xs font-semibold text-neutral-500">Simulate Plan:</span>
 				<div class="flex flex-wrap rounded-lg bg-neutral-100 p-0.5 dark:bg-neutral-800">
-					{#each ['free', 'starter', 'pro', 'enterprise'] as plan}
+					{#each ['free', 'starter', 'pro', 'enterprise'] as plan (plan)}
 						<button
 							type="button"
 							class="rounded px-2.5 py-1 text-xs font-medium transition-colors {simPlan === plan
@@ -168,6 +231,7 @@ export const POST = createS3UploadHandler({
 				userPlan={simPlan}
 				userRole={simRole}
 				preview={true}
+				upgradeUrl="/saas"
 				upgradeTitle="Pro Tier Feature"
 				upgradeMessage="Exporting automated daily reports requires an active Pro or Enterprise plan."
 			>
@@ -240,6 +304,136 @@ export const POST = createS3UploadHandler({
 			/>
 		</div>
 	</div>
+
+	<!-- Feature Flags & Percentage Rollouts -->
+	<Card class="space-y-6 border-neutral-200 p-4 shadow-xs sm:p-6 dark:border-neutral-800">
+		<div class="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+			<div>
+				<div class="flex items-center gap-2">
+					<h2 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">
+						Feature Flags &amp; Percentage Rollouts
+					</h2>
+					<Badge color="primary" variant="subtle" size="xs">defineFlags</Badge>
+				</div>
+				<p class="mt-1 text-xs text-neutral-500">
+					Deterministic FNV-1a percentage rollouts, plan/role targeting, and live localStorage
+					overrides synced across <code class="font-mono">&lt;Gate flag="..." /&gt;</code>,
+					<code class="font-mono">useFeatureFlag()</code>, and
+					<code class="font-mono">&lt;DevSandbox /&gt;</code>.
+				</p>
+			</div>
+
+			<div class="flex flex-wrap items-center gap-2">
+				<Button
+					size="xs"
+					variant={aiCopilotFlag.overrideValue === true ? 'solid' : 'outline'}
+					color="success"
+					onclick={() => setFeatureFlagOverride('ai-copilot', true)}
+				>
+					Force Enable
+				</Button>
+				<Button
+					size="xs"
+					variant={aiCopilotFlag.overrideValue === false ? 'solid' : 'outline'}
+					color="error"
+					onclick={() => setFeatureFlagOverride('ai-copilot', false)}
+				>
+					Force Disable
+				</Button>
+				<Button
+					size="xs"
+					variant="ghost"
+					color="neutral"
+					onclick={() => clearFeatureFlagOverrides()}
+				>
+					Reset Auto
+				</Button>
+			</div>
+		</div>
+
+		<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+			<div
+				class="space-y-3 rounded-xl border border-dashed border-neutral-200 bg-neutral-50/50 p-4 dark:border-neutral-800 dark:bg-neutral-950/40"
+			>
+				<div class="flex items-center justify-between gap-2">
+					<code class="text-xs font-bold text-neutral-800 dark:text-neutral-200">
+						&lt;Gate flag="ai-copilot" preview /&gt;
+					</code>
+					<Badge
+						size="xs"
+						variant="subtle"
+						color={aiCopilotFlag.isOverridden ? 'warning' : 'neutral'}
+					>
+						{aiCopilotFlag.isOverridden
+							? `Override: ${aiCopilotFlag.overrideValue}`
+							: 'Auto Targeting (50% Pro+)'}
+					</Badge>
+				</div>
+
+				<Gate
+					flag="ai-copilot"
+					user={simUser}
+					preview={true}
+					upgradeUrl=""
+					upgradeTitle="AI Copilot Locked"
+					upgradeMessage="Blocked by feature flag targeting or override. Click Force Enable above or switch plan to Pro."
+				>
+					<div
+						class="flex items-center justify-between rounded-xl border border-neutral-200 bg-white p-4 shadow-xs dark:border-neutral-800 dark:bg-neutral-900"
+					>
+						<div class="flex items-center gap-2.5">
+							<div
+								class="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-100 text-primary-600 dark:bg-primary-950/60 dark:text-primary-400"
+							>
+								<Icon name="sparkles" class="h-4 w-4" />
+							</div>
+							<div>
+								<h4 class="text-xs font-bold text-neutral-900 dark:text-neutral-100">
+									AI Copilot Active
+								</h4>
+								<p class="text-[11px] text-neutral-500">Streaming prompt completions unlocked.</p>
+							</div>
+						</div>
+						<Badge color="success" variant="solid" size="xs">ON</Badge>
+					</div>
+				</Gate>
+			</div>
+
+			<div
+				class="flex flex-col justify-between space-y-3 rounded-xl border border-neutral-200 bg-white p-4 dark:border-neutral-800 dark:bg-neutral-900/60"
+			>
+				<div class="space-y-2">
+					<div class="flex items-center justify-between">
+						<code class="text-xs font-bold text-neutral-800 dark:text-neutral-200">
+							useFeatureFlag('beta-kanban')
+						</code>
+						<Badge
+							size="xs"
+							color={betaKanbanFlag.enabled ? 'success' : 'neutral'}
+							variant="subtle"
+						>
+							{betaKanbanFlag.enabled ? 'Enabled' : 'Disabled'}
+						</Badge>
+					</div>
+					<p class="text-xs text-neutral-500">
+						Toggle runtime overrides cleanly from code or inside the built-in admin DevSandbox.
+					</p>
+				</div>
+				<div class="flex flex-wrap items-center gap-2">
+					<Button size="xs" variant="soft" color="primary" onclick={() => betaKanbanFlag.toggle()}>
+						Toggle beta-kanban ({betaKanbanFlag.enabled ? 'ON' : 'OFF'})
+					</Button>
+				</div>
+			</div>
+		</div>
+
+		<CodeBlock
+			code={flagsSnippet}
+			language="typescript"
+			filename="src/lib/flags.ts"
+			showLineNumbers={true}
+		/>
+	</Card>
 
 	<!-- Storage Uploads -->
 	<div class="space-y-4">

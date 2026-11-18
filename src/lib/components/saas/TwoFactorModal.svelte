@@ -220,7 +220,7 @@
 			<div
 				class="grid grid-cols-2 gap-2 rounded-xl border border-neutral-200 bg-neutral-50 p-3 text-center font-mono text-xs select-all dark:border-neutral-800 dark:bg-neutral-900/80"
 			>
-				{#each backupCodes as code}
+				{#each backupCodes as code, i (`${i}-${code}`)}
 					<span
 						class="rounded border border-neutral-200/60 bg-white p-1.5 font-semibold tracking-wider text-neutral-800 dark:border-neutral-700/60 dark:bg-neutral-800 dark:text-neutral-200"
 					>

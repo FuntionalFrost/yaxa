@@ -127,17 +127,25 @@ export function generateOgSvg(params: {
 
 export function createOgImageHandler(options?: OgImageOptions): RequestHandler {
 	return async ({ url }) => {
-		const title = url.searchParams.get('title') || options?.config?.title || 'Yaxa';
+		let searchParams: URLSearchParams;
+		try {
+			searchParams = url.searchParams;
+		} catch {
+			// SvelteKit prerender crawler forbids accessing url.searchParams during static build checks.
+			searchParams = new URLSearchParams();
+		}
+
+		const title = searchParams.get('title') || options?.config?.title || 'Yaxa';
 		const description =
-			url.searchParams.get('description') ||
+			searchParams.get('description') ||
 			options?.config?.description ||
 			'Fast, beautiful, accessible UI components and SEO tools for SvelteKit.';
 		const badge =
-			url.searchParams.get('badge') ||
+			searchParams.get('badge') ||
 			(options?.config?.project ? computeProjectBadge(options.config.project) : undefined);
-		const tag = url.searchParams.get('tag') || undefined;
-		const theme = (url.searchParams.get('theme') as 'dark' | 'light') || 'dark';
-		const siteName = url.searchParams.get('site') || options?.config?.name || 'Yaxa';
+		const tag = searchParams.get('tag') || undefined;
+		const theme = (searchParams.get('theme') as 'dark' | 'light') || 'dark';
+		const siteName = searchParams.get('site') || options?.config?.name || 'Yaxa';
 		const siteUrl = options?.config?.url || url.origin;
 
 		const svg = generateOgSvg({

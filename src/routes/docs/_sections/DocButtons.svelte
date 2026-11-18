@@ -268,7 +268,7 @@ syntax highlighting engine.
 			<div class="flex flex-wrap items-center justify-between gap-4 text-xs">
 				<div class="flex flex-wrap items-center gap-1.5">
 					<span class="mr-1 font-semibold text-neutral-500">Variant:</span>
-					{#each ['solid', 'outline', 'soft', 'subtle', 'ghost', 'link'] as const as v}
+					{#each ['solid', 'outline', 'soft', 'subtle', 'ghost', 'link'] as const as v (v)}
 						<button
 							type="button"
 							onclick={() => (pgVariant = v)}
@@ -283,7 +283,7 @@ syntax highlighting engine.
 
 				<div class="flex flex-wrap items-center gap-1.5">
 					<span class="mr-1 font-semibold text-neutral-500">Color:</span>
-					{#each ['primary', 'neutral', 'success', 'warning', 'error'] as const as c}
+					{#each ['primary', 'neutral', 'success', 'warning', 'error'] as const as c (c)}
 						<button
 							type="button"
 							onclick={() => (pgColor = c)}
@@ -298,7 +298,7 @@ syntax highlighting engine.
 
 				<div class="flex flex-wrap items-center gap-1.5">
 					<span class="mr-1 font-semibold text-neutral-500">Size:</span>
-					{#each ['xs', 'sm', 'md', 'lg', 'xl'] as const as s}
+					{#each ['xs', 'sm', 'md', 'lg', 'xl'] as const as s (s)}
 						<button
 							type="button"
 							onclick={() => (pgSize = s)}

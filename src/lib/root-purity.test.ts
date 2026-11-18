@@ -130,3 +130,104 @@ describe('Root Entry Point Purity (yaxa-svelte)', () => {
 		expect(typeof rootExports.useFeatureFlag).toBe('function');
 	});
 });
+
+describe('Package Exports & Svelte Condition Integrity (package.json)', () => {
+	const pkg = JSON.parse(fs.readFileSync(path.resolve('package.json'), 'utf-8')) as {
+		exports: Record<string, string | { types?: string; svelte?: string; default?: string }>;
+	};
+
+	function resolveLocalModule(fromFile: string, specifier: string): string | null {
+		if (!specifier.startsWith('.')) return null;
+		const base = path.resolve(path.dirname(fromFile), specifier);
+		const candidates = [
+			base,
+			`${base}.ts`,
+			`${base}.svelte.ts`,
+			`${base}.svelte`,
+			`${base}.js`,
+			path.join(base, 'index.ts'),
+			path.join(base, 'index.svelte.ts'),
+			path.join(base, 'index.js')
+		];
+		for (const candidate of candidates) {
+			if (fs.existsSync(candidate) && fs.statSync(candidate).isFile()) {
+				return candidate;
+			}
+		}
+		return null;
+	}
+
+	function graphContainsSvelteModules(entryFile: string): boolean {
+		const visited = new Set<string>();
+		let foundSvelte = false;
+
+		function walk(filePath: string) {
+			if (visited.has(filePath) || foundSvelte) return;
+			visited.add(filePath);
+
+			if (filePath.endsWith('.svelte') || filePath.endsWith('.svelte.ts')) {
+				foundSvelte = true;
+				return;
+			}
+
+			const raw = fs.readFileSync(filePath, 'utf-8');
+			const code = raw.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+			const staticImportRegex =
+				/(?:^|\n)\s*(?:import|export)\s+(?!type\b)(?:[\s\S]*?\s+from\s+)?['"]([^'"]+)['"]/g;
+
+			let match: RegExpExecArray | null;
+			while ((match = staticImportRegex.exec(code)) !== null) {
+				const specifier = match[1];
+				if (specifier.endsWith('.svelte') || specifier.endsWith('.svelte.ts')) {
+					foundSvelte = true;
+					return;
+				}
+				const resolved = resolveLocalModule(filePath, specifier);
+				if (resolved) {
+					walk(resolved);
+				}
+			}
+		}
+
+		walk(entryFile);
+		return foundSvelte;
+	}
+
+	it('every JS subpath in package.json maps to an existing src/lib entry and has "svelte" condition iff it exports .svelte / .svelte.ts modules', () => {
+		for (const [subpath, target] of Object.entries(pkg.exports)) {
+			if (typeof target === 'string') {
+				// CSS exports (./yaxa.css, ./theme.css)
+				const srcCss = target.replace(/^\.\/dist\//, 'src/lib/');
+				expect(
+					fs.existsSync(path.resolve(srcCss)),
+					`CSS export '${subpath}' points to missing source file '${srcCss}'`
+				).toBe(true);
+				continue;
+			}
+
+			expect(target.default, `Export '${subpath}' is missing "default" condition`).toBeDefined();
+			expect(target.types, `Export '${subpath}' is missing "types" condition`).toBeDefined();
+
+			const srcEntry = path.resolve(
+				target.default!.replace(/^\.\/dist\//, 'src/lib/').replace(/\.js$/, '.ts')
+			);
+			expect(
+				fs.existsSync(srcEntry),
+				`Export '${subpath}' points to missing source entry '${srcEntry}'`
+			).toBe(true);
+
+			const hasSvelteRuntime = graphContainsSvelteModules(srcEntry);
+			if (hasSvelteRuntime) {
+				expect(
+					target.svelte,
+					`Subpath '${subpath}' (${path.relative(process.cwd(), srcEntry)}) exports .svelte or .svelte.ts runtime code and MUST include "svelte": "${target.default}" in package.json#exports`
+				).toBe(target.default);
+			} else {
+				expect(
+					target.svelte,
+					`Subpath '${subpath}' (${path.relative(process.cwd(), srcEntry)}) is pure .ts and should NOT include a "svelte" condition in package.json#exports`
+				).toBeUndefined();
+			}
+		}
+	});
+});

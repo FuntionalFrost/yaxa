@@ -251,7 +251,7 @@
 					</div>
 
 					<div class="space-y-1">
-						{#each data.tables as table}
+						{#each data.tables as table (table)}
 							{@const isActive = table === currentTable}
 							<button
 								type="button"
@@ -324,7 +324,7 @@
 									class="border-b border-neutral-200 bg-neutral-50/80 font-semibold tracking-wider text-neutral-500 uppercase dark:border-neutral-800 dark:bg-neutral-900/80 dark:text-neutral-400"
 								>
 									<tr>
-										{#each data.columns as col}
+										{#each data.columns as col (col.name)}
 											<th class="px-4 py-3 whitespace-nowrap">
 												<div class="flex items-center gap-1.5">
 													<span>{col.name}</span>
@@ -349,13 +349,13 @@
 											</td>
 										</tr>
 									{:else}
-										{#each data.records as row}
+										{#each data.records as row, rowIdx (row[data.primaryKey] ?? rowIdx)}
 											<tr
 												class="cursor-pointer transition-colors hover:bg-neutral-50 dark:hover:bg-neutral-900/60"
 												onclick={() => inspectRecord(row)}
 											>
-												{#each data.columns as col}
-													<td class="max-w-[240px] truncate px-4 py-3 font-mono">
+												{#each data.columns as col (col.name)}
+													<td class="max-w-60 truncate px-4 py-3 font-mono">
 														{row[col.name] !== undefined && row[col.name] !== null
 															? String(row[col.name])
 															: '—'}
@@ -413,8 +413,8 @@
 	<!-- Create Record Modal -->
 	<Modal bind:open={isCreateModalOpen} title={`Create New Record in ${currentTable}`}>
 		<form onsubmit={handleCreateRecord} class="space-y-4 p-4 text-xs">
-			<div class="max-h-[420px] space-y-3 overflow-y-auto pr-1">
-				{#each data.columns as col}
+			<div class="max-h-105 space-y-3 overflow-y-auto pr-1">
+				{#each data.columns as col (col.name)}
 					<div class="space-y-1">
 						<div class="flex items-center justify-between">
 							<label

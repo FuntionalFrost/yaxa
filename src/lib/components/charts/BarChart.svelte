@@ -102,7 +102,7 @@
 		<!-- Gridlines -->
 		{#if showGrid}
 			<g class="stroke-neutral-200/70 dark:stroke-neutral-800/70" stroke-dasharray="3 3">
-				{#each yTicks as tick}
+				{#each yTicks as tick, i (i)}
 					{@const y = getY(tick)}
 					<line x1={padding.left} y1={y} x2={width - padding.right} y2={y} />
 				{/each}
@@ -111,7 +111,7 @@
 
 		<!-- Y-Axis Labels -->
 		<g class="fill-neutral-400 text-[10px] select-none dark:fill-neutral-500">
-			{#each yTicks as tick}
+			{#each yTicks as tick, i (i)}
 				{@const y = getY(tick)}
 				<text x={padding.left - 8} y={y + 3} text-anchor="end">
 					{yAxisFormat(tick)}
@@ -121,7 +121,7 @@
 
 		<!-- X-Axis Labels -->
 		<g class="fill-neutral-400 text-[10px] select-none dark:fill-neutral-500">
-			{#each data as d, i}
+			{#each data as d, i (i)}
 				{#if data.length <= 8 || i % Math.ceil(data.length / 6) === 0 || i === data.length - 1}
 					{@const x = padding.left + i * groupWidth + groupWidth / 2}
 					<text {x} y={height - 8} text-anchor="middle">
@@ -132,7 +132,7 @@
 		</g>
 
 		<!-- Bar Groups -->
-		{#each data as d, dIdx}
+		{#each data as d, dIdx (dIdx)}
 			{@const groupX = padding.left + dIdx * groupWidth}
 			{@const paddingFactor = 0.25}
 			{@const availableWidth = groupWidth * (1 - paddingFactor)}
@@ -163,7 +163,7 @@
 
 				{#if isStacked}
 					<!-- Stacked Bars -->
-					{#each series as s, sIdx}
+					{#each series as s, sIdx (`${s.key}-${sIdx}`)}
 						{@const val = Number(d[s.key] ?? 0)}
 						{@const offsetVal = getStackedOffset(d, sIdx)}
 						{@const barHeight = (val / (yMax || 1)) * innerHeight}
@@ -183,7 +183,7 @@
 					{/each}
 				{:else}
 					<!-- Grouped / Side-by-Side Bars -->
-					{#each series as s, sIdx}
+					{#each series as s, sIdx (`${s.key}-${sIdx}`)}
 						{@const val = Number(d[s.key] ?? 0)}
 						{@const barHeight = (val / (yMax || 1)) * innerHeight}
 						{@const y = padding.top + innerHeight - barHeight}
@@ -218,7 +218,7 @@
 			<div class="mb-1 font-semibold text-neutral-800 dark:text-neutral-200">
 				{xAxisFormat(activeItem.label)}
 			</div>
-			{#each series as s, sIdx}
+			{#each series as s, sIdx (`${s.key}-${sIdx}`)}
 				{@const val = Number(activeItem[s.key] ?? 0)}
 				{@const color = s.color || DEFAULT_COLORS[sIdx % DEFAULT_COLORS.length]}
 				<div class="flex items-center justify-between gap-3 text-[11px]">
@@ -241,7 +241,7 @@
 		<div
 			class="mt-3 flex flex-wrap items-center justify-center gap-4 text-xs text-neutral-600 dark:text-neutral-300"
 		>
-			{#each series as s, sIdx}
+			{#each series as s, sIdx (`${s.key}-${sIdx}`)}
 				{@const color = s.color || DEFAULT_COLORS[sIdx % DEFAULT_COLORS.length]}
 				<div class="flex items-center gap-1.5">
 					<span class="h-2.5 w-2.5 rounded-full" style="background-color: {color}"></span>

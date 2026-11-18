@@ -83,7 +83,7 @@
 
 	<!-- Terminal Body -->
 	<div class="space-y-2 overflow-x-auto p-4 text-xs leading-relaxed text-neutral-200">
-		{#each lines as line}
+		{#each lines as line, i (i)}
 			{#if line.comment}
 				<div class="text-neutral-500 select-none">
 					# {line.comment}

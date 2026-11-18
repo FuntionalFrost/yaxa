@@ -49,7 +49,7 @@
 	>
 		<!-- Swatches Grid -->
 		<div class="grid grid-cols-5 gap-1.5">
-			{#each presets as hex}
+			{#each presets as hex, i (`${i}-${hex}`)}
 				<button
 					type="button"
 					{disabled}
@@ -114,7 +114,7 @@
 			<div class="text-xs font-semibold text-neutral-500 dark:text-neutral-400">Color Swatches</div>
 			<!-- Swatches Grid -->
 			<div class="grid grid-cols-5 gap-1.5">
-				{#each presets as hex}
+				{#each presets as hex, i (`${i}-${hex}`)}
 					<button
 						type="button"
 						onclick={() => {

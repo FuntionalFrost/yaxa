@@ -59,7 +59,7 @@
 </script>
 
 <div class={stepperVariants({ orientation, class: className })}>
-	{#each steps as step, index}
+	{#each steps as step, index (step.id ?? index)}
 		{@const status = getStatus(index, step)}
 		{@const isLast = index === steps.length - 1}
 

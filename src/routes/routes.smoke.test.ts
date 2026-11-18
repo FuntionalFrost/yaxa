@@ -5,6 +5,9 @@ import SaasPage from './saas/+page.svelte';
 import AdminPage from './admin/+page.svelte';
 import { GET as getApiDocs } from './api/docs/+server.js';
 import { GET as getProjects, POST as createProject } from './api/projects/+server.js';
+import { createYaxaHook } from '#lib/site/hook.js';
+import { siteConfig } from '../site.config.js';
+import { SITEMAP_STATIC_ROUTES } from './docs/_data/docs-nav.js';
 
 describe('Application Route Smoke Tests (Headless in-memory)', () => {
 	it('mounts homepage and renders hero heading and documentation CTA', () => {
@@ -114,5 +117,31 @@ describe('Application Route Smoke Tests (Headless in-memory)', () => {
 		const created = await postRes.json();
 		expect(created.name).toBe('New Space Project');
 		expect(created.id).toBeDefined();
+	});
+
+	it('serves full 26+ URL /sitemap.xml through createYaxaHook when configured with SITEMAP_STATIC_ROUTES', async () => {
+		const hook = createYaxaHook({
+			config: siteConfig,
+			sitemap: {
+				config: siteConfig,
+				staticRoutes: SITEMAP_STATIC_ROUTES
+			}
+		});
+		const event = createMockRequestEvent({
+			url: 'https://yaxa.vercel.app/sitemap.xml'
+		});
+		const res = await hook({
+			event,
+			resolve: async () => new Response('not found', { status: 404 })
+		});
+		expect(res.status).toBe(200);
+		expect(res.headers.get('content-type')).toContain('application/xml');
+		const xml = await res.text();
+		const locs = xml.match(/<loc>/g) || [];
+		expect(locs.length).toBeGreaterThanOrEqual(26);
+		expect(xml).toContain('https://yaxa.vercel.app/docs/intro</loc>');
+		expect(xml).toContain('https://yaxa.vercel.app/docs/comp-overlays</loc>');
+		expect(xml).toContain('https://yaxa.vercel.app/theme</loc>');
+		expect(xml).toContain('https://yaxa.vercel.app/saas</loc>');
 	});
 });

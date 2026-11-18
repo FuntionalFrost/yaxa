@@ -68,7 +68,15 @@
 	let demoInputValue = $state('user@yaxa.dev');
 
 	let copiedInstall = $state(false);
-	const installCommand = 'pnpm add yaxa-svelte';
+	const INSTALL_MANAGERS = [
+		{ id: 'pnpm', label: 'pnpm', command: 'pnpm add yaxa-svelte' },
+		{ id: 'npm', label: 'npm', command: 'npm install yaxa-svelte' },
+		{ id: 'bun', label: 'bun', command: 'bun add yaxa-svelte' }
+	] as const;
+	let activePkgManager = $state<'pnpm' | 'npm' | 'bun'>('pnpm');
+	const installCommand = $derived(
+		INSTALL_MANAGERS.find((m) => m.id === activePkgManager)?.command ?? 'pnpm add yaxa-svelte'
+	);
 
 	function copyInstall() {
 		if (typeof navigator !== 'undefined' && navigator.clipboard) {
@@ -154,7 +162,7 @@ export const siteConfig = defineSiteConfig({
 		<p
 			class="mx-auto mt-6 max-w-2xl text-lg leading-relaxed font-normal text-neutral-600 sm:text-xl dark:text-neutral-400"
 		>
-			75+ accessible components & primitives powered by Bits UI & Tailwind Variants. Includes AI
+			80+ accessible components & primitives powered by Bits UI & Tailwind Variants. Includes AI
 			chat primitives, native SVG charts, docs content blocks, solo SaaS workflows, and the
 			real-time Visual Web Theme Studio.
 		</p>
@@ -189,26 +197,51 @@ export const siteConfig = defineSiteConfig({
 			</Button>
 		</div>
 
-		<!-- One-Click Install Command Pill -->
+		<!-- One-Click Install Command Pill with Package Manager Switcher -->
 		<div class="mt-8 flex justify-center">
-			<button
-				type="button"
-				onclick={copyInstall}
-				class="group inline-flex items-center gap-4 rounded-xl border border-neutral-200/80 bg-white/80 py-2 pr-2.5 pl-4 font-mono text-xs shadow-xs backdrop-blur-md transition-all hover:border-primary-500/50 hover:bg-neutral-50/90 dark:border-neutral-800 dark:bg-neutral-900/80 dark:hover:border-primary-500/40 dark:hover:bg-neutral-800/80"
+			<div
+				class="inline-flex max-w-full flex-wrap items-center justify-center gap-2 rounded-xl border border-neutral-200/80 bg-white/80 p-1.5 shadow-xs backdrop-blur-md dark:border-neutral-800 dark:bg-neutral-900/80"
 			>
-				<span
-					class="flex items-center gap-2 whitespace-nowrap text-neutral-600 dark:text-neutral-300"
+				<div
+					class="flex items-center gap-0.5 rounded-lg bg-neutral-100 p-0.5 text-[11px] font-semibold dark:bg-neutral-800/80"
+					role="group"
+					aria-label="Select package manager"
 				>
-					<span class="font-bold text-primary-500">$</span>
-					<span>{installCommand}</span>
-				</span>
-				<span
-					class="flex items-center gap-1.5 rounded-lg bg-neutral-100 px-2.5 py-1 text-xs font-semibold text-neutral-600 transition-colors group-hover:bg-primary-100 group-hover:text-primary-700 dark:bg-neutral-800 dark:text-neutral-300 dark:group-hover:bg-primary-950 dark:group-hover:text-primary-300"
+					{#each INSTALL_MANAGERS as pm (pm.id)}
+						<button
+							type="button"
+							onclick={() => {
+								activePkgManager = pm.id;
+								copiedInstall = false;
+							}}
+							class="rounded-md px-2 py-1 transition-all {activePkgManager === pm.id
+								? 'bg-white text-neutral-900 shadow-xs dark:bg-neutral-700 dark:text-white'
+								: 'text-neutral-500 hover:text-neutral-900 dark:text-neutral-400 dark:hover:text-white'}"
+						>
+							{pm.label}
+						</button>
+					{/each}
+				</div>
+
+				<button
+					type="button"
+					onclick={copyInstall}
+					class="group inline-flex items-center gap-3 rounded-lg px-2.5 py-1 font-mono text-xs transition-colors hover:bg-neutral-50/90 dark:hover:bg-neutral-800/80"
 				>
-					<Icon name={copiedInstall ? 'check' : 'clipboard-document'} class="h-3.5 w-3.5" />
-					<span>{copiedInstall ? 'Copied!' : 'Copy'}</span>
-				</span>
-			</button>
+					<span
+						class="flex items-center gap-2 whitespace-nowrap text-neutral-600 dark:text-neutral-300"
+					>
+						<span class="font-bold text-primary-500">$</span>
+						<span>{installCommand}</span>
+					</span>
+					<span
+						class="flex items-center gap-1.5 rounded-md bg-neutral-100 px-2.5 py-1 text-xs font-semibold text-neutral-600 transition-colors group-hover:bg-primary-100 group-hover:text-primary-700 dark:bg-neutral-800 dark:text-neutral-300 dark:group-hover:bg-primary-950 dark:group-hover:text-primary-300"
+					>
+						<Icon name={copiedInstall ? 'check' : 'clipboard-document'} class="h-3.5 w-3.5" />
+						<span>{copiedInstall ? 'Copied!' : 'Copy'}</span>
+					</span>
+				</button>
+			</div>
 		</div>
 	</Container>
 </section>
@@ -256,7 +289,7 @@ export const siteConfig = defineSiteConfig({
 						</span>
 					</div>
 					<div class="flex flex-wrap gap-2.5">
-						{#each accentList as item}
+						{#each accentList as item (item.id)}
 							{@const active = theme.accent === item.id}
 							<button
 								type="button"
@@ -290,7 +323,7 @@ export const siteConfig = defineSiteConfig({
 						</span>
 					</div>
 					<div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
-						{#each neutralList as item}
+						{#each neutralList as item (item.id)}
 							{@const active = theme.neutral === item.id}
 							{@const pal = NEUTRAL_PALETTES[item.id]}
 							<button
@@ -334,7 +367,7 @@ export const siteConfig = defineSiteConfig({
 						</span>
 					</div>
 					<div class="grid grid-cols-3 gap-2">
-						{#each fontOptions as item}
+						{#each fontOptions as item (item.id)}
 							{@const active = theme.fontFamily === item.id}
 							<button
 								type="button"
@@ -360,7 +393,7 @@ export const siteConfig = defineSiteConfig({
 							4. Corner Radius
 						</span>
 						<div class="flex flex-wrap gap-1.5">
-							{#each radiusOptions as item}
+							{#each radiusOptions as item (item.id)}
 								{@const active = theme.radius === item.id}
 								<button
 									type="button"
@@ -383,7 +416,7 @@ export const siteConfig = defineSiteConfig({
 							5. Density Scale
 						</span>
 						<div class="flex flex-wrap gap-1.5">
-							{#each sizeOptions as item}
+							{#each sizeOptions as item (item.id)}
 								{@const active = theme.fontSize === item.id}
 								<button
 									type="button"

@@ -38,7 +38,7 @@
 			{#if content}
 				{@render content()}
 			{:else}
-				{#each items as item}
+				{#each items as item, i (item.id ?? i)}
 					{#if item.separator}
 						<ContextMenu.Separator class="my-1 h-px bg-neutral-200 dark:bg-neutral-800" />
 					{:else}

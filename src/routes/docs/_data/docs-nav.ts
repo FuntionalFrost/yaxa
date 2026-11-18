@@ -1,3 +1,5 @@
+import type { SitemapRoute } from '#lib/site/sitemap.js';
+
 export interface DocNavItem {
 	id: string;
 	label: string;
@@ -229,6 +231,23 @@ export const DOC_NAV_GROUPS: DocNavGroup[] = [
 ];
 
 export const ALL_DOC_ITEMS: DocNavItem[] = DOC_NAV_GROUPS.flatMap((g) => g.items);
+
+export const SITEMAP_STATIC_ROUTES: SitemapRoute[] = [
+	{ loc: '/', priority: 1.0, changefreq: 'daily' },
+	{ loc: '/docs/intro', priority: 0.95, changefreq: 'weekly' },
+	{ loc: '/api/docs', priority: 0.85, changefreq: 'weekly' },
+	{ loc: '/theme', priority: 0.9, changefreq: 'weekly' },
+	{ loc: '/saas', priority: 0.8, changefreq: 'monthly' },
+	{ loc: '/terms', priority: 0.5, changefreq: 'yearly' },
+	{ loc: '/privacy', priority: 0.5, changefreq: 'yearly' },
+	{ loc: '/refunds', priority: 0.5, changefreq: 'yearly' },
+	{ loc: '/impressum', priority: 0.5, changefreq: 'yearly' },
+	...ALL_DOC_ITEMS.map((item) => ({
+		loc: item.href,
+		priority: 0.9,
+		changefreq: 'weekly' as const
+	}))
+];
 
 export function getDocItemBySlug(slug: string): DocNavItem | undefined {
 	return ALL_DOC_ITEMS.find((item) => item.id === slug);

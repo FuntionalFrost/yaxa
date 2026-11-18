@@ -33,7 +33,7 @@
 		: 'flex-col gap-2'} {className}"
 	role="radiogroup"
 >
-	{#each options as opt}
+	{#each options as opt, i (`${i}-${opt.value}`)}
 		{@const isSelected = value === opt.value}
 		<label
 			class="relative flex items-start gap-3 select-none {opt.disabled
